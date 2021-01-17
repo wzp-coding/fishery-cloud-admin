@@ -59,9 +59,12 @@ style必须设置scoped来限制作用域（如果父组件想改变或者覆盖
 
 ### route文件夹说明
 我已经帮你们命名好了，直接在里面注册路由就行了
-我怎么命名？比如`processPlant_coldStorage_LJC`，`processPlant`和`coldStorage`是你负责的模块，中间用`_`连接，后缀是你的名字简写
+
+注册路由参考里面的格式就行了
 
 ![路由](https://images.gitee.com/uploads/images/2021/0117/165615_fe069392_7367930.png "屏幕截图.png")
+
+如果是
 
 ![例子](https://images.gitee.com/uploads/images/2021/0117/165815_716281e0_7367930.png "屏幕截图.png")
 
@@ -78,3 +81,4 @@ npm run serve
 
 
 
+> 这里输入引用文本
