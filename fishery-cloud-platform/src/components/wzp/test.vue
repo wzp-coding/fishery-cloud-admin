@@ -1,6 +1,14 @@
 <template>
-    <div>
-        test
-        Lorem ipsum dolor sit.
-    </div>
+  <div>
+    {{ msg }}
+  </div>
 </template>
+<script>
+export default {
+  props: {
+    msg: {
+      type: String,
+    },
+  },
+};
+</script>
