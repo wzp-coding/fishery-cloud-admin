@@ -14,13 +14,19 @@
   </div>
 </template>
 <script>
+import { mapState,mapMutations } from 'vuex';
 export default {
   data() {
     return {
       way: window.localStorage.getItem("way"),
     };
   },
+  computed:{
+    ...mapState(["permissionVisable"])
+  },
   methods: {
+    // 获取设置权限的方法
+    ...mapMutations(["setPermissionList"]),
     // 退出登录操作
     backLogin() {
       window.localStorage.clear();
