@@ -81,7 +81,7 @@ const mutations = {
   setPermissionList(state, data) {
     state.permissionList = data
     window.localStorage.setItem('permissionList', JSON.stringify(data))
-    console.log(data)
+    // console.log('data: ', data);
     // 先将权限重置，以免上一次的用户权限影响下一次的用户权限
     for (let key in state.permissionVisable) {
       state.permissionVisable[key] = false
@@ -99,7 +99,7 @@ const mutations = {
         }
       })
     }
-    console.log(state.permissionVisable)
+    // console.log('state.permissionVisable: ', state.permissionVisable);
   }
 }
 export default new Vuex.Store({

@@ -23,16 +23,12 @@ const routes = [
     name: 'login',
     component: Login
   },
-  // 跳转到首页时，重定向到第一个子菜单
+  // 主页界面
   {
     path: '/home',
     name: 'home',
     component: Home,
     children:[
-      {
-        path:'',
-        component: DigitalBase
-      },
       ...CCY,
       ...CGX,
       ...YZC,
