@@ -35,7 +35,7 @@ export default {
       if (this.way !== "1") {
         window.location.href = "http://106.75.132.85:9001/#/basePage";
       } else {
-        this.$router.push("/");
+        this.$router.push("/login");
       }
     },
   },

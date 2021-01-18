@@ -332,7 +332,7 @@ export default {
       // 是否折叠
       isCollapse: false,
       // 被激活的链接地址
-      activePath: "/digital-base",
+      activePath: "",
     };
   },
   computed: {
@@ -352,7 +352,7 @@ export default {
       );
       // console.log("res: ", res);
       if (res.code === 20000) {
-        this.$router.push("/digital-base");
+        this.activePath = '/digital-base';
         this.defines.setBaseId(res.data.baseId);
         window.localStorage.setItem("baseId", res.data.baseId);
         window.localStorage.setItem("baseIdentity", res.data.baseIdentity);
@@ -394,7 +394,7 @@ export default {
       if (this.way !== "1") {
         window.location.href = "http://106.75.132.85:9001/#/basePage";
       } else {
-        this.$router.push("/");
+        this.$router.push("/login");
       }
     },
   },
@@ -406,10 +406,10 @@ export default {
           "",
           "http://106.75.132.85:9001/#/basePage"
         );
-        if (location.href.indexOf("#") == -1) {
-          location.href = location.href + "#";
-          location.reload();
-        }
+        // if (location.href.indexOf("#") == -1) {
+        //   location.href = location.href + "#";
+        //   location.reload();
+        // }
       };
       //接收数据
       window.addEventListener(
