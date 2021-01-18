@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import {Message} from 'element-ui';
+import { Message } from 'element-ui';
 import CCY from './breedBaseManagement_CCY'
 import YZC from './environmentalMonitor_YZC'
 import LJC from './processPlant_coldStorage_LJC'
@@ -8,8 +8,6 @@ import CGX from './logisticsSystem_CGX'
 // 引入视图
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
-// 引入默认展示的子组件
-import DigitalBase from '../views/DigitalBase.vue'
 Vue.use(VueRouter)
 const routes = [
   // 第一次进入页面重定向到登录页面
@@ -28,7 +26,7 @@ const routes = [
     path: '/home',
     name: 'home',
     component: Home,
-    children:[
+    children: [
       ...CCY,
       ...CGX,
       ...YZC,
@@ -44,29 +42,24 @@ const router = new VueRouter({
 })
 // 挂在路由导航守卫
 router.beforeEach((to, from, next) => {
-  if (to.path === '/digital-base' && window.localStorage.getItem('token') == null) {
-    next()
-  } else if (to.path === '/login' && window.localStorage.getItem('token') == null) {
-    next()
-  } else if (to.path === '/login' && (window.localStorage.getItem('token') !== null || window.localStorage.getItem('token') !== undefined)) {
-    next('/digital-base')
-  } else if (window.localStorage.getItem('token') == null) {
-    next('/login')
-    Message.error('请登录！！')
+  // console.log('next: ', next);
+  // console.log('from: ', from);
+  // console.log('to: ', to);
+  if (to.path !== '/login' && !window.localStorage.getItem('token')) {
+    next('/login');
+    Message.error('请先登录账户');
+  } else if (to.path !== 'digital-base' && to.matched.length === 0) {
+    next('/digital-base');
+    Message.error('无效路径');
   } else {
-    if (to.matched.length === 0) {
-      Message.error('无效路径')
-      next('/digital-base')
-    } else {
-      next()
-    }
+    next();
   }
 })
 
-console.log(routes);
+// console.log(routes);
 // 解决路由访问重复时报错问题：
-const originalPush = VueRouter.prototype.push
-VueRouter.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err)
-}
+// const originalPush = VueRouter.prototype.push
+// VueRouter.prototype.push = function push(location) {
+//   return originalPush.call(this, location).catch(err => err)
+// }
 export default router
