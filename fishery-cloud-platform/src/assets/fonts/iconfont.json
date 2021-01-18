@@ -1,0 +1,23 @@
+{
+  "id": "2174873",
+  "name": "41",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "5308376",
+      "name": "锁",
+      "font_class": "lock",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "5089136",
+      "name": "虾",
+      "font_class": "xia",
+      "unicode": "e70b",
+      "unicode_decimal": 59147
+    }
+  ]
+}
