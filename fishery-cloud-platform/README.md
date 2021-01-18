@@ -3,6 +3,7 @@
 [VUE官方风格文档](https://vuejs.bootcss.com/style-guide/#%E8%A7%84%E5%88%99%E5%BD%92%E7%B1%BB)
 
 以下内容并非本人瞎哔哔，都是参考官方文档，懒得看官方就看我下面写的就行
+
 优秀的程序员必然代码也是很规范的，希望大家尽量养成习惯，规范开发，便利你我他
 ## 目录说明
 ### 区别组件和视图
@@ -64,9 +65,13 @@ style必须设置scoped来限制作用域（如果父组件想改变或者覆盖
 
 ![路由](https://images.gitee.com/uploads/images/2021/0117/165615_fe069392_7367930.png "屏幕截图.png")
 
-如果是
+## 如何开始做项目
 
-![例子](https://images.gitee.com/uploads/images/2021/0117/165815_716281e0_7367930.png "屏幕截图.png")
+点开路由router，找到自己对应的路由文件，查看注释，我基本上都把要写的页面写好了
+
+如果需要自己再添加页面（指的是views），注意命名格式
+
+![router](https://images.gitee.com/uploads/images/2021/0118/202002_b641e614_7367930.png "屏幕截图.png")
 
 ## Project setup
 ```
@@ -77,8 +82,3 @@ npm install
 ```
 npm run serve
 ```
-
-
-
-
-> 这里输入引用文本
