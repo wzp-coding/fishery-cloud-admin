@@ -3,7 +3,7 @@
     :title="title"
     :visible.sync="dialogVisible"
     width="50%"
-    @close="DialogClosed"
+    :before-close="DialogClosed"
   >
     <!-- 内容主题区 虾苗信息-->
     <el-form
@@ -56,11 +56,7 @@
       </el-form-item>
     </el-form>
     <!-- 内容主题区 物流信息-->
-    <div id="map" v-if="isLogistics"></div>
-    <!-- 页脚 -->
-    <!-- <span slot="footer" class="dialog-footer">
-      <el-button @click="this.$emit("ChangeDialogVisible");">取 消</el-button>
-    </span> -->
+    <div id="map" v-else></div>
   </el-dialog>
 </template>
 <script>
@@ -68,7 +64,6 @@ export default {
   data() {
     return {
       form: {},
-      myDialogVisible: this.dialogVisible,
       // 地图
       // 出发位置
       startPos: "",
@@ -114,9 +109,8 @@ export default {
   methods: {
     // 监听修改对话框的关闭事件，关闭时重置
     DialogClosed() {
-      this.$refs.FormRef.resetFields();
-      // 让父组件的dialogVisible变为false
-      this.$emit("ChangeDialogVisible");
+      // 通知父组件的dialogVisible变为false
+      this.$emit("notifyParent");
     },
     // 获取虾苗信息
     async getShrimpById(id) {
@@ -206,14 +200,12 @@ export default {
     id(id) {
       console.log("id: ", id);
       // 对话框出现才请求数据
-      if (this.myDialogVisible) {
-        if (this.isLogistics) {
-          //   如果是物流信息
-          this.getLogisticsById(this.id);
-        } else {
-          // 否则是对虾信息
-          this.getShrimpById(this.id);
-        }
+      if (this.isLogistics) {
+        //   如果是物流信息
+        this.getLogisticsById(this.id);
+      } else {
+        // 否则是对虾信息
+        this.getShrimpById(this.id);
       }
     },
   },

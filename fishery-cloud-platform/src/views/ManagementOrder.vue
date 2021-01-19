@@ -225,7 +225,7 @@
       :is-logistics="isLogistics"
       :dialog-visible="dialogVisible"
       :id="showInfoId"
-      @ChangeDialogVisible="ChangeDialogVisible"
+      @notifyParent="ChangeDialogVisible"
     ></show-info>
 
     <!-- 物流二维码 -->
