@@ -1,13 +1,13 @@
 <template>
   <div class="home-container">
     <!-- 头部区域 -->
-    <the-header></the-header>
+    <TheHeader></TheHeader>
     <!-- 页面主体区域 -->
     <el-container style="height: 100%">
       <!-- 侧边栏(导航栏)区域 -->
-      <the-navbar></the-navbar>
+      <TheNavbar></TheNavbar>
       <!-- 右侧主体区域 -->
-      <el-main>
+      <el-main style="background:#eaedf1;">
         <!-- 路由占位符 -->
         <router-view></router-view>
       </el-main>

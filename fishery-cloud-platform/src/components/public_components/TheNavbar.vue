@@ -26,10 +26,7 @@
           <span>我的基地</span>
         </template>
         <!-- 二级菜单 -->
-        <el-menu-item
-          index="/digital-base"
-          @click="saveNavState('/digital-base')"
-        >
+        <el-menu-item index="/digital-base">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-s-data"></i>
@@ -37,10 +34,7 @@
             <span>数字基地</span>
           </template>
         </el-menu-item>
-        <el-menu-item
-          index="/monitor-live"
-          @click="saveNavState('/monitor-live')"
-        >
+        <el-menu-item index="/monitor-live">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-stopwatch"></i>
@@ -49,10 +43,7 @@
             <!-- <a :href="this.monitorUrl" target="_blank" style="text-decoration:none;color:white"></a> -->
           </template>
         </el-menu-item>
-        <el-menu-item
-          index="/monitor-environment"
-          @click="saveNavState('/monitor-environment')"
-        >
+        <el-menu-item index="/monitor-environment">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-cloudy-and-sunny"></i>
@@ -70,11 +61,7 @@
           <span>渔业管理</span>
         </template>
         <!-- 二级菜单 -->
-        <el-menu-item
-          index="/management-pond"
-          @click="saveNavState('/management-pond')"
-          v-if="permissionVisable.traceability_pond"
-        >
+        <el-menu-item index="/management-pond">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-receiving"></i>
@@ -82,11 +69,7 @@
             <span>池塘管理</span>
           </template>
         </el-menu-item>
-        <el-menu-item
-          index="/management-supplies"
-          @click="saveNavState('/management-supplies')"
-          v-if="permissionVisable.traceability_agricultural"
-        >
+        <el-menu-item index="/management-supplies">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-grape"></i>
@@ -94,11 +77,7 @@
             <span>农资管理</span>
           </template>
         </el-menu-item>
-        <el-menu-item
-          index="/seed-purchase"
-          @click="saveNavState('/seed-purchase')"
-          v-if="permissionVisable.traceability_shrimp"
-        >
+        <el-menu-item index="/seed-purchase">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-s-help"></i>
@@ -106,11 +85,7 @@
             <span>种苗进货</span>
           </template>
         </el-menu-item>
-        <el-menu-item
-          index="/info-seed"
-          @click="saveNavState('/info-seed')"
-          v-if="permissionVisable.traceability_shrimpInfo"
-        >
+        <el-menu-item index="/info-seed">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-s-order"></i>
@@ -118,11 +93,7 @@
             <span>种苗信息</span>
           </template>
         </el-menu-item>
-        <el-menu-item
-          index="/info-supplies"
-          @click="saveNavState('/info-supplies')"
-          v-if="permissionVisable.traceability_inputs"
-        >
+        <el-menu-item index="/info-supplies">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-folder"></i>
@@ -140,11 +111,7 @@
           <span>设备管理</span>
         </template>
         <!-- 二级菜单 -->
-        <el-menu-item
-          index="/monitor-equipment"
-          @click="saveNavState('/monitor-equipment')"
-          v-if="permissionVisable.traceability_monitor"
-        >
+        <el-menu-item index="/monitor-equipment">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-s-platform"></i>
@@ -152,11 +119,7 @@
             <span>监控设备</span>
           </template>
         </el-menu-item>
-        <el-menu-item
-          index="/info-weather"
-          @click="saveNavState('/info-weather')"
-          v-if="permissionVisable.traceability_atmosphere"
-        >
+        <el-menu-item index="/info-weather">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-wind-power"></i>
@@ -164,11 +127,7 @@
             <span>气象设备</span>
           </template>
         </el-menu-item>
-        <el-menu-item
-          index="/info-water-quality"
-          @click="saveNavState('/info-water-quality')"
-          v-if="permissionVisable.traceability_waterquality"
-        >
+        <el-menu-item index="/info-water-quality">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-odometer"></i>
@@ -186,11 +145,7 @@
           <span>养殖生产</span>
         </template>
         <!-- 二级菜单 -->
-        <el-menu-item
-          index="/cold-storage"
-          @click="saveNavState('/cold-storage')"
-          v-if="permissionVisable.traceability_refrigeratory"
-        >
+        <el-menu-item index="/cold-storage">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-mobile"></i>
@@ -198,11 +153,7 @@
             <span>冷库</span>
           </template>
         </el-menu-item>
-        <el-menu-item
-          index="/process-plant"
-          @click="saveNavState('/process-plant')"
-          v-if="permissionVisable.traceability_process"
-        >
+        <el-menu-item index="/process-plant">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-house"></i>
@@ -210,11 +161,7 @@
             <span>加工厂</span>
           </template>
         </el-menu-item>
-        <el-menu-item
-          index="/info-product"
-          @click="saveNavState('/info-product')"
-          v-if="permissionVisable.traceability_product"
-        >
+        <el-menu-item index="/info-product">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-notebook-1"></i>
@@ -232,10 +179,7 @@
           <span>订单物流</span>
         </template>
         <!-- 二级菜单 -->
-        <el-menu-item
-          index="/management-order"
-          @click="saveNavState('/management-order')"
-        >
+        <el-menu-item index="/management-order">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-document"></i>
@@ -243,10 +187,7 @@
             <span>订单管理</span>
           </template>
         </el-menu-item>
-        <el-menu-item
-          index="/info-logistics"
-          @click="saveNavState('/info-logistics')"
-        >
+        <el-menu-item index="/info-logistics">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-truck"></i>
@@ -256,7 +197,7 @@
         </el-menu-item>
       </el-submenu>
       <!-- 系统设置 -->
-      <el-submenu index="6" v-if="baseIdentity === '2' || baseIdentity === '3'">
+      <el-submenu index="6">
         <template slot="title">
           <!-- 图标 -->
           <i class="el-icon-setting"></i>
@@ -264,10 +205,7 @@
           <span>基地管理</span>
         </template>
         <!-- 二级菜单 -->
-        <el-menu-item
-          index="/info-customer"
-          @click="saveNavState('/info-customer')"
-        >
+        <el-menu-item index="/info-customer">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-s-custom"></i>
@@ -275,10 +213,7 @@
             <span>客户管理</span>
           </template>
         </el-menu-item>
-        <el-menu-item
-          index="/management-staff"
-          @click="saveNavState('/management-staff')"
-        >
+        <el-menu-item index="/management-staff">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-user"></i>
@@ -286,10 +221,7 @@
             <span>员工管理</span>
           </template>
         </el-menu-item>
-        <el-menu-item
-          index="/management-inputs-classification"
-          @click="saveNavState('/management-inputs-classification')"
-        >
+        <el-menu-item index="/management-inputs-classification">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-caret-bottom"></i>
@@ -297,11 +229,7 @@
             <span>投入品分类管理</span>
           </template>
         </el-menu-item>
-        <el-menu-item
-          index="/management-authority"
-          @click="saveNavState('/management-authority')"
-          v-if="baseIdentity === '2'"
-        >
+        <el-menu-item index="/management-authority">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-s-grid"></i>
@@ -309,7 +237,7 @@
             <span>权限管理</span>
           </template>
         </el-menu-item>
-        <el-menu-item index="/info-base" @click="saveNavState('/info-base')">
+        <el-menu-item index="/info-base">
           <template slot="title">
             <!-- 图标 -->
             <i class="el-icon-document-copy"></i>
@@ -322,121 +250,14 @@
   </el-aside>
 </template>
 <script>
-import { mapMutations, mapState } from "vuex";
 export default {
   data() {
     return {
-      way: window.localStorage.getItem("way"),
-      baseIdentity: window.localStorage.getItem("baseIdentity"),
-      monitorUrl: "",
       // 是否折叠
       isCollapse: false,
       // 被激活的链接地址
-      activePath: "",
+      activePath: "/digital-base",
     };
-  },
-  computed: {
-    ...mapState(["permissionVisable"]),
-  },
-  methods: {
-    ...mapMutations(["setPermissionList"]),
-    // 验证用户是否有权限登录
-    async isLogined(token) {
-      const { data: res } = await this.$http.get(
-        "http://106.75.154.40:9003/user/self",
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-      // console.log("res: ", res);
-      if (res.code === 20000) {
-        this.activePath = '/digital-base';
-        this.defines.setBaseId(res.data.baseId);
-        window.localStorage.setItem("baseId", res.data.baseId);
-        window.localStorage.setItem("baseIdentity", res.data.baseIdentity);
-        document.cookie = encodeURI("aaa=" + this.defines.baseId);
-        this.getPermission();
-      }
-    },
-    // 获取权限清单
-    async getPermission() {
-      let baseId = window.localStorage.getItem("baseId");
-      let baseIdentity = window.localStorage.getItem("baseIdentity");
-      const { data: res } = await this.$http.get(
-        `http://106.75.154.40:9003/function/${baseId}/${baseIdentity}`,
-        {
-          headers: {
-            Authorization: window.localStorage.getItem("token"),
-          },
-        }
-      );
-      // console.log(res);
-      if (res.code === 20000) {
-        res.data.forEach((item) => {
-          if (item.remarks === "溯源管理") {
-            this.setPermissionList(item);
-          }
-        });
-      }
-    },
-    // 保存链接的激活状态
-    saveNavState(activePath) {
-      window.sessionStorage.setItem("activePath", activePath);
-      this.activePath = activePath;
-    },
-    // 退出登录操作
-    backLogin() {
-      window.localStorage.clear();
-      this.defines.setBaseId("");
-      this.setPermissionList(JSON.parse("{}"));
-      if (this.way !== "1") {
-        window.location.href = "http://106.75.132.85:9001/#/basePage";
-      } else {
-        this.$router.push("/login");
-      }
-    },
-  },
-  created() {
-    if (!this.defines.baseId) {
-      var This = this;
-      window.onload = function () {
-        window.frames[0].postMessage(
-          "",
-          "http://106.75.132.85:9001/#/basePage"
-        );
-        // if (location.href.indexOf("#") == -1) {
-        //   location.href = location.href + "#";
-        //   location.reload();
-        // }
-      };
-      //接收数据
-      window.addEventListener(
-        "message",
-        function (e) {
-          // console.log('e: ', e);
-          // console.log('typeof e.data: ', typeof e.data);
-          if (
-            typeof e.data != "object" &&
-            e.data.substring(0, 6) === "Bearer"
-          ) {
-            window.localStorage.setItem("token", e.data);
-            This.monitorUrl = "http://106.75.132.85:9002/livemonitor.html";
-            This.isLogined(e.data);
-          } else if (window.localStorage.getItem("token")) {
-            This.isLogined(window.localStorage.getItem("token"));
-          }
-        },
-        false
-      );
-    } else {
-      // console.log("this.defines.baseId: ", this.defines.baseId);
-      this.isLogined(window.localStorage.getItem("token"));
-    }
-    const activePath = window.sessionStorage.getItem("activePath");
-    activePath ? (this.activePath = activePath) : "";
-    // console.log("this.activePath: ", this.activePath);
   },
 };
 </script>
