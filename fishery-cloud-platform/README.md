@@ -27,9 +27,9 @@
 
 ![注册组件命名](https://images.gitee.com/uploads/images/2021/0117/162832_b42d9984_7367930.png "屏幕截图.png")
 
-使用组件：（经常用到）在vue文件中的template使用组件时，统一用`-`连接
+使用组件：（经常用到）在vue文件中的template使用组件时，统一用大驼峰命名吧，这样有高亮显示容易看一点
 
-![使用组件](https://images.gitee.com/uploads/images/2021/0117/163218_4bf88e17_7367930.png "屏幕截图.png")
+![大驼峰](https://images.gitee.com/uploads/images/2021/0119/110859_12a0038e_7367930.png "屏幕截图.png")
 
 基础组件：（这个你们一般不用封装）应用特定样式和约定的基础组件 (也就是展示类的、无逻辑的或无状态的组件) 应该全部以一个特定的前缀开头，比如 Base、App 或 V。
 这些组件为你的应用奠定了一致的基础样式和行为。它们可能只包括：
@@ -67,18 +67,30 @@ style必须设置scoped来限制作用域（如果父组件想改变或者覆盖
 
 ## 如何开始做项目
 
-点开路由router，找到自己对应的路由文件，查看注释，我基本上都把要写的页面写好了
+### 将origin/master代码拉取到你自己本地的分支(比如ljc,ccy,cgx,yzc）
 
-如果需要自己再添加页面（指的是views），注意命名格式
+执行`cnpm install`安装依赖包(因为git不会把node_modules文件上传)
+
+执行`npm run serve`运行项目
+
+点开路由router，找到自己对应的路由文件，查看导入的views视图名称，在views中找到对应的vue文件
+
+再看中文注释，在原来的溯源代码中找到对应的页面，然后开始你的CV大法，再模块化即可
+
+我基本上都把要写的页面写好了，如果需要自己再添加页面（指的是views），注意命名格式
 
 ![router](https://images.gitee.com/uploads/images/2021/0118/202002_b641e614_7367930.png "屏幕截图.png")
 
-## Project setup
-```
-npm install
-```
+### 模块化常见问题
+#### 单向数据流
+所有的 prop 都使得其父子 prop 之间形成了一个单向下行绑定：父级 prop 的更新会向下流动到子组件中，但是反过来则不行。这样会防止从子组件意外变更父级组件的状态，从而导致你的应用的数据流向难以理解。
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+额外的，每次父级组件发生变更时，子组件中所有的 prop 都将会刷新为最新的值。这意味着你不应该在一个子组件内部改变 prop。如果你这样做了，Vue 会在浏览器的控制台中发出警告。
+
+这里有两种常见的试图变更一个 prop 的情形：
+
+![prop](https://images.gitee.com/uploads/images/2021/0119/101005_37722081_7367930.png "屏幕截图.png")
+
+
+
+
