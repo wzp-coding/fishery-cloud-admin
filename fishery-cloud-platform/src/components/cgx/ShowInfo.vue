@@ -8,7 +8,7 @@
     <!-- 内容主题区 虾苗信息-->
     <el-form
       v-if="!isLogistics"
-      :model="form"
+      v-model="form"
       ref="FormRef"
       label-width="120px"
     >
@@ -112,28 +112,29 @@ export default {
       // 通知父组件的dialogVisible变为false
       this.$emit("notifyParent");
     },
-    // 获取虾苗信息
-    async getShrimpById(id) {
-      // 调用根据ID查询用户信息接口
-      const { data: res } = await this.$http.get("/shrimp/" + id);
-      if (res.code !== 20000) {
-        return this.$message.error("查询该虾苗信息失败！！");
-      }
-      this.form = res.data || {};
-      console.log("this.form: ", this.form);
-    },
-    // 展示物流信息的对话框
-    async getLogisticsById(id) {
-      // 调用根据ID查询
-      const { data: res } = await this.$http.get("/logistics/findForQR/" + id);
-      if (res.code !== 20000) {
-        return this.$message.error("查询该物流信息失败！！");
-      }
-      // console.log(res)
-      this.form = res.data || {};
-      console.log("this.form: ", this.form);
-      this.init();
-    },
+    // // 获取虾苗信息
+    // async getShrimpById(id) {
+    //   // 调用根据ID查询用户信息接口
+    //   const { data: res } = await this.$http.get("/shrimp/" + id);
+    //   if (res.code !== 20000) {
+    //     return this.$message.error("查询该虾苗信息失败！！");
+    //   }
+    //   this.form = res.data || {};
+    //   console.log("this.form: ", this.form);
+    // },
+    // // 展示物流信息的对话框
+    // async getLogisticsById(id) {
+    //   // 调用根据ID查询
+    //   const { data: res } = await this.$http.get("/logistics/findForQR/" + id);
+    //   if (res.code !== 20000) {
+    //     return this.$message.error("查询该物流信息失败！！");
+    //   }
+    //   // console.log(res)
+    //   this.form = res.data || {};
+    //   console.log("this.form: ", this.form);
+    //   this.init();
+    // },
+
     // 地图
     init() {
       var This = this;
@@ -202,10 +203,77 @@ export default {
       // 对话框出现才请求数据
       if (this.isLogistics) {
         //   如果是物流信息
-        this.getLogisticsById(this.id);
+        // this.getLogisticsById(this.id);
+        this.form = [
+          {
+            adultShrimpId: "1304076717681414144",
+            arrivalAddr: "中国香港特别行政区香港特别行政区中西区花旗銀行大廈",
+            arrivalTime: "2020-09-12 17:40:22",
+            baseId: "1248910886228332544",
+            createBy: null,
+            createDate: null,
+            departureAddr: "广州市海珠区仲恺农业工程学院",
+            departureTime: "2020-09-10 23:18:11",
+            id: "1304076718616743936",
+            logisticsArrivalLatitude: "22.27534",
+            logisticsArrivalLongitude: "114.16546",
+            logisticsStartLatitude: "23.107161",
+            logisticsStartLongitude: "113.280548",
+            logisticsStatus: "1",
+            orderId: "1304076719510130688",
+          },
+          {
+            adultShrimpId: "1304076717681414144",
+            arrivalAddr: "中国香港特别行政区香港特别行政区中西区花旗銀行大廈",
+            arrivalTime: "2020-09-12 17:40:22",
+            baseId: "1248910886228332544",
+            createBy: null,
+            createDate: null,
+            departureAddr: "广州市海珠区仲恺农业工程学院",
+            departureTime: "2020-09-10 23:18:11",
+            id: "1304076718616743936",
+            logisticsArrivalLatitude: "22.27534",
+            logisticsArrivalLongitude: "114.16546",
+            logisticsStartLatitude: "23.107161",
+            logisticsStartLongitude: "113.280548",
+            logisticsStatus: "1",
+            orderId: "1304076719510130688",
+          },
+          {
+            adultShrimpId: "1304076717681414144",
+            arrivalAddr: "中国香港特别行政区香港特别行政区中西区花旗銀行大廈",
+            arrivalTime: "2020-09-12 17:40:22",
+            baseId: "1248910886228332544",
+            createBy: null,
+            createDate: null,
+            departureAddr: "广州市海珠区仲恺农业工程学院",
+            departureTime: "2020-09-10 23:18:11",
+            id: "1304076718616743936",
+            logisticsArrivalLatitude: "22.27534",
+            logisticsArrivalLongitude: "114.16546",
+            logisticsStartLatitude: "23.107161",
+            logisticsStartLongitude: "113.280548",
+            logisticsStatus: "1",
+            orderId: "1304076719510130688",
+          },
+        ];
       } else {
         // 否则是对虾信息
-        this.getShrimpById(this.id);
+        // this.getShrimpById(this.id);
+        this.form = [
+          {
+            shrimpBatchName: "",
+            shrimpSpecies: "",
+            shrimpOrigin: "",
+            shrimpSupplier: "",
+            seedlingTime: "",
+            fishingTime: "",
+            createBy: "",
+            inputNum: "",
+            yield: "",
+            remain: "",
+          },
+        ];
       }
     },
   },

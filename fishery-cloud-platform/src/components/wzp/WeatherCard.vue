@@ -1,32 +1,144 @@
 <template>
-  <div class="weather-card container">
-    <div class="sunny" v-show="'00'==weatherIndex"></div>
-    <div class="cloudy" v-show="'01'==weatherIndex ||'02'==weatherIndex || '18'==weatherIndex || '100'==weatherIndex"></div>
-    <div class="rainy" v-show="'03'==weatherIndex || '07'==weatherIndex || '08'==weatherIndex || '09'==weatherIndex || '10'==weatherIndex || '11'==weatherIndex || '12'==weatherIndex || '19'==weatherIndex || '21'==weatherIndex || '22'==weatherIndex || '23'==weatherIndex || '24'==weatherIndex || '25'==weatherIndex"></div>
-    <div class="snowy" v-show="'13'==weatherIndex || '14'==weatherIndex || '15'==weatherIndex || '16'==weatherIndex || '17'==weatherIndex || '26'==weatherIndex || '27'==weatherIndex || '28'==weatherIndex"></div>
-    <div class="stormy" v-show="'04'==weatherIndex"></div>
-  </div>
+  <el-card shadow="always">
+    <el-carousel height="450px" :interval="4000" indicator-position="outside">
+      <el-carousel-item
+        style="border: none"
+        v-for="(item, index) in weatherData.list"
+        :key="index"
+      >
+        <div class="weather-card container">
+          <div class="sunny" v-show="'00' == weatherIndex"></div>
+          <div
+            class="cloudy"
+            v-show="
+              '01' == weatherIndex ||
+              '02' == weatherIndex ||
+              '18' == weatherIndex ||
+              '100' == weatherIndex
+            "
+          ></div>
+          <div
+            class="rainy"
+            v-show="
+              '03' == weatherIndex ||
+              '07' == weatherIndex ||
+              '08' == weatherIndex ||
+              '09' == weatherIndex ||
+              '10' == weatherIndex ||
+              '11' == weatherIndex ||
+              '12' == weatherIndex ||
+              '19' == weatherIndex ||
+              '21' == weatherIndex ||
+              '22' == weatherIndex ||
+              '23' == weatherIndex ||
+              '24' == weatherIndex ||
+              '25' == weatherIndex
+            "
+          ></div>
+          <div
+            class="snowy"
+            v-show="
+              '13' == weatherIndex ||
+              '14' == weatherIndex ||
+              '15' == weatherIndex ||
+              '16' == weatherIndex ||
+              '17' == weatherIndex ||
+              '26' == weatherIndex ||
+              '27' == weatherIndex ||
+              '28' == weatherIndex
+            "
+          ></div>
+          <div class="stormy" v-show="'04' == weatherIndex"></div>
+        </div>
+        <div class="weatherContent">
+          <el-row class="weatherTop">
+            <el-col :span="12" class="weatherDay">{{
+              index === 0 ? "今" : "明"
+            }}</el-col>
+            <el-col :span="12" class="weatherRightTop">
+              <p>{{ weatherData.cityName }}</p>
+              <div>{{ item.date }}</div>
+            </el-col>
+          </el-row>
+          <el-row class="weatherBottom">
+            <el-col :span="12" class="weatherBL">
+              <p style="font-weight: bold; font-size: 20px">早</p>
+              <p>气温:{{ item.qw1 }} ℃</p>
+              <p>天气:{{ item.tq1 }}</p>
+              <p>风力:{{ item.fl1 }}</p>
+            </el-col>
+            <el-col :span="12" class="weatherBR">
+              <p style="font-weight: bold; font-size: 20px">晚</p>
+              <p>气温:{{ item.qw2 }} ℃</p>
+              <p>天气:{{ item.tq2 }}</p>
+              <p>风力:{{ item.fl2 }}</p>
+            </el-col>
+          </el-row>
+        </div>
+      </el-carousel-item>
+    </el-carousel>
+  </el-card>
 </template>
 
 <script>
 export default {
-  name: 'WeatherCard',
-  props: {
-    weatherIndex: {
-      type: String,
-      default: '00'
-    }
-  }
-}
+  data() {
+    return {
+      weatherIndex: "00",
+      weatherData: {
+        cityId: "CH280101",
+        cityName: "广州",
+        list: [
+          {
+            date: "2021-01-20",
+            fl1: "微风",
+            fl2: "微风",
+            fx1: "无持续风向",
+            fx2: "无持续风向",
+            numfl1: "0",
+            numfl2: "0",
+            numfx1: "0",
+            numfx2: "0",
+            numtq1: "01",
+            numtq2: "01",
+            qw1: "22",
+            qw2: "14",
+            tq1: "多云",
+            tq2: "多云",
+          },
+          {
+            date: "2021-01-21",
+            fl1: "微风",
+            fl2: "微风",
+            fx1: "无持续风向",
+            fx2: "无持续风向",
+            numfl1: "0",
+            numfl2: "0",
+            numfx1: "0",
+            numfx2: "0",
+            numtq1: "02",
+            numtq2: "02",
+            qw1: "23",
+            qw2: "16",
+            tq1: "阴",
+            tq2: "阴",
+          },
+        ],
+        sj: "2021-01-20 15:00:00",
+      },
+      weatherFlag: 1,
+    };
+  },
+};
 </script>
 
 <style lang="less" scoped>
 .weather-card {
-  position:relative;
-  min-height:200px;
+  position: relative;
+  min-height: 200px;
   // background-color: #e6e0e0;
   background-color: #cce2ff;
-//   background-color: #000;
+  //   background-color: #000;
   border-radius: 6px;
 }
 /* SUNNY */
@@ -65,7 +177,7 @@ export default {
   //   rgba(255, 255, 255, 0.8) 50%,
   //   rgba(255, 255, 255, 0) 100%
   // );
-  content: '';
+  content: "";
   height: 140px;
   width: 20px;
   opacity: 1;
@@ -79,7 +191,7 @@ export default {
   background: #ffee44;
   border-radius: 50%;
   box-shadow: rgba(255, 255, 0, 0.2) 0 0 0 15px;
-  content: '';
+  content: "";
   height: 80px;
   width: 80px;
   position: absolute;
@@ -127,7 +239,7 @@ export default {
   animation: cloudy_shadow 5s ease-in-out infinite;
   background: #000000;
   border-radius: 50%;
-  content: '';
+  content: "";
   height: 15px;
   width: 120px;
   opacity: 0.2;
@@ -185,7 +297,7 @@ export default {
   animation: rainy_shadow 5s ease-in-out infinite 1s;
   background: #000000;
   border-radius: 50%;
-  content: '';
+  content: "";
   height: 15px;
   width: 120px;
   opacity: 0.2;
@@ -198,7 +310,7 @@ export default {
 .rainy:before {
   -webkit-animation: rainy_rain 0.7s infinite linear;
   animation: rainy_rain 0.7s infinite linear;
-  content: '';
+  content: "";
   background: #cccccc;
   border-radius: 50%;
   display: block;
@@ -341,7 +453,7 @@ export default {
   animation: rainbow_shadow 5s ease-in-out infinite;
   background: #000000;
   border-radius: 50%;
-  content: '';
+  content: "";
   opacity: 0.2;
   height: 15px;
   width: 120px;
@@ -407,7 +519,7 @@ export default {
   animation: starry 5s ease-in-out infinite;
   border-radius: 50%;
   box-shadow: #ffffff -25px 0;
-  content: '';
+  content: "";
   height: 100px;
   width: 100px;
   position: absolute;
@@ -476,7 +588,7 @@ export default {
   animation: stormy_shadow 5s ease-in-out infinite;
   background: #000;
   border-radius: 50%;
-  content: '';
+  content: "";
   height: 15px;
   width: 120px;
   opacity: 0.2;
@@ -493,7 +605,7 @@ export default {
   border-right: 7px solid transparent;
   border-top: 43px solid yellow;
   box-shadow: yellow -7px -32px;
-  content: '';
+  content: "";
   display: block;
   height: 0;
   width: 0;
@@ -597,7 +709,7 @@ export default {
   animation: snowy_shadow 5s ease-in-out infinite 1s;
   background: #000000;
   border-radius: 50%;
-  content: '';
+  content: "";
   height: 15px;
   width: 120px;
   opacity: 0.2;
@@ -610,7 +722,7 @@ export default {
 .snowy:before {
   -webkit-animation: snowy_snow 2s infinite linear;
   animation: snowy_snow 2s infinite linear;
-  content: '';
+  content: "";
   border-radius: 50%;
   display: block;
   height: 7px;
@@ -769,5 +881,51 @@ export default {
   // );
   -webkit-transform: scale(0.9);
   transform: scale(0.9);
+}
+.weather-card {
+  border: 1px solid black;
+}
+.weatherContent {
+  color: rgb(90, 88, 88);
+  box-sizing: border-box;
+  padding: 2px 10px;
+  border: 1px solid black;
+  width: 90%;
+  margin: 10px auto 0;
+  border-radius: 6px;
+  background-color: #cce2ff;
+  .weatherTop {
+    margin-bottom: 0;
+    .weatherDay {
+      font-size: 70px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+
+    .weatherRightTop {
+      p {
+        font-size: 20px;
+        line-height: 0;
+        padding: 5px 0;
+      }
+    }
+  }
+
+  .weatherBottom {
+    margin-bottom: 0;
+    .weatherBL {
+      p {
+        line-height: 0;
+        padding: 5px 0;
+      }
+    }
+
+    .weatherBR {
+      p {
+        line-height: 0;
+        padding: 5px 0;
+      }
+    }
+  }
 }
 </style>

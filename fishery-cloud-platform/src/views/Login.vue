@@ -114,7 +114,7 @@ export default {
           }
         )
         .then((ret) => {
-          console.log(ret);
+          // console.log(ret);
           if (ret.data.code == 20001) {
             this.operation();
             this.frequent = ret.data.message;

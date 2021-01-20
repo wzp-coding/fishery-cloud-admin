@@ -24,6 +24,14 @@ Vue.prototype.$echarts = echarts
 import JsonExcel from 'vue-json-excel'
 Vue.component('downloadExcel', JsonExcel)
 
+// 拖拽组件
+import draggable from 'vuedraggable'
+Vue.component('Draggable', draggable)
+
+// 无渲染标签
+import { Plugin } from 'vue-fragment'
+Vue.use(Plugin)
+
 // 配置请求的根路径
 axios.defaults.baseURL = 'http://106.75.154.40:9012/traceability'
 // 配置权限根路径

@@ -3,18 +3,21 @@
  1.当组件作为 展示基地的地图位置 使用时，需要传入
  地图类型：map-name:"base"
  基地的经纬度：center-point:{lat:纬度(Float),lng:经度(Float)}
+
  2.当组件作为 展示物流发货地和目的地 使用时，需要传入
  地图类型：map-name:"logistics"
  发货地的经纬度：start-point:{lat:纬度(Float),lng:经度(Float)}
  目的地的经纬度：end-point:{lat:纬度(Float),lng:经度(Float)}
  * @Author: 吴泽鹏
  * @Date: 2021/1/20 0:00
- * @LastEditors: 无
- * @LastEditTime: 无
+ * @LastEditors: 吴泽鹏
+ * @LastEditTime: 2021/1/20 15:09
 -->
 <template>
   <!--   定义地图显示容器   -->
-  <div id="mapContainer" style="width: 100%; height: 500px"></div>
+  <el-card id="mapCard">
+    <div id="mapContainer" style="width: 100%; height: 500px"></div>
+  </el-card>
 </template>
 
 <script>
@@ -62,52 +65,35 @@ export default {
         return obj.lat && obj.lng;
       },
     },
-
+    
     // 控制显示地图的类型
     /**
      * 物流：logistics
      * 基地：base
+     * 订单：order
      */
     mapName: {
       type: String,
       default: "base",
       required: true,
       validator(str) {
-        return ["logistics", "base"].includes(str);
+        return ["logistics", "base", "order"].includes(str);
       },
     },
-  },
-  data() {
-    return {
-      // 地址
-      address: "",
-      // 维度
-      lat: 39.916527,
-      // 经度
-      lng: 116.397128,
-      // 用于创建一个地图
-      map: undefined,
-      // 标记
-      mark: undefined,
-      debounceLocationToAddr: undefined,
-      // 经纬度转地址的转换器
-      geocoderLocationToAddr: undefined,
-      debounceAddrToLocation: undefined,
-      geocoderAddrToLocation: undefined,
-    };
   },
   methods: {
     // 动态引入腾讯地图
     // key = 4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ
     loadScript(key) {
-      return new Promise((resolve, reject) => {
-        window.onload = function () {
-          resolve(TMap);
-        };
+      // console.log("key: ", key);
+      return new Promise((resolve) => {
         var script = document.createElement("script");
         script.type = "text/javascript";
         script.src = `https://map.qq.com/api/gljs?v=1.exp&key=${key}&callback=init`;
         document.body.appendChild(script);
+        window.init = function () {
+          resolve(TMap);
+        };
       });
     },
     //设置自适应显示marker
@@ -127,7 +113,8 @@ export default {
       });
     },
     //初始化基地地图
-    initBaseMap() {
+    async initBaseMap() {
+      await this.$nextTick();
       //定义地图中心点坐标
       const center = new TMap.LatLng(
         this.centerPoint.lat,
@@ -182,8 +169,9 @@ export default {
       });
       centerWindow.open();
     },
-    // 初始化物流地图
-    initLogisticsMap() {
+    //初始化物流地图
+    async initLogisticsMap() {
+      await this.$nextTick();
       //定义map变量，调用 TMap.Map() 构造函数创建地图
       let map = new TMap.Map(document.getElementById("mapContainer"), {});
       //创建并初始化出发点，目的地
@@ -246,9 +234,15 @@ export default {
       });
       endWindow.open();
     },
+    // 初始化订单地图
+    async initOrderMap() {
+      await this.$nextTick();
+      
+    },
   },
   created() {
     this.loadScript("4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ").then(() => {
+      // console.log('TMap: ', TMap);
       switch (this.mapName) {
         case "logistics":
           this.initLogisticsMap();
@@ -256,8 +250,19 @@ export default {
         case "base":
           this.initBaseMap();
           break;
+        case "order":
+          this.initOrderMap();
+          break;
       }
     });
   },
 };
 </script>
+<style lang="less" scoped>
+#mapCard {
+  #mapContainer {
+    border: 1px solid #ebeef5;
+    border-radius: 4px;
+  }
+}
+</style>
