@@ -1,42 +1,21 @@
 <template>
   <div>
     <!-- 头部区域 -->
-    <iframe src="http://106.75.132.85:9001/#/basePage" hidden></iframe>
     <el-header>
       <div>
-        <img src="" />
         <span>智慧渔业云服务平台</span>
       </div>
-      <span @click="backLogin" style="cursor: pointer">{{
-        way === "1" ? "退出登录" : "返回前台"
-      }}</span>
+      <span @click="backLogin" style="cursor: pointer">退出登录</span>
     </el-header>
   </div>
 </template>
 <script>
-import { mapState,mapMutations } from 'vuex';
 export default {
-  data() {
-    return {
-      way: window.localStorage.getItem("way"),
-    };
-  },
-  computed:{
-    ...mapState(["permissionVisable"])
-  },
   methods: {
-    // 获取设置权限的方法
-    ...mapMutations(["setPermissionList"]),
     // 退出登录操作
     backLogin() {
-      window.localStorage.clear();
-      this.defines.setBaseId("");
-      this.setPermissionList(JSON.parse("{}"));
-      if (this.way !== "1") {
-        window.location.href = "http://106.75.132.85:9001/#/basePage";
-      } else {
-        this.$router.push("/login");
-      }
+      localStorage.setItem('token','');
+      this.$router.push('/login');
     },
   },
 };

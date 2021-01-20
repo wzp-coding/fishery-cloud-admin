@@ -84,13 +84,9 @@ export default {
       token: window.localStorage.getItem("token"),
     };
   },
-  created() {
+  mounted() {
     this.getCaptcha();
-    this.isLogined();
   },
-  // mounted() {
-  //   this.isLogined()
-  // },
   methods: {
     async isLogined() {
       const { data: res } = await this.$http.get(
@@ -167,25 +163,12 @@ export default {
           }
           // 登录成功保留token值
           else {
-            if (res.data.data.baseId != null) {
-              console.log(res);
-              window.localStorage.setItem(
-                `token`,
-                "Bearer " + res.headers.token
-              );
-              window.localStorage.setItem("baseId", res.data.data.baseId);
-              window.localStorage.setItem(
-                "baseIdentity",
-                res.data.data.baseIdentity
-              );
-              window.localStorage.setItem("way", 1);
-              this.defines.setBaseId(res.data.data.baseId);
-              document.cookie = encodeURI("aaa=" + this.defines.baseId);
-              this.$router.push(`/home`);
-              this.$message.success(`登录成功`);
-            } else {
-              this.roperation();
-            }
+            window.localStorage.setItem(
+              `token`,
+              "Bearer " + res.headers.token
+            );
+            this.$router.push(`/digital-base`);
+            this.$message.success(`登录成功`);
           }
         });
     },
