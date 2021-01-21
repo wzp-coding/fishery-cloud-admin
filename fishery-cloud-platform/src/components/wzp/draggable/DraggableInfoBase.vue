@@ -1,7 +1,6 @@
 <template>
   <el-col :span="6">
     <InfoBase></InfoBase>
-    
   </el-col>
 </template>
 <script>

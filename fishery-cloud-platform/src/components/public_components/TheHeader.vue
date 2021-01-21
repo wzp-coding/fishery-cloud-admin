@@ -33,7 +33,7 @@ export default {
   //文本颜色
   color: #fff;
   //字体大小
-  font-size: 24px;
+  font-size: 20px;
   > div {
     display: flex;
     // y轴居中对齐
