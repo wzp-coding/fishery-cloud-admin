@@ -1,14 +1,14 @@
 <template>
     <div>
         实况监控
-        <LocationPicker></LocationPicker>
+        <MyLocationPicker></MyLocationPicker>
     </div>
 </template>
 <script>
-import LocationPicker from "../components/public_components/LocationPicker"
+import MyLocationPicker from "../components/public_components/MyLocationPicker"
 export default {
     components:{
-        LocationPicker
+        MyLocationPicker
     }
 }
 </script>

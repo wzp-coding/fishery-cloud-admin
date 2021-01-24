@@ -8,10 +8,12 @@ import get from 'lodash/get';
  * 示例：如果有 http://106.75.154.40:9012/traceability/getA
  *       和 http://106.75.154.40:9012/traceability/getB
  * 那么value就是 http://106.75.154.40:9012/traceability
+ * 
+ * 如果一定需要原生纯净的axios,那么可以通过this.$originAxios来调用
  */
 const baseURLObject = {
-    huangyue:"http://106.75.154.40:9012/traceability",
-    plant:"http://119.23.218.131:9111",
+    auth:"http://106.75.154.40:9003",
+    user:"http://106.75.154.40:9003/user",
 }
 
 // 异常拦截处理器
@@ -52,12 +54,16 @@ for (const key in baseURLObject){
     axiosObject[key].interceptors.request.use((config)=>{
         // 如果 token 存在
         // 让每个请求携带自定义 token 请根据实际情况自行修改
-        config.headers.Authorization = `bearer ${localStorage.getItem('token')}`;
+        config.headers = {
+            Authorization : `bearer ${localStorage.getItem('token')}`,
+            xip: window.localStorage.getItem("Ip")
+        }
         return config;
     },errorHandler)
 }
 
-
+// 添加一个纯净的axios
+axiosObject.originAxios = axios.create();
 
 export default {
     install(Vue){
