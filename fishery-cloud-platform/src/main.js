@@ -37,6 +37,7 @@ axios.defaults.baseURL = 'http://106.75.154.40:9012/traceability'
 // 配置权限根路径
 Vue.prototype.$limit = 'http://106.75.154.40:9003'
 
+
 new Vue({
   router,
   store,
