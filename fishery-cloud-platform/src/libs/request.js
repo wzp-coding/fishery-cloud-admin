@@ -8,6 +8,8 @@ import get from 'lodash/get';
  * 示例：如果有 http://106.75.154.40:9012/traceability/getA
  *       和 http://106.75.154.40:9012/traceability/getB
  * 那么value就是 http://106.75.154.40:9012/traceability
+ * 
+ * 如果一定需要原生纯净的axios,那么可以通过this.$originAxios来调用
  */
 const baseURLObject = {
     auth:"http://106.75.154.40:9003",
@@ -60,7 +62,8 @@ for (const key in baseURLObject){
     },errorHandler)
 }
 
-
+// 添加一个纯净的axios
+axiosObject.originAxios = axios.create();
 
 export default {
     install(Vue){
