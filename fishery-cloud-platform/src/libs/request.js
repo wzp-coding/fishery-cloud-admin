@@ -1,11 +1,18 @@
 import axios from 'axios';
 import get from 'lodash/get';
-// 创建 axios 实例
-const request = axios.create({
-    // API 请求的默认前缀
-    baseURL: 'http://106.75.154.40:9012/traceability',
-    timeout: 10000, // 请求超时时间
-});
+/**
+ * baseURL 对象{Object}
+ * key:定义你们要请求的名字(每个人可以自定义,建议按模块名称定义，比如权限模块就用Authority)
+ * 示例：this.$myName，则key就是myName(注意$,请求时$必加)
+ * value:定义请求的根地址
+ * 示例：如果有 http://106.75.154.40:9012/traceability/getA
+ *       和 http://106.75.154.40:9012/traceability/getB
+ * 那么value就是 http://106.75.154.40:9012/traceability
+ */
+const baseURLObject = {
+    huangyue:"http://106.75.154.40:9012/traceability",
+    huangzerun:"http://xxx",
+}
 
 // 异常拦截处理器
 const errorHandler = (error) => {
@@ -29,39 +36,33 @@ const errorHandler = (error) => {
     return Promise.reject(error);
 };
 
-// request interceptor请求拦截器
-request.interceptors.request.use((config) => {
-    // 如果 token 存在
-    // 让每个请求携带自定义 token 请根据实际情况自行修改
-    // eslint-disable-next-line no-param-reassign
-    config.headers.Authorization = `bearer ${localStorage.getItem('token')}`;
-    return config;
-}, errorHandler);
+/**
+ * 循环创建axios实例
+ * 实例名称为baseURL的key名
+ * 需要添加请求头请在下面自己加
+ */
+const axiosObject = {};
+for (const key in baseURLObject){
+    axiosObject[key] = axios.create({
+        // API 请求的默认前缀
+        baseURL: baseURLObject[key],
+        timeout: 10000, // 请求超时时间
+    })
+    // 请求拦截器（添加请求头，例如token、IP等）
+    axiosObject[key].interceptors.request.use((config)=>{
+        // 如果 token 存在
+        // 让每个请求携带自定义 token 请根据实际情况自行修改
+        config.headers.Authorization = `bearer ${localStorage.getItem('token')}`;
+        return config;
+    },errorHandler)
+}
 
-// response interceptor响应拦截器
-request.interceptors.response.use((response) => {
-    const dataAxios = response.data;
-    // 这个状态码是和后端约定的
-    const { code } = dataAxios;
-    // 根据 code 进行判断
-    if (code === undefined) {
-        // 如果没有 code 代表这不是项目后端开发的接口
-        return dataAxios;
-        // eslint-disable-next-line no-else-return
-    } else {
-        // 有 code 代表这是一个后端接口 可以进行进一步的判断
-        switch (code) {
-            case 200:
-                // [ 示例 ] code === 200 代表没有错误
-                return dataAxios.data;
-            case 'xxx':
-                // [ 示例 ] 其它和后台约定的 code
-                return 'xxx';
-            default:
-                // 不是正确的 code
-                return '不是正确的code';
+
+
+export default {
+    install(Vue){
+        for(let key in axiosObject){
+            Vue.prototype["$"+key] = axiosObject[key];
         }
     }
-}, errorHandler);
-
-export default request;
+};

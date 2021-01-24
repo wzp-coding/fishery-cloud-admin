@@ -16,9 +16,9 @@ Vue.use(VueCookies)
 import Directives from "./libs/directives/index"
 Vue.use(Directives)
 
-// 安装axios并且把包挂载到原型对象上
-import axios from 'axios'
-Vue.prototype.$http = axios
+// 封装axios并且把包挂载到原型对象上
+import axiosObject from './libs/request'
+Vue.use(axiosObject)
 
 // 安装echarts并且全局挂载
 import echarts from 'echarts'
@@ -32,24 +32,8 @@ Vue.component('downloadExcel', JsonExcel)
 import draggable from 'vuedraggable'
 Vue.component('Draggable', draggable)
 
-// 配置请求的根路径
-axios.defaults.baseURL = 'http://106.75.154.40:9012/traceability'
-// 配置权限根路径
-Vue.prototype.$limit = 'http://106.75.154.40:9003'
 
 
-// 到时候封装权限按钮控制
-// Vue.directive('add', {
-//   bind: function (el, binding, vnode) {
-//     if (binding.value == 'digital-base') {
-//       el.disabled = false;
-//       el.classList.remove("is-disabled")
-//     }else{
-//       el.disabled = true;
-//       el.classList.add("is-disabled")
-//     }
-//   }
-// })
 
 new Vue({
   router,

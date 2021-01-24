@@ -21,8 +21,15 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: "Map",
+  data() {
+    return {
+      // 我个人注册腾讯地图的key
+      key:"4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ"
+    }
+  },
   props: {
     // 地图中心点坐标
     centerPoint: {
@@ -70,26 +77,25 @@ export default {
     /**
      * 物流：logistics
      * 基地：base
-     * 订单：order
      */
     mapName: {
       type: String,
       default: "base",
       required: true,
       validator(str) {
-        return ["logistics", "base", "order"].includes(str);
+        return ["logistics", "base"].includes(str);
       },
     },
   },
   methods: {
     // 动态引入腾讯地图
     // key = 4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ
-    loadScript(key) {
+    loadScript() {
       // console.log("key: ", key);
       return new Promise((resolve) => {
         var script = document.createElement("script");
         script.type = "text/javascript";
-        script.src = `https://map.qq.com/api/gljs?v=1.exp&key=${key}&callback=init`;
+        script.src = `https://map.qq.com/api/gljs?v=1.exp&key=${this.key}&callback=init`;
         document.body.appendChild(script);
         window.init = function () {
           resolve(TMap);
@@ -195,7 +201,7 @@ export default {
           },
         },
       ];
-      let markerLayer = new TMap.MultiMarker({
+      new TMap.MultiMarker({
         map: map, //指定地图容器
         //样式定义
         styles: {
@@ -234,24 +240,24 @@ export default {
       });
       endWindow.open();
     },
-    // 初始化订单地图
-    async initOrderMap() {
-      await this.$nextTick();
-      
-    },
+    // 显示物流地图的路线（不是实际路线，只是为了好看）
+    async showLogisticsRoute(){
+      const url = `/api/ws/direction/v1/driving/?from=${this.startPoint.lat},${this.startPoint.lng}&to=${this.endPoint.lat},${this.endPoint.lng}&output=json&key=${this.key}`
+      const {data:res} = await axios.get(url);
+      const route = res.result.routes[0];
+      console.log('route: ', route);
+    }
   },
   created() {
-    this.loadScript("4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ").then(() => {
+    this.loadScript().then(() => {
       // console.log('TMap: ', TMap);
       switch (this.mapName) {
         case "logistics":
           this.initLogisticsMap();
+          this.showLogisticsRoute();
           break;
         case "base":
           this.initBaseMap();
-          break;
-        case "order":
-          this.initOrderMap();
           break;
       }
     });

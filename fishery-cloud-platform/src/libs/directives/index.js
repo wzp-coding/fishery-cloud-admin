@@ -1,7 +1,7 @@
-// import draggable from './draggable'
+import permission from './permission'
 // 自定义指令
 const directives = {
-    // draggable
+    permission
 }
 
 export default {

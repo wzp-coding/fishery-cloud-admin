@@ -5,14 +5,14 @@
       <el-breadcrumb-item>数字基地</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="cardBody">
-      <el-row class="globalHeader" style="margin-bottom: 20px">
+      <el-row class="globalHeader" style="margin-bottom: 20px;">
         <el-col :span="4">
-          <i class="el-icon-s-data"></i> <span>数字基地</span></el-col
+          <i class="el-icon-s-data"></i><span>数字基地</span></el-col
         >
         <el-col style="width: 100px; float: right">
           <el-button
             type="primary"
-            style="float: right"
+            style="float: right;"
             plain
             @click="ChangeAuthorityShow"
             >所持权限</el-button
@@ -77,31 +77,34 @@
 const DraggableInfoBase = {
   components: { InfoBase },
   render(h) {
-    return (<el-col span={6}>
-          <InfoBase></InfoBase>
-        </el-col>)
-  }
+    return (
+      <el-col span={6}>
+        <InfoBase></InfoBase>
+      </el-col>
+    );
+  },
 };
 const DraggableMap = {
   components: { Map },
   render(h) {
-    return (<el-col span={11}>
-          <Map map-name="base"></Map>
-        </el-col>)
+    return (
+      <el-col span={11}>
+        <Map map-name="logistics"></Map>
+      </el-col>
+    );
   },
 };
 const DraggableWeatherCard = {
   components: { WeatherCard },
   render(h) {
-    return (<el-col span={6}>
-          <WeatherCard></WeatherCard>
-        </el-col>)
+    return (
+      <el-col span={6}>
+        <WeatherCard></WeatherCard>
+      </el-col>
+    );
   },
 };
 import Authority from "../components/wzp/Authority";
-// import DraggableMap from "../components/wzp/draggable/DraggableMap";
-// import DraggableWeatherCard from "../components/wzp/draggable/DraggableWeatherCard";
-// import DraggableInfoBase from "../components/wzp/draggable/DraggableInfoBase";
 import Map from "../components/public_components/Map";
 import WeatherCard from "../components/wzp/WeatherCard";
 import InfoBase from "../components/wzp/InfoBase";
