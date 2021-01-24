@@ -11,7 +11,7 @@ import get from 'lodash/get';
  */
 const baseURLObject = {
     huangyue:"http://106.75.154.40:9012/traceability",
-    huangzerun:"http://xxx",
+    plant:"http://119.23.218.131:9111",
 }
 
 // 异常拦截处理器
