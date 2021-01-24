@@ -21,14 +21,14 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 export default {
   name: "Map",
   data() {
     return {
       // 我个人注册腾讯地图的key
-      key:"4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ"
-    }
+      key: "4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ",
+    };
   },
   props: {
     // 地图中心点坐标
@@ -72,7 +72,7 @@ export default {
         return obj.lat && obj.lng;
       },
     },
-    
+
     // 控制显示地图的类型
     /**
      * 物流：logistics
@@ -241,12 +241,18 @@ export default {
       endWindow.open();
     },
     // 显示物流地图的路线（不是实际路线，只是为了好看）
-    async showLogisticsRoute(){
-      const url = `/api/ws/direction/v1/driving/?from=${this.startPoint.lat},${this.startPoint.lng}&to=${this.endPoint.lat},${this.endPoint.lng}&output=json&key=${this.key}`
-      const {data:res} = await axios.get(url);
+    async showLogisticsRoute() {
+      let url = "/api/ws/direction/v1/driving/?";
+      // 路线出发点
+      url += `from=${this.startPoint.lat},${this.startPoint.lng}`;
+      // 路线终点
+      url += `&to=${this.endPoint.lat},${this.endPoint.lng}`;
+      // 返回格式 和 密钥key
+      url += `&output=json&key=${this.key}`;
+      const { data: res } = await axios.get(url);
       const route = res.result.routes[0];
-      console.log('route: ', route);
-    }
+      console.log("route: ", route);
+    },
   },
   created() {
     this.loadScript().then(() => {

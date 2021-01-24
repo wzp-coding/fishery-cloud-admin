@@ -10,8 +10,8 @@ import get from 'lodash/get';
  * 那么value就是 http://106.75.154.40:9012/traceability
  */
 const baseURLObject = {
-    huangyue:"http://106.75.154.40:9012/traceability",
-    huangzerun:"http://xxx",
+    auth:"http://106.75.154.40:9003",
+    user:"http://106.75.154.40:9003/user",
 }
 
 // 异常拦截处理器
@@ -52,7 +52,10 @@ for (const key in baseURLObject){
     axiosObject[key].interceptors.request.use((config)=>{
         // 如果 token 存在
         // 让每个请求携带自定义 token 请根据实际情况自行修改
-        config.headers.Authorization = `bearer ${localStorage.getItem('token')}`;
+        config.headers = {
+            Authorization : `bearer ${localStorage.getItem('token')}`,
+            xip: window.localStorage.getItem("Ip")
+        }
         return config;
     },errorHandler)
 }

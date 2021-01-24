@@ -89,38 +89,21 @@ export default {
   },
   methods: {
     async isLogined() {
-      const { data: res } = await this.$http.get(
-        "http://106.75.154.40:9003/user/self",
-        {
-          headers: {
-            Authorization: this.token,
-          },
-        }
-      );
+      const { data: res } = await this.$user.get("self");
       if (res.code === 20000) {
         this.$router.push("/home");
       }
     },
     // 向图片验证码端口发起请求
     getCaptcha() {
-      this.$http
-        .post(
-          `${this.$limit}/captcha/getCaptcha`,
-          {},
-          {
-            headers: {
-              xip: window.localStorage.getItem("Ip"),
-            },
-          }
-        )
-        .then((ret) => {
-          // console.log(ret);
-          if (ret.data.code == 20001) {
-            this.operation();
-            this.frequent = ret.data.message;
-          }
-          this.url = ret.data.data.img;
-        });
+      this.$auth.post(`/captcha/getCaptcha`).then((ret) => {
+        // console.log(ret);
+        if (ret.data.code == 20001) {
+          this.operation();
+          this.frequent = ret.data.message;
+        }
+        this.url = ret.data.data.img;
+      });
     },
     // 验证码刷新频繁操作
     operation() {
@@ -142,19 +125,11 @@ export default {
     },
     // 向登录接口发起请求
     onSubmit() {
-      this.$http
-        .post(
-          `${this.$limit}/user/login?captcha=${this.loginForm.captcha}`,
-          {
-            loginId: this.loginForm.loginId,
-            password: this.loginForm.password,
-          },
-          {
-            headers: {
-              xip: window.localStorage.getItem("Ip"),
-            },
-          }
-        )
+      this.$auth
+        .post(`/user/login?captcha=${this.loginForm.captcha}`, {
+          loginId: this.loginForm.loginId,
+          password: this.loginForm.password,
+        })
         .then((res) => {
           // 登录失败刷新验证码
           if (res.data.flag == false) {
@@ -163,10 +138,7 @@ export default {
           }
           // 登录成功保留token值
           else {
-            window.localStorage.setItem(
-              `token`,
-              "Bearer " + res.headers.token
-            );
+            window.localStorage.setItem(`token`, "Bearer " + res.headers.token);
             this.$router.push(`/digital-base`);
             this.$message.success(`登录成功`);
           }
