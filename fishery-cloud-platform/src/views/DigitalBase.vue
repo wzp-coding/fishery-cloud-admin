@@ -92,7 +92,7 @@ const DraggableMap = {
         <Map map-name="logistics"></Map>
       </el-col>
     );
-  },
+  }, 
 };
 const DraggableWeatherCard = {
   components: { WeatherCard },
