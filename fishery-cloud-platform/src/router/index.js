@@ -8,6 +8,9 @@ import CGX from './logisticsSystem_CGX'
 // 引入视图
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
+// 进度条
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 Vue.use(VueRouter)
 const routes = [
   // 第一次进入页面重定向到登录页面
@@ -40,20 +43,21 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
-// 挂在路由导航守卫
+// 挂载路由导航守卫
 router.beforeEach((to, from, next) => {
-  // console.log('next: ', next);
-  // console.log('from: ', from);
-  // console.log('to: ', to);
+  NProgress.start();
   if (to.path !== '/login' && !window.localStorage.getItem('token')) {
     next('/login');
-    Message.error('请先登录账户');
+    Message.error('请您登录账户');
   } else if (to.path !== 'digital-base' && to.matched.length === 0) {
     next('/digital-base');
     Message.error('无效路径');
   } else {
     next();
   }
+})
+router.afterEach(to => {
+  NProgress.done();
 })
 
 // console.log(routes);

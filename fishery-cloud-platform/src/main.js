@@ -12,9 +12,13 @@ import './assets/fonts/iconfont.css'
 import VueCookies from 'vue-cookies'
 Vue.use(VueCookies)
 
-// 安装axios并且把包挂载到原型对象上
-import axios from 'axios'
-Vue.prototype.$http = axios
+// 安装自定义指令
+import Directives from "./libs/directives/index"
+Vue.use(Directives)
+
+// 封装axios并且把包挂载到原型对象上
+import axiosObject from './libs/request'
+Vue.use(axiosObject)
 
 // 安装echarts并且全局挂载
 import echarts from 'echarts'
@@ -28,14 +32,8 @@ Vue.component('downloadExcel', JsonExcel)
 import draggable from 'vuedraggable'
 Vue.component('Draggable', draggable)
 
-// 无渲染标签
-import { Plugin } from 'vue-fragment'
-Vue.use(Plugin)
 
-// 配置请求的根路径
-axios.defaults.baseURL = 'http://106.75.154.40:9012/traceability'
-// 配置权限根路径
-Vue.prototype.$limit = 'http://106.75.154.40:9003'
+
 
 
 new Vue({
