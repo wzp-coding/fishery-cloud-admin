@@ -20,6 +20,10 @@ Vue.use(Directives)
 import axiosObject from './libs/request'
 Vue.use(axiosObject)
 
+// 安装lodash
+import lodash from './libs/lodash';
+Vue.use(lodash);
+
 // 安装echarts并且全局挂载
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts

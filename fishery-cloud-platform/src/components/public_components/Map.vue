@@ -37,8 +37,8 @@ export default {
       type: Object,
       default() {
         return {
-          lat: 23.123,
-          lng: 113.134,
+          lat: JSON.parse(localStorage.getItem('location')).lat,
+          lng: JSON.parse(localStorage.getItem('location')).lng,
           content: "中心点内容",
         };
       },
@@ -224,7 +224,6 @@ export default {
 
     //初始化基地地图
     async initBaseMap() {
-      await this.$nextTick();
       //定义地图中心点坐标
       const center = new TMap.LatLng(
         this.centerPoint.lat,
@@ -256,7 +255,6 @@ export default {
 
     //初始化物流地图
     async initLogisticsMap() {
-      await this.$nextTick();
       let start = new TMap.LatLng(this.startPoint.lat, this.startPoint.lng);
       let end = new TMap.LatLng(this.endPoint.lat, this.endPoint.lng);
 
