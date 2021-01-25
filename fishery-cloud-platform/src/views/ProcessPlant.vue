@@ -10,14 +10,14 @@
       <TheTitle :myTitle="myTitle" :icon="icon" />
       <!-- 标题区域结束 -->
 
-      <!-- 搜索添加区域开始 -->
-      <TheSeekAdd
+      <!-- 添加区域开始 -->
+      <TheAdd
         @changeAddDialogVisible="changeAddDialogVisible()"
         @getAllInfo="getAllInfo()"
         :labels="labels"
         :baseId="baseId"
       />
-      <!-- 搜索添加区域结束 -->
+      <!-- 添加区域结束 -->
 
       <!-- 列表区域开始 -->
       <ThePlantTable
@@ -44,7 +44,7 @@
 import ljc from "../components/ljc/processPlant/processPlant";
 import TheBreadcrumb from "../components/ljc/public/breadcrumb";
 import TheTitle from "../components/ljc/public/title";
-import TheSeekAdd from "../components/ljc/processPlant/TheSeekAdd";
+import TheAdd from "../components/ljc/processPlant/TheAdd";
 import ThePlantTable from "../components/ljc/processPlant/TheTable";
 import ThePagination from "../components/ljc/public/pagination";
 
@@ -52,7 +52,7 @@ export default {
   components: {
     TheBreadcrumb,
     TheTitle,
-    TheSeekAdd,
+    TheAdd,
     ThePlantTable,
     ThePagination,
   },
@@ -66,8 +66,6 @@ export default {
       breadcrumbInfo: ["养殖生产", "加工厂"],
       // 标题信息
       myTitle: "加工厂",
-      // 基地Id
-      baseId: "123456",
       // 数据总条数
       total: 0,
       // 当前页码,
@@ -81,8 +79,13 @@ export default {
     };
   },
   computed: {
+    // 标签
     labels() {
       return this.model.labels;
+    },
+    // 基地ID
+    baseId() {
+      return localStorage.getItem("baseId");
     },
   },
   created() {

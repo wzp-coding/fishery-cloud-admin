@@ -1,26 +1,10 @@
 <template>
   <div>
-    <!-- 搜索添加区域开始 -->
-    <el-row :gutter="20">
-      <el-col :span="6"
-        ><div>
-          <el-input placeholder="请输入内容" v-model="seekDate">
-            <el-button
-              type="info"
-              slot="append"
-              icon="el-icon-search"
-            ></el-button>
-          </el-input></div
-      ></el-col>
-      <el-col :span="6"
-        ><div>
-          <el-button type="primary" round @click="addDialogVisible = true"
-            >添加</el-button
-          >
-        </div></el-col
-      >
-    </el-row>
-    <!-- 搜索添加区域结束 -->
+    <!-- 添加区域开始 -->
+    <el-button type="primary" @click="addDialogVisible = true">{{
+      formTitle
+    }}</el-button>
+    <!-- 添加区域结束 -->
 
     <!-- 添加表单区域开始 -->
     <el-dialog
@@ -74,9 +58,6 @@ export default {
 
       // 表单名称
       formTitle: "添加加工厂",
-
-      // 搜索信息
-      seekDate: "",
 
       // 控制添加表单的显示与隐藏
       addDialogVisible: false,

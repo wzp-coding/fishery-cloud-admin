@@ -12,9 +12,9 @@
 
       <!-- tab栏开始 -->
       <el-tabs class="tabs">
-        <el-tab-pane label="加工产品管理">加工产品管理</el-tab-pane>
-        <el-tab-pane label="工艺管理">工艺管理</el-tab-pane>
-        <el-tab-pane label="投入品管理">投入品管理</el-tab-pane>
+        <el-tab-pane label="加工产品管理"><TheProduct /></el-tab-pane>
+        <el-tab-pane label="工艺管理"><TheCraft /></el-tab-pane>
+        <el-tab-pane label="投入品管理"><TheInput /></el-tab-pane>
       </el-tabs>
       <!-- tab栏结束 -->
     </el-card>
@@ -24,10 +24,16 @@
 <script>
 import TheBreadcrumb from "../components/ljc/public/breadcrumb";
 import TheTitle from "../components/ljc/public/title";
+import TheProduct from "../components/ljc/product/TheProduct";
+import TheCraft from "../components/ljc/craft/TheCraft";
+import TheInput from "../components/ljc/input/TheInput";
 export default {
   components: {
     TheBreadcrumb,
     TheTitle,
+    TheProduct,
+    TheCraft,
+    TheInput,
   },
   data() {
     return {

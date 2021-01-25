@@ -14,6 +14,7 @@
 </template>
 <script>
 export default {
+  name: "pagination",
   props: {
     // 数据总条数
     total: Number,

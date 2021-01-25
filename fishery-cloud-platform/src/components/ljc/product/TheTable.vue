@@ -1,21 +1,21 @@
 <template>
   <div>
     <!-- 表格开始 -->
-    <el-table :data="productList" border stripe>
+    <el-table :data="allList" border stripe>
       >
       <el-table-column type="index"> </el-table-column>
       <el-table-column prop="id" :label="labels.id"></el-table-column>
       <el-table-column
-        prop="processingFactoryName"
-        :label="labels.processingFactoryName"
+        prop="productName"
+        :label="labels.productName"
       ></el-table-column>
       <el-table-column
-        prop="processingFactoryAddress"
-        :label="labels.processingFactoryAddress"
+        prop="germchitId"
+        :label="labels.germchitId"
       ></el-table-column>
       <el-table-column
-        prop="createPersonId"
-        :label="labels.createPersonId"
+        prop="processingFactoryId"
+        :label="labels.processingFactoryId"
       ></el-table-column>
       <el-table-column label="操作"> </el-table-column>
     </el-table>
@@ -28,14 +28,19 @@ export default {
   components: {},
   props: {
     // 表格数据
-    productList: {},
+    allList: {},
 
     // 数据标签
     labels: {},
+
+    // 主题
+    title: {},
   },
   data() {
     return {};
   },
+  computed: {},
+  methods: {},
 };
 </script>
 
