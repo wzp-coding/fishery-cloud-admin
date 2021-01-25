@@ -41,7 +41,7 @@
   </div>
 </template>
 <script>
-const model = require("../components/ljc/processPlant/processPlant");
+import ljc from "../components/ljc/processPlant/processPlant";
 import TheBreadcrumb from "../components/ljc/processPlant/breadcrumb";
 import TheTitle from "../components/ljc/processPlant/title";
 import TheSeekAdd from "../components/ljc/processPlant/TheSeekAdd";
@@ -58,6 +58,7 @@ export default {
   },
   data() {
     return {
+      model: new ljc(this),
       // 分类
       myClassify: "养殖生产",
       // 标题
@@ -78,7 +79,7 @@ export default {
   },
   computed: {
     labels() {
-      return model.labels;
+      return this.model.labels;
     },
   },
   created() {
@@ -93,14 +94,16 @@ export default {
       }
       this.pageNum = pageNum;
       this.pageSize = pageSize;
-      await model.getAllInfo(this.baseId, pageNum, pageSize).then((val) => {
-        if (val.status !== 200) {
-          this.$message.error(this.getErrorInfo);
-        }
-        this.plantList = [];
-        this.plantList.push(val.data.data.records);
-        this.total = val.data.data.total;
-      });
+      await this.model
+        .getAllInfo(this.baseId, pageNum, pageSize)
+        .then((val) => {
+          if (val.status !== 200) {
+            this.$message.error(this.getErrorInfo);
+          }
+          this.plantList = [];
+          this.plantList.push(val.data.data.records);
+          this.total = val.data.data.total;
+        });
     },
   },
 };

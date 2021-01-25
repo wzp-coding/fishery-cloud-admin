@@ -12,8 +12,9 @@ import get from 'lodash/get';
  * 如果一定需要原生纯净的axios,那么可以通过this.$originAxios来调用
  */
 const baseURLObject = {
-    auth:"http://106.75.154.40:9003",
-    user:"http://106.75.154.40:9003/user",
+    auth: "http://106.75.154.40:9003",
+    user: "http://106.75.154.40:9003/user",
+    plant: "http://119.23.218.131:9111"
 }
 
 // 异常拦截处理器
@@ -44,31 +45,31 @@ const errorHandler = (error) => {
  * 需要添加请求头请在下面自己加
  */
 const axiosObject = {};
-for (const key in baseURLObject){
+for (const key in baseURLObject) {
     axiosObject[key] = axios.create({
         // API 请求的默认前缀
         baseURL: baseURLObject[key],
         timeout: 10000, // 请求超时时间
     })
     // 请求拦截器（添加请求头，例如token、IP等）
-    axiosObject[key].interceptors.request.use((config)=>{
+    axiosObject[key].interceptors.request.use((config) => {
         // 如果 token 存在
         // 让每个请求携带自定义 token 请根据实际情况自行修改
         config.headers = {
-            Authorization : `bearer ${localStorage.getItem('token')}`,
+            Authorization: `bearer ${localStorage.getItem('token')}`,
             xip: window.localStorage.getItem("Ip")
         }
         return config;
-    },errorHandler)
+    }, errorHandler)
 }
 
 // 添加一个纯净的axios
 axiosObject.originAxios = axios.create();
 
 export default {
-    install(Vue){
-        for(let key in axiosObject){
-            Vue.prototype["$"+key] = axiosObject[key];
+    install(Vue) {
+        for (let key in axiosObject) {
+            Vue.prototype["$" + key] = axiosObject[key];
         }
     }
 };

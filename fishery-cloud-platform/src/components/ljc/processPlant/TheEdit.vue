@@ -49,7 +49,7 @@
   </div>
 </template>
 <script>
-const model = require("../processPlant/processPlant");
+import ljc from "../processPlant/processPlant";
 export default {
   props: {
     id: {},
@@ -58,6 +58,7 @@ export default {
   },
   data() {
     return {
+      model: new ljc(this),
       // 表单名称
       formTitle: "修改加工厂",
 
@@ -118,7 +119,7 @@ export default {
     editInfo() {
       this.$refs.editFormRef.validate(async (val) => {
         if (!val) return false;
-        const { data: res } = await model.editInfo(this.editForm);
+        const { data: res } = await this.model.editInfo(this.editForm);
         console.log(res);
         if (res.statusCode == 20000) {
           this.$emit("getAllInfo");
@@ -138,7 +139,7 @@ export default {
 
     /* 根据Id查询工厂信息开始 */
     async getInfoById() {
-      const { data: res } = await model.getInfoById(this.id);
+      const { data: res } = await this.model.getInfoById(this.id);
       this.editForm = res.data;
       this.editDialogVisible = true;
     },

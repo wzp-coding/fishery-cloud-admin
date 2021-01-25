@@ -62,7 +62,7 @@
   </div>
 </template>
 <script>
-const model = require("../processPlant/processPlant");
+import ljc from "../processPlant/processPlant";
 export default {
   props: {
     baseId: {},
@@ -70,6 +70,8 @@ export default {
   },
   data() {
     return {
+      model: new ljc(this),
+
       // 表单名称
       formTitle: "添加加工厂",
 
@@ -135,7 +137,7 @@ export default {
         if (!val) return false;
         this.addFrom.baseId = this.baseId;
         console.log(this.addFrom);
-        await model.addInfo(this.addFrom).then((val) => {
+        await this.model.addInfo(this.addFrom).then((val) => {
           if (val.status !== 200) {
             this.$message.error(this.addErrorInfo);
           }

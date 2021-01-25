@@ -1,10 +1,9 @@
-let ljcAxios = require('axios')
-const axios = ljcAxios.create({
-    baseURL: "http://119.23.218.131:9111"
-})
 module.exports = class {
+    constructor(vue) {
+        this.vue = vue;
+    }
     /* 标签开始 */
-    static labels = {
+    labels = {
         id: "加工厂编号",
         processingFactoryName: "加工厂名称",
         processingFactoryAddress: "加工厂地址",
@@ -14,9 +13,9 @@ module.exports = class {
     /* 标签结束 */
 
     /* 获取数据开始 */
-    static getAllInfo(baseId, pageNum, pageSize) {
+    getAllInfo(baseId, pageNum, pageSize) {
         return new Promise((resolve) => {
-            axios.get(`/processingFactory/factory/baseFactory/${baseId}/${pageNum}/${pageSize}`)
+            this.vue.$plant.get(`/processingFactory/factory/baseFactory/${baseId}/${pageNum}/${pageSize}`)
                 .then((res) => {
                     resolve(res);
                 })
@@ -25,9 +24,9 @@ module.exports = class {
     /* 获取数据结束 */
 
     /* 添加开始 */
-    static addInfo(addFrom) {
+    addInfo(addFrom) {
         return new Promise((resolve) => {
-            axios.post("/processingFactory/factory/", addFrom)
+            this.vue.$plant.post("/processingFactory/factory/", addFrom)
                 .then((res) => {
                     resolve(res);
                 })
@@ -36,9 +35,9 @@ module.exports = class {
     /* 添加结束 */
 
     /* 删除开始 */
-    static removeById(id) {
+    removeById(id) {
         return new Promise((resolve) => {
-            axios.delete(`/processingFactory/factory/${id}`)
+            this.vue.$plant.delete(`/processingFactory/factory/${id}`)
                 .then((res) => {
                     resolve(res);
                 })
@@ -47,9 +46,9 @@ module.exports = class {
     /* 删除结束 */
 
     /* 根据ID查询信息开始 */
-    static getInfoById(id) {
+    getInfoById(id) {
         return new Promise((resolve) => {
-            axios.get(`/processingFactory/factory/${id}`)
+            this.vue.$plant.get(`/processingFactory/factory/${id}`)
                 .then((res) => {
                     resolve(res);
                 })
@@ -58,9 +57,9 @@ module.exports = class {
     /* 根据ID查询信息结束 */
 
     /* 修改开始 */
-    static editInfo(editForm) {
+    editInfo(editForm) {
         return new Promise((resolve) => {
-            axios.put(`/processingFactory/factory/`, editForm)
+            this.vue.$plant.put(`/processingFactory/factory/`, editForm)
                 .then((res) => {
                     resolve(res);
                 })

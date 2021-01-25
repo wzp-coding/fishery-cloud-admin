@@ -11,14 +11,16 @@
   </div>
 </template>
 <script>
-const model = require("../processPlant/processPlant");
+import ljc from "../processPlant/processPlant";
 export default {
   props: {
     id: {},
     title: {},
   },
   data() {
-    return {};
+    return {
+      model: new ljc(this),
+    };
   },
   created() {},
   methods: {
@@ -38,7 +40,7 @@ export default {
       if (confirmResult !== "confirm") {
         return this.$message.info("已取消删除");
       }
-      const { data: res } = await model.removeById(this.id);
+      const { data: res } = await this.model.removeById(this.id);
       if (res.statusCode == 20000) {
         this.$emit("getAllInfo");
         this.$message.success(res.message);
