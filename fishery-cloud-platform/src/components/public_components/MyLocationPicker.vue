@@ -23,6 +23,8 @@ export default {
       location: JSON.parse(localStorage.getItem("location")),
       // 点标记图层
       markerLayer: undefined,
+      // 中心标记点坐标
+      center: new TMap.LatLng(this.initPoint.lat, this.initPoint.lng),
     };
   },
   props: {
@@ -37,6 +39,48 @@ export default {
       },
       validator(obj) {
         return obj.lat && obj.lng;
+      },
+    },
+
+    // 设置相关参数
+    options: {
+      type: Object,
+      default() {
+        return {
+          // 是否返回周边POI(地址)列表
+          getPoi: false,
+          // 返回短地址 或者 长地址，0返回长地址，1返回短地址
+          addressFormat: 0,
+          // 半径，取值范围 1-5000（米）
+          radius: 5000,
+          // 每页条数，取值范围 1-20
+          pageSize: 10,
+          // 页码，取值范围 1-20(注：分页时pageSize与pageIndex参数需要同时使用)
+          pageIndex: 1,
+          /**
+           * 控制返回场景
+           * 1[默认] 以地标+主要的路+近距离POI为主，着力描述当前位置；
+           * 2 到家场景：筛选合适收货的POI，并会细化收货地址，精确到楼栋；
+           * 3 出行场景：过滤掉车辆不易到达的POI(如一些景区内POI)，增加道路出入口、交叉口、大区域出入口类POI，排序会根据真实API大用户的用户点击自动优化。
+           * 4 社交签到场景，针对用户签到的热门 地点进行优先排序。
+           * 5 位置共享场景，用户经常用于发送位置、位置分享等场景的热门地点优先排序
+           */
+          policy: 2,
+        };
+      },
+      validator(obj) {
+        return (
+          [true, false].includes(obj.getPoi) &&
+          [0, 1].includes(obj.addressFormat) &&
+          obj.radius > 0 &&
+          obj.radius < 5000 &&
+          obj.pageSize > 1 &&
+          obj.pageSize < 20 &&
+          obj.pageIndex > 1 &&
+          obj.pageIndex < 20 &&
+          obj.policy > 0 &&
+          obj.policy < 6
+        );
       },
     },
   },
@@ -55,10 +99,12 @@ export default {
         };
       });
     },
+
     // 创建map实例
     createMap(config = {}) {
       this.map = new TMap.Map(document.getElementById("mapContainer"), config);
     },
+
     // 创建标记点的图层
     createMarkerLayer(markerArr) {
       this.markerLayer = new TMap.MultiMarker({
@@ -80,15 +126,16 @@ export default {
         geometries: markerArr,
       });
     },
+
     // 拖拽地图设置中心点
     handleDragMap() {
-      const center = this.map.getCenter();
-      this.map.setCenter(center);
-      // 创建中心点的标记
+      this.center = this.map.getCenter();
+      this.map.setCenter(this.center);
+      // 创建新的中心点的标记
       const centerMarker = {
         id: "1", //点标记唯一标识，后续如果有删除、修改位置等操作，都需要此id
         styleId: "myStyle", //指定样式id
-        position: center, //点标记坐标位置
+        position: this.center, //点标记坐标位置
         properties: {
           //自定义属性
           title: "中心点",
@@ -97,13 +144,32 @@ export default {
       // 更新标注点
       this.markerLayer.updateGeometries([centerMarker]);
     },
+    // 将中心点坐标逆解析成地址
+    pointToAddress() {
+      console.log(this.center.lat, this.center.lng);
+      let url = "/api/ws/geocoder/v1/?";
+      url += `location=${this.center.lat},${this.center.lng}`;
+      url += `&get_poi=${this.options.getPoi ? 1 : 0}`;
+      url += `&poi_options=`;
+      if (this.options.addressFormat == 1) {
+        // 如果要返回短地址才要传参
+        url += `address_format=short`;
+      }
+      url += `;radius=${this.options.radius}`;
+      url += `;page_size=${this.options.pageSize}`;
+      url += `;page_index=${this.options.pageIndex}`;
+      url += `;policy=${this.options.policy}`;
+      url += `&key=${this.key}`;
+      console.log('url: ', url);
+      this.$originAxios.get(url);
+    },
+
     // 初始化
     init() {
-      //定义地图中心点坐标
-      const center = new TMap.LatLng(this.initPoint.lat, this.initPoint.lng);
+      //定义地图中心点坐标(默认是本地地址)
 
       //createMap函数创建地图(并且有地图中心点)
-      this.createMap({ center });
+      this.createMap({ center: this.center });
 
       // 创建中心点的标记
       const centerMarker = {
@@ -119,7 +185,7 @@ export default {
       // createMarkerLayer函数创建标记点的层面
       this.createMarkerLayer([centerMarker]);
 
-      // 监听地图拖拽事件
+      // 监听地图拖拽事件(节流函数)
       const throttle = this._.throttle(this.handleDragMap, 200);
       this.map.on("drag", throttle);
     },

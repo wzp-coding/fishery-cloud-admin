@@ -81,7 +81,7 @@ export default {
         // 验证验证码是否合法
         captcha: [{ required: true, message: "请输入验证码", trigger: "blur" }],
       },
-      token: window.localStorage.getItem("token"),
+      token: localStorage.getItem("token"),
     };
   },
   mounted() {
@@ -94,6 +94,7 @@ export default {
         this.$router.push("/home");
       }
     },
+
     // 向图片验证码端口发起请求
     getCaptcha() {
       this.$auth.post(`/captcha/getCaptcha`).then((ret) => {
@@ -105,6 +106,7 @@ export default {
         this.url = ret.data.data.img;
       });
     },
+
     // 验证码刷新频繁操作
     operation() {
       this.play = true;
@@ -114,6 +116,7 @@ export default {
     operation1() {
       this.play = false;
     },
+
     // 用户无baseId弹窗
     roperation() {
       this.splay = true;
@@ -123,6 +126,7 @@ export default {
     roperation1() {
       this.splay = false;
     },
+
     // 向登录接口发起请求
     onSubmit() {
       this.$auth
@@ -131,6 +135,7 @@ export default {
           password: this.loginForm.password,
         })
         .then((res) => {
+          console.log('res: ', res);
           // 登录失败刷新验证码
           if (res.data.flag == false) {
             this.getCaptcha();
@@ -138,7 +143,8 @@ export default {
           }
           // 登录成功保留token值
           else {
-            window.localStorage.setItem(`token`, "Bearer " + res.headers.token);
+            localStorage.setItem(`token`, "Bearer " + res.headers.token);
+            localStorage.setItem("baseId",res.data.data.baseId);
             this.$router.push(`/digital-base`);
             this.$message.success(`登录成功`);
           }
