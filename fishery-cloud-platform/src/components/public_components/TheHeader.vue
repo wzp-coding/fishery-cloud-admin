@@ -5,7 +5,18 @@
       <div>
         <span>智慧渔业云服务平台</span>
       </div>
-      <span @click="backLogin" style="cursor: pointer">退出登录</span>
+      <div>
+        <img class="avatar" src="../../assets/131.jpg" />
+        <el-dropdown  @command="backLogin">
+          <span class="el-dropdown-link" @click="showUserInfo">
+            个人中心<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>退出登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <!-- <span @click="backLogin" style="cursor: pointer">退出登录</span> -->
+      </div>
     </el-header>
   </div>
 </template>
@@ -14,9 +25,13 @@ export default {
   methods: {
     // 退出登录操作
     backLogin() {
-      localStorage.setItem('token','');
-      this.$router.push('/login');
+      console.log('啊啊飒飒大师级都按时')
+      // localStorage.setItem("token", "");
+      // this.$router.push("/login");
     },
+    showUserInfo(){
+      console.log("ahsodijasoidj")
+    }
   },
 };
 </script>
@@ -42,6 +57,11 @@ export default {
       // 图标与字体距离
       margin-left: 15px;
     }
+  }
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
   }
 }
 </style>

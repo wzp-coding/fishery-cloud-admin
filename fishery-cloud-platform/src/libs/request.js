@@ -15,7 +15,6 @@ const baseURLObject = {
     auth:"http://106.75.154.40:9003",
     user:"http://106.75.154.40:9003/user",
 }
-
 // 异常拦截处理器
 const errorHandler = (error) => {
     const status = get(error, 'response.status');
@@ -45,6 +44,7 @@ const errorHandler = (error) => {
  */
 const axiosObject = {};
 for (const key in baseURLObject){
+    console.table({ [key]: baseURLObject[key] })
     axiosObject[key] = axios.create({
         // API 请求的默认前缀
         baseURL: baseURLObject[key],
