@@ -32,13 +32,6 @@ Vue.component('downloadExcel', JsonExcel)
 import draggable from 'vuedraggable'
 Vue.component('Draggable', draggable)
 
-<<<<<<< HEAD
-
-
-
-
-=======
->>>>>>> fa135045b6199ae14f69c69423437bc9be51d717
 new Vue({
   router,
   store,
