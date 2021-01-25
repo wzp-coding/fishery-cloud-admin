@@ -37,8 +37,8 @@ export default {
       type: Object,
       default() {
         return {
-          lat: JSON.parse(localStorage.getItem('location')).lat,
-          lng: JSON.parse(localStorage.getItem('location')).lng,
+          lat: JSON.parse(localStorage.getItem("location")).lat,
+          lng: JSON.parse(localStorage.getItem("location")).lng,
           content: "中心点内容",
         };
       },
@@ -312,6 +312,9 @@ export default {
           break;
       }
     });
+  },
+  beforeDestroy() {
+    this.map.destroy();
   },
 };
 </script>

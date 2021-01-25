@@ -31,8 +31,10 @@ const routes = [
       const location = res.location;
       localStorage.setItem("location",JSON.stringify(location));
       res = res.ad_info;
+      // console.log('res: ', res);
       const address = res.nation + res.province + res.city + res.district;
       localStorage.setItem("address",address);
+      localStorage.setItem("ad_info",JSON.stringify(res));
       next();
     }
   },

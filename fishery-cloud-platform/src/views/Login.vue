@@ -6,6 +6,7 @@
       <el-form :rules="loginFormRules" :model="loginForm">
         <el-form-item prop="loginId">
           <el-input
+            autofocus
             type="text"
             required=""
             placeholder=" 账号"
@@ -131,11 +132,11 @@ export default {
     onSubmit() {
       this.$auth
         .post(`/user/login?captcha=${this.loginForm.captcha}`, {
-          loginId: this.loginForm.loginId,
-          password: this.loginForm.password,
+          loginId: this.loginForm.loginId || 210,
+          password: this.loginForm.password || 123456,
         })
         .then((res) => {
-          console.log('res: ', res);
+          // console.log('res: ', res);
           // 登录失败刷新验证码
           if (res.data.flag == false) {
             this.getCaptcha();
@@ -144,7 +145,7 @@ export default {
           // 登录成功保留token值
           else {
             localStorage.setItem(`token`, "Bearer " + res.headers.token);
-            localStorage.setItem("baseId",res.data.data.baseId);
+            localStorage.setItem("baseId", res.data.data.baseId);
             this.$router.push(`/digital-base`);
             this.$message.success(`登录成功`);
           }
