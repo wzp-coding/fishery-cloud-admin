@@ -1,13 +1,13 @@
 <template>
   <div>
     <!-- 面包屑导航开始 -->
-    <TheBreadcrumb :myTitle="myTitle" :myClassify="myClassify" />
+    <TheBreadcrumb :breadcrumbInfo="breadcrumbInfo" />
     <!-- 面包屑导航结束 -->
 
     <!-- 卡片视图区域开始 -->
     <el-card>
       <!-- 标题区域开始 -->
-      <TheTitle :myTitle="myTitle" />
+      <TheTitle :myTitle="myTitle" :icon="icon" />
       <!-- 标题区域结束 -->
 
       <!-- 搜索添加区域开始 -->
@@ -42,11 +42,11 @@
 </template>
 <script>
 import ljc from "../components/ljc/processPlant/processPlant";
-import TheBreadcrumb from "../components/ljc/processPlant/breadcrumb";
-import TheTitle from "../components/ljc/processPlant/title";
+import TheBreadcrumb from "../components/ljc/public/breadcrumb";
+import TheTitle from "../components/ljc/public/title";
 import TheSeekAdd from "../components/ljc/processPlant/TheSeekAdd";
-import ThePlantTable from "../components/ljc/processPlant/ThePlantTable";
-import ThePagination from "../components/ljc/processPlant/pagination";
+import ThePlantTable from "../components/ljc/processPlant/TheTable";
+import ThePagination from "../components/ljc/public/pagination";
 
 export default {
   components: {
@@ -58,10 +58,13 @@ export default {
   },
   data() {
     return {
+      // js
       model: new ljc(this),
-      // 分类
-      myClassify: "养殖生产",
-      // 标题
+      // 标题图标
+      icon: "el-icon-house",
+      // 面包屑导航信息
+      breadcrumbInfo: ["养殖生产", "加工厂"],
+      // 标题信息
       myTitle: "加工厂",
       // 基地Id
       baseId: "123456",

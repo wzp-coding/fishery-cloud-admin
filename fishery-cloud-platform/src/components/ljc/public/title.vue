@@ -5,7 +5,7 @@
       style="margin-bottom: 20px; padding-bottom: 45px"
     >
       <el-col :span="4">
-        <i class="el-icon-house"></i>
+        <i :class="icon"></i>
         <span>{{ myTitle }}</span>
       </el-col>
     </el-row>
@@ -15,6 +15,7 @@
 export default {
   props: {
     myTitle: {},
+    icon: {},
   },
 };
 </script>
