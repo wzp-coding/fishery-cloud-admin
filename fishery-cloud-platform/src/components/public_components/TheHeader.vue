@@ -7,7 +7,7 @@
       </div>
       <div>
         <img class="avatar" src="../../assets/131.jpg" />
-        <el-dropdown  @command="backLogin">
+        <el-dropdown  @command="loginOut">
           <span class="el-dropdown-link" @click="showUserInfo">
             个人中心<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
@@ -15,7 +15,6 @@
             <el-dropdown-item>退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <!-- <span @click="backLogin" style="cursor: pointer">退出登录</span> -->
       </div>
     </el-header>
   </div>
@@ -24,13 +23,11 @@
 export default {
   methods: {
     // 退出登录操作
-    backLogin() {
-      console.log('啊啊飒飒大师级都按时')
+    loginOut() {
       // localStorage.setItem("token", "");
-      // this.$router.push("/login");
+      this.$router.push("/login");
     },
     showUserInfo(){
-      console.log("ahsodijasoidj")
     }
   },
 };
