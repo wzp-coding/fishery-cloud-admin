@@ -22,7 +22,19 @@ const routes = [
     //登陆界面
     path: '/login',
     name: 'login',
-    component: Login
+    component: Login,
+    beforeEnter: async (to, from, next) => {
+      // console.log(Vue.prototype.$originAxios);
+      // 获取本地坐标和详细地址
+      let { data: res } = await Vue.prototype.$originAxios.get("/api/ws/location/v1/ip?key=4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ&ip=" + localStorage.getItem('Ip'))
+      res = res.result;
+      const location = res.location;
+      localStorage.setItem("location",JSON.stringify(location));
+      res = res.ad_info;
+      const address = res.nation + res.province + res.city + res.district;
+      localStorage.setItem("address",address);
+      next();
+    }
   },
   // 主页界面
   {
@@ -46,9 +58,9 @@ const router = new VueRouter({
 // 挂载路由导航守卫
 router.beforeEach((to, from, next) => {
   NProgress.start();
-  if (to.path !== '/login' && !window.localStorage.getItem('token')) {
+  if (to.path !== '/login' && !localStorage.getItem('token')) {
     next('/login');
-    Message.error('请您登录账户');
+    Message.error('请您登录账户');  
   } else if (to.path !== 'digital-base' && to.matched.length === 0) {
     next('/digital-base');
     Message.error('无效路径');

@@ -7,7 +7,7 @@
       <!-- 侧边栏(导航栏)区域 -->
       <TheNavbar></TheNavbar>
       <!-- 右侧主体区域 -->
-      <el-main style="background:#eaedf1;overflow:auto;">
+      <el-main style="background:#eaedf1;overflow:hidden;">
         <!-- 路由占位符 -->
         <router-view></router-view>
       </el-main>
