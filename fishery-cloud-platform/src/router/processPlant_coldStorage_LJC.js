@@ -2,6 +2,7 @@ import InfoProduct from '../views/InfoProduct.vue';
 import ColdStorage from '../views/ColdStorage.vue';
 import ProcessPlant from '../views/ProcessPlant.vue';
 import InfoPlant from '../views/InfoPlant.vue';
+import InfoCraft from '../views/InfoCraft.vue';
 import ManagementInputsClassification from '../views/ManagementInputsClassification.vue';
 export default [
     {
@@ -23,6 +24,11 @@ export default [
         // 加工信息
         path: '/info-plant',
         component: InfoPlant
+    },
+    {
+        // 加工产品的工艺信息
+        path: '/info-craft',
+        component: InfoCraft
     },
     {
         // 投入品分类管理

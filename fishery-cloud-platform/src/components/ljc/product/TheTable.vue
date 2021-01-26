@@ -28,7 +28,7 @@
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
-            <!-- <el-col :span="6">
+            <el-col :span="6">
               <el-tooltip
                 effect="dark"
                 :content="buttonInfo"
@@ -43,7 +43,7 @@
                   :path="path"
                 />
               </el-tooltip>
-            </el-col> -->
+            </el-col>
             <el-col :span="6">
               <TheDelete
                 tag="product"
@@ -79,6 +79,12 @@ export default {
 
     // 主题
     title: {},
+
+    // 跳转路径
+    path: "/info-craft",
+
+    // 跳转信息
+    buttonInfo: "查看工艺",
   },
   data() {
     return {};
