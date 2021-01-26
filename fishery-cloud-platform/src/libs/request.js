@@ -13,7 +13,8 @@ const baseURLObject = {
     auth:"http://106.75.154.40:9003",
     user:"http://106.75.154.40:9003/user",
     management:"http://119.23.218.131:9103",
-    pondController:"http://119.23.218.131:9103/pond"
+    pondController:"http://119.23.218.131:9103/pond",   //池塘模块
+    germchit:"http://119.23.218.131:9103/germchit"      //种苗模块
 }
 
 // 异常拦截处理器

@@ -46,6 +46,7 @@ export default {
       this.$refs['addeFormRef'].validate((valid) => {
         if (valid) {
           console.log('验证通过');
+          console.log(this);
           this.$parent.createPond()
         } else {
           console.log('验证不通过');

@@ -22,13 +22,14 @@
         </div>
         <div class="bigBox" slot="bigBox">
           <!-- 池塘子组件 -->
-          <pond></pond>
+          <!-- :toPond="pondList" -->
+          <pond :toPond="item" v-for="item in pondList" :key="item.pondId"></pond>
         </div>
       </TheCardHead>
-      <ThePagination></ThePagination>
+      <ThePagination :toPagination="addPondInfo" @fatherMethod="getPondList"></ThePagination>
     </el-card>
     <!-- @click="dialogFormVisible = false" -->
-    <TheDialogAll :toDialogInfo="addPondInfo" ref="addeFormRef" :addFormInfo="addeForm">
+    <TheDialogAll :toDialogInfo="addPondInfo" ref="addeFormRef" :addFormInfo="addeForm" page="currentPage" size="currentSize" >
         <el-form-item label="池塘名称" prop="name">
           <el-input v-model="addeForm.name"></el-input>
         </el-form-item>
@@ -64,7 +65,9 @@
         </el-row>
       </span>
     </TheDialogAll>
-    <!-- <TheDialogAll></TheDialogAll> -->
+    <!-- <TheDialogAll :toDialogInfo="adviseInput" >
+
+    </TheDialogAll> -->
   </div>
 </template>
 
@@ -77,18 +80,30 @@ export default {
   components: { TheCardHead, pond, ThePagination, TheDialogAll },
   data() {
     return {
+      //全部池塘信息
+      pondList:[],
+      baseId:'1248910886228332544',     //基地ID
       // 添加池塘的表单数据
       addeForm: {
-        id:'',          //池塘
-        baseId: "",     //基地id
-        name: "",       //池塘名称
         area: "",       //池塘面积
+        baseId: "1248910886228332544",     //基地id
+        creator:'boss',  //创建者
         depth: "",      //池塘深度
+        // gmtCreate:'',
+        // gmtModified:'',
+        // id:'2',          //池塘编号
+        // isDeleted:'0',
+        name: "",       //池塘名称  
         type: "",       //池塘类型
+        // version:0
       },
       addPondInfo: {
         title: "添加池塘",
         dialogVisible: false,
+        total:0,
+        size:3,
+        page:1,
+        // sizeGroup:[3,6,9],
         addeForm:this.addeForm,
         // 添加表单的验证规则对象
         addeFormRules: {
@@ -122,299 +137,70 @@ export default {
       editPondInfo: {
         title: "修改池塘信息",
         dialogVisible: false,
+        
       },
+      // 建议卡信息输入表单
+      kindForm: {
+        pondVolume: 0,
+        pondDeep: 0,
+        shrimpKindId: '',
+        shrimpMethod: '',
+      },
+      //建议卡输入
+      adviseInput:{
+        title:'池塘信息输入',
+        dialogVisible: false,
+        // 建议卡的信息输入的验证规则对象
+        kindFormRules: {
+        kindName: [
+          { required: true, message: '请输入虾的品种', trigger: 'blur' },
+        ],
+        pondVolume: [
+          { required: true, message: '请输入池塘面积', trigger: 'blur' },
+        ],
+        pondDeep: [
+          { required: true, message: '请输入池塘深度', trigger: 'blur' },
+        ],
+      },
+      }
     };
   },
-  // data() {
-  //   return {
-  //     // token: window.localStorage.getItem("token"),
-  //     // 虾管理信息，用于展示
-  //     shrimpInfo: [],
-  //     // 基地编码
-  //     baseId: this.defines.baseId,
-  //     // 用于控制分页的当前页码和条数
-  //     pageInfo: {
-  //       // 当前页码
-  //       pagenum: 1,
-  //       // 每页显示条数
-  //       pagesize: 6,
-  //     },
-  //     // 分类信息
-  //     valueType: [],
-  //     categoryOptions: [],
-  //     // 总条数
-  //     total: 0,
-  //     // 对应id虾苗总数
-  //     remainNumber: 0,
-  //     // 目前虾苗量
-  //     constNum: "",
-  //     // 保存虾苗品种
-  //     shrimpSpecies: "",
-  //     // 保存投放状态选项·
-  //     options: [
-  //       {
-  //         value: "0",
-  //         label: "未投放",
-  //       },
-  //       {
-  //         value: "1",
-  //         label: "已投放",
-  //       },
-  //     ],
-  //     // 保存捕捞规格
-  //     options3: [
-  //       {
-  //         value: "60以上",
-  //       },
-  //       {
-  //         value: "50~60",
-  //       },
-  //       {
-  //         value: "30~40",
-  //       },
-  //       {
-  //         value: "20~10",
-  //       },
-  //       {
-  //         value: "10~0",
-  //       },
-  //     ],
-  //     // 保存虾的养殖方式
-  //     options4: [
-  //       {
-  //         value: "工厂流水养殖",
-  //       },
-  //       {
-  //         value: "外塘传统养殖",
-  //       },
-  //       {
-  //         value: "大棚温室养殖",
-  //       },
-  //       {
-  //         value: "稻虾套养模式",
-  //       },
-  //     ],
-  //     // 池塘列表
-  //     pondList: [],
-  //     // 虾苗品种列表
-  //     ShrimpSpeciesList: [],
-  //     // 用于获取虾苗编号
-  //     shrimpManagement: [],
-  //     // 用于获取农资名称
-  //     suppliesName: [],
-  //     // 用于存放人员信息
-  //     personInfoList: [],
-  //     // 添加池塘的表单数据
-  //     addeForm: {
-  //       pondName: "",
-  //       pondVolume: "",
-  //       depth: "",
-  //       pondType: "",
-  //       baseId: "",
-  //     },
-  //     // 投苗表单数据
-  //     drogForm: {
-  //       id: "",
-  //       shrimpId: "",
-  //       baseId: "",
-  //       inputNum: "",
-  //       createDate: "",
-  //       species: "",
-  //     },
-  //     // 投料表单数据
-  //     farmForm: {
-  //       suppliesName: "",
-  //       applyTime: "",
-  //       pondId: "",
-  //       applicator: "",
-  //       applyType: "",
-  //       deliveryVolume: "",
-  //       suppliesInfoId: "",
-  //     },
-  //     // 捕捞表单数据
-  //     catchForm: {
-  //       id: "",
-  //       shrimpId: "",
-  //       catchDate: "",
-  //       people: "",
-  //       yield: "",
-  //       specification: "",
-  //     },
-  //     // 查询到的池塘信息对象，用于修改池塘信息
-  //     editForm: {
-  //       id: "",
-  //       pondName: "",
-  //       pondType: "",
-  //       depth: "",
-  //       baseId: "",
-  //       shrimpId: "",
-  //       pondVolume: 0,
-  //       inputNum: 0,
-  //       createDate: null,
-  //       deliveryStatus: "",
-  //       catchDate: null,
-  //     },
-  //     // 建议卡信息输入表单
-  //     kindForm: {
-  //       pondVolume: 0,
-  //       pondDeep: 0,
-  //       shrimpKindId: "",
-  //       shrimpMethod: "",
-  //     },
-  //     // 查询到的建议卡信息
-  //     suggest: {
-  //       id: "string",
-  //       kindName: "string",
-  //       minDensity: "string",
-  //       maxDensity: "string",
-  //       waterTemperature: 0,
-  //       salinity: 0,
-  //       ph: 0,
-  //       ammoniaValue: 0,
-  //       dissolvedOxygen: 0,
-  //       pondVolume: 0,
-  //       pondDeep: 0,
-  //     },
-  //     // 控制添加池塘面板的显示与隐藏
-  //     addDialogVisible: false,
-  //     // 控制修改池塘面板的显示和隐藏
-  //     aditDialogVisible: false,
-  //     // 控制投苗面板的显示和隐藏
-  //     drogDialogVisible: false,
-  //     // 控制投料面板的显示和隐藏
-  //     farmDialogVisible: false,
-  //     // 控制捕捞面板的显示和隐藏
-  //     catchDialogVisible: false,
-  //     // 控制建议卡:池塘信息输入面板的显示和隐藏
-  //     kindDialogVisible: false,
-  //     // 控制建议卡面板的显示和隐藏
-  //     suggestDialogVisible: false,
-  //     // 添加表单的验证规则对象
-  //     addeFormRules: {
-  //       pondName: [
-  //         { required: true, message: "请输入池塘名称", trigger: "blur" },
-  //         {
-  //           min: 2,
-  //           max: 10,
-  //           message: "池塘名称的长度在2~10个字符之间",
-  //           trigger: "blur",
-  //         },
-  //       ],
-  //       pondType: [
-  //         { required: true, message: "请输入池塘类型", trigger: "blur" },
-  //         {
-  //           min: 2,
-  //           max: 10,
-  //           message: "池塘类型的长度在2~10个字符之间",
-  //           trigger: "blur",
-  //         },
-  //       ],
-  //       depth: [{ required: true, message: "请输入池塘深度", trigger: "blur" }],
-  //       pondVolume: [
-  //         { required: true, message: "请输入池塘面积", trigger: "blur" },
-  //       ],
-  //     },
-  //     // 投苗表单的验证规则对象
-  //     drogFormRules: {
-  //       shrimpId: [
-  //         { required: true, message: "请输入虾苗批次名称", trigger: "blur" },
-  //       ],
-  //       inputNum: [
-  //         { required: true, message: "请输入投放尾数", trigger: "blur" },
-  //       ],
-  //     },
-  //     // 投料表单的验证规则对象
-  //     farmFormRules: {
-  //       suppliesInfoId: [
-  //         { required: true, message: "请输入农资名称", trigger: "blur" },
-  //       ],
-  //       applicator: [
-  //         { required: true, message: "请输入操作人", trigger: "blur" },
-  //       ],
-  //       applyType: [
-  //         { required: true, message: "请输入操作类别", trigger: "blur" },
-  //       ],
-  //       deliveryVolume: [
-  //         { required: true, message: "请输入投放量", trigger: "blur" },
-  //       ],
-  //     },
-  //     // 捕捞表单的验证规则对象
-  //     catchFormRules: {
-  //       people: [{ required: true, message: "请输入操作员", trigger: "blur" }],
-  //       specification: [
-  //         { required: true, message: "请输入捕捞规格", trigger: "blur" },
-  //       ],
-  //       yield: [{ required: true, message: "请输入产量", trigger: "blur" }],
-  //     },
-  //     // 修改表单的验证规则对象
-  //     editFormRules: {
-  //       pondName: [
-  //         { required: true, message: "请输入池塘名称", trigger: "blur" },
-  //         {
-  //           min: 2,
-  //           max: 10,
-  //           message: "池塘名称的长度在2~10个字符之间",
-  //           trigger: "blur",
-  //         },
-  //       ],
-  //       pondType: [
-  //         { required: true, message: "请输入池塘类型", trigger: "blur" },
-  //         {
-  //           min: 2,
-  //           max: 10,
-  //           message: "池塘类型的长度在2~10个字符之间",
-  //           trigger: "blur",
-  //         },
-  //       ],
-  //       pondVolume: [
-  //         { required: true, message: "请输入池塘面积", trigger: "blur" },
-  //       ],
-  //       depth: [{ required: true, message: "请输入池塘深度", trigger: "blur" }],
-  //       deliveryStatus: [
-  //         { required: true, message: "请输入投放状态", trigger: "blur" },
-  //       ],
-  //     },
-  //     // 建议卡的信息输入的验证规则对象
-  //     kindFormRules: {
-  //       kindName: [
-  //         { required: true, message: "请输入虾的品种", trigger: "blur" },
-  //       ],
-  //       pondVolume: [
-  //         { required: true, message: "请输入池塘面积", trigger: "blur" },
-  //       ],
-  //       pondDeep: [
-  //         { required: true, message: "请输入池塘深度", trigger: "blur" },
-  //       ],
-  //     },
-  //   };
-  // },
   created() {
-    this.getPondList();  //获取池塘信息
+    this.getPondList(this.addPondInfo.size,1);  //获取池塘信息
     // this.createPond();
+    this.test()
   },
   methods: {
-    async getPondList() {
+    async getPondList(size,page) {
       const { data: res } = await this.$pondController.get(
-        `getInfo/1/3/1`
+        `getInfo/${this.baseId}/${size}/${page}`
       );
       if (res.statusCode !== 2000) {
         console.log(res);
+        this.pondList = res.data.records;
+        this.addPondInfo.total = res.data.total
       } else {
         console.log("查询池塘信息失败");
       }
     },
+    test(){
+      console.log(this);
+    },
     //创建池塘
     async createPond() {
-      this.addPondInfo.baseId = 1;
-      const { data: res } = await this.$pondController.post(`/create?pond=${this.addeForm}`);
-      if (res.status !== 400) {
+      console.log(this.addeForm);
+      this.addPondInfo.baseId = '1248910886228332544';
+      const { data: res } = await this.$pondController.post(`/create}`,this.addeForm);
+      if (res.statusCode !== 20000) {
         console.log("请求创建池塘失败");
       } else {
         console.log(res);
         this.addPondInfo.dialogVisible = !this.addPondInfo.dialogVisible;
+        this.getPondList(this.addPondInfo.size,this.addPondInfo.page);
         this.$message.success('添加池塘成功!!')
       }
-    },
+      console.log(res);
+},
     addPondEvent() {    //确认添加池塘事件
       console.log("创建池塘事件");
       this.$refs.addeFormRef.dialogVerification();
