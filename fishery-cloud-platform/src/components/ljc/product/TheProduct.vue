@@ -1,7 +1,11 @@
 <template>
   <div>
     <!-- 添加区域开始 -->
-    <TheAdd />
+    <TheAdd
+      :labels="labels"
+      :processingFactoryId="processingFactoryId"
+      @getAllInfo="getAllInfo"
+    />
     <!-- 添加区域结束 -->
 
     <!-- 表格开始 -->
@@ -58,8 +62,8 @@ export default {
   },
   computed: {
     // 加工厂id
-    plantId() {
-      return this.$route.params.ID;
+    processingFactoryId() {
+      return this.$route.query.ID;
     },
 
     // 标签
@@ -80,13 +84,13 @@ export default {
       this.pageNum = pageNum;
       this.pageSize = pageSize;
       const { data: res } = await this.model.getAllInfo(
-        this.plantId,
+        this.processingFactoryId,
         pageNum,
         pageSize
       );
       console.log(res);
       if (res.statusCode !== 20000) {
-        this.$message.error(res.data.message);
+        this.$message.error(res.message);
       }
       this.allList = res.data.records;
       this.total = res.data.total;

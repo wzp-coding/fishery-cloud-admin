@@ -17,15 +17,59 @@
         prop="processingFactoryId"
         :label="labels.processingFactoryId"
       ></el-table-column>
-      <el-table-column label="操作"> </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-row :gutter="10">
+            <el-col :span="6">
+              <TheEdit
+                :id="scope.row.id"
+                :labels="labels"
+                :title="title"
+                @getAllInfo="getAllInfo()"
+              />
+            </el-col>
+            <!-- <el-col :span="6">
+              <el-tooltip
+                effect="dark"
+                :content="buttonInfo"
+                placement="top"
+                :enterable="false"
+              >
+                <TheInto
+                  :id="scope.row.id"
+                  type="warning"
+                  icon="el-icon-d-arrow-right"
+                  size="mini"
+                  :path="path"
+                />
+              </el-tooltip>
+            </el-col> -->
+            <el-col :span="6">
+              <TheDelete
+                tag="product"
+                :id="scope.row.id"
+                :title="title"
+                @getAllInfo="getAllInfo()"
+              />
+            </el-col>
+          </el-row>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 表格结束 -->
   </div>
 </template>
 
 <script>
+import TheDelete from "../public/delete";
+import TheInto from "../public/into";
+import TheEdit from "../product/TheEdit";
 export default {
-  components: {},
+  components: {
+    TheDelete,
+    TheEdit,
+    TheInto,
+  },
   props: {
     // 表格数据
     allList: {},
@@ -40,7 +84,11 @@ export default {
     return {};
   },
   computed: {},
-  methods: {},
+  methods: {
+    getAllInfo() {
+      this.$emit("getAllInfo");
+    },
+  },
 };
 </script>
 

@@ -12,7 +12,7 @@
       :visible.sync="addDialogVisible"
       @close="addDialogClosed"
     >
-      <el-form :model="addFrom" ref="addFromRef" :rules="addFormRules">
+      <el-form :model="addFrom" ref="addFromRef" :rules="formRules">
         <el-form-item
           :label="labels.processingFactoryName"
           prop="processingFactoryName"
@@ -65,51 +65,24 @@ export default {
       // 添加信息
       addFrom: {},
 
-      // 管理员数组
-      createPersonList: [
-        {
-          personName: "张三",
-          id: "1111",
-        },
-        {
-          personName: "李四",
-          id: "2222",
-        },
-      ],
-
       /* 提示信息开始 */
       addSuccessInfo: "添加加工厂成功！！",
       addErrorInfo: "加工厂已存在，请重新输入",
       /* 提示信息结束 */
 
-      /* 表单验证规则对象开始 */
-      addFormRules: {
-        processingFactoryName: [
-          { required: true, message: "请输入厂家名称", trigger: "blur" },
-          {
-            min: 2,
-            max: 10,
-            message: "厂家名称的长度在2~10个字符之间",
-            trigger: "blur",
-          },
-        ],
-        processingFactoryAddress: [
-          { required: true, message: "请输入厂家地址", trigger: "blur" },
-          {
-            min: 2,
-            message: "厂家地址至少两个字符以上",
-            trigger: "blur",
-          },
-        ],
-        createPersonId: [
-          { required: true, message: "请输入创建者", trigger: "blur" },
-        ],
-      },
-
-      /* 表单验证规则对象结束 */
     };
   },
-  computed: {},
+  computed: {
+    // 管理员数组
+    createPersonList() {
+      return this.model.createPersonList;
+    },
+
+    // 表单验证规则对象
+    formRules() {
+      return this.model.formRules;
+    },
+  },
   created() {},
   methods: {
     /* 添加加工厂开始 */

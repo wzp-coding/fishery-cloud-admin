@@ -16,24 +16,15 @@
       @close="editDialogClosed"
     >
       <el-form :model="editForm" ref="editFormRef" :rules="formRules">
-        <el-form-item
-          :label="labels.processingFactoryName"
-          prop="processingFactoryName"
-        >
-          <el-input v-model="editForm.processingFactoryName"></el-input>
+        <el-form-item :label="labels.productName" prop="productName">
+          <el-input v-model="editForm.productName"></el-input>
         </el-form-item>
-        <el-form-item
-          :label="labels.processingFactoryAddress"
-          prop="processingFactoryAddress"
-        >
-          <el-input v-model="editForm.processingFactoryAddress"></el-input>
-        </el-form-item>
-        <el-form-item :label="labels.createPersonId" prop="createPersonId">
-          <el-select v-model="editForm.createPersonId">
+        <el-form-item :label="labels.germchitId" prop="germchitId">
+          <el-select v-model="editForm.germchitId">
             <el-option
-              v-for="item in createPersonList"
+              v-for="item in germchitIds"
               :key="item.id"
-              :label="item.personName"
+              :label="item.name"
               :value="item.id"
             >
             </el-option>
@@ -49,35 +40,29 @@
   </div>
 </template>
 <script>
-import ljc from "../processPlant/processPlant";
+import ljc from "../product/product";
 export default {
   props: {
     id: {},
-    baseId: {},
     labels: {},
   },
   data() {
     return {
       model: new ljc(this),
       // 表单名称
-      formTitle: "修改加工厂",
+      formTitle: "修改加工产品信息",
 
       // 控制表单的显示与隐藏
       editDialogVisible: false,
 
       // 修改信息
       editForm: {},
-
-      /* 提示信息开始 */
-      successInfo: "修改加工厂成功！！",
-      errorInfo: "加工厂已存在，请重新输入",
-      /* 提示信息结束 */
     };
   },
   computed: {
-    // 管理员数组
-    createPersonList() {
-      return this.model.createPersonList;
+    // 种苗信息
+    germchitIds() {
+      return this.model.germchitIds;
     },
 
     // 验证规则
@@ -87,12 +72,19 @@ export default {
   },
   created() {},
   methods: {
-    /* 修改加工厂开始 */
+    /* 根据Id查询信息开始 */
+    async getInfoById() {
+      const { data: res } = await this.model.getInfoById(this.id);
+      this.editForm = res.data;
+      this.editDialogVisible = true;
+    },
+    /* 根据Id查询信息结束 */
+
+    /* 修改开始 */
     editInfo() {
       this.$refs.editFormRef.validate(async (val) => {
         if (!val) return false;
         const { data: res } = await this.model.editInfo(this.editForm);
-        console.log(res);
         if (res.statusCode == 20000) {
           this.$emit("getAllInfo");
           this.editDialogVisible = false;
@@ -100,7 +92,7 @@ export default {
         }
       });
     },
-    /* 修改加工厂结束 */
+    /* 修改结束 */
 
     /* 监听窗口关闭事件开始 */
     editDialogClosed() {
@@ -108,14 +100,6 @@ export default {
       this.$refs.editFormRef.resetFields();
     },
     /* 监听窗口关闭事件关闭 */
-
-    /* 根据Id查询工厂信息开始 */
-    async getInfoById() {
-      const { data: res } = await this.model.getInfoById(this.id);
-      this.editForm = res.data;
-      this.editDialogVisible = true;
-    },
-    /* 根据Id查询工厂信息结束 */
   },
 };
 </script>

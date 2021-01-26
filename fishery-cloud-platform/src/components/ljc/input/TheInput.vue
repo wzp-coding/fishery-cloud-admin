@@ -1,8 +1,9 @@
 <template>
-  <div>投入品</div>
+  <div class="ljc">ljc</div>
 </template>
 <script>
 export default {
+  name: "ljc",
   data() {
     return {};
   },

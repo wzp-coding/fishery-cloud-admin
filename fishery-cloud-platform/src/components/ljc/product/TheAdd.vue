@@ -7,30 +7,21 @@
     <!-- 添加区域结束 -->
 
     <!-- 添加表单区域开始 -->
-    <!-- <el-dialog
+    <el-dialog
       :title="formTitle"
       :visible.sync="addDialogVisible"
       @close="addDialogClosed"
     >
-      <el-form :model="addFrom" ref="addFromRef" :rules="addFormRules">
-        <el-form-item
-          :label="labels.processingFactoryName"
-          prop="processingFactoryName"
-        >
-          <el-input v-model="addFrom.processingFactoryName"></el-input>
+      <el-form :model="addFrom" ref="addFromRef" :rules="formRules">
+        <el-form-item :label="labels.productName" prop="productName">
+          <el-input v-model="addFrom.productName"></el-input>
         </el-form-item>
-        <el-form-item
-          :label="labels.processingFactoryAddress"
-          prop="processingFactoryAddress"
-        >
-          <el-input v-model="addFrom.processingFactoryAddress"></el-input>
-        </el-form-item>
-        <el-form-item :label="labels.createPersonId" prop="createPersonId">
-          <el-select v-model="addFrom.createPersonId">
+        <el-form-item :label="labels.germchitId" prop="germchitId">
+          <el-select v-model="addFrom.germchitId">
             <el-option
-              v-for="item in createPersonList"
+              v-for="item in germchitIds"
               :key="item.id"
-              :label="item.personName"
+              :label="item.name"
               :value="item.id"
             >
             </el-option>
@@ -41,15 +32,15 @@
         <el-button @click="addDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="addInfo()">确 定</el-button>
       </div>
-    </el-dialog> -->
+    </el-dialog>
     <!-- 添加表单区域结束 -->
   </div>
 </template>
 <script>
-import ljc from "../processPlant/processPlant";
+import ljc from "../product/product";
 export default {
   props: {
-    baseId: {},
+    processingFactoryId: {},
     labels: {},
   },
   data() {
@@ -64,68 +55,32 @@ export default {
 
       // 添加信息
       addFrom: {},
-
-      // 管理员数组
-      createPersonList: [
-        {
-          personName: "张三",
-          id: "1111",
-        },
-        {
-          personName: "李四",
-          id: "2222",
-        },
-      ],
-
-      /* 提示信息开始 */
-      addSuccessInfo: "添加加工厂成功！！",
-      addErrorInfo: "加工厂已存在，请重新输入",
-      /* 提示信息结束 */
-
-      /* 表单验证规则对象开始 */
-      addFormRules: {
-        processingFactoryName: [
-          { required: true, message: "请输入厂家名称", trigger: "blur" },
-          {
-            min: 2,
-            max: 10,
-            message: "厂家名称的长度在2~10个字符之间",
-            trigger: "blur",
-          },
-        ],
-        processingFactoryAddress: [
-          { required: true, message: "请输入厂家地址", trigger: "blur" },
-          {
-            min: 2,
-            message: "厂家地址至少两个字符以上",
-            trigger: "blur",
-          },
-        ],
-        createPersonId: [
-          { required: true, message: "请输入创建者", trigger: "blur" },
-        ],
-      },
-
-      /* 表单验证规则对象结束 */
     };
   },
-  computed: {},
+  computed: {
+    //获取种苗编号列表
+    germchitIds() {
+      return this.model.germchitIds;
+    },
+
+    // 验证规则
+    formRules() {
+      return this.model.formRules;
+    },
+  },
   created() {},
   methods: {
     /* 添加加工厂开始 */
     addInfo() {
       this.$refs.addFromRef.validate(async (val) => {
         if (!val) return false;
-        this.addFrom.baseId = this.baseId;
-        console.log(this.addFrom);
-        await this.model.addInfo(this.addFrom).then((val) => {
-          if (val.status !== 200) {
-            this.$message.error(this.addErrorInfo);
-          }
-          this.$message.success(this.addSuccessInfo);
-          this.$emit("getAllInfo");
-          this.addDialogVisible = false;
-        });
+        this.addFrom.processingFactoryId = this.processingFactoryId;
+        const { data: res } = await this.model.addInfo(this.addFrom);
+        if (res.statusCode == 20000) {
+          this.$message.success(res.message);
+        }
+        this.$emit("getAllInfo");
+        this.addDialogVisible = false;
       });
     },
     /* 添加加工厂结束 */

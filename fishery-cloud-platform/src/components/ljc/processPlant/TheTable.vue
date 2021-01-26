@@ -46,6 +46,7 @@
             </el-col>
             <el-col :span="6">
               <TheDelete
+                tag="plant"
                 :id="scope.row.id"
                 :title="title"
                 @getAllInfo="getAllInfo()"

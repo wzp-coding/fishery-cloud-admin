@@ -11,7 +11,7 @@
       <!-- 标题区域结束 -->
 
       <!-- tab栏开始 -->
-      <el-tabs class="tabs">
+      <el-tabs class="tabs" type="card">
         <el-tab-pane label="加工产品管理"><TheProduct /></el-tab-pane>
         <el-tab-pane label="工艺管理"><TheCraft /></el-tab-pane>
         <el-tab-pane label="投入品管理"><TheInput /></el-tab-pane>
