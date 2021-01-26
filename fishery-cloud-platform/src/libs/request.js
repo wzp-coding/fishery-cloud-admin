@@ -14,6 +14,10 @@ import get from 'lodash/get';
 const baseURLObject = {
     auth:"http://106.75.154.40:9003",
     user:"http://106.75.154.40:9003/user",
+    equipment:"http://8.129.175.45:57110/equipment",
+    warning:"http://8.129.175.45:57110/warning/",
+    meteorologicalData:"http://8.129.175.45:57110/meteorologicalData/",
+    waterData:"http://8.129.175.45:57110/waterData/"
 }
 // 异常拦截处理器
 const errorHandler = (error) => {
