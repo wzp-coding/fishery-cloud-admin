@@ -75,6 +75,11 @@ export default {
       validator(str) {
         return ["logistics", "base"].includes(str);
       },
+       default() {
+        return {
+          a:'base'
+        };
+      },
     },
   },
   data() {
@@ -101,7 +106,7 @@ export default {
     // key = 4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ
     loadScript(key) {
       return new Promise((resolve, reject) => {
-        window.onload = function () {
+        window.init = function () {
           resolve(TMap);
         };
         var script = document.createElement("script");
