@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 添加区域开始 -->
-    <TheAdd
+    <Add
       :labels="labels"
       :processingFactoryId="processingFactoryId"
       @getAllInfo="getAllInfo"
@@ -9,16 +9,17 @@
     <!-- 添加区域结束 -->
 
     <!-- 表格开始 -->
-    <TheTable
+    <Table
       :allList="allList"
       :labels="labels"
       :title="myTitle"
+      :processingFactoryId="processingFactoryId"
       @getAllInfo="getAllInfo()"
     />
     <!-- 表格结束 -->
 
     <!-- 换页开始 -->
-    <ThePagination
+    <Pagination
       :pageNum="pageNum"
       :pageSize="pageSize"
       :total="total"
@@ -29,14 +30,14 @@
 </template>
 <script>
 import ljc from "../product/product.js";
-import TheAdd from "../product/TheAdd";
-import TheTable from "../product/TheTable";
-import ThePagination from "../public/pagination";
+import Add from "../product/Add";
+import Table from "../product/Table";
+import Pagination from "../public/pagination";
 export default {
   components: {
-    TheAdd,
-    TheTable,
-    ThePagination,
+    Add,
+    Table,
+    Pagination,
   },
   props: {},
   data() {
