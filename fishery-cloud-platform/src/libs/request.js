@@ -49,8 +49,9 @@ const errorHandler = (error) => {
  * 需要添加请求头请在下面自己加
  */
 const axiosObject = {};
+const axiosArray = [];
 for (const key in baseURLObject){
-    console.table({ [key]: baseURLObject[key] })
+    axiosArray[key] = baseURLObject[key]
     axiosObject[key] = axios.create({
         // API 请求的默认前缀
         baseURL: baseURLObject[key],
@@ -67,7 +68,7 @@ for (const key in baseURLObject){
         return config;
     }, errorHandler)
 }
-
+console.table(axiosArray);
 // 添加一个纯净的axios
 axiosObject.originAxios = axios.create();
 

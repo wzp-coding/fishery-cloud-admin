@@ -101,14 +101,12 @@
 </template>
 
 <script>
-import axios from 'axios'
 // 引入添加设备子组件
 import InfoWaterQualityAddDevice from '../components/yzc/InfoWaterQuality/InfoWaterQualityAddDevice'
 // 引入搜索设备组件
 import SearchDevice from '../components/yzc/SearchDevice.vue'
 // 引入分页组件
 import Pagination from '../components/yzc/pagination'
-import LoginVue from './Login.vue'
 export default {
   components: {
     InfoWaterQualityAddDevice,

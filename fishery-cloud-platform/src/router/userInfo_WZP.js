@@ -1,6 +1,6 @@
-import Login from '../views/Login.vue'
-import Register from '../views/Register.vue'
-import ForgetPassword from '../views/ForgetPassword.vue'
+import Login from '../views/user_info/Login.vue'
+import Register from '../views/user_info/Register.vue'
+import ForgetPassword from '../views/user_info/ForgetPassword.vue'
 import Vue from "vue"
 export default [
     {

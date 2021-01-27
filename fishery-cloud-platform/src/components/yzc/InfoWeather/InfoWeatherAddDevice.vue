@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import LoginVue from '../../../views/Login.vue'
 export default {
     data() {
         return {

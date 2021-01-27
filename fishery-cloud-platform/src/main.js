@@ -31,13 +31,7 @@ Vue.use(lodash);
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
 
-// 导出表格
-import JsonExcel from 'vue-json-excel'
-Vue.component('downloadExcel', JsonExcel)
 
-// 拖拽组件
-import draggable from 'vuedraggable'
-Vue.component('Draggable', draggable)
 
 new Vue({
   router,
