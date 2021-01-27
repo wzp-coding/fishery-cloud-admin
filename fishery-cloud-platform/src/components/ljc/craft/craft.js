@@ -18,23 +18,23 @@ module.exports = class {
     /* 表单验证规则对象开始 */
     formRules = {
         craftName: [
-            { required: true, message: "请输入工艺名称", trigger: "blur" },
+            { required: true, message: `请输入${this.labels.craftName}`, trigger: "blur" },
             {
                 min: 2,
                 max: 10,
-                message: "工艺名称的长度在2~10个字符之间",
+                message: `${this.labels.craftName}的长度在2~10个字符之间`,
                 trigger: "blur",
             },
         ],
         craftDescription: [
-            { required: true, message: "请输入工艺描述", trigger: "blur" },
+            { required: true, message: `请输入${this.labels.craftDescription}`, trigger: "blur" },
         ],
         craftResponsible: [
-            { required: true, message: "请输入工艺负责人", trigger: "blur" },
+            { required: true, message: `请输入${this.labels.craftResponsible}`, trigger: "blur" },
         ],
         craftTime: [
-            { required: true, message: "请输入工艺耗时", trigger: "blur" },
-        ]
+            { required: true, message: `请输入${this.labels.craftTime}`, trigger: "blur" },
+        ],
     }
     /* 表单验证规则对象结束 */
 
@@ -64,7 +64,7 @@ module.exports = class {
     /* 根据ID查询信息开始 */
     getInfoById(id) {
         return new Promise((resolve) => {
-            this.vue.$plant.get(`/processingFactory/product/${id}`)
+            this.vue.$plant.get(`/processingFactory/craft/${id}`)
                 .then((res) => {
                     resolve(res);
                 })
@@ -75,7 +75,7 @@ module.exports = class {
     /* 修改开始 */
     editInfo(editForm) {
         return new Promise((resolve) => {
-            this.vue.$plant.put(`/processingFactory/product/`, editForm)
+            this.vue.$plant.put(`/processingFactory/craft/`, editForm)
                 .then((res) => {
                     resolve(res);
                 })

@@ -27,11 +27,30 @@
             <el-col :span="6">
               <Edit
                 :id="scope.row.id"
+                :processingFactoryId="processingFactoryId"
                 :labels="labels"
                 :title="title"
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
+            <el-col :span="6">
+              <el-tooltip
+                effect="dark"
+                :content="buttonInfo"
+                placement="top"
+                :enterable="false"
+              >
+                <Into
+                  :id="scope.row.id"
+                  type="warning"
+                  icon="el-icon-d-arrow-right"
+                  size="mini"
+                  :path="path"
+                  :otherQuery="otherQuery"
+                />
+              </el-tooltip>
+            </el-col>
+
             <el-col :span="6">
               <Delete
                 tag="craft"
@@ -51,10 +70,12 @@
 <script>
 import Delete from "../public/delete";
 import Edit from "../craft/Edit";
+import Into from "../public/into";
 export default {
   components: {
     Delete,
     Edit,
+    Into,
   },
   props: {
     // 表格数据
@@ -70,9 +91,20 @@ export default {
     processingFactoryId: {},
   },
   data() {
-    return {};
+    return {
+      // 跳转信息
+      buttonInfo: "查看投入品",
+
+      // 跳转路径
+      path: "/info-input",
+    };
   },
-  computed: {},
+  computed: {
+    // 跳转的其他参数对象
+    otherQuery() {
+      return { processingFactoryId: this.processingFactoryId };
+    },
+  },
   methods: {
     getAllInfo() {
       this.$emit("getAllInfo");

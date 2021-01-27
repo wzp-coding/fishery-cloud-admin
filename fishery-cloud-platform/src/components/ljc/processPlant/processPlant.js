@@ -15,24 +15,24 @@ module.exports = class {
     /* 表单验证规则对象开始 */
     formRules = {
         processingFactoryName: [
-            { required: true, message: "请输入厂家名称", trigger: "blur" },
+            { required: true, message: `请输入${this.labels.processingFactoryName}`, trigger: "blur" },
             {
                 min: 2,
                 max: 10,
-                message: "厂家名称的长度在2~10个字符之间",
+                message: `${this.labels.processingFactoryName}的长度在2~10个字符之间`,
                 trigger: "blur",
             },
         ],
         processingFactoryAddress: [
-            { required: true, message: "请输入厂家地址", trigger: "blur" },
+            { required: true, message: `请输入${this.labels.processingFactoryAddress}`, trigger: "blur" },
             {
                 min: 2,
-                message: "厂家地址至少两个字符以上",
+                message: `${this.labels.processingFactoryAddress}至少两个字符以上`,
                 trigger: "blur",
             },
         ],
         createPersonId: [
-            { required: true, message: "请输入创建者", trigger: "blur" },
+            { required: true, message: `请输入创建者`, trigger: "blur" },
         ],
     }
     /* 表单验证规则对象结束 */
