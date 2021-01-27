@@ -1,10 +1,11 @@
 <template>
   <div>
     <!--面包区域区域——start-->
-    <el-breadcrumb separator-class="el-icon-arrow-right">
+    <!-- <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item>设备管理</el-breadcrumb-item>
       <el-breadcrumb-item>气象设备</el-breadcrumb-item>
-    </el-breadcrumb>
+    </el-breadcrumb> -->
+    <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
     <!--面包区域区域——end-->
 
     <!--卡片视图区域——start-->
@@ -97,14 +98,17 @@ import InfoWeatherAddDevice from '../components/yzc/InfoWeather/InfoWeatherAddDe
 import SearchDevice from '../components/yzc/SearchDevice.vue'
 // 引入分页组件
 import Pagination from '../components/yzc/pagination'
+import Breadcrumb from '../components/public_components/Breadcrumb'
 export default {
   components: {
     InfoWeatherAddDevice,
     SearchDevice,
-    Pagination
+    Pagination,
+    Breadcrumb
   },
   data() {
     return {
+      breadcrumbs:["设备管理","气象设备"],
       typeId:'0',
       baseId:'1248910886228332544',
       //---------------设备信息列表相关属性——start

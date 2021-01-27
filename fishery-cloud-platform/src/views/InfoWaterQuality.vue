@@ -1,10 +1,11 @@
 <template>
   <div>
     <!--面包区域区域——start-->
-    <el-breadcrumb separator-class="el-icon-arrow-right">
+    <!-- <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item>设备管理</el-breadcrumb-item>
       <el-breadcrumb-item>水质设备</el-breadcrumb-item>
-    </el-breadcrumb>
+    </el-breadcrumb> -->
+    <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
     <!--面包区域区域——end--> 
 
     <!--卡片视图区域——start-->
@@ -101,19 +102,19 @@
 </template>
 
 <script>
-import axios from 'axios'
 // 引入添加设备子组件
 import InfoWaterQualityAddDevice from '../components/yzc/InfoWaterQuality/InfoWaterQualityAddDevice'
 // 引入搜索设备组件
 import SearchDevice from '../components/yzc/SearchDevice.vue'
 // 引入分页组件
 import Pagination from '../components/yzc/pagination'
-import LoginVue from './Login.vue'
+import Breadcrumb from '../components/public_components/Breadcrumb'
 export default {
   components: {
     InfoWaterQualityAddDevice,
     SearchDevice,
-    Pagination
+    Pagination,
+    Breadcrumb
   },
   created() {
     // 获取设备信息
@@ -125,6 +126,7 @@ export default {
   },
   data() {
     return {
+      breadcrumbs:["设备管理","水质设备"],
       //---------------设备信息列表相关属性——start
       // 水质设备对应的typeId
       typeId: '1',
@@ -176,10 +178,6 @@ export default {
       page_size: 5,
       // 总条数
       total: 0,
-      //每页显示的条数 默认10
-      //page_size: 10,
-      // total是数据总条数
-      //total: 0,
       // -----------关于分页功能的属性——end
 
       // 存放搜索到的数据

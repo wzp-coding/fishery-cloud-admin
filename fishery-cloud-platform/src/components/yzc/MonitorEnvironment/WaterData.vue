@@ -273,7 +273,7 @@ export default {
                 ammoniaNitrogenUnit: '%',
                 equipmentId: '',
                 waterQualityWorking: '',
-                chlorophyll: '',
+                chlorophyll: 0,
                 chlorophyllUnit: 'mg/L',
                 conductivity: '' ,
                 conductivityUnit: '(μS/cm)',
