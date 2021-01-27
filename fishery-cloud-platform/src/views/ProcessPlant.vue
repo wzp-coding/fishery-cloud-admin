@@ -76,8 +76,6 @@ export default {
       plantList: [],
       // 获取总数据错误信息
       getErrorInfo: "获取加工厂信息失败",
-      // 基地ID
-      baseId: "1350657222372835330",
     };
   },
   computed: {
@@ -86,9 +84,9 @@ export default {
       return this.model.labels;
     },
     // 基地ID
-    // baseId() {
-    //   return localStorage.getItem("baseId");
-    // },
+    baseId() {
+      return localStorage.getItem("baseId");
+    },
   },
   created() {
     this.getAllInfo();
