@@ -78,7 +78,8 @@ import {
     MessageBox,
     Message,
     Notification,
-    Drawer
+    Drawer,
+    Avatar
 } from 'element-ui';
 
 Vue.use(Pagination);
@@ -155,6 +156,7 @@ Vue.use(Backtop);
 Vue.use(PageHeader);
 Vue.use(Drawer);
 Vue.use(CascaderPanel);
+Vue.use(Avatar);
 
 Vue.use(Loading.directive);
 

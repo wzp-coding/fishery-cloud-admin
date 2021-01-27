@@ -1,18 +1,19 @@
 <template>
   <div id="digitalbase">
-    <el-breadcrumb separator-class="el-icon-arrow-right">
+    <!-- <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item>我的基地</el-breadcrumb-item>
       <el-breadcrumb-item>数字基地</el-breadcrumb-item>
-    </el-breadcrumb>
+    </el-breadcrumb> -->
+    <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
     <div class="cardBody">
-      <el-row class="globalHeader" style="margin-bottom: 20px;">
+      <el-row class="globalHeader" style="margin-bottom: 20px">
         <el-col :span="4">
           <i class="el-icon-s-data"></i><span>数字基地</span></el-col
         >
         <el-col style="width: 100px; float: right">
           <el-button
             type="primary"
-            style="float: right;"
+            style="float: right"
             plain
             @click="changeAuthorityShow"
             >所持权限</el-button
@@ -92,7 +93,7 @@ const DraggableMap = {
         <Map map-name="logistics"></Map>
       </el-col>
     );
-  }, 
+  },
 };
 const DraggableWeatherCard = {
   components: { WeatherCard },
@@ -118,6 +119,7 @@ export default {
   },
   data() {
     return {
+      breadcrumbs: ["我的基地", "数字基地"],
       // 控制展示权限对话框
       isShowAuthority: false,
 
