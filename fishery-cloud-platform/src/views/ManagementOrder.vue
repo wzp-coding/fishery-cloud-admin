@@ -149,91 +149,34 @@
     </el-card>
 
     <!-- 修改订单信息的对话框 -->
-    <el-dialog
-      title="修改订单信息"
-      :visible.sync="aditDialogVisible"
-      width="30%"
-      @close="aditDialogClosed"
+    <Show-change
+    :edit-form-rules="editFormRules"
+    :edit-form="editForm"
+    :adit-dialog-visible="aditDialogVisible"
+    :remain="remain"
+    :personInfoList="personInfoList"
+    :constWeight="constWeight"
+    :options="options"
+    @changenotifyParent="changenotifyParent"
+    @getOrderList="getOrderList"
     >
-      <!-- 内容主题区 -->
-      <el-form
-        :model="editForm"
-        :rules="editFormRules"
-        ref="editFormRef"
-        label-width="120px"
-      >
-        <el-form-item label="客户名" prop="customerName">
-          <el-input v-model="editForm.customerName"></el-input>
-        </el-form-item>
-        <el-form-item label="客户类型" prop="customerType">
-          <el-select v-model="editForm.customerType" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="金额/元" prop="money">
-          <el-input-number
-            v-model="editForm.money"
-            controls-position="right"
-            :min="0"
-          ></el-input-number>
-        </el-form-item>
-        <el-form-item label="重量/kg" prop="weight">
-          <el-input-number
-            v-model="editForm.weight"
-            controls-position="right"
-            :min="0"
-            :max="remain + constWeight"
-          ></el-input-number>
-        </el-form-item>
-        <el-form-item label="操作人" prop="createBy">
-          <el-select v-model="editForm.createBy" placeholder="请选择">
-            <el-option
-              v-for="(item, i) in personInfoList"
-              :key="i"
-              :value="item.name"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="创建日期" prop="createDate">
-          <el-date-picker
-            v-model="editForm.createDate"
-            type="datetime"
-            placeholder="选择日期时间"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="收货地址" prop="receiptAddress">
-          <el-input v-model="editForm.receiptAddress"></el-input>
-        </el-form-item>
-      </el-form>
-      <!-- 页脚 -->
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="aditDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editOrderInfo">确 定</el-button>
-      </span>
-    </el-dialog>
+    </Show-change>
 
     <!-- 展示虾苗信息 或者 物流信息-->
-    <show-info
+    <Show-info
       :title="title"
       :is-logistics="isLogistics"
       :dialog-visible="dialogVisible"
       :id="showInfoId"
       @notifyParent="ChangeDialogVisible"
-    ></show-info>
+    ></Show-info>
 
 <!-- 展示物流 或者 溯源二维码 -->
     <show-orinfo
     :ortitle="orTitle"
     :is-show-code="isShowCode"
     :adult-shrimp-id="adultShrimpId"
+    :options="options"
     @notifyParent2="closeCode"
     
     >
@@ -244,12 +187,14 @@
 
 <script>
 import QRCode from "qrcodejs2";
-import ShowInfo from "../components/cgx/ShowInfo/ShowInfo1";
-import showOrinfo from "../components/cgx/ShowOrcode/ShowOrcode2";
+import ShowInfo from   "../components/cgx/ManagementOrder/ShowInfo/ShowInfo1";
+import ShowOrinfo from "../components/cgx/ManagementOrder/ShowOrcode/ShowOrcode2";
+import ShowChange from "../components/cgx/ManagementOrder/ModifyInformation/ShowChange";
 export default {
   components: {
     ShowInfo,
-    showOrinfo,
+    ShowOrinfo,
+    ShowChange,
   },
   data() {
     return {
@@ -353,7 +298,9 @@ export default {
       ],
 
       // 用于存放人员信息
-      personInfoList: [],
+      personInfoList: [
+       
+      ],
 
       // 订单列表
       OrderList: [{
@@ -466,7 +413,7 @@ export default {
       this.showInfoId = id;
       this.dialogVisible = true;
     },
-    // 子组件关闭时触发改变dialogVisible
+    // 展示信息子组件关闭时触发改变dialogVisible
     ChangeDialogVisible() {
       this.dialogVisible = !this.dialogVisible;
     },
@@ -551,16 +498,14 @@ export default {
       this.pageInfo.pagesize = newSize;
       this.getOrderList();
     },
-
+    // 改变修改信息对话框触发时改变aditDialogVisible
+    changenotifyParent(){
+      this.aditDialogVisible = false;
+    },
     // 监听页码值改变的事件
     handleCurrentChange(newPage) {
       this.pageInfo.pagenum = newPage;
       this.getOrderList();
-    },
-
-    // 监听修改订单信息对话框的关闭事件，关闭时重置
-    aditDialogClosed() {
-      this.$refs.editFormRef.resetFields();
     },
 
     // 获取人员信息
@@ -578,93 +523,50 @@ export default {
     // },
 
     // // 获取订单信息
-    // async getOrderList() {
-    //   const { data: res } = await this.$http.post(
-    //     `/order/search/${this.pageInfo.pagenum}/${this.pageInfo.pagesize}`,
-    //     {
-    //       baseId: this.baseId,
-    //     }
-    //   );
-    //   console.log("res111:",res);
-    //   if (res.code !== 20000) {
-    //     return this.$message.error("获取虾苗订单列表失败！！");
-    //   }
-    //   this.OrderList = res.data.rows;
-    //   this.total = res.data.total;
-    //   console.log("OrderList:",OrderList)
-    //   console.log("total:",total)
-    // },
+    async getOrderList() {
+      const { data: res } = await this.$http.post(
+        `/order/search/${this.pageInfo.pagenum}/${this.pageInfo.pagesize}`,
+        {
+          baseId: this.baseId,
+        }
+      );
+      console.log("执行出错:",res);
+      if (res.code !== 20000) {
+        return this.$message.error("获取虾苗订单列表失败！！");
+      }
+      this.OrderList = res.data.rows;
+      this.total = res.data.total;
+      console.log("OrderList:",OrderList)
+      console.log("total:",total)
+    },
 
     // // 获取虾苗剩余量
-    // async getShrimpRemainById(id) {
-    //   // 调用根据ID查询用户信息接口
-    //   console.log(id);
-    //   const { data: res } = await this.$http.get("/shrimp/" + id);
-    //   if (res.code !== 20000) {
-    //     return this.$message.error("查询该虾苗剩余量失败！！");
-    //   }
-    //   this.remain = res.data.remain;
-    // },
+    async getShrimpRemainById(id) {id
+      // 调用根据ID查询用户信息接口
+      console.log(id);
+      const { data: res } = await this.$http.get("/shrimp/" + id);
+      if (res.code !== 20000) {
+        return this.$message.error("查询该虾苗剩余量失败！！");
+      }
+      this.remain = res.data.remain;
+    },
 
     // // 展示修改的对话框
-    // async showEditDialog(id) {
-    //   // 调用根据ID查询用户信息接口
-    //   const { data: res } = await this.$http.get("/order/" + id);
-    //   if (res.code !== 20000) {
-    //     return this.$message.error("查询该订单信息失败！！");
-    //   }
-    //   console.log(res);
-    //   this.editForm = res.data;
-    //   this.getShrimpRemainById(this.editForm.shrimpId);
-    //   this.constWeight = res.data.weight;
-    //   // console.log(this.editForm)
-    //   this.aditDialogVisible = true;
-    // },
-
-    // 修改信息并提交
-    editOrderInfo() {
-      // 先进行表单的预验证
-      this.$refs.editFormRef.validate(async (valid) => {
-        if (!valid) return false;
-        // 正确，则会发起修改用户信息的请求
-        // 转化时间为标准形式
-        if (this.editForm.createDate !== null) {
-          var date = new Date(this.editForm.createDate);
-          this.editForm.createDate = `${date.getFullYear()}-${
-            date.getMonth() + 1
-          }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-        }
-        const { data: res } = await this.$http.post(
-          `/order/${this.editForm.id}?oldNum=${this.constWeight}`,
-          {
-            customerName: this.editForm.customerName,
-            customerType: this.editForm.customerType,
-            money: this.editForm.money,
-            shrimpId: this.editForm.shrimpId,
-            weight: this.editForm.weight,
-            createBy: this.editForm.createBy,
-            createDate: this.editForm.createDate,
-            receiptAddress: this.editForm.receiptAddress,
-            addressLongitude: this.editForm.addressLongitude,
-            addressLatitude: this.editForm.addressLatitude,
-            baseId: this.editForm.baseId,
-            shrimpBatchName: this.editForm.shrimpBatchName,
-            logisticsId: this.editForm.logisticsId,
-            adultShrimpId: this.editForm.adultShrimpId,
-          }
-        );
-        // console.log(res)
-        if (res.code !== 20000) {
-          return this.$message.error("更新该虾苗订单信息失败！！");
-        }
-        // 关闭对话框
-        this.aditDialogVisible = false;
-        // 刷新列表
-        this.getOrderList();
-        // 提示修改成功
-        this.$message.success("更新该虾苗订单信息成功！！");
-      });
+    async showEditDialog(id) {
+      // 调用根据ID查询用户信息接口
+      const { data: res } = await this.$http.get("/order/" + id);
+      if (res.code !== 20000) {
+        return this.$message.error("查询该订单信息失败！！");
+      }
+      console.log(res);
+      this.editForm = res.data;
+      this.getShrimpRemainById(this.editForm.shrimpId);
+      this.constWeight = res.data.weight;
+      console.log(this.editForm)
+      this.aditDialogVisible = true;
     },
+
+    
 
     // // 根据id删除对应的订单信息
     // async removeOrderById(id) {
@@ -695,66 +597,7 @@ export default {
     //   this.$message.success("删除订单信息成功！！");
     //   this.getOrderList();
     // },
-    //   // 地图
-    // init() {
-    //   var This = this
-    //   // 经纬度设置
-    //   This.startPos = new qq.maps.LatLng(
-    //     This.logisticsForm.logisticsStartLatitude,
-    //     This.logisticsForm.logisticsStartLongitude
-    //   )
-    //   This.endPos = new qq.maps.LatLng(
-    //     This.logisticsForm.logisticsArrivalLatitude,
-    //     This.logisticsForm.logisticsArrivalLongitude
-    //   )
-    //   // 开始画地图
-    //   This.map = new qq.maps.Map(document.getElementById('map'), {
-    //     // 地图的中心地理坐标，这里设为西安市。
-    //     center: new qq.maps.LatLng(34.01, 108.41),
-    //     zoom: 4,
-    //   })
-    //   // InfoWindow表示信息窗口
-    //   This.infoWin1 = new qq.maps.InfoWindow({
-    //     map: This.map,
-    //   })
-    //   This.infoWin2 = new qq.maps.InfoWindow({
-    //     map: This.map,
-    //   })
-    //   This.infoWin1.open()
-    //   This.infoWin1.setContent(
-    //     '<div style="width:200px;padding-top:10px;">' +
-    //       '离开地址:' +
-    //       This.logisticsForm.departureAddr +
-    //       '<br/>离开时间:' +
-    //       This.logisticsForm.departureTime +
-    //       '</div>'
-    //   )
-    //   This.infoWin1.setPosition(This.startPos)
-    //   This.infoWin2.open()
-    //   This.infoWin2.setContent(
-    //     '<div style="width:200px;padding-top:10px;">' +
-    //       '抵达地址:' +
-    //       This.logisticsForm.arrivalAddr +
-    //       '<br/>抵达时间:' +
-    //       This.logisticsForm.arrivalTime +
-    //       '</div>'
-    //   )
-    //   This.infoWin2.setPosition(This.endPos)
-    //   This.mark1 = new qq.maps.Marker({
-    //     position: This.startPos,
-    //     map: This.map,
-    //   })
-    //   This.mark2 = new qq.maps.Marker({
-    //     position: This.endPos,
-    //     map: This.map,
-    //   })
-    //   This.polyline = new qq.maps.Polyline({
-    //     path: [This.startPos, This.endPos],
-    //     strokeColor: '#39bf3e',
-    //     strokeWeight: 4,
-    //     map: This.map,
-    //   })
-    // },
+
     
   },
 };

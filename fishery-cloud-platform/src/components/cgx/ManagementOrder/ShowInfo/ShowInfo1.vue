@@ -73,13 +73,13 @@
     ></map>
      <!-- 页脚 -->
       <span slot="footer" class="dialog-footer">
-        <el-button @click="DialogClosed()">取 消</el-button>
+        <el-button @click="DialogClosed">取 消</el-button>
       </span>
   </el-dialog>
   
 </template>
 <script>
-import Map from "../../public_components/Map";
+import Map from "../../../public_components/Map";
 import FormE from "./elFormItem";
 import TimeE1 from "./elFormtime";
 export default {
