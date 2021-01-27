@@ -1,33 +1,24 @@
 <template>
     <div>
-        <!-- 面包屑导航区域——start -->
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item>设备管理</el-breadcrumb-item>
-            <el-breadcrumb-item>气象设备</el-breadcrumb-item>
-            <el-breadcrumb-item>气象预警阀值</el-breadcrumb-item>
-        </el-breadcrumb>
-        <!-- 面包屑导航区域——end -->
-
-        <el-card class="box-card">
+        <el-card shadow="never" style="border:0">
         <!--头部区域 标题and按钮 start-->
         <el-row :gutter="30" class="globalHeader" style="margin-bottom:20px;padding-bottom:45px">
-        <el-col :span="16">
+        <el-col :span="21">
              <div class="grid-content bg-purple">
                 <i class="el-icon-s-custom"></i>
-                <span>气象预警阀值</span>
+                <span>气象数据</span>
              </div>
         </el-col>
-         <el-col :span="6" :push="4">
+         <el-col :span="3">
              <div class="grid-content bg-purple">
-                 <el-button type="primary" round @click="ShowAddDialog()">添加阈值</el-button>
-                 <el-button type="primary" round @click="back()">返回</el-button>
+                 <el-button type="primary" @click="ShowAddDialog()" size="mini">上传数据</el-button>
              </div>
          </el-col>
         </el-row>
         <!--头部区域 标题and按钮 end-->
 
-        <!--添加阈值的对话框——start-->
-        <el-dialog title="水质预警" :visible.sync="addDialogVisible" width="35%" @close="addDialogClosed">
+        <!--添加对话框——start-->
+        <el-dialog title="上传数据" :visible.sync="addDialogVisible" width="35%" @close="addDialogClosed">
             
             <!--表单内容——start-->
             <el-form :model="addeForm" ref="addeFormRef" label-width="100px">
@@ -78,29 +69,48 @@
             <!--底部按钮区域——end-->
 
         </el-dialog>
-        <!--添加阈值的对话框——end-->
+        <!--添加对话框——end-->
 
-        <!--修改水质预警阈值设置对话框——start-->
-        <el-dialog title="编辑信息" :visible.sync="editDialogVisible" width="35%" @close="aditDialogClosed">
+        <!--修改对话框——start-->
+        <el-dialog title="更新数据" :visible.sync="editDialogVisible" width="35%" @close="aditDialogClosed">
 
             <!--表单内容——start -->
-            <el-form :model="addeForm" :rules="addeFormRules" ref="addeFormRef" label-width="100px">
-                <el-form-item label="通道的名称">
-                    <el-select v-model="addeForm.channelName" placeholder="请选择通道的名称">
-                        <el-option v-for="item in equipmentOptions" :key="item.value" :label="item.value" :value="item.value"></el-option>
+            <el-form :model="editForm" ref="editFormRef" label-width="100px">
+                <el-form-item label="气温 ℃">
+                    <el-input v-model="editForm.airTemperature"></el-input>
+                </el-form-item>
+                <el-form-item label="电能 mV">
+                    <el-input v-model="editForm.electricEnergy"></el-input>
+                </el-form-item>
+                <el-form-item label="工作状态">
+                    <el-select v-model="editForm.equipmentWorking" placeholder="请选择">
+                        <el-option v-for="item in status" :key="item.value" :label="item.text" :value="item.value">
+                        </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="单位" prop="unit">
-                    <el-input v-model="addeForm.unit"></el-input>
+                <el-form-item label="湿度 %">
+                    <el-input v-model="editForm.humidity"></el-input>
                 </el-form-item>
-                <el-form-item label="最大值" prop="maxValue">
-                    <el-input v-model="addeForm.maxValue"></el-input>
+                <el-form-item label="光照 Lux">
+                    <el-input v-model="editForm.illumination"></el-input>
                 </el-form-item>
-                <el-form-item label="最小值" prop="minValue">
-                    <el-input v-model="addeForm.minValue"></el-input>
+                <el-form-item label="雨量 mm">
+                    <el-input v-model="editForm.rain"></el-input>
                 </el-form-item>
-                <el-form-item label="更新时间">
-                    <el-date-picker v-model="addeForm.updateDate" type="datetime" placeholder="选择更新时间"></el-date-picker>
+                <el-form-item label="土湿 %">
+                    <el-input v-model="editForm.soilMoisture"></el-input>
+                </el-form-item>
+                <el-form-item label="土温 ℃">
+                    <el-input v-model="editForm.soilTemperature"></el-input>
+                </el-form-item>
+                <el-form-item label="风向">
+                    <el-input v-model="editForm.windDirect"></el-input>
+                </el-form-item>
+                <el-form-item label="风速 m/s">
+                    <el-input v-model="editForm.windSpeed"></el-input>
+                </el-form-item>
+                <el-form-item label="采集时间">
+                    <el-date-picker v-model="editForm.acquisitionTime" type="datetime" placeholder="选择时间"></el-date-picker>
                 </el-form-item>
             </el-form>
             <!--表单内容——end-->
@@ -112,40 +122,46 @@
             </span>
             <!--底部按钮区域——end-->
         </el-dialog>
-        <!--修改水质预警阈值设置对话框——end-->
+        <!--修改对话框——end-->
 
         <!--预警列表区域——start-->
-        <el-table :data="warningList" border stripe>
-            <el-table-column type="index" label="序号" width="50px"> </el-table-column>
-            <el-table-column prop="updateDate" label="添加时间" width-min>
-                <template slot-scope="scope">
-                    <i class="el-icon-time"></i>
-                    {{scope.row.updateDate}}
-                </template>
-            </el-table-column>
-            <el-table-column prop="channelName" label="通道的名称" width="180"></el-table-column>
-            <el-table-column prop="maxValue" label="最大值" width="120"></el-table-column>
-            <el-table-column prop="minValue" label="最小值" width="120"></el-table-column>
-            <el-table-column prop="unit" label="单位" width="120"></el-table-column>
-            <el-table-column label="操作">
-                <template slot-scope="scope" width="200px">
-                    <div>
-                    <!--状态按钮-->
-                    <span style="margin:15px">
-                        <el-switch v-model="scope.row.isUse" active-value='1' inactive-value='0' active-color="#13ce66" inactive-color="#ff4949" active-text="启动" inactive-text="关闭" ></el-switch>
-                    </span>
-                    <!--修改参数按钮-->
-                    <span style="margin:15px">
-                        <el-button type="primary" icon="el-icon-edit" circle @click="showEditDialog(scope.row)"></el-button>
-                    </span>
-                    <!--删除按钮-->
-                    <span style="margin:15px">
-                        <el-button type="danger" icon="el-icon-delete" circle @click="deletemessage(scope.row.id)"></el-button>
-                    </span>
-                    </div>
-                </template>
-            </el-table-column>
-        </el-table>
+          <el-table :data="warningList" border stripe>
+              <el-table-column type="expand">
+                  <template slot-scope="scope">
+                      <el-form label-position="left" inline class="demo-table-expand">
+                          <el-form-item label="光照"><span>{{scope.row.illumination}} {{scope.row.illuminationUnit}}</span></el-form-item>
+                          <el-form-item label="电能"><span>{{scope.row.electricEnergy}} {{scope.row.electricEnergyUnit}}</span></el-form-item>
+                          <el-form-item label="湿度"><span>{{scope.row.humidity}} {{scope.row.humidityUnit}}</span></el-form-item>
+                          <el-form-item label="雨量"><span>{{scope.row.rain}} {{scope.row.rainUnit}}</span></el-form-item>
+                          <el-form-item label="土湿"><span>{{scope.row.soilMoisture}} {{scope.row.soiMoistureUnit}}</span></el-form-item>
+                          <el-form-item label="土温"><span>{{scope.row.soilTemperature}} {{scope.row.soilTemperatureUnit}}</span></el-form-item>
+                          <el-form-item label="风向"><span>{{scope.row.windDirect}} {{scope.row.windDirectUnit}}</span></el-form-item>
+                          <el-form-item label="风速"><span>{{scope.row.windSpeed}} {{scope.row.windSpeedUnit}}</span></el-form-item>
+                      </el-form>
+                  </template>
+              </el-table-column>
+              <el-table-column prop="id" label="编号"></el-table-column>
+              <el-table-column prop="acquisitionTime" label="添加时间">
+                  <template slot-scope="scope">
+                  <i class="el-icon-time"></i> {{scope.row.acquisitionTime}}
+                  </template>
+                  </el-table-column>
+              <el-table-column prop="equipmentWorking" label="工作状态">
+              <template slot-scope="scope">
+                  <el-tag v-if="scope.row.equipmentWorking == '1'" type="success">工作中</el-tag>
+                  <el-tag type="danger" v-else-if="scope.row.equipmentWorking == '0' ">关闭</el-tag>
+                  <el-tag type="warning" v-else-if="scope.row.equipmentWorking == '2' ">故障</el-tag>
+                  <el-tag type="info" v-else-if="scope.row.equipmentWorking == null">状态未知</el-tag>
+                  <el-tag type="info" v-else-if="scope.row.equipmentWorking == '' ">状态未知</el-tag>
+              </template>
+              </el-table-column>
+              <el-table-column label="操作" width="140px" align="center">
+                  <template slot-scope="scope">
+                      <el-button type="primary" icon="el-icon-edit" circle @click="showEditDialog(scope.row.id)"></el-button>
+                      <el-button type="danger" icon="el-icon-delete" circle @click="deletemessage(scope.row.id)"></el-button>
+                  </template>
+              </el-table-column>
+          </el-table>
         <!--预警列表区域——end-->
 
         <!--分页区域——start-->
@@ -157,19 +173,24 @@
 
 <script>
 // 引入分页组件
-import Pagination from '../components/yzc/pagination'
+import Pagination from '../pagination'
 export default {
     components: {
         Pagination
     },
     data() {
         return {
+            id:'',
             baseId:'1248910886228332544',
             // -----------关于添加阈值对话框的属性——start
-            // 该设备的id
-            equipmentId: '',
             // 控制对话框的显示隐藏 默认隐藏
             addDialogVisible: false,
+            // 状态
+            status: [
+                { value:0, text:'关闭' },
+                { value:1, text:'开启' },
+                { value:2, text:'故障' }
+            ],
             // 气象设备的：电能，光照，风速，风向，气温，湿度，雨量，土温，土湿
             equipmentOptions: [
                 {
@@ -201,7 +222,30 @@ export default {
                 }
             ],
             // 添加表单的数据
-            addeForm: {},
+            addeForm: {
+                acquisitionTime: '',
+                airTemperature: '',
+                airTemperatureUnit: '℃',
+                baseId: '',
+                electricEnergy: '',
+                electricEnergyUnit: 'mV',
+                equipmentId: '',
+                equipmentWorking: '',
+                humidity: '',
+                humidityUnit: '%',
+                illumination: '' ,
+                illuminationUnit: 'Lux',
+                rain: '',
+                rainUnit: 'mm' ,
+                soilMoisture: '',
+                soiMoistureUnit: '%',
+                soilTemperature: '',
+                soilTemperatureUnit: '℃',
+                windDirect: '',
+                windDirectUnit: '度',
+                windSpeed: '',
+                windSpeedUnit: 'm/s'
+            },
             // -----------关于添加阈值对话框的属性——end
 
             // -----------关于编辑阈值参数对话框的属性——start
@@ -227,26 +271,18 @@ export default {
             // -----------关于分页功能的属性——end
         }
     },
-    mounted() {
-        this.equipmentId = this.$route.query.equipmentId
-        this.getwarningList()
-    },
     methods:{
         // 获取预警信息列表
-        async getwarningList() {
+        async getwarningList(id) {
             const {data:res} = await this.$meteorologicalData.post(`search/${this.page_index}/${this.page_size}`,{
-                //baseId: "1248910886228332544",
-                equipmentId:this.equipmentId
+                equipmentId:this.id
             })
             if(res.statusCode!==20000) {
                 return this.$message.error('获取设备阈值信息失败！')
             }
+            console.log(this.id);
             this.warningList = res.data.records
             this.page_total = res.data.total
-        },
-        // 返回按钮 返回气象设备页面
-        back() {
-            this.$router.push('/info-weather')
         },
         // 添加阈值 点击显示添加阈值对话框 
         ShowAddDialog() {
@@ -257,12 +293,14 @@ export default {
             this.addeForm.acquisitionTime = this.checkTime(this.addeForm.acquisitionTime)
             this.addeForm.equipmentId = this.equipmentId
             this.addeForm.baseId = this.baseId
-            const {data:res} = await this.$originAxios.post('http://8.129.175.45:57110/meteorologicalData',this.addeForm)
+            const {data:res} = await this.$meteorologicalData.post('',this.addeForm)
             if(res.statusCode!==20000) {
+                this.aditDialogClosed()
                 return this.$message.error('添加失败！')
             }
             this.getwarningList()
             this.$message.success('添加成功！')
+            this.aditDialogClosed()
             this.addDialogVisible = false
         },
         // 监听添加对话框的关闭事件,关闭时对表单进行重置 并清除第一个选项 即addForm.channelName中的数据
@@ -279,7 +317,7 @@ export default {
         },
         // 用于编辑按钮 点击展示修改对话框
         async showEditDialog(id) {
-            const {data:res} = await this.$originAxios.get(`http://8.129.175.45:57110/meteorologicalData/${id}`)
+            const {data:res} = await this.$meteorologicalData.get(`${id}`)
             this.editForm = res.data
             this.editDialogVisible = true
         },
@@ -290,7 +328,7 @@ export default {
         },
         // editwarningInfo用于修改对话框的确定按钮 点击提交修改信息并关闭对话框
         async editwarningInfo() {
-            const {data:res} = await this.$originAxios.put(`http://8.129.175.45:57110/meteorologicalData/${this.editForm.id}`,this.editForm)
+            const {data:res} = await this.$meteorologicalData.put(`${this.editForm.id}`,this.editForm)
             if(res.statusCode!==20000) {
                 return this.$message.error('修改信息失败！')
             }
@@ -310,7 +348,7 @@ export default {
             if (confirmResult !== 'confirm') {
                 return this.$message.info('已取消删除')
             }
-            const {data:res} = await this.$originAxios.delete(`http://8.129.175.45:57110/meteorologicalData/${id}`)
+            const {data:res} = await this.$meteorologicalData.delete(`${id}`)
             if(res.statusCode!==20000) {
            return this.$message.error('删除设备失败！')
           }
@@ -350,5 +388,5 @@ export default {
     margin-right: 0;
     margin-bottom: 0;
     width: 50%;
-  }
+}
 </style>
