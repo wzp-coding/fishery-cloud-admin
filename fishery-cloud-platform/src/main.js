@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-// 导入样式(element-ui和自己定义的global.css)
+// 导入组件库和样式(element-ui和自己定义的global.css)
 import './plugins/element'
 import './assets/css/global.css'
 // 导入字体图标
@@ -11,6 +11,9 @@ import './assets/fonts/iconfont.css'
 // 安装vue-cookies
 import VueCookies from 'vue-cookies'
 Vue.use(VueCookies)
+
+// 导入全局注册的自定义组件
+import './libs/components'
 
 // 安装自定义指令
 import Directives from "./libs/directives/index"

@@ -57,24 +57,6 @@
 </template>
 <script>
 export default {
-  data() {
-    return {
-      // 我个人注册腾讯地图的key
-      key: "4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ",
-      // map实例
-      map: undefined,
-      // 本地地址
-      location: JSON.parse(localStorage.getItem("location")),
-      // 当前所在城市
-      city: JSON.parse(localStorage.getItem("ad_info")).city,
-      // 点标记图层
-      markerLayer: undefined,
-      // 中心标记点坐标
-      center: this.initPoint,
-      // 防抖关键字搜索函数
-      debounceSearchInputTip: undefined,
-    };
-  },
   props: {
     // 初始的地图中心点(默认为本地地址)
     initPoint: {
@@ -296,6 +278,24 @@ export default {
 
       this.debounceSearchInputTip = this._.debounce(this.searchInputTip, 500);
     },
+  },
+  data() {
+    return {
+      // 我个人注册腾讯地图的key
+      key: "4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ",
+      // map实例
+      map: undefined,
+      // 本地地址
+      location: JSON.parse(localStorage.getItem("location")),
+      // 当前所在城市
+      city: JSON.parse(localStorage.getItem("ad_info")).city,
+      // 点标记图层
+      markerLayer: undefined,
+      // 中心标记点坐标
+      center: this.initPoint,
+      // 防抖关键字搜索函数
+      debounceSearchInputTip: undefined,
+    };
   },
   created() {
     this.loadScript().then(() => {

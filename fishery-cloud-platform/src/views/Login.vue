@@ -35,7 +35,7 @@
           <img :src="'data:image/png;base64,' + url" />
         </el-form-item>
         <el-row class="login">
-          <el-button type="primary" @click="onSubmit">登录</el-button>
+          <el-button type="success" @click="onSubmit">登录</el-button>
         </el-row>
         <el-row class="psd_reg">
           <router-link to="/forgetPassword">找回密码</router-link>
@@ -162,7 +162,7 @@ body {
     }
   }
 }
-/deep/ .el-button--primary {
+/deep/ .el-button--success {
   width: 100%;
 }
 .login {
