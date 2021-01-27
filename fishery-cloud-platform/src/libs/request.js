@@ -15,16 +15,13 @@ const baseURLObject = {
     auth:"http://106.75.154.40:9003",
     user:"http://106.75.154.40:9003/user",
     management:"http://119.23.218.131:9103",
-<<<<<<< HEAD
     pondController:"http://119.23.218.131:9103/pond",   //池塘模块
-    germchit:"http://119.23.218.131:9103/germchit"      //种苗模块
-=======
-    pondController:"http://119.23.218.131:9103/pond",
+    germchit:"http://119.23.218.131:9103/germchit"   ,   //种苗模块
+    // pondController:"http://119.23.218.131:9103/pond",
     equipment:"http://8.129.175.45:57110/equipment",
     warning:"http://8.129.175.45:57110/warning/",
     meteorologicalData:"http://8.129.175.45:57110/meteorologicalData/",
     waterData:"http://8.129.175.45:57110/waterData/"
->>>>>>> d673df2b7fe2e6185991cd878b9c08f399d1f971
 }
 // 异常拦截处理器
 const errorHandler = (error) => {
