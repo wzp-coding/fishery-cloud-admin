@@ -23,8 +23,8 @@
       ></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-row :gutter="10">
-            <el-col :span="6">
+          <el-row :gutter="20">
+            <el-col :span="8">
               <Edit
                 :id="scope.row.id"
                 :processingFactoryId="processingFactoryId"
@@ -33,7 +33,7 @@
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <el-tooltip
                 effect="dark"
                 :content="buttonInfo"
@@ -51,7 +51,7 @@
               </el-tooltip>
             </el-col>
 
-            <el-col :span="6">
+            <el-col :span="8">
               <Delete
                 tag="craft"
                 :id="scope.row.id"

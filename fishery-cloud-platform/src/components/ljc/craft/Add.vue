@@ -87,7 +87,7 @@ export default {
   },
   created() {},
   methods: {
-    /* 添加加工厂开始 */
+    /* 添加开始 */
     addInfo() {
       this.$refs.addFromRef.validate(async (val) => {
         if (!val) return false;
@@ -100,7 +100,7 @@ export default {
         this.addDialogVisible = false;
       });
     },
-    /* 添加加工厂结束 */
+    /* 添加结束 */
 
     /* 监听窗口关闭事件开始 */
     addDialogClosed() {

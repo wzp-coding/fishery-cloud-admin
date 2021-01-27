@@ -89,7 +89,7 @@ export default {
   },
   created() {},
   methods: {
-    /* 修改加工厂开始 */
+    /* 修改开始 */
     editInfo() {
       this.$refs.editFormRef.validate(async (val) => {
         if (!val) return false;
@@ -102,7 +102,7 @@ export default {
         }
       });
     },
-    /* 修改加工厂结束 */
+    /* 修改结束 */
 
     /* 监听窗口关闭事件开始 */
     editDialogClosed() {
