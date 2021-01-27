@@ -12,9 +12,10 @@ import get from 'lodash/get';
  * 如果一定需要原生纯净的axios,那么可以通过this.$originAxios来调用
  */
 const baseURLObject = {
-    auth: "http://106.75.154.40:9003",
-    user: "http://106.75.154.40:9003/user",
-    plant: "http://119.23.218.131:9111"
+    auth:"http://106.75.154.40:9003",
+    user:"http://106.75.154.40:9003/user",
+    management:"http://119.23.218.131:9103",
+    pondController:"http://119.23.218.131:9103/pond"
 }
 // 异常拦截处理器
 const errorHandler = (error) => {
