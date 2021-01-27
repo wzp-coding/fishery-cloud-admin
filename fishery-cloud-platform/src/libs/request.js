@@ -8,15 +8,24 @@ import get from 'lodash/get';
  * 示例：如果有 http://106.75.154.40:9012/traceability/getA
  *       和 http://106.75.154.40:9012/traceability/getB
  * 那么value就是 http://106.75.154.40:9012/traceability
+ * 
+ * 如果一定需要原生纯净的axios,那么可以通过this.$originAxios来调用
  */
 const baseURLObject = {
     auth:"http://106.75.154.40:9003",
     user:"http://106.75.154.40:9003/user",
     management:"http://119.23.218.131:9103",
+<<<<<<< HEAD
     pondController:"http://119.23.218.131:9103/pond",   //池塘模块
     germchit:"http://119.23.218.131:9103/germchit"      //种苗模块
+=======
+    pondController:"http://119.23.218.131:9103/pond",
+    equipment:"http://8.129.175.45:57110/equipment",
+    warning:"http://8.129.175.45:57110/warning/",
+    meteorologicalData:"http://8.129.175.45:57110/meteorologicalData/",
+    waterData:"http://8.129.175.45:57110/waterData/"
+>>>>>>> d673df2b7fe2e6185991cd878b9c08f399d1f971
 }
-
 // 异常拦截处理器
 const errorHandler = (error) => {
     const status = get(error, 'response.status');
@@ -46,29 +55,31 @@ const errorHandler = (error) => {
  */
 const axiosObject = {};
 for (const key in baseURLObject){
+    console.table({ [key]: baseURLObject[key] })
     axiosObject[key] = axios.create({
         // API 请求的默认前缀
         baseURL: baseURLObject[key],
         timeout: 10000, // 请求超时时间
     })
     // 请求拦截器（添加请求头，例如token、IP等）
-    axiosObject[key].interceptors.request.use((config)=>{
+    axiosObject[key].interceptors.request.use((config) => {
         // 如果 token 存在
         // 让每个请求携带自定义 token 请根据实际情况自行修改
         config.headers = {
-            Authorization : `bearer ${localStorage.getItem('token')}`,
+            Authorization: `bearer ${localStorage.getItem('token')}`,
             xip: window.localStorage.getItem("Ip")
         }
         return config;
-    },errorHandler)
+    }, errorHandler)
 }
 
-
+// 添加一个纯净的axios
+axiosObject.originAxios = axios.create();
 
 export default {
-    install(Vue){
-        for(let key in axiosObject){
-            Vue.prototype["$"+key] = axiosObject[key];
+    install(Vue) {
+        for (let key in axiosObject) {
+            Vue.prototype["$" + key] = axiosObject[key];
         }
     }
 };

@@ -14,7 +14,7 @@
             type="primary"
             style="float: right;"
             plain
-            @click="ChangeAuthorityShow"
+            @click="changeAuthorityShow"
             >所持权限</el-button
           >
         </el-col>
@@ -68,7 +68,7 @@
     </div>
     <Authority
       :dialog-visible="isShowAuthority"
-      @notifyParent="ChangeAuthorityShow"
+      @notifyParent="changeAuthorityShow"
     ></Authority>
   </div>
 </template>
@@ -155,7 +155,7 @@ export default {
   },
   methods: {
     // 所持权限  按钮
-    ChangeAuthorityShow() {
+    changeAuthorityShow() {
       this.isShowAuthority = !this.isShowAuthority;
     },
     // 保存自定义  按钮
