@@ -12,19 +12,6 @@ module.exports = class {
     }
     /* 标签结束 */
 
-    /* 管理员数组开始 */
-    createPersonList = [
-        {
-            personName: "张三",
-            id: "1111",
-        },
-        {
-            personName: "李四",
-            id: "2222",
-        },
-    ]
-    /* 管理员数组结束 */
-
     /* 表单验证规则对象开始 */
     formRules = {
         processingFactoryName: [

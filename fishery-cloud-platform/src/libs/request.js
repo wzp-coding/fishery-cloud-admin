@@ -12,10 +12,11 @@ import get from 'lodash/get';
  * 如果一定需要原生纯净的axios,那么可以通过this.$originAxios来调用
  */
 const baseURLObject = {
-    auth:"http://106.75.154.40:9003",
-    user:"http://106.75.154.40:9003/user",
-    management:"http://119.23.218.131:9103",
-    pondController:"http://119.23.218.131:9103/pond"
+    auth: "http://106.75.154.40:9003",
+    user: "http://106.75.154.40:9003/user",
+    plant: "http://119.23.218.131:9111",
+    management: "http://119.23.218.131:9103",
+    pondController: "http://119.23.218.131:9103/pond"
 }
 // 异常拦截处理器
 const errorHandler = (error) => {
@@ -45,7 +46,7 @@ const errorHandler = (error) => {
  * 需要添加请求头请在下面自己加
  */
 const axiosObject = {};
-for (const key in baseURLObject){
+for (const key in baseURLObject) {
     console.table({ [key]: baseURLObject[key] })
     axiosObject[key] = axios.create({
         // API 请求的默认前缀

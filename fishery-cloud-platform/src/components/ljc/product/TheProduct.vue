@@ -89,7 +89,6 @@ export default {
         pageNum,
         pageSize
       );
-      console.log(res);
       if (res.statusCode !== 20000) {
         this.$message.error(res.message);
       }

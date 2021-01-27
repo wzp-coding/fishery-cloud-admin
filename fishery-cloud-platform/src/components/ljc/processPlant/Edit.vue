@@ -50,6 +50,7 @@
 </template>
 <script>
 import ljc from "../processPlant/processPlant";
+import ljcPublic from "../public/public";
 export default {
   props: {
     id: {},
@@ -59,6 +60,7 @@ export default {
   data() {
     return {
       model: new ljc(this),
+      public: new ljcPublic(this),
       // 表单名称
       formTitle: "修改加工厂",
 
@@ -77,7 +79,7 @@ export default {
   computed: {
     // 管理员数组
     createPersonList() {
-      return this.model.createPersonList;
+      return this.public.createPersonList;
     },
 
     // 验证规则

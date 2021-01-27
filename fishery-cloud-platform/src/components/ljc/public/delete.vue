@@ -11,8 +11,9 @@
   </div>
 </template>
 <script>
-import ljc from "../processPlant/processPlant";
+import ljcPlant from "../processPlant/processPlant";
 import ljcProduct from "../product/product";
+import ljcCraft from "../craft/craft";
 export default {
   props: {
     id: {},
@@ -21,8 +22,9 @@ export default {
   },
   data() {
     return {
-      model: new ljc(this),
-      modelProduct: new ljcProduct(this),
+      Plant: new ljcPlant(this),
+      Product: new ljcProduct(this),
+      Craft: new ljcCraft(this),
     };
   },
   created() {},
@@ -44,11 +46,15 @@ export default {
         return this.$message.info("已取消删除");
       }
       if (this.tag == "product") {
-        const { data: res } = await this.modelProduct.removeById(this.id);
+        const { data: res } = await this.Product.removeById(this.id);
         this.messageInfo(res);
       }
       if (this.tag == "plant") {
-        const { data: res } = await this.model.removeById(this.id);
+        const { data: res } = await this.Plant.removeById(this.id);
+        this.messageInfo(res);
+      }
+      if (this.tag == "craft") {
+        const { data: res } = await this.Craft.removeById(this.id);
         this.messageInfo(res);
       }
     },
