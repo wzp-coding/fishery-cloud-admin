@@ -1,15 +1,16 @@
 <template>
   <div>
     <el-dialog
-      width="21%"
+    class="dialog"
+      @close="addDialogClosed"
       :title="toDialogInfo.title"
       :visible.sync="toDialogInfo.dialogVisible"
     >
       <!--主体区域-->
       <el-form
-        :model="addFormInfo"
+        :model="FormInfo"
         label-width="110px"
-        :rules="toDialogInfo.addeFormRules"
+        :rules="toDialogInfo.FormRules"
         ref="addeFormRef"
       >
         <slot></slot>
@@ -21,38 +22,47 @@
 </template>
 <script>
 export default {
+  
   props: {
     toDialogInfo: {
       type: Object,
       title: String,
       dialogVisible: Boolean,
-      addeFormRules: Object,
+      FormRules: Object,
     },
-    addFormInfo: {
+    FormInfo: {
       type: Object,
     },
   },
+  
   data() {
     return {
-      //   info: "操作",
+      temp:10
     };
   },
   created() {
-    
+    this.setWidth()
   },
   methods: {
     //表单验证
+    setWidth(){
+      console.log(document.getElementsByClassName('dialog'));
+    },
     dialogVerification() {
       this.$refs['addeFormRef'].validate((valid) => {
         if (valid) {
           console.log('验证通过');
+          this.$refs.addeFormRef.resetFields()
           console.log(this);
-          this.$parent.createPond()
+          this.$parent.parentMehod()
         } else {
           console.log('验证不通过');
         }
       });
     },
+    addDialogClosed(){
+      this.$refs.addeFormRef.resetFields()
+    }
   },
 };
 </script>
