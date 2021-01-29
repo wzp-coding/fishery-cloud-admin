@@ -178,7 +178,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .lxl-login {
-  background-image: url("../assets/131.jpg");
+  background-image: url("../../assets/131.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;

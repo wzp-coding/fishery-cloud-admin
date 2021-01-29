@@ -1,10 +1,6 @@
 <template>
   <div id="digitalbase">
-    <!-- <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item>我的基地</el-breadcrumb-item>
-      <el-breadcrumb-item>数字基地</el-breadcrumb-item>
-    </el-breadcrumb> -->
-    <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
+    <Breadcrumb :breadcrumbs="['我的基地', '数字基地']"></Breadcrumb>
     <div class="cardBody">
       <el-row class="globalHeader" style="margin-bottom: 20px">
         <el-col :span="4">
@@ -119,7 +115,7 @@ export default {
   },
   data() {
     return {
-      breadcrumbs: ["我的基地", "数字基地"],
+      
       // 控制展示权限对话框
       isShowAuthority: false,
 

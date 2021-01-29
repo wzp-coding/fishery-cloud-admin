@@ -43,10 +43,6 @@
         </el-row>
       </el-form>
     </div>
-    <!-- <el-alert v-if="play" :title="frequent" type="warning" show-icon>
-    </el-alert> -->
-    <!-- <el-alert v-if="splay" title="无访问权限" type="error" show-icon>
-    </el-alert> -->
   </body>
 </template>
 
@@ -54,10 +50,7 @@
 export default {
   data() {
     return {
-      play: false,
-      // splay: false,
       url: "",
-      frequent: "",
       loginForm: {
         captcha: "",
         loginId: "210",
@@ -106,7 +99,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  background: url("../assets/131.jpg");
+  background: url("../../assets/131.jpg");
   background-size: cover;
   /deep/.box {
     position: absolute;
