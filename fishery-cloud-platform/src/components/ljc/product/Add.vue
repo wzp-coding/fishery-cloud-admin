@@ -11,8 +11,16 @@
       :title="formTitle"
       :visible.sync="addDialogVisible"
       @close="addDialogClosed"
+      width="40%"
     >
-      <el-form :model="addFrom" ref="addFromRef" :rules="formRules">
+      <el-form
+        :model="addFrom"
+        ref="addFromRef"
+        :rules="formRules"
+        label-width="100px"
+        label-position="left"
+        :hide-required-asterisk="true"
+      >
         <el-form-item :label="labels.productName" prop="productName">
           <el-input v-model="addFrom.productName"></el-input>
         </el-form-item>

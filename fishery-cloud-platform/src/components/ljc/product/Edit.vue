@@ -14,8 +14,16 @@
       :title="formTitle"
       :visible.sync="editDialogVisible"
       @close="editDialogClosed"
+      width="40%"
     >
-      <el-form :model="editForm" ref="editFormRef" :rules="formRules">
+      <el-form
+        :model="editForm"
+        ref="editFormRef"
+        :rules="formRules"
+        label-width="100px"
+        label-position="left"
+        :hide-required-asterisk="true"
+      >
         <el-form-item :label="labels.productName" prop="productName">
           <el-input v-model="editForm.productName"></el-input>
         </el-form-item>

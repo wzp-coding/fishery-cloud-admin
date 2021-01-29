@@ -11,8 +11,16 @@
       :title="formTitle"
       :visible.sync="addDialogVisible"
       @close="addDialogClosed"
+      width="40%"
     >
-      <el-form :model="addFrom" ref="addFromRef" :rules="formRules">
+      <el-form
+        :model="addFrom"
+        ref="addFromRef"
+        :rules="formRules"
+        label-width="100px"
+        label-position="left"
+        :hide-required-asterisk="true"
+      >
         <el-form-item
           :label="labels.processingFactoryName"
           prop="processingFactoryName"
@@ -47,7 +55,7 @@
 </template>
 <script>
 import ljc from "../processPlant/processPlant";
-import ljcPublic from "../public/public"
+import ljcPublic from "../public/public";
 export default {
   props: {
     baseId: {},
@@ -71,7 +79,6 @@ export default {
       addSuccessInfo: "添加加工厂成功！！",
       addErrorInfo: "加工厂已存在，请重新输入",
       /* 提示信息结束 */
-
     };
   },
   computed: {

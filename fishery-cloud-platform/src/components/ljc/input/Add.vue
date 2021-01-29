@@ -11,23 +11,28 @@
       :title="formTitle"
       :visible.sync="addDialogVisible"
       @close="addDialogClosed"
+      width="40%"
     >
       <!-- 表单信息(按需改) -->
-      <el-form :model="addFrom" ref="addFromRef">
-        <el-form-item
-          :label="labels.inputName"
-          prop="inputName"
-          :rules="formRules"
-        >
+      <el-form
+        :model="addFrom"
+        ref="addFromRef"
+        :rules="formRules"
+        label-width="100px"
+        label-position="left"
+        :hide-required-asterisk="true"
+      >
+        <el-form-item :label="labels.inputName" prop="inputName">
           <el-input v-model="addFrom.inputName"></el-input>
         </el-form-item>
-        <el-form-item label="有效期" prop="inputName">
+        <el-form-item label="有效期" prop="inputDate">
           <el-date-picker
             v-model="inputDate"
             type="datetimerange"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
+            value-format="yyyy-MM-dd HH:mm:ss"
           >
           </el-date-picker>
         </el-form-item>
@@ -42,12 +47,37 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="labels.craftTime" prop="craftTime">
+        <el-form-item :label="labels.specification" prop="specification">
           <el-input-number
-            v-model="addFrom.craftTime"
+            v-model="addFrom.specification"
             controls-position="right"
             :min="1"
           ></el-input-number>
+        </el-form-item>
+        <el-form-item :label="labels.supplierName" prop="supplierName">
+          <el-input v-model="addFrom.supplierName"></el-input>
+        </el-form-item>
+        <el-form-item :label="labels.supplierAddr" prop="supplierAddr">
+          <el-input v-model="addFrom.supplierAddr"></el-input>
+        </el-form-item>
+        <el-form-item :label="labels.supplierPhone" prop="supplierPhone">
+          <el-input v-model="addFrom.supplierPhone"></el-input>
+        </el-form-item>
+        <el-form-item :label="labels.inputPicture">
+          <TheUploadPic
+            :picLimit="picLimitInput"
+            :uploadUrl="uploadUrl"
+            tag="input"
+            @getPic="getPic"
+          />
+        </el-form-item>
+        <el-form-item :label="labels.supplierLicense">
+          <TheUploadPic
+            :picLimit="picLimitLicense"
+            :uploadUrl="uploadUrl"
+            @getPic="getPic"
+            tag="license"
+          />
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -62,7 +92,11 @@
 /* 导入路径(改) */
 import ljc from "../input/input";
 import ljcPublic from "../public/public";
+import TheUploadPic from "../public/uploadPic";
 export default {
+  components: {
+    TheUploadPic,
+  },
   props: {
     processingFactoryId: {},
     labels: {},
@@ -81,8 +115,14 @@ export default {
       // 添加信息
       addFrom: {},
 
-      // 日期
-      inputDate: "",
+      // 有效期
+      inputDate: [],
+
+      // 限制产品照片个数
+      picLimitInput: 1,
+
+      // 限制许可证数目
+      picLimitLicense: 1,
     };
   },
   computed: {
@@ -95,6 +135,11 @@ export default {
     formRules() {
       return this.model.formRules;
     },
+
+    // 上传路径
+    uploadUrl() {
+      return this.model.uploadUrl;
+    },
   },
   created() {},
   methods: {
@@ -104,6 +149,9 @@ export default {
         if (!val) return false;
         /* 传入表单逻辑处理开始（按需改） */
         this.addFrom.processingFactoryId = this.processingFactoryId;
+        this.addFrom.inputProduceDate = this.inputDate[0];
+        this.addFrom.inputExpireDate = this.inputDate[1];
+        console.log(this.addFrom);
         /* 传入表单逻辑处理结束 */
         const { data: res } = await this.model.addInfo(this.addFrom);
         if (res.statusCode == 20000) {
@@ -121,7 +169,21 @@ export default {
       this.$refs.addFromRef.resetFields();
     },
     /* 监听窗口关闭事件关闭 */
+
+    /* 接收上传组件的照片信息开始 */
+    getPic(tag, res) {
+      switch (tag) {
+        case "input":
+          this.addFrom.inputPicture = 'res';
+          break;
+        case "license":
+          this.addFrom.supplierLicense = 'res';
+          break;
+      }
+    },
+    /* 接收上传组件的照片信息结束 */
   },
 };
 </script>
+
 

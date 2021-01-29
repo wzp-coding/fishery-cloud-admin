@@ -1,8 +1,13 @@
 <template>
   <div>
     <!-- 表格开始 -->
-    <el-table :data="allList" border stripe>
-      >
+    <el-table
+      :data="allList"
+      border
+      stripe
+      :header-cell-style="{ 'text-align': 'center' }"
+      :cell-style="{ 'text-align': 'center' }"
+    >
       <el-table-column type="index"> </el-table-column>
       <el-table-column prop="id" :label="labels.id"></el-table-column>
       <el-table-column
