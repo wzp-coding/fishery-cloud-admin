@@ -11,17 +11,12 @@
       <!-- 标题区域结束 -->
 
       <!-- 添加区域开始 -->
-      <Add
-        @changeAddDialogVisible="changeAddDialogVisible()"
-        @getAllInfo="getAllInfo()"
-        :labels="labels"
-        :baseId="baseId"
-      />
+      <Add @getAllInfo="getAllInfo()" :labels="labels" :baseId="baseId" />
       <!-- 添加区域结束 -->
 
       <!-- 列表区域开始 -->
-      <PlantTable
-        :plantList="plantList"
+      <Table
+        :allList="allList"
         :labels="labels"
         :title="myTitle"
         @getAllInfo="getAllInfo()"
@@ -45,7 +40,7 @@ import ljc from "../components/ljc/processPlant/processPlant";
 import Breadcrumb from "../components/ljc/public/breadcrumb";
 import Title from "../components/ljc/public/title";
 import Add from "../components/ljc/processPlant/Add";
-import PlantTable from "../components/ljc/processPlant/Table";
+import Table from "../components/ljc/processPlant/Table";
 import Pagination from "../components/ljc/public/pagination";
 
 export default {
@@ -53,7 +48,7 @@ export default {
     Breadcrumb,
     Title,
     Add,
-    PlantTable,
+    Table,
     Pagination,
   },
   data() {
@@ -73,9 +68,7 @@ export default {
       // 每页显示总条数
       pageSize: 4,
       // 总数据
-      plantList: [],
-      // 获取总数据错误信息
-      getErrorInfo: "获取加工厂信息失败",
+      allList: [],
     };
   },
   computed: {
@@ -100,16 +93,17 @@ export default {
       }
       this.pageNum = pageNum;
       this.pageSize = pageSize;
-      await this.model
-        .getAllInfo(this.baseId, pageNum, pageSize)
-        .then((val) => {
-          if (val.status !== 200) {
-            this.$message.error(this.getErrorInfo);
-          }
-          this.plantList = [];
-          this.plantList.push(val.data.data.records);
-          this.total = val.data.data.total;
-        });
+      const { data: res } = await this.model.getAllInfo(
+        this.baseId,
+        pageNum,
+        pageSize
+      );
+      if (res.statusCode !== 20000) {
+        this.$message.error(res.message);
+      }
+      this.allList = [];
+      this.allList.push(res.data.records);
+      this.total = res.data.total;
     },
   },
 };

@@ -1,9 +1,12 @@
 <template>
   <div>
     <!-- 添加区域开始 -->
-    <el-button type="primary" @click="addDialogVisible = true" style="margin-top: 20px">{{
-      formTitle
-    }}</el-button>
+    <el-button
+      type="primary"
+      @click="addDialogVisible = true"
+      style="margin-top: 20px"
+      >{{ formTitle }}</el-button
+    >
     <!-- 添加区域结束 -->
 
     <!-- 添加表单区域开始 -->
@@ -61,7 +64,7 @@ export default {
       model: new ljc(this),
 
       // 表单名称
-      formTitle: "添加加工工艺",
+      formTitle: "添加工艺投入品",
 
       // 控制添加表单的显示与隐藏
       addDialogVisible: false,
