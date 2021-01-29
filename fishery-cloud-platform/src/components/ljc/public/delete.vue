@@ -43,12 +43,9 @@ export default {
       if (confirmResult !== "confirm") {
         return this.$message.info("已取消删除");
       }
-      console.log(this["$" + this.root]);
-      console.log(`${this.url}/${this.id}`);
       const { data: res } = await this["$" + this.root].delete(
         `${this.deleteUrl}/${this.id}`
       );
-      console.log(res);
       if (res.statusCode == 20000) {
         this.$emit("getAllInfo");
         this.$message.success(res.message);

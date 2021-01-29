@@ -10,6 +10,7 @@
       name="multipartFile"
       :limit="picLimit"
       :class="{ hide: hideUploadCard }"
+      :file-list="imageUrlArray"
     >
       <i class="el-icon-plus"></i>
     </el-upload>
@@ -27,20 +28,25 @@ export default {
     uploadUrl: {},
     // 图片标签标志
     tag: {},
+    // 默认数组值
+    imageUrlArray: {},
   },
   data() {
     return {
       dialogImageUrl: "",
       dialogVisible: false,
+      // 控制上传按钮的显示与隐藏
       hideUploadCard: false,
     };
   },
-  created() {},
+  created() {
+    this.editHideImage();
+  },
   methods: {
-    /* 上传处理开始 */
     // 删除图片的处理
     handleRemove(file, fileList) {
       this.hideUploadCard = false;
+      this.$emit("getPic", this.tag, "");
     },
 
     // 图片放大的处理
@@ -60,7 +66,13 @@ export default {
         this.hideUploadCard = true;
       }
     },
-    /* 上传处理结束 */
+
+    // 修改时如果时没有图片的就显示，有图片就隐藏
+    editHideImage() {
+      if (this.imageUrlArray.length >= this.picLimit) {
+        this.hideUploadCard = true;
+      }
+    },
   },
 };
 </script>

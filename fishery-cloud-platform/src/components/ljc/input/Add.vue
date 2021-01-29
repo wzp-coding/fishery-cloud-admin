@@ -63,22 +63,30 @@
         <el-form-item :label="labels.supplierPhone" prop="supplierPhone">
           <el-input v-model="addFrom.supplierPhone"></el-input>
         </el-form-item>
-        <el-form-item :label="labels.inputPicture">
-          <TheUploadPic
-            :picLimit="picLimitInput"
-            :uploadUrl="uploadUrl"
-            tag="input"
-            @getPic="getPic"
-          />
-        </el-form-item>
-        <el-form-item :label="labels.supplierLicense">
-          <TheUploadPic
-            :picLimit="picLimitLicense"
-            :uploadUrl="uploadUrl"
-            @getPic="getPic"
-            tag="license"
-          />
-        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item :label="labels.inputPicture">
+              <TheUploadPic
+                :picLimit="picLimitInput"
+                :uploadUrl="uploadUrl"
+                tag="input"
+                :imageUrlArray="[]"
+                @getPic="getPic"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="labels.supplierLicense">
+              <TheUploadPic
+                :picLimit="picLimitLicense"
+                :uploadUrl="uploadUrl"
+                :imageUrlArray="[]"
+                @getPic="getPic"
+                tag="license"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>

@@ -6,25 +6,32 @@
       border
       stripe
       :header-cell-style="{ 'text-align': 'center' }"
-      :cell-style="{ 'text-align': 'center' }"
     >
       <el-table-column type="index"> </el-table-column>
-      <el-table-column prop="id" :label="labels.id"></el-table-column>
+      <el-table-column
+        prop="id"
+        :label="labels.id"
+        align="center"
+      ></el-table-column>
       <el-table-column
         prop="craftName"
         :label="labels.craftName"
+        align="center"
       ></el-table-column>
       <el-table-column
         prop="craftDescription"
         :label="labels.craftDescription"
+        align="center"
       ></el-table-column>
       <el-table-column
         prop="craftResponsible"
         :label="labels.craftResponsible"
+        align="center"
       ></el-table-column>
       <el-table-column
         prop="craftTime"
         :label="labels.craftTime"
+        align="center"
       ></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">

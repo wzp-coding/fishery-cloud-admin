@@ -16,7 +16,7 @@
       @close="editDialogClosed"
       width="40%"
     >
-      <!-- 表单信息（按需改） -->
+      <!-- 表单信息(按需改) -->
       <el-form
         :model="editForm"
         ref="editFormRef"
@@ -25,19 +25,22 @@
         label-position="left"
         :hide-required-asterisk="true"
       >
-        <el-form-item :label="labels.craftName" prop="craftName">
-          <el-input v-model="editForm.craftName"></el-input>
+        <el-form-item :label="labels.inputName" prop="inputName">
+          <el-input v-model="editForm.inputName"></el-input>
         </el-form-item>
-        <el-form-item :label="labels.craftDescription" prop="craftDescription">
-          <el-input
-            type="textarea"
-            placeholder="请输入内容"
-            v-model="editForm.craftDescription"
+        <el-form-item label="有效期" prop="inputDate">
+          <el-date-picker
+            v-model="inputDate"
+            type="datetimerange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="yyyy-MM-dd HH:mm:ss"
           >
-          </el-input>
+          </el-date-picker>
         </el-form-item>
-        <el-form-item :label="labels.craftResponsible" prop="craftResponsible">
-          <el-select v-model="editForm.craftResponsible">
+        <el-form-item :label="labels.inspector" prop="inspector">
+          <el-select v-model="editForm.inspector">
             <el-option
               v-for="item in createPersonList"
               :key="item.id"
@@ -47,13 +50,46 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="labels.craftTime" prop="craftTime">
+        <el-form-item :label="labels.specification" prop="specification">
           <el-input-number
-            v-model="editForm.craftTime"
+            v-model="editForm.specification"
             controls-position="right"
             :min="1"
           ></el-input-number>
         </el-form-item>
+        <el-form-item :label="labels.supplierName" prop="supplierName">
+          <el-input v-model="editForm.supplierName"></el-input>
+        </el-form-item>
+        <el-form-item :label="labels.supplierAddr" prop="supplierAddr">
+          <el-input v-model="editForm.supplierAddr"></el-input>
+        </el-form-item>
+        <el-form-item :label="labels.supplierPhone" prop="supplierPhone">
+          <el-input v-model="editForm.supplierPhone"></el-input>
+        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item :label="labels.inputPicture">
+              <TheUploadPic
+                :picLimit="picLimitInput"
+                :uploadUrl="uploadUrl"
+                :imageUrlArray="imageUrlInput"
+                tag="input"
+                @getPic="getPic"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="labels.supplierLicense">
+              <TheUploadPic
+                :picLimit="picLimitLicense"
+                :uploadUrl="uploadUrl"
+                @getPic="getPic"
+                :imageUrlArray="imageUrlLicense"
+                tag="license"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
@@ -67,7 +103,11 @@
 /* 路径（按需改） */
 import ljc from "../input/input";
 import ljcPublic from "../public/public";
+import TheUploadPic from "../public/uploadPic";
 export default {
+  components: {
+    TheUploadPic,
+  },
   props: {
     id: {},
     /* 传入参数按需改 */
@@ -86,6 +126,21 @@ export default {
 
       // 修改信息
       editForm: {},
+
+      // 有效期
+      inputDate: [],
+
+      // 限制产品照片个数
+      picLimitInput: 1,
+
+      // 限制许可证数目
+      picLimitLicense: 1,
+
+      // 已有投入品图片展示
+      imageUrlInput: [],
+
+      // 已有许可证图片展示
+      imageUrlLicense: [],
     };
   },
   computed: {
@@ -98,6 +153,11 @@ export default {
     formRules() {
       return this.model.formRules;
     },
+
+    // 上传路径
+    uploadUrl() {
+      return this.model.uploadUrl;
+    },
   },
   created() {},
   methods: {
@@ -105,6 +165,10 @@ export default {
     async getInfoById() {
       const { data: res } = await this.model.getInfoById(this.id);
       this.editForm = res.data;
+      this.inputDate.push(this.editForm.inputProduceDate);
+      this.inputDate.push(this.editForm.inputExpireDate);
+      this.imageUrlInput = [{ url: this.editForm.inputPicture }];
+      this.imageUrlLicense = [{ url: this.editForm.supplierLicense }];
       this.editDialogVisible = true;
     },
     /* 根据Id查询信息结束 */
@@ -115,6 +179,8 @@ export default {
         if (!val) return false;
         /* 传入表单逻辑处理开始 */
         this.editForm.processingFactoryId = this.processingFactoryId;
+        this.editForm.inputProduceDate = this.inputDate[0];
+        this.editForm.inputExpireDate = this.inputDate[1];
         /* 传入表单逻辑处理结束 */
         const { data: res } = await this.model.editInfo(this.editForm);
         if (res.statusCode == 20000) {
@@ -129,9 +195,26 @@ export default {
     /* 监听窗口关闭事件开始 */
     editDialogClosed() {
       this.editForm = {};
+      this.inputDate = [];
       this.$refs.editFormRef.resetFields();
     },
     /* 监听窗口关闭事件关闭 */
+
+    /* 接收上传组件的照片信息开始 */
+    getPic(tag, res) {
+      // 字符串转对象
+      let picUrl = eval("(" + res + ")").url;
+      console.log(picUrl);
+      switch (tag) {
+        case "input":
+          this.editForm.inputPicture = picUrl;
+          break;
+        case "license":
+          this.editForm.supplierLicense = picUrl;
+          break;
+      }
+    },
+    /* 接收上传组件的照片信息结束 */
   },
 };
 </script>

@@ -6,22 +6,28 @@
       border
       stripe
       :header-cell-style="{ 'text-align': 'center' }"
-      :cell-style="{ 'text-align': 'center' }"
     >
       >
       <el-table-column type="index"> </el-table-column>
-      <el-table-column prop="id" :label="labels.id"></el-table-column>
+      <el-table-column
+        prop="id"
+        :label="labels.id"
+        align="center"
+      ></el-table-column>
       <el-table-column
         prop="processingFactoryName"
         :label="labels.processingFactoryName"
+        align="center"
       ></el-table-column>
       <el-table-column
         prop="processingFactoryAddress"
         :label="labels.processingFactoryAddress"
+        align="center"
       ></el-table-column>
       <el-table-column
         prop="createPersonId"
         :label="labels.createPersonId"
+        align="center"
       ></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
