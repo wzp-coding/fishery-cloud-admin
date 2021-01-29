@@ -60,17 +60,6 @@ module.exports = class {
     }
     /* 添加结束 */
 
-    /* 删除开始 */
-    removeById(id) {
-        return new Promise((resolve) => {
-            this.vue.$plant.delete(`/processingFactory/factory/${id}`)
-                .then((res) => {
-                    resolve(res);
-                })
-        })
-    }
-    /* 删除结束 */
-
     /* 根据ID查询信息开始 */
     getInfoById(id) {
         return new Promise((resolve) => {

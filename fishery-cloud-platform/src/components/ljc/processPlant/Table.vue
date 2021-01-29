@@ -53,9 +53,10 @@
             </el-col>
             <el-col :span="6">
               <Delete
-                tag="plant"
                 :id="scope.row.id"
                 :title="title"
+                :root="root"
+                :deleteUrl="deleteUrl"
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
@@ -94,6 +95,12 @@ export default {
 
       // 路径对象
       otherQuery: {},
+
+      // 删除接口的根路径标签
+      root: "plant",
+
+      // 删除接口的路径
+      deleteUrl: "/processingFactory/factory",
     };
   },
   watch: {},

@@ -11,21 +11,19 @@
   </div>
 </template>
 <script>
-import ljcPlant from "../processPlant/processPlant";
-import ljcProduct from "../product/product";
-import ljcCraft from "../craft/craft";
 export default {
   props: {
+    // 要删除的ID
     id: {},
+    // 标题
     title: {},
-    tag: {},
+    // 删除路径
+    deleteUrl: {},
+    // 根路径
+    root: {},
   },
   data() {
-    return {
-      Plant: new ljcPlant(this),
-      Product: new ljcProduct(this),
-      Craft: new ljcCraft(this),
-    };
+    return {};
   },
   created() {},
   methods: {
@@ -45,29 +43,18 @@ export default {
       if (confirmResult !== "confirm") {
         return this.$message.info("已取消删除");
       }
-      if (this.tag == "product") {
-        const { data: res } = await this.Product.removeById(this.id);
-        this.messageInfo(res);
-      }
-      if (this.tag == "plant") {
-        const { data: res } = await this.Plant.removeById(this.id);
-        this.messageInfo(res);
-      }
-      if (this.tag == "craft") {
-        const { data: res } = await this.Craft.removeById(this.id);
-        this.messageInfo(res);
-      }
-    },
-    /* 删除结束 */
-
-    /* 提示判断开始 */
-    messageInfo(res) {
+      console.log(this["$" + this.root]);
+      console.log(`${this.url}/${this.id}`);
+      const { data: res } = await this["$" + this.root].delete(
+        `${this.deleteUrl}/${this.id}`
+      );
+      console.log(res);
       if (res.statusCode == 20000) {
         this.$emit("getAllInfo");
         this.$message.success(res.message);
       }
     },
-    /* 提示判断结束 */
+    /* 删除结束 */
   },
 };
 </script>

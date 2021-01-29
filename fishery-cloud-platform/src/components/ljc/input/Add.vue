@@ -151,7 +151,6 @@ export default {
         this.addFrom.processingFactoryId = this.processingFactoryId;
         this.addFrom.inputProduceDate = this.inputDate[0];
         this.addFrom.inputExpireDate = this.inputDate[1];
-        console.log(this.addFrom);
         /* 传入表单逻辑处理结束 */
         const { data: res } = await this.model.addInfo(this.addFrom);
         if (res.statusCode == 20000) {
@@ -172,12 +171,14 @@ export default {
 
     /* 接收上传组件的照片信息开始 */
     getPic(tag, res) {
+      // 字符串转对象
+      let picUrl = eval("(" + res + ")").url;
       switch (tag) {
         case "input":
-          this.addFrom.inputPicture = 'res';
+          this.addFrom.inputPicture = picUrl;
           break;
         case "license":
-          this.addFrom.supplierLicense = 'res';
+          this.addFrom.supplierLicense = picUrl;
           break;
       }
     },

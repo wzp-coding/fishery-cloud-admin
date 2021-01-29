@@ -86,15 +86,4 @@ module.exports = class {
         })
     }
     /* 修改结束 */
-
-    /* 删除开始 */
-    removeById(id) {
-        return new Promise((resolve) => {
-            this.vue.$plant.delete(`/processingFactory/product/${id}`)
-                .then((res) => {
-                    resolve(res);
-                })
-        })
-    }
-    /* 删除结束 */
 }

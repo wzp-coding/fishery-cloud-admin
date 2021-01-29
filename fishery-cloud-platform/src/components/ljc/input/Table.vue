@@ -44,9 +44,10 @@
             </el-col>
             <el-col :span="8">
               <Delete
-                tag="craft"
                 :id="scope.row.id"
                 :title="title"
+                :root="root"
+                :deleteUrl="deleteUrl"
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
@@ -80,7 +81,12 @@ export default {
     processingFactoryId: {},
   },
   data() {
-    return {};
+    return {
+      // 删除接口的根路径标签
+      root: "plant",
+      // 删除接口的路径
+      deleteUrl: "/processingFactory/input",
+    };
   },
   computed: {},
   methods: {
