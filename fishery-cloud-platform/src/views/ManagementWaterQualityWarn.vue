@@ -115,7 +115,7 @@
                     <div>
                     <!--状态按钮-->
                     <span style="margin:15px">
-                        <el-switch v-model="scope.row.isUse" active-value='1' inactive-value='0' active-color="#13ce66" inactive-color="#ff4949" active-text="启动" inactive-text="关闭" ></el-switch>
+                        <el-switch v-model="scope.row.isUse" active-value='1' inactive-value='0' active-color="#13ce66" inactive-color="#ff4949" active-text="启动" inactive-text="关闭"  @change="changeCode(scope.row)"></el-switch>
                     </span>
                     <!--修改参数按钮-->
                     <span style="margin:15px">
@@ -292,8 +292,6 @@ export default {
         },
         // 用于编辑按钮 点击展示修改对话框
         showEditDialog(info) {
-            // const {data:res} = await this.$originAxios.get(`http://8.129.175.45:57110/warning/${id}`)
-            // this.editForm = res.data
             this.editForm = info
             this.editDialogVisible = true
         },
@@ -303,17 +301,28 @@ export default {
             this.addeForm.channelName = ''
             this.editDialogVisible = false
         },
-        // editwarningInfo用于修改对话框的确定按钮 点击提交修改信息并关闭对话框
         async editwarningInfo() {
             this.editForm.updateDate = this.checkTime(this.editForm.updateDate)
             this.$refs.editFormRef.validate(async valid => {
                 if(!valid) return false
-                console.log(this.editForm);
-                const res = await this.$warning.put(`${this.editForm.id}`,this.editForm)
-                console.log(res);
+                const {data:res} = await this.$warning.put(`${this.editForm.id}`,this.editForm)
+                if(res.statusCode!==20000) {
+                    return this.$message.error('修改状态失败！')
+                }
+                this.$message.success('修改成功')
+                this.getwarningList()
             })
             this.editDialogVisible = false
             this.aditDialogClosed()
+        },
+        // 修改设备状态
+        async changeCode(info) {
+            const {data:res} = await this.$warning.put(`${info.id}`,info)
+            if(res.statusCode!==20000) {
+                return this.$message.error('修改状态失败！')
+            }
+            this.$message.success('修改成功')
+            this.getwarningList()
         },
         // 页码改变
         pageChange(page) {

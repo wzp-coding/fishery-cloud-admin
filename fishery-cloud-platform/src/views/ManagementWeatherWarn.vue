@@ -115,7 +115,7 @@
                     <div>
                     <!--状态按钮-->
                     <span style="margin:15px">
-                        <el-switch v-model="scope.row.isUse" active-value='1' inactive-value='0' active-color="#13ce66" inactive-color="#ff4949" active-text="启动" inactive-text="关闭" ></el-switch>
+                        <el-switch v-model="scope.row.isUse" active-value='1' inactive-value='0' active-color="#13ce66" inactive-color="#ff4949" active-text="启动" inactive-text="关闭" @change="changeCode(scope.row)"></el-switch>
                     </span>
                     <!--修改参数按钮-->
                     <span style="margin:15px">
@@ -235,14 +235,6 @@ export default {
             // -----------关于分页功能的属性——end
         }
     },
-    watch: {
-        editForm: {
-            handler: function() {
-                console.log(this.editForm)
-            },
-            deep:true
-        }
-    },
     mounted() {
         this.equipmentId = this.$route.query.equipmentId
         this.getwarningList()
@@ -282,6 +274,15 @@ export default {
                 this.addDialogVisible = false
             })
         },
+        // 修改设备状态
+        async changeCode(info) {
+            const {data:res} = await this.$warning.put(`${info.id}`,info)
+            if(res.statusCode!==20000) {
+                return this.$message.error('修改状态失败！')
+            }
+            this.$message.success('修改成功')
+            this.getwarningList()
+        },
         // 监听添加对话框的关闭事件,关闭时对表单进行重置 并清除第一个选项 即addForm.channelName中的数据
         addDialogClosed() {
         // 表单方法：resetFields：对整个表单进行重置，将所有字段值重置为初始值并移除校验结果
@@ -291,8 +292,6 @@ export default {
         },
         // 用于编辑按钮 点击展示修改对话框
         showEditDialog(info) {
-            // const {data:res} = await this.$originAxios.get(`http://8.129.175.45:57110/warning/${id}`)
-            // this.editForm = res.data
             this.editForm = info
             this.editDialogVisible = true
         },
@@ -307,9 +306,12 @@ export default {
             this.editForm.updateDate = this.checkTime(this.editForm.updateDate)
             this.$refs.editFormRef.validate(async valid => {
                 if(!valid) return false
-                console.log(this.editForm);
-                const res = await this.$warning.put(`${this.editForm.id}`,this.editForm)
-                console.log(res);
+                const {data:res} = await this.$warning.put(`${this.editForm.id}`,this.editForm)
+                if(res.statusCode!==20000) {
+                    return this.$message.error('修改状态失败！')
+                }
+                this.$message.success('修改成功')
+                this.getwarningList()
             })
             this.editDialogVisible = false
             this.aditDialogClosed()
