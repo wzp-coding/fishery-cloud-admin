@@ -12,9 +12,11 @@
 
       <!-- 步骤条开始 -->
       <el-steps :active="3" simple class="steps">
-        <el-step title="步骤 1"></el-step>
-        <el-step title="步骤 2"></el-step>
-        <el-step title="步骤 3"></el-step>
+        <el-step
+          :title="item.craftName"
+          v-for="item in allList[0]"
+          :key="item.sort"
+        ></el-step>
       </el-steps>
       <!-- 步骤条结束 -->
 
@@ -129,7 +131,6 @@ export default {
       );
       this.craftInfo.push(res.data);
     },
-
     /* 获取全部工艺信息结束 */
 
     // 获取表格信息

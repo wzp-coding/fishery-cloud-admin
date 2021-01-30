@@ -11,7 +11,12 @@
       <!-- 标题区域结束 -->
 
       <!-- 添加区域开始 -->
-      <Add @getAllInfo="getAllInfo()" :labels="labels" :craftId="craftId" />
+      <Add
+        @getAllInfo="getAllInfo()"
+        :labels="labels"
+        :craftId="craftId"
+        :inputInfo="inputInfo"
+      />
       <!-- 添加区域结束 -->
 
       <!-- 列表区域开始 -->
@@ -19,6 +24,7 @@
         :allList="allList"
         :labels="labels"
         :title="myTitle"
+        :craftId="craftId"
         @getAllInfo="getAllInfo()"
       />
       <!-- 列表区域结束 -->
@@ -71,6 +77,9 @@ export default {
 
       // 总数据
       allList: [],
+
+      // 所有投入品信息
+      inputInfo: [],
     };
   },
   computed: {
@@ -83,9 +92,15 @@ export default {
     craftId() {
       return this.$route.query.ID;
     },
+
+    // 工厂Id
+    processingFactoryId() {
+      return this.$route.query.processingFactoryId;
+    },
   },
   created() {
     this.getAllInfo();
+    this.getInputInfo();
   },
   methods: {
     /* 返回开始 */
@@ -97,6 +112,15 @@ export default {
       });
     },
     /* 返回结束 */
+
+    /* 获取全部工艺信息开始 */
+    async getInputInfo() {
+      const { data: res } = await this.model.getInputInfo(
+        this.processingFactoryId
+      );
+      this.inputInfo.push(res.data);
+    },
+    /* 获取全部工艺信息结束 */
 
     // 获取表格信息
     async getAllInfo(pageSize, pageNum) {
@@ -111,7 +135,6 @@ export default {
         pageNum,
         pageSize
       );
-      console.log(res);
       if (res.statusCode !== 20000) {
         this.$message.error(res.message);
       }

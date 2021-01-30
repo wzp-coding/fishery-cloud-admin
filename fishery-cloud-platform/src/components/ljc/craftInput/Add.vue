@@ -24,19 +24,12 @@
         label-position="left"
         :hide-required-asterisk="true"
       >
-        <el-form-item :label="labels.sort" prop="sort">
-          <el-input-number
-            v-model="addFrom.sort"
-            controls-position="right"
-            :min="1"
-          ></el-input-number>
-        </el-form-item>
-        <el-form-item :label="labels.craftId" prop="craftId">
-          <el-select v-model="addFrom.craftId">
+        <el-form-item :label="labels.id" prop="id">
+          <el-select v-model="addFrom.id">
             <el-option
-              v-for="item in craftInfos"
+              v-for="item in inputInfo[0]"
               :key="item.id"
-              :label="item.craftName"
+              :label="item.inputName"
               :value="item.id"
             >
             </el-option>
@@ -52,12 +45,12 @@
   </div>
 </template>
 <script>
-import ljc from "../productCraft/productCraft";
+import ljc from "../craftInput/craftInput";
 export default {
   props: {
-    productId: {},
+    craftId: {},
     labels: {},
-    craftInfo: {},
+    inputInfo: {},
   },
   data() {
     return {
@@ -89,7 +82,7 @@ export default {
     addInfo() {
       this.$refs.addFromRef.validate(async (val) => {
         if (!val) return false;
-        this.addFrom.productId = this.productId;
+        this.addFrom.craftId = this.craftId;
         const { data: res } = await this.model.addInfo(this.addFrom);
         if (res.statusCode == 20000) {
           this.$message.success(res.message);

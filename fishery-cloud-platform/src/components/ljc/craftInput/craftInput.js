@@ -21,10 +21,6 @@ module.exports = class {
     }
     /* 标签结束 */
 
-    /* 上传路径开始 */
-    uploadUrl = "http://119.23.218.131:9103/base/file/upload"
-    /* 上传路径结束 */
-
     /* 表单验证规则对象开始 */
     formRules = {
         inputName: [
@@ -78,7 +74,7 @@ module.exports = class {
     /* 添加开始 */
     addInfo(addFrom) {
         return new Promise((resolve) => {
-            this.vue.$plant.post(`/processingFactory/craft/${craftId}/${inputId}`)
+            this.vue.$plant.post(`/processingFactory/craft/${addFrom.craftId}/${addFrom.id}`)
                 .then((res) => {
                     resolve(res);
                 })
@@ -86,14 +82,14 @@ module.exports = class {
     }
     /* 添加结束 */
 
-    /* 根据ID查询信息开始 */
-    getInfoById(id) {
+    /* 获取所有的投入品信息开始 */
+    getInputInfo(id) {
         return new Promise((resolve) => {
-            this.vue.$plant.get(`/processingFactory/input/${id}`)
+            this.vue.$plant.get(`/processingFactory/input/factoryInput/${id}`)
                 .then((res) => {
                     resolve(res);
                 })
         })
     }
-    /* 根据ID查询信息结束 */
+    /* 获取所有的投入品信息结束 */
 }
