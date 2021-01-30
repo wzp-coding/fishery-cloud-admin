@@ -11,7 +11,8 @@ module.exports = class {
         craftResponsible: "工艺负责人",
         craftTime: "工艺耗时/s",
         processingFactoryId: "所属工厂编号",
-        sort: "排序"
+        sort: "排序",
+        craftId: "工艺名称"
     }
     /* 标签结束 */
 
@@ -35,6 +36,13 @@ module.exports = class {
         craftTime: [
             { required: true, message: `请输入${this.labels.craftTime}`, trigger: "blur" },
         ],
+        sort: [
+            { required: true, message: `请输入${this.labels.sort}`, trigger: "blur" },
+        ],
+        craftId: [
+            { required: true, message: `请输入${this.labels.craftId}`, trigger: "blur" },
+        ],
+
     }
     /* 表单验证规则对象结束 */
 
@@ -42,7 +50,7 @@ module.exports = class {
     /* 获取数据开始 */
     getAllInfo(id, page, size) {
         return new Promise((resolve) => {
-            this.vue.$plant.get(`/processingFactory/craft/factoryCraft/${id}/${page}/${size}`)
+            this.vue.$plant.get(`/processingFactory/craft/productCraft/${id}/${page}/${size}`)
                 .then((res) => {
                     resolve(res);
                 })
@@ -50,10 +58,20 @@ module.exports = class {
     }
     /* 获取数据结束 */
 
-    /* 添加开始 */
-    addInfo(addFrom) {
+    /* 获取所有的工艺 */
+    getCraftInfo(id) {
         return new Promise((resolve) => {
-            this.vue.$plant.post("/processingFactory/craft/", addFrom)
+            this.vue.$plant.get(`/processingFactory/craft/factoryCraft/${id}`)
+                .then((res) => {
+                    resolve(res);
+                })
+        })
+    }
+
+    /* 添加开始 */
+    addInfo(addForm) {
+        return new Promise((resolve) => {
+            this.vue.$plant.post(`/processingFactory/product/${addForm.productId}/${addForm.craftId}/${addForm.sort}`)
                 .then((res) => {
                     resolve(res);
                 })
@@ -75,7 +93,7 @@ module.exports = class {
     /* 修改开始 */
     editInfo(editForm) {
         return new Promise((resolve) => {
-            this.vue.$plant.put(`/processingFactory/craft/`, editForm)
+            this.vue.$plant.put(`/processingFactory/product/${editForm.productId}/${editForm.id}/${editForm.sort}`)
                 .then((res) => {
                     resolve(res);
                 })

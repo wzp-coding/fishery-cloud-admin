@@ -22,7 +22,8 @@ const baseURLObject = {
     warning:"http://8.129.175.45:57110/warning/",
     meteorologicalData:"http://8.129.175.45:57110/meteorologicalData/",
     waterData:"http://8.129.175.45:57110/waterData/",
-    monitor:"http://8.129.175.45:57110/monitor/"
+    monitor:"http://8.129.175.45:57110/monitor/",
+    plant: "http://119.23.218.131:9111/",
 }
 
 // 异常拦截处理器

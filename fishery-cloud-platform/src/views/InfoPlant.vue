@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 面包屑导航区开始 -->
-    <TheBreadcrumb :breadcrumbInfo="breadcrumbInfo" />
+    <Breadcrumb :breadcrumbInfo="breadcrumbInfo" />
     <!-- 面包屑导航区结束 -->
 
     <!-- 卡片视图开始 -->
@@ -12,9 +12,9 @@
 
       <!-- tab栏开始 -->
       <el-tabs class="tabs" type="card">
-        <el-tab-pane label="加工产品管理"><TheProduct /></el-tab-pane>
-        <el-tab-pane label="工艺管理"><TheCraft /></el-tab-pane>
-        <el-tab-pane label="投入品管理"><TheInput /></el-tab-pane>
+        <el-tab-pane label="加工产品管理"><Product /></el-tab-pane>
+        <el-tab-pane label="工艺管理"><Craft /></el-tab-pane>
+        <el-tab-pane label="投入品管理"><Input /></el-tab-pane>
       </el-tabs>
       <!-- tab栏结束 -->
     </el-card>
@@ -22,18 +22,18 @@
   </div>
 </template>
 <script>
-import TheBreadcrumb from "../components/ljc/public/breadcrumb";
-import TheTitle from "../components/ljc/public/title";
-import TheProduct from "../components/ljc/product/TheProduct";
-import TheCraft from "../components/ljc/craft/TheCraft";
-import TheInput from "../components/ljc/input/TheInput";
+import Breadcrumb from "../components/ljc/public/breadcrumb";
+import Title from "../components/ljc/public/title";
+import Product from "../components/ljc/product/theProduct";
+import Craft from "../components/ljc/craft/theCraft";
+import Input from "../components/ljc/input/theInput";
 export default {
   components: {
-    TheBreadcrumb,
-    TheTitle,
-    TheProduct,
-    TheCraft,
-    TheInput,
+    Breadcrumb,
+    Title,
+    Product,
+    Craft,
+    Input,
   },
   data() {
     return {
