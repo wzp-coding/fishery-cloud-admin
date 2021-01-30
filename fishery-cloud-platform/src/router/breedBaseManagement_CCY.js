@@ -1,14 +1,14 @@
-import DigitalBase from '../views/DigitalBase.vue'
-import SeedPurchase from '../views/SeedPurchase.vue'
-import InfoSeed from '../views/InfoSeed.vue'
-import InfoCustomer from '../views/InfoCustomer.vue'
-import InfoSupplies from '../views/InfoSupplies.vue'
+import DigitalBase from '../views/DigitalBase.vue'     //
+import SeedPurchase from '../views/SeedPurchase.vue'    //
+import InfoSeed from '../views/InfoSeed.vue'           //
+import InfoCustomer from '../views/InfoCustomer.vue'   //客户管理
+import InfoSupplies from '../views/InfoSupplies.vue'    //
 import InfoBase from '../views/InfoBase.vue'
 import InfoPond from '../views/InfoPond.vue'
-import ManagementStaff from '../views/ManagementStaff.vue'
-import ManagementSupplies from '../views/ManagementSupplies.vue'
-import ManagementPond from '../views/ManagementPond.vue'
-import ManagementAuthority from '../views/ManagementAuthority.vue'
+import ManagementStaff from '../views/ManagementStaff.vue'      //
+import ManagementSupplies from '../views/ManagementSupplies.vue'       //
+import ManagementPond from '../views/ManagementPond.vue'    //
+import ManagementAuthority from '../views/ManagementAuthority.vue'    //权限管理
 export default [
     {
         // 数字基地

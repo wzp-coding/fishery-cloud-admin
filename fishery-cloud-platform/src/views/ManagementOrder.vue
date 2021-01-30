@@ -172,7 +172,7 @@
     ></Show-info>
 
 <!-- 展示物流 或者 溯源二维码 -->
-    <show-orinfo
+    <Show-orinfo
     :ortitle="orTitle"
     :is-show-code="isShowCode"
     :adult-shrimp-id="adultShrimpId"
@@ -180,7 +180,7 @@
     @notifyParent2="closeCode"
     
     >
-    </show-orinfo>
+    </Show-orinfo>
    
   </div>
 </template>
@@ -541,10 +541,10 @@ export default {
     },
 
     // // 获取虾苗剩余量
-    async getShrimpRemainById(id) {id
+    async getShrimpRemainById(id) {
       // 调用根据ID查询用户信息接口
       console.log(id);
-      const { data: res } = await this.$http.get("/shrimp/" + id);
+      const { data: res } = await this.$originAxios.get("/shrimp/" + id);
       if (res.code !== 20000) {
         return this.$message.error("查询该虾苗剩余量失败！！");
       }
@@ -554,13 +554,13 @@ export default {
     // // 展示修改的对话框
     async showEditDialog(id) {
       // 调用根据ID查询用户信息接口
-      const { data: res } = await this.$http.get("/order/" + id);
+      const { data: res } = await this.$originAxios.get("/logistics/order/" + "{"+id+"}");
       if (res.code !== 20000) {
         return this.$message.error("查询该订单信息失败！！");
       }
-      console.log(res);
+      console.log(res);1
       this.editForm = res.data;
-      this.getShrimpRemainById(this.editForm.shrimpId);
+      // this.getShrimpRemainById(this.editForm.shrimpId);
       this.constWeight = res.data.weight;
       console.log(this.editForm)
       this.aditDialogVisible = true;

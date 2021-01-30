@@ -1,6 +1,6 @@
-<template>
+<template lang="">
     <div>
-        实况监控
+        
     </div>
 </template>
 <script>

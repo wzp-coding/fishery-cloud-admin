@@ -82,11 +82,13 @@
 import Map from "../../../public_components/Map";
 import FormE from "./elFormItem";
 import TimeE1 from "./elFormtime";
+import FormE2 from "../../Memorandum/Memorandum"
 export default {
   components: {
      Map,
      FormE,
      TimeE1,
+     FormE2
   },
   data() { 
     return {
@@ -139,7 +141,8 @@ export default {
     // 获取虾苗信息
     async getShrimpById(id) {
       // 调用根据ID查询用户信息接口
-      const { data: res } = await this.$http.get("/shrimp/" + id);
+      const { data: res } = await this.$managementOrder.get(id);
+      console.log("this.$managementOrder--->",this.$managementOrder)
       if (res.code !== 20000) {
         return this.$message.error("查询该虾苗信息失败！！");
       }
@@ -149,7 +152,7 @@ export default {
     // 展示物流信息的对话框
     async getLogisticsById(id) {
       // 调用根据ID查询
-      const { data: res } = await this.$http.get("/logistics/findForQR/" + id);
+      const { data: res } = await this.$managementOrder.get(id);
       if (res.code !== 20000) {
         return this.$message.error("查询该物流信息失败！！");
       }

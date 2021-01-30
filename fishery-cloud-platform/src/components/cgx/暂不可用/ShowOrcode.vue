@@ -58,22 +58,22 @@ export default {
             this.$emit("notifyParent2");
         },
         // 前往判断是否收货页面(路径暂时不知道，到时候合并再写进去)
-    //  toLcodeWeb(id) {
-    //  switch(this.title){
-    //      case "物流二维码":
-    //      this.$router.push({
-    //     path: "/",
-    //     query: { id: id },
-    //   });
-    //   break;
-    //      case "溯源二维码":
-    //           this.$router.push({
-    //     path: "/",
-    //     query: { id: id },
-    //   });
-    //   break;
-    //  }
-    //  },
+     toLcodeWeb(id) {
+     switch(this.title){
+         case "物流二维码":
+         this.$router.push({
+        path: "/",
+        query: { id: id },
+      });
+      break;
+         case "溯源二维码":
+              this.$router.push({
+        path: "/",
+        query: { id: id },
+      });
+      break;
+     }
+     },
     },
     mounted(){
          this.url = this.QrcodeUrl;

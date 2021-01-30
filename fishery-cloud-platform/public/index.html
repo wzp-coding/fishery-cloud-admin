@@ -8,12 +8,13 @@
     <!-- <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=8def2d26e9a9af4d003743d1e42857c4"></script>  -->
     <!-- 腾讯 -->
     <!-- <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ"></script> -->
+
     <!-- 获取本地IP地址 -->
-    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>  
+    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
     <script type="text/javascript">
-      var Ip = returnCitySN['cip']
-      var cityname = returnCitySN['cname']
-      localStorage.setItem('Ip', Ip)
+      var Ip = returnCitySN["cip"];
+      var cityname = returnCitySN["cname"];
+      localStorage.setItem("Ip", Ip);
     </script>
     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
     <title><%= htmlWebpackPlugin.options.title %></title>
