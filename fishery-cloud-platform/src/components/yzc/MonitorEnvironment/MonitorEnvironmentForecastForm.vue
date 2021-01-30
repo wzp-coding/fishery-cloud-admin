@@ -1,4 +1,5 @@
 <template>
+<div>
     <el-card class="box-card">
         <el-row><span>预测内容</span></el-row>
         <!--表单内容区域——start-->
@@ -37,11 +38,12 @@
         <!--按钮区域——start-->
         <el-row>
             <el-col :push="15">
-                <el-button type="primary" @click="getForecastData" round>开始预测</el-button>
+                <el-button type="primary" @click="sendfrom" round>开始预测</el-button>
             </el-col>
         </el-row>
         <!--按钮区域——end-->
     </el-card>
+</div>
 </template>
 
 <script>
@@ -99,17 +101,7 @@ export default {
                 endTime: [
                     { required: true, message: '请选择结束时间', trigger: 'blur' }
                 ]
-            }
-        }
-    },
-    watch: {
-        // 监听forecaseForm对象的改变 传值给父组件
-        forecaseForm: {
-            handler() {
-                this.$emit('forecaseForm',this.forecaseForm)
-                console.log(this.forecaseForm)
             },
-            deep: true
         }
     },
     methods: {
@@ -118,47 +110,22 @@ export default {
             this.forecaseForm.typeId = value.typeId
             this.forecaseForm.equipmentName = value.equipmentName
         },
-        // 格式化时间
-        checkTime(date) {
-            if (!date) return ''
-            date = date.toString()
-            const d = new Date(date)
-            const month = (d.getMonth() + 1) < 10 ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1)
-            const day = d.getDate() < 10 ? '0' + d.getDate() : d.getDate()
-            const hours = d.getHours() < 10 ? '0' + d.getHours() : d.getHours()
-            const min = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()
-            const sec = d.getSeconds() < 10 ? '0' + d.getSeconds() : d.getSeconds()
-            const times = d.getFullYear() + '-' + month + '-' + day + ' ' + hours + ':' + min + ':' + sec
-            return times
-        },
-        // 获取预测数据
-        async getForecastData() {
+        sendfrom() {
             this.$refs.forecaseFormRef.validate(async valid => {
                 if(!valid) return false
-                this.forecaseForm.startTime = this.checkTime(this.forecaseForm.startTime)
-                this.forecaseForm.endTime = this.checkTime(this.forecaseForm.endTime)
-                const myflag = this.forecaseForm.typeId === '0' ? '' : '/water'
-                const form = {
-                    equipmentId: this.forecaseForm.equipment.equipmentId,
-                    checkItemName: this.forecaseForm.checkItemName,
-                    startTime: this.forecaseForm.startTime,
-                    endTime: this.forecaseForm.endTime,
-                    typeId: this.forecaseForm.typeId,
-                    baseId: this.forecaseForm.equipment.baseId
-                }
-                // this.$forecast.post(`${myflag}/${this.forecaseForm.arithmetic}/1/50`,form)
-                const res = await axios.post(`http://8.129.175.45:57110/datarecord/forecast${myflag}/${this.forecaseForm.arithmetic}/1/500`,form)
-                console.log(res)
-                console.log(form)
-                if(res.code !== 200) {
-                    return this.$message.error(('预测失败'))
-                }
+                this.$emit('getForecastData',this.forecaseForm)
                 this.$emit('showfrom',false)
                 this.$emit('showforecast',false)
                 setTimeout(() => {
-                    this.$emit('showother',true)
-                },500)
+                this.$emit('showother',true)
+            },500)
             })
+        },
+        // 清空表单
+        empty() {
+            for(var key in this.forecaseForm) {
+                this.forecaseForm[key] = ''
+            }
         }
     }
 }
