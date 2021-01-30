@@ -6,185 +6,88 @@
       <el-breadcrumb-item>🐟苗信息</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
-    <TheCardAll>
-      <div slot="CardTitle">
-        <el-col :span="4">
-          <i class="el-icon-s-order"></i>
-          <span>虾苗信息</span>
-        </el-col>
-      </div>
-      <el-table-column type="expand" slot="cardExpand">
-        <template slot-scope="props">
-          <el-form label-position="left" label-width="170px">
-            <el-row style="margin-bottom: 0">
-              <el-col :span="12">
-                <el-form-item label="虾苗批次名称" class="down-label">
-                  <span>{{ props.row.shrimpBatchName }}</span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="虾苗品种" class="down-label">
-                  <span>{{ props.row.shrimpSpecies }}</span>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row style="margin-bottom: 0">
-              <el-col :span="12">
-                <el-form-item label="放苗时间" class="down-label">
-                  <span>{{ props.row.seedlingTime }}</span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="捕捞状态" class="down-label">
-                  <span>{{
-                    props.row.fishingStatus === "1" ? "已捕捞" : "未捕捞"
-                  }}</span>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row style="margin-bottom: 0">
-              <el-col :span="12">
-                <el-form-item label="捕捞时间" class="down-label">
-                  <span>{{
-                    props.row.fishingStatus === "1" ? props.row.fishingTime : ""
-                  }}</span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="捕捞审核人" class="down-label">
-                  <span>{{
-                    props.row.fishingStatus === "1" ? props.row.createBy : ""
-                  }}</span>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row style="margin-bottom: 0">
-              <el-col :span="12">
-                <el-form-item label="投放尾数/尾" class="down-label">
-                  <span>{{ props.row.inputNum }}</span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="产量kg" class="down-label">{{
-                  props.row.fishingStatus === "1" ? props.row.yield : ""
-                }}</el-form-item>
-              </el-col>
-            </el-row>
-            <el-row style="margin-bottom: 0">
-              <el-col :span="12">
-                <el-form-item label="剩余量/kg" class="down-label">
-                  <span>{{
-                    props.row.fishingStatus === "1" ? props.row.remain : ""
-                  }}</span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="规格(尾/kg)" class="down-label">
-                  <span>{{
-                    props.row.fishingStatus === "1"
-                      ? props.row.specification
-                      : ""
-                  }}</span>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row style="margin-bottom: 0">
-              <el-col :span="12">
-                <el-form-item label="虾苗产地" class="down-label">
-                  <span>{{ props.row.shrimpOrigin }}</span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="虾苗供应商" class="down-label">
-                  <span>{{ props.row.shrimpSupplier }}</span>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </template>
-      </el-table-column>
-      <div slot="ordinary">
+      <TheCardHead>
+        <div slot="CardTitle">
+          <el-col :span="4">
+            <i class="el-icon-s-order"></i>
+            <span>鱼苗信息</span>
+          </el-col>
+        </div>
+      </TheCardHead>
+      <el-table border stripe :data="allSeedInfo">
+        <el-table-column type="expand" >
+          <template slot-scope="props">
+            <el-form label-position="left" inline label-width="170px" class="exp">
+              <el-row style="margin-bottom: 0">
+                <el-col :span="12">
+                  <el-form-item label="种苗批次名称">
+                    <span>{{ props.row.germchitBatchName }}</span>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="种苗品种">
+                    <span>{{ props.row.germchitSpecies }}</span>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row style="margin-bottom: 0">
+                <el-col :span="12">
+                  <el-form-item label="种苗产地">
+                    <span>{{ props.row.germchitOrigin }}</span>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="供应商名称">
+                    <span>{{ props.row.germchitSupplierName }}</span>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row style="margin-bottom: 0">
+                <el-col :span="12">
+                  <el-form-item label="供应商电话">
+                    <span>{{ props.row.germchitSupplierPhone }}</span>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="种苗数量">
+                    <span>{{ props.row.germchitAmount }}</span>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <!-- <div>质检图片</div> -->
+            </el-form>
+          </template>
+        </el-table-column>
+        <!--普通列-->
         <el-table-column
-          prop="shrimpSpecies"
-          label="虾苗品种"
+          prop="germchitSpecies"
+          label="种苗品种"
         ></el-table-column>
-        <el-table-column label="捕捞状态">
-          <template slot-scope="scope">{{
-            scope.row.fishingStatus === "1" ? "已捕捞" : "未捕捞"
-          }}</template>
+        <el-table-column label="种苗产地" prop="germchitOrigin">
         </el-table-column>
-        <el-table-column prop="fishingTime" label="捕捞时间">
-          <template slot-scope="scope">{{
-            scope.row.fishingStatus === "1" ? scope.row.fishingTime : ""
-          }}</template>
+        <el-table-column label="种苗数量" prop="germchitAmount">
         </el-table-column>
-        <el-table-column label="剩余量/kg">
-          <template slot-scope="scope">
-            {{
-              scope.row.fishingStatus === "1" ? scope.row.remain : ""
-            }} </template
-          >kg
-        </el-table-column>
-        <el-table-column label="规格(尾/kg)">
-          <template slot-scope="scope">{{
-            scope.row.fishingStatus === "1" ? scope.row.specification : ""
-          }}</template>
+        <el-table-column label="供货商姓名" prop="germchitSupplierName">
         </el-table-column>
         <el-table-column label="操作" width="240px" fixed="right">
-          <template slot-scope="scope">
+          <!-- slot-scope="scope" -->
+          <template >
             <!-- 修改按钮 -->
             <el-button
               type="primary"
               icon="el-icon-edit"
               size="mini"
-              @click="showEditDialog(scope.row.id)"
-              :disabled="!permissionVisable.traceability_shrimpInfo_update"
             ></el-button>
-            <!-- 订单按钮 -->
-            <el-tooltip
-              effect="dark"
-              content="下订单"
-              placement="top"
-              :enterable="false"
-            >
-              <el-button
-                type="warning"
-                icon="el-icon-s-order"
-                size="mini"
-                v-show="scope.row.fishingStatus == 1 ? true : false"
-                @click="orderById(scope.row.id)"
-                :disabled="!permissionVisable.traceability_shrimpInfo_select"
-              ></el-button>
-            </el-tooltip>
-            <!-- 入库按钮 -->
-            <el-tooltip
-              effect="dark"
-              content="进入冷库"
-              placement="top"
-              :enterable="false"
-            >
-              <el-button
-                type="success"
-                icon="el-icon-mobile"
-                size="mini"
-                v-show="scope.row.fishingStatus == 1 ? true : false"
-                @click="storageById(scope.row.id)"
-                :disabled="!permissionVisable.traceability_shrimpInfo_select"
-              ></el-button>
-            </el-tooltip>
             <!-- 删除按钮 -->
             <el-button
               type="danger"
               icon="el-icon-delete"
               size="mini"
-              @click="removeShrimpById(scope.row.id)"
-              :disabled="!permissionVisable.traceability_shrimpInfo_delete"
             ></el-button>
           </template>
         </el-table-column>
-      </div>
-      <ThePagination slot="pagination"></ThePagination>
-    </TheCardAll>
+      </el-table>
+      <ThePagination :toPagination="paginationInfo"  @fatherMethod="getSeedInfoList"></ThePagination>
     </el-card>
   </div>
 </template>
@@ -199,9 +102,45 @@ export default {
     TheCardAll,
     ThePagination,
     TheDialogAll,
+    TheCardHead,
+  },
+  data() {
+    return {
+      //种苗信息数组
+      allSeedInfo: [],
+      //分页信息
+      paginationInfo: {
+        total:0,
+        size:4,
+        currentPage:1,
+        // sizeGroup:[4,6,8,10]
+      },
+    };
+  },
+  created() {
+    this.getSeedInfoList(4,1);
+  },
+  methods: {
+    //获取所有种苗信息
+    async getSeedInfoList(size,page) {
+      const { data: res } = await this.$germchit.get(`${size}/${page}`);
+      console.log(res);
+      this.allSeedInfo = res.data.records;
+      this.paginationInfo.total = res.data.total;
+    },
+
   },
 };
 </script>
 
-<style>
+<style scoped>
+.exp label {
+  width: 90px;
+  color: #99a9bf;
+}
+.exp .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
 </style>

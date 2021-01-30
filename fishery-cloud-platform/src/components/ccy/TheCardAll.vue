@@ -6,7 +6,7 @@
     >
       <slot name="CardTitle"></slot>
     </el-row>
-    <el-table border stripe>
+    <el-table border stripe :data="toDialogInfo">
       <!--通过slot-scope传值-->
       <slot name="cardExpand"></slot>
       <slot name="ordinary"></slot>
@@ -22,6 +22,11 @@ export default {
   components: {
     TheCardHead,
   },
+  props:{
+    toDialogInfo:{
+      type:Array
+    }
+  }
 };
 </script>
 

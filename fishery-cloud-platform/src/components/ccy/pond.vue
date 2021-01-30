@@ -2,8 +2,8 @@
   <div class="main">
     <el-row>
       <el-col :span="24" class="infoTitle">
-        <div class="pondName">池塘名字</div>
-        <div>更多</div>
+        <div class="pondName">{{toPond.name}}</div>
+        <div><el-button size="mini" plain type="primary">更多</el-button></div>
       </el-col>
     </el-row>
     <el-row>
@@ -13,13 +13,13 @@
         </div>
       </el-col>
       <el-col :span="15">
-        <p>虾苗品种：</p>
-        <p>池塘面积/m²：</p>
-        <p>池塘深度/m：</p>
-        <p>池塘类型：</p>
-        <p>投放尾数/尾：</p>
-        <p>投放时间：</p>
-        <p>上次捕捞时间：</p>
+        <!-- <p>池塘名称：</p> -->
+        <p>池塘面积/m²：{{toPond.area}}</p>
+        <p>池塘深度/m：{{toPond.depth}}</p>
+        <p>池塘类型：{{toPond.type}}</p>
+        <!-- <p>投放尾数/尾：{{toPond.}}</p> -->
+        <!-- <p>投放时间：{{toPond.}}</p> -->
+        <!-- <p>上次捕捞时间：{{toPond.}}</p> -->
         <p>投放状态：未投放</p>
       </el-col>
     </el-row>
@@ -69,7 +69,40 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props:{
+    toPond:{
+      type:[Object],
+      area:String,
+      depth:String,
+      type:String,
+      name:String,
+      creator:String
+    }
+  },
+  data(){
+    return {
+      
+      baseId:'1248910886228332544',     //基地ID
+    }
+  },
+  created(){
+    // this.getPondList(3,1);  //获取池塘信息
+  },
+  methods:{
+    async getPondList(size,page) {
+      const { data: res } = await this.$pondController.get(
+        `getInfo/${this.baseId}/${size}/${page}`
+      );
+      if (res.statusCode !== 2000) {
+        console.log(res);
+        this.addPondInfo.total = res.data.total
+      } else {
+        console.log("查询池塘信息失败");
+      }
+    },
+  }
+};
 </script>
 
 <style scoped lang="less">
