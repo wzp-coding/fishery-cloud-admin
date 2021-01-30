@@ -1,11 +1,6 @@
 <template>
     <div>
         <!-- 面包屑导航区域——start -->
-        <!-- <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item>设备管理</el-breadcrumb-item>
-            <el-breadcrumb-item>气象设备</el-breadcrumb-item>
-            <el-breadcrumb-item>气象预警阀值</el-breadcrumb-item>
-        </el-breadcrumb> -->
         <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
         <!-- 面包屑导航区域——end -->
 

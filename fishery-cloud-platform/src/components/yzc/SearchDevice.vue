@@ -1,28 +1,65 @@
 <template>
-    <div style="" class="search"><input placeholder="输入设备名称进行查询" v-model="searchinput" style="border:0;outline:none"><i class="el-icon-search"></i></div>
+    <div style="" class="search"><input placeholder="输入设备名称(序列号)" v-model="searchinput" style="border:0;outline:none"><i class="el-icon-search searchicon" @click="search"></i></div>
 </template>
 
 <script>
 export default {
     props: {
-        equipmentList: {
-            type: Array,
-            require: true
-        }
+        SearchType: {
+            reauire:true
+        },
     },
     data() {
         return {
             // 搜索输入
-            searchinput: ''
+            searchinput: '',
+            fff:[]
+        }
+    },
+    // watch: {
+    //     searchinput: function() {
+    //         const input = this.searchinput
+    //         const searchdate = this.equipmentList.filter(value => {
+    //             return value.equipmentName.match(input)
+    //         })
+    //         this.$emit('searchdate',searchdate)
+    //     }
+    // }
+    methods: {
+        async search () {
+            if(this.searchinput == '') {
+                return this.$message.error('请输入搜索内容')
+            }
+            if(this.SearchType === '水质设备'||this.SearchType === '气象设备') {
+                await this.$equipment.post('search/1/5',{
+                    equipmentName:this.searchinput
+                }).then(res=> {
+                    if(res.data.statusCode !== 20000) {
+                        return this.$messsge.error('查询失败')
+                    }
+                    this.$message.success('查询成功')
+                    this.$emit('searchfor',res.data.data.records)
+                })
+            }
+            if(this.SearchType === '监控设备') {
+                await this.$base.post('/search/1/5',{
+                    deviceSerial:this.searchinput
+                }).then(res => {
+                    console.log(res);
+                    if(res.data.statusCode !== 20000) {
+                        return this.$messsge.error('查询失败')
+                    }
+                    this.$message.success('查询成功')
+                    this.$emit('searchfor',res.data.data.records)
+                })
+            }
         }
     },
     watch: {
         searchinput: function() {
-            const input = this.searchinput
-            const searchdate = this.equipmentList.filter(value => {
-                return value.equipmentName.match(input)
-            })
-            this.$emit('searchdate',searchdate)
+            if(this.searchinput=='') {
+                this.$emit('getequipmentList')
+            }
         }
     }
 }
@@ -37,5 +74,9 @@ export default {
     text-align: center;
     width: 250px;
     height: 40px;
+}
+.searchicon:hover {
+    color: #598cff;
+    cursor: pointer;
 }
 </style>

@@ -1,10 +1,6 @@
 <template>
   <div>
     <!--面包区域区域——start-->
-    <!-- <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item>设备管理</el-breadcrumb-item>
-      <el-breadcrumb-item>监控设备</el-breadcrumb-item>
-    </el-breadcrumb> -->
     <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
     <!--面包区域区域——end--> 
 
@@ -35,7 +31,7 @@
               设备数量：{{total}}台
             </el-col>
             <el-col :span="9" :push="3">
-              <SearchDevice :equipmentList="equipmentList" @searchdate="searchdate = $event"></SearchDevice>
+              <SearchDevice @getequipmentList="getequipmentList" @searchfor="searchfor($event)" :SearchType="SearchType"></SearchDevice>
             </el-col>
           </el-row>
 
@@ -94,6 +90,7 @@ export default {
   data() {
     return {
       breadcrumbs:["设备管理","监控设备"],
+      SearchType:'监控设备',
       total:0,
       // 控制添加监控设备卡片的显示隐藏
       ShowAddDevice: false,
@@ -117,6 +114,14 @@ export default {
     this.getequipmentList()
   },
   methods: {
+    // 搜索
+    searchfor(info) {
+      if(info !== []) {
+        this.equipmentList = info
+      }else {
+        this.getequipmentList()
+      }
+    },
     // 获取监控设备信息列表
     async getequipmentList() {
       const {data:res} = await this.$base.post(`search/${this.page_index}/${this.page_size}`,{
