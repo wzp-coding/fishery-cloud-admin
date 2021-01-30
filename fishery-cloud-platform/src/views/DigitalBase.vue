@@ -22,7 +22,7 @@
           v-for="(item, index) in checkBox"
           :key="index"
           v-model="item.checked"
-          :label="item.name"
+          :label="item.cname"
           border
           @change="handleChange(item)"
         ></el-checkbox>
@@ -44,7 +44,7 @@
         <el-col :span="6">
           <WeatherCard></WeatherCard>
         </el-col> -->
-        <!--使用draggable组件 v-model绑定数组-->
+        <!-- 使用draggable组件 v-model绑定数组 -->
         <Draggable
           @start="drag = true"
           @end="drag = false"
@@ -57,7 +57,7 @@
               style="margin: 5px"
               v-for="(item, index) in componentCheckedData"
               :key="index"
-              :is="item.component"
+              :is="item.name"
             />
           </transition-group>
         </Draggable>
@@ -71,40 +71,8 @@
 </template>
 
 <script>
-const DraggableInfoBase = {
-  components: { InfoBase },
-  render(h) {
-    return (
-      <el-col span={6}>
-        <InfoBase></InfoBase>
-      </el-col>
-    );
-  },
-};
-const DraggableMap = {
-  components: { Map },
-  render(h) {
-    return (
-      <el-col span={11}>
-        <Map map-name="logistics"></Map>
-      </el-col>
-    );
-  },
-};
-const DraggableWeatherCard = {
-  components: { WeatherCard },
-  render(h) {
-    return (
-      <el-col span={6}>
-        <WeatherCard></WeatherCard>
-      </el-col>
-    );
-  },
-};
 import Authority from "../components/wzp/Authority";
-import Map from "../components/public_components/Map";
-import WeatherCard from "../components/wzp/WeatherCard";
-import InfoBase from "../components/wzp/InfoBase";
+import { DraggableMap, DraggableWeatherCard, DraggableInfoBase } from "../libs/draggable";
 export default {
   name: "DigitalBase",
   components: {
@@ -115,7 +83,6 @@ export default {
   },
   data() {
     return {
-      
       // 控制展示权限对话框
       isShowAuthority: false,
 
@@ -125,22 +92,21 @@ export default {
       // 存放可拖拽组件
       componentData: [
         {
-          component: "DraggableMap",
-          name: "基地地图",
+          name: "DraggableMap",
+          cname: "基地地图",
           checked: true,
         },
         {
-          component: "DraggableWeatherCard",
-          name: "天气卡片",
+          name: "DraggableWeatherCard",
+          cname: "天气卡片",
           checked: false,
         },
         {
-          component: "DraggableInfoBase",
-          name: "基地信息",
+          name: "DraggableInfoBase",
+          cname: "基地信息",
           checked: true,
         },
       ],
-
       // 多选框
       checkBox: [],
     };
@@ -169,7 +135,7 @@ export default {
     handleChange(item) {
       // 模块选择的时候，同时改变componentData让组件重新渲染
       this.componentData.some((data, index, origin) => {
-        if (data.component == item.component) {
+        if (data.cname == item.cname) {
           origin[index].checked = item.checked;
           return true;
         }

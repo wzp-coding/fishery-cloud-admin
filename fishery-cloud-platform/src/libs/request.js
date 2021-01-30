@@ -12,15 +12,16 @@ import get from 'lodash/get';
  * 如果一定需要原生纯净的axios,那么可以通过this.$originAxios来调用
  */
 const baseURLObject = {
-    auth:"http://106.75.154.40:9003",
-    user:"http://106.75.154.40:9003/user",
-    management:"http://119.23.218.131:9103",
-    pondController:"http://119.23.218.131:9103/pond",
-    equipment:"http://8.129.175.45:57110/equipment",
-    warning:"http://8.129.175.45:57110/warning/",
-    meteorologicalData:"http://8.129.175.45:57110/meteorologicalData/",
-    waterData:"http://8.129.175.45:57110/waterData/"
+    auth: "http://106.75.154.40:9003",
+    user: "http://106.75.154.40:9003/user",
+    management: "http://119.23.218.131:9103",
+    pondController: "http://119.23.218.131:9103/pond",
+    equipment: "http://8.129.175.45:57110/equipment",
+    warning: "http://8.129.175.45:57110/warning/",
+    meteorologicalData: "http://8.129.175.45:57110/meteorologicalData/",
+    waterData: "http://8.129.175.45:57110/waterData/"
 }
+
 // 异常拦截处理器
 const errorHandler = (error) => {
     const status = get(error, 'response.status');
@@ -50,7 +51,7 @@ const errorHandler = (error) => {
  */
 const axiosObject = {};
 const axiosArray = [];
-for (const key in baseURLObject){
+for (const key in baseURLObject) {
     axiosArray[key] = baseURLObject[key]
     axiosObject[key] = axios.create({
         // API 请求的默认前缀
