@@ -1,11 +1,7 @@
 <template>
     <div>
         <!-- 面包屑导航区域——start -->
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item>设备管理</el-breadcrumb-item>
-            <el-breadcrumb-item>水质设备</el-breadcrumb-item>
-            <el-breadcrumb-item>水质预警阀值</el-breadcrumb-item>
-        </el-breadcrumb>
+        <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
         <!-- 面包屑导航区域——end -->
 
         <el-card class="box-card">
@@ -40,11 +36,11 @@
                 <el-form-item label="单位" prop="unit">
                     <el-input v-model="addeForm.unit"></el-input>
                 </el-form-item>
-                <el-form-item label="最大值" prop="maxValue">
-                    <el-input v-model="addeForm.maxValue"></el-input>
+                <el-form-item label="最大值" prop="maxValues">
+                    <el-input v-model="addeForm.maxValues"></el-input>
                 </el-form-item>
-                <el-form-item label="最小值" prop="minValue">
-                    <el-input v-model="addeForm.minValue"></el-input>
+                <el-form-item label="最小值" prop="minValues">
+                    <el-input v-model="addeForm.minValues"></el-input>
                 </el-form-item>
                 <el-form-item label="更新时间">
                     <el-date-picker v-model="addeForm.updateDate" type="datetime" placeholder="选择更新时间"></el-date-picker>
@@ -63,7 +59,7 @@
         <!--添加阈值的对话框——end-->
 
         <!--修改水质预警阈值设置对话框——start-->
-        <el-dialog title="编辑信息" :visible.sync="editDialogVisible" width="35%" @close="aditDialogClosed">
+        <el-dialog title="编辑信息" :visible.sync="editDialogVisible" width="35%">
 
             <!--表单内容——start-->
             <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="100px">
@@ -75,11 +71,11 @@
                 <el-form-item label="单位" prop="unit">
                     <el-input v-model="editForm.unit"></el-input>
                 </el-form-item>
-                <el-form-item label="最大值" prop="maxValue">
-                    <el-input v-model="editForm.maxValue"></el-input>
+                <el-form-item label="最大值" prop="maxValues">
+                    <el-input v-model="editForm.maxValues"></el-input>
                 </el-form-item>
-                <el-form-item label="最小值" prop="minValue">
-                    <el-input v-model="editForm.minValue"></el-input>
+                <el-form-item label="最小值" prop="minValues">
+                    <el-input v-model="editForm.minValues"></el-input>
                 </el-form-item>
                 <el-form-item label="更新时间">
                     <el-date-picker v-model="editForm.updateDate" type="datetime" placeholder="选择更新时间"></el-date-picker>
@@ -89,7 +85,7 @@
 
             <!--底部按钮区域——start-->
             <span slot="footer" class="dialog-footer">
-                <el-button @click="editDialogVisible = false">取 消</el-button>
+                <el-button @click="aditDialogClosed()">取 消</el-button>
                 <el-button type="primary" @click="editwarningInfo">确 定</el-button>
             </span>
             <!--底部按钮区域——end-->
@@ -106,15 +102,15 @@
                 </template>
             </el-table-column>
             <el-table-column prop="channelName" label="通道的名称" width="180"></el-table-column>
-            <el-table-column prop="maxValue" label="最大值" width="120"></el-table-column>
-            <el-table-column prop="minValue" label="最小值" width="120"></el-table-column>
+            <el-table-column prop="maxValues" label="最大值" width="120"></el-table-column>
+            <el-table-column prop="minValues" label="最小值" width="120"></el-table-column>
             <el-table-column prop="unit" label="单位" width="120"></el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope" width="200px">
                     <div>
                     <!--状态按钮-->
                     <span style="margin:15px">
-                        <el-switch v-model="scope.row.isUse" active-value='1' inactive-value='0' active-color="#13ce66" inactive-color="#ff4949" active-text="启动" inactive-text="关闭" ></el-switch>
+                        <el-switch v-model="scope.row.isUse" active-value='1' inactive-value='0' active-color="#13ce66" inactive-color="#ff4949" active-text="启动" inactive-text="关闭"  @change="changeCode(scope.row)"></el-switch>
                     </span>
                     <!--修改参数按钮-->
                     <span style="margin:15px">
@@ -140,12 +136,15 @@
 <script>
 // 引入分页组件
 import Pagination from '../components/yzc/pagination'
+import Breadcrumb from '../components/public_components/Breadcrumb'
 export default {
     components: {
-        Pagination
+        Pagination,
+        Breadcrumb
     },
     data() {
         return {
+            breadcrumbs:["设备管理","水质设备","水质预警阈值"],
             equipmentId: '',
             // -----------关于添加阈值对话框的属性——start
             // 控制对话框的显示隐藏 默认隐藏
@@ -169,8 +168,8 @@ export default {
             addeForm: {
                 channelName: '',
                 unit: '',
-                maxValue: '',
-                minValue: '',
+                maxValues: '',
+                minValues: '',
                 updateDate: '',
                 isUse: '0',
             },
@@ -179,10 +178,10 @@ export default {
                 channelName: [
                     { required: true, message: '请输入通道的名称', trigger: 'blur' }
                 ],
-                maxValue: [
+                maxValues: [
                     { required: true, message: '请输入最大值', trigger: 'blur' }
                 ],
-                minValue: [
+                minValues: [
                     { required: true, message: '请输入最小值', trigger: 'blur' }
                 ],
                 unit: [
@@ -195,7 +194,6 @@ export default {
             // -----------关于添加阈值对话框的属性——end
 
             // -----------关于编辑阈值参数对话框的属性——start
-
             // 控制修改预警阈值的对话框显示与隐藏
             editDialogVisible: false,
             // editForm用于存放所修改对象信息
@@ -205,10 +203,10 @@ export default {
                 channelName: [
                     { required: true, message: '请输入通道的名称', trigger: 'blur' }
                 ],
-                maxValue: [
+                maxValues: [
                     { required: true, message: '请输入最大值', trigger: 'blur' }
                 ],
-                minValue: [
+                minValues: [
                     { required: true, message: '请输入最小值', trigger: 'blur' }
                 ],
                 unit: [
@@ -218,7 +216,6 @@ export default {
                     { required: true, message: '请选择时间', trigger: 'blur' }
                 ]
             },
-
             // -----------关于编辑阈值参数对话框的属性——end
 
             // -----------关于预警列表的属性——start
@@ -240,16 +237,23 @@ export default {
         this.equipmentId = this.$route.query.equipmentId
         this.getwarningList()
     },
+    watch: {
+        editForm: function() {
+            console.log(this.editForm);
+        }
+    },
     methods:{
         // 获取预警信息
         async getwarningList() {
-            const {data:res} = await this.$warning.post(`search`,{
+            const {data:res} = await this.$warning.post(`search/${this.page_index}/${this.page_size}`,{
                 equipmentId:this.equipmentId
             })
             if(res.statusCode!==20000) {
                 return this.$message.error('获取信息列表失败！')
             }
-            this.warningList = res.data
+            console.log(res.data.records);
+            this.warningList = res.data.records
+            this.page_total = res.data.total
         },
         // 返回按钮 返回水质设备页面
         back() {
@@ -282,9 +286,7 @@ export default {
             this.addeForm.updateDate = ''
         },
         // 用于编辑按钮 点击展示修改对话框
-        async showEditDialog(info) {
-            // const res = await this.$originAxios.get(`http://8.129.175.45:57110/warning/${id}`)
-            // console.log(res);
+        showEditDialog(info) {
             this.editForm = info
             this.editDialogVisible = true
         },
@@ -292,17 +294,30 @@ export default {
         aditDialogClosed() {
             this.$refs.editFormRef.resetFields()
             this.addeForm.channelName = ''
+            this.editDialogVisible = false
         },
-        // editwarningInfo用于修改对话框的确定按钮 点击提交修改信息并关闭对话框
         async editwarningInfo() {
+            this.editForm.updateDate = this.checkTime(this.editForm.updateDate)
             this.$refs.editFormRef.validate(async valid => {
                 if(!valid) return false
-                console.log(this.editForm);
-                console.log(this.editForm.id);
-                const res = await this.$warning.put(`${this.editForm.id}`,this.editForm)
-                console.log(res);
+                const {data:res} = await this.$warning.put(`${this.editForm.id}`,this.editForm)
+                if(res.statusCode!==20000) {
+                    return this.$message.error('修改状态失败！')
+                }
+                this.$message.success('修改成功')
+                this.getwarningList()
             })
             this.editDialogVisible = false
+            this.aditDialogClosed()
+        },
+        // 修改设备状态
+        async changeCode(info) {
+            const {data:res} = await this.$warning.put(`${info.id}`,info)
+            if(res.statusCode!==20000) {
+                return this.$message.error('修改状态失败！')
+            }
+            this.$message.success('修改成功')
+            this.getwarningList()
         },
         // 页码改变
         pageChange(page) {

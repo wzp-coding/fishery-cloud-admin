@@ -1,10 +1,7 @@
 <template>
     <div>
         <!-- 面包屑导航区域——start -->
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item>我的基地</el-breadcrumb-item>
-            <el-breadcrumb-item>环境检测</el-breadcrumb-item>
-        </el-breadcrumb>
+        <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
         <!-- 面包屑导航区域——end -->
 
         <transition name="el-zoom-in-top">
@@ -106,11 +103,13 @@
 import MonitorEnvironmentDeviceQuery from '../components/yzc/MonitorEnvironment/MonitorEnvironmentDeviceQuery'
 import MonitorEnvironmentForecastForm from '../components/yzc/MonitorEnvironment/MonitorEnvironmentForecastForm'
 import MonitorEnvironmentForecastFormrevise from '../components/yzc/MonitorEnvironment/MonitorEnvironmentForecastFormrevise'
+import Breadcrumb from '../components/public_components/Breadcrumb'
 export default {
     components: {
         MonitorEnvironmentDeviceQuery,
         MonitorEnvironmentForecastForm,
-        MonitorEnvironmentForecastFormrevise
+        MonitorEnvironmentForecastFormrevise,
+        Breadcrumb
     },
     mounted() {
         this.$nextTick(function() {
@@ -122,6 +121,7 @@ export default {
     },
     data() {
         return {
+            breadcrumbs:["我的基地","环境监测"],
             //----------预测内容表单相关属性——start
             baseId:'1248910886228332544',
             // 表单内容是否显示

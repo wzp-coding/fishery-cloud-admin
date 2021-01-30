@@ -191,13 +191,13 @@
                   <i class="el-icon-time"></i> {{scope.row.acquisitionTime}}
                   </template>
                   </el-table-column>
-              <el-table-column prop="equipmentWorking" label="水质传感器工作状态">
+              <el-table-column prop="waterQualityWorking" label="水质传感器工作状态">
               <template slot-scope="scope">
-                  <el-tag v-if="scope.row.equipmentWorking == '1'" type="success">工作中</el-tag>
-                  <el-tag type="danger" v-else-if="scope.row.equipmentWorking == '0' ">关闭</el-tag>
-                  <el-tag type="warning" v-else-if="scope.row.equipmentWorking == '2' ">故障</el-tag>
-                  <el-tag type="info" v-else-if="scope.row.equipmentWorking == null">状态未知</el-tag>
-                  <el-tag type="info" v-else-if="scope.row.equipmentWorking == '' ">状态未知</el-tag>
+                  <el-tag v-if="scope.row.waterQualityWorking == '1'" type="success">工作中</el-tag>
+                  <el-tag type="danger" v-else-if="scope.row.waterQualityWorking == '0' ">关闭</el-tag>
+                  <el-tag type="warning" v-else-if="scope.row.waterQualityWorking == '2' ">故障</el-tag>
+                  <el-tag type="info" v-else-if="scope.row.waterQualityWorking == null">状态未知</el-tag>
+                  <el-tag type="info" v-else-if="scope.row.waterQualityWorking == '' ">状态未知</el-tag>
               </template>
               </el-table-column>
               <el-table-column prop="floatValveStatus" label="浮球阀状态">
@@ -273,7 +273,7 @@ export default {
                 ammoniaNitrogenUnit: '%',
                 equipmentId: '',
                 waterQualityWorking: '',
-                chlorophyll: '',
+                chlorophyll: 0,
                 chlorophyllUnit: 'mg/L',
                 conductivity: '' ,
                 conductivityUnit: '(μS/cm)',
@@ -369,7 +369,7 @@ export default {
         },
         // 用于编辑按钮 点击展示修改对话框
         async showEditDialog(id) {
-            const {data:res} = await this.$meteorologicalData.get(`${id}`)
+            const {data:res} = await this.$waterData.get(`${id}`)
             this.editForm = res.data
             this.editDialogVisible = true
         },
@@ -380,7 +380,8 @@ export default {
         },
         // editwarningInfo用于修改对话框的确定按钮 点击提交修改信息并关闭对话框
         async editwarningInfo() {
-            const {data:res} = await this.$meteorologicalData.put(`${this.editForm.id}`,this.editForm)
+            console.log(this.editForm);
+            const {data:res} = await this.$waterData.put(`${this.editForm.id}`,this.editForm)
             if(res.statusCode!==20000) {
                 return this.$message.error('修改信息失败！')
             }
@@ -400,7 +401,9 @@ export default {
             if (confirmResult !== 'confirm') {
                 return this.$message.info('已取消删除')
             }
-            const {data:res} = await this.$meteorologicalData.delete(`${id}`)
+            console.log(id);
+            const {data:res} = await this.$waterData.delete(`${id}`)
+            console.log(res);
             if(res.statusCode!==20000) {
            return this.$message.error('删除设备失败！')
           }
