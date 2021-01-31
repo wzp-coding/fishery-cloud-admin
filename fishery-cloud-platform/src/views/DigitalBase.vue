@@ -19,7 +19,7 @@
       <el-row
         ><span>组件模块：</span>
         <el-checkbox
-          v-for="(item, index) in checkBox"
+          v-for="(item, index) in componentData"
           :key="index"
           v-model="item.checked"
           :label="item.cname"
@@ -44,19 +44,20 @@
         <el-col :span="6">
           <WeatherCard></WeatherCard>
         </el-col> -->
+
         <!-- 使用draggable组件 v-model绑定数组 -->
         <Draggable
           @start="drag = true"
           @end="drag = false"
           animation="1000"
           style="width: 100%"
-          v-model="componentData"
+          v-model="componentCheckedData"
         >
           <transition-group>
             <component
               style="margin: 5px"
-              v-for="(item, index) in componentCheckedData"
-              :key="index"
+              v-for="item in componentCheckedData"
+              :key="item.id"
               :is="item.name"
             />
           </transition-group>
@@ -72,7 +73,12 @@
 
 <script>
 import Authority from "../components/wzp/Authority";
-import { DraggableMap, DraggableWeatherCard, DraggableInfoBase } from "../libs/draggable";
+import {
+  DraggableMap,
+  DraggableWeatherCard,
+  DraggableInfoBase,
+} from "../util/draggable";
+
 export default {
   name: "DigitalBase",
   components: {
@@ -92,71 +98,76 @@ export default {
       // 存放可拖拽组件
       componentData: [
         {
+          id: 1,
           name: "DraggableMap",
           cname: "基地地图",
           checked: true,
         },
         {
+          id: 2,
           name: "DraggableWeatherCard",
           cname: "天气卡片",
           checked: false,
         },
         {
+          id: 3,
           name: "DraggableInfoBase",
           cname: "基地信息",
           checked: true,
         },
       ],
-      // 多选框
-      checkBox: [],
+      // 存放被选中的可拖拽组件
+      componentCheckedData: [],
     };
-  },
-  computed: {
-    // 过滤出componentData中被选中的组件
-    componentCheckedData() {
-      return this.componentData.filter((item) => item.checked);
-    },
   },
   methods: {
     // 所持权限  按钮
     changeAuthorityShow() {
       this.isShowAuthority = !this.isShowAuthority;
     },
+
     // 保存自定义  按钮
     saveComponentData() {
-      // 保存调整后的模块顺序
+      // 保存选中模块的调整顺序
+      localStorage.setItem(
+        "componentCheckedData",
+        JSON.stringify(this.componentCheckedData)
+      );
+      // 保存所有模块
       localStorage.setItem("componentData", JSON.stringify(this.componentData));
-      // 保存模块的选择与否
-      localStorage.setItem("initCheckbox", JSON.stringify(this.checkBox));
       this.$message.success("保存成功");
     },
 
     // 多选框触发事件
     handleChange(item) {
-      // 模块选择的时候，同时改变componentData让组件重新渲染
-      this.componentData.some((data, index, origin) => {
-        if (data.cname == item.cname) {
-          origin[index].checked = item.checked;
-          return true;
-        }
-        return false;
-      });
+      // 模块选择的时候，componentData变化了，更新componentCheckedData
+      if(item.checked){
+        // 选中
+        this.componentCheckedData.push(item);
+      }else{
+        // 取消选中
+        this.componentCheckedData.some((inner,index,origin)=>{
+          if(inner.id == item.id){
+            Array.prototype.splice.call(origin,index,1);
+            return true;
+          }
+          return false;
+        })
+      }
     },
   },
   created() {
-    // 获取最初自定义模块的顺序
-    if (!localStorage.getItem("initCheckbox")) {
+    if (!localStorage.getItem("componentData")) {
       // 第一次载入页面
-      localStorage.setItem("initCheckbox", JSON.stringify(this.componentData));
-      this.checkBox = JSON.parse(JSON.stringify(this.componentData));
+      this.componentCheckedData = this.componentData.filter(
+        (item) => item.checked
+      );
     } else {
-      // 第二次以后载入页面
-      this.checkBox = JSON.parse(localStorage.getItem("initCheckbox"));
-    }
-    // 获取上次保存的自定义视图
-    if (localStorage.getItem("componentData")) {
-      // 第二次以后载入页面
+      // 第二次以后载入页面，获取上次保存的自定义视图
       this.componentData = JSON.parse(localStorage.getItem("componentData"));
+      this.componentCheckedData = JSON.parse(
+        localStorage.getItem("componentCheckedData")
+      );
     }
   },
 };
