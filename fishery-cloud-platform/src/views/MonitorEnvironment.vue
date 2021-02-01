@@ -47,7 +47,7 @@
                 <transition name="el-zoom-in-top">
                 <el-col :span="15" v-show="showforecast">
                     <el-row :gutter="10">
-                        <el-col :span="24"><el-card class="box-card" :body-style="{ padding: '15px' }"><span style="margin-left:8px">设备--</span></el-card></el-col>
+                        <el-col :span="24"><el-card class="box-card" :body-style="{ padding: '15px' }"><span style="margin-left:8px">预警--{{this.warn}}</span></el-card></el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
@@ -127,6 +127,7 @@ export default {
         return {
             interval: '',
             breadcrumbs:["我的基地","环境监测"],
+            warn: '无',
             //----------预测内容表单相关属性——start
             baseId:'1248910886228332544',
             // 表单内容是否显示
@@ -198,6 +199,7 @@ export default {
             this.showother = false
             this.closedisabled = true
             this.showforecast = false
+            this.warn = '无'
             this.$refs.ForecastForm.empty()
         },
         // 控制功能的切换 即环境预测与设备查询
@@ -258,20 +260,26 @@ export default {
             Unit = arrUnitList.find(item => item.value === forecaseForm.checkItemName )
             Unit = Unit.label
             // this.$forecast.post(`${myflag}/${this.forecaseForm.arithmetic}/1/50`,form)
-            console.log(form);
             const {data:res} = await this.$originAxios.post(`http://106.75.154.40:9004/datarecord/forecast${myflag}/${forecaseForm.arithmetic}/1/500`,form)
-            console.log(res)
-            console.log(form)
             if(res.code !== 200) {
                 return this.$message.error(('预测失败'))
             }
+            if (res.data.orgindata.length === 0) {
+                return this.$message.info('查无数据')
+            }
             console.log(res.data);
             this.$message.success('预测成功')
+            this.warn = res.data.warn === true?'预测到接下来一段时间内，当前通道值可能会超出或低于阀值，请及时做出相应处理':'无'
             const length = this.getTimeLength(forecaseForm.startTime, forecaseForm.endTime)
             const xData = this.makeEchartXData(forecaseForm.startTime, this.interval, length)
             xData.length = 700
             res.data.predictdata = [...res.data.orgindata, ...res.data.predictdata]
             this.ChartInit(xData, res.data.orgindata, res.data.predictdata, Unit)
+            this.showfrom = false
+            this.showforecast = false
+            setTimeout(()=> {
+                this.showother = true
+            })
         },
         // 绘制预测图表
         ChartInit(xData, orgindata, predictdata, unit) {

@@ -14,13 +14,13 @@
                 </el-form-item>
                 <!--需要预测的项目-->
                 <el-form-item label="检测项" prop="checkItemName" label-width="78px">
-                    <el-select v-model="forecaseForm.checkItemName" placeholder="请选择检测项">
+                    <el-select v-model="forecaseForm.checkItemName" placeholder="请选择检测项" @change="getCheckItemName">
                         <el-option v-for="item in forecaseForm.typeId=='1'?pondCheckItemName:weatherCheckItemName" :key="item.value" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
                 <!--使用的算法模型-->
                 <el-form-item label="算法模型" prop="arithmetic">
-                    <el-select v-model="forecaseForm.arithmetic" placeholder="请选择算法模型">
+                    <el-select v-model="forecaseForm.arithmetic" placeholder="请选择算法模型" @change="getArithmetic">
                         <el-option v-for="item in forecaseForm.typeId=='1'?pondarithmetic:weatherarithmetic" :key="item.value" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
     props: {
         equipmentList: {
@@ -109,16 +108,18 @@ export default {
         getForecaseEquipment(value) {
             this.forecaseForm.typeId = value.typeId
             this.forecaseForm.equipmentName = value.equipmentName
+            this.forecaseForm.checkItemName = ''
+            this.forecaseForm.arithmetic = ''
         },
         sendfrom() {
             this.$refs.forecaseFormRef.validate(async valid => {
                 if(!valid) return false
                 this.$emit('getForecastData',this.forecaseForm)
-                this.$emit('showfrom',false)
-                this.$emit('showforecast',false)
-                setTimeout(() => {
-                this.$emit('showother',true)
-            },500)
+            //     this.$emit('showfrom',false)
+            //     this.$emit('showforecast',false)
+            //     setTimeout(() => {
+            //     this.$emit('showother',true)
+            // },500)
             })
         },
         // 清空表单
@@ -126,6 +127,22 @@ export default {
             for(var key in this.forecaseForm) {
                 this.forecaseForm[key] = ''
             }
+        },
+        getCheckItemName(value) {
+            if (this.forecaseForm.typeId === '') {
+                alert('请先选择设备')
+                this.forecaseForm.checkItemName = ''
+                return
+            }
+            this.forecaseForm.checkItemName = value
+        },
+        getArithmetic(value) {
+            if (this.forecaseForm.typeId === '') {
+                alert('请先选择设备')
+                this.forecaseForm.checkItemName = ''
+                return
+            }
+            this.forecaseForm.arithmetic = value
         }
     }
 }
