@@ -3,92 +3,31 @@
     <div class="box">
       <h2>智慧渔业云服务平台</h2>
       <!-- 表单区域 -->
-      <el-form :rules="loginFormRules" :model="loginForm">
-        <el-form-item prop="loginId">
-          <el-input
-            autofocus
-            type="text"
-            required=""
-            placeholder=" 账号"
-            v-model="loginForm.loginId"
-            prefix-icon="iconfont icon-xia"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input
-            type="password"
-            name=""
-            required=""
-            placeholder=" 密码"
-            v-model="loginForm.password"
-            prefix-icon="iconfont icon-lock"
-            show-password
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="captcha">
-          <el-input
-            type="text"
-            placeholder="请输入验证码"
-            v-model="loginForm.captcha"
-            class="captcha"
-          ></el-input>
-          <img :src="'data:image/png;base64,' + url" />
-        </el-form-item>
-        <el-row class="login">
-          <el-button type="success" @click="onSubmit">登录</el-button>
-        </el-row>
-        <el-row class="psd_reg">
-          <router-link to="/forgetPassword">找回密码</router-link>
-          <router-link to="/register">注册</router-link>
-        </el-row>
-      </el-form>
+      <Form :callback="handleSubmit"></Form>
+      <el-row class="psd_reg">
+        <router-link to="/forgetPassword">找回密码</router-link>
+        <router-link to="/register">注册</router-link>
+      </el-row>
     </div>
   </body>
 </template>
 
 <script>
+import Form from '../../components/wzp/user_info/Form'
 export default {
   data() {
     return {
-      url: "",
-      loginForm: {
-        captcha: "",
-        loginId: "210",
-        password: "123456",
-      },
-      // 这是表单的验证规则对象
-      loginFormRules: {
-        // 验证用户名是否合法
-        loginId: [
-          { required: true, message: "请输入用户ID", trigger: "blur" },
-          {
-            min: 1,
-            max: 10,
-            message: "长度在 1 到 10 个字符",
-            trigger: "blur",
-          },
-        ],
-        // 验证密码是否合法
-        password: [
-          { required: true, message: "请输入登录密码", trigger: "blur" },
-          {
-            min: 1,
-            max: 15,
-            message: "长度在 1 到 15 个字符",
-            trigger: "blur",
-          },
-        ],
-        // 验证验证码是否合法
-        captcha: [{ required: true, message: "请输入验证码", trigger: "blur" }],
-      },
       token: localStorage.getItem("token"),
     };
   },
-  mounted() {},
+  components:{
+    Form,
+  },
   methods: {
     // 向登录接口发起请求
-    onSubmit() {
-      this.$router.push("/digital-base");
+    handleSubmit(form) {
+      console.log('form: ', form);
+      // this.$router.push("/digital-base");
     },
   },
 };
@@ -106,7 +45,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    height: 390px;
+    height: 350px;
     width: 400px;
     padding: 40px;
     background: rgba(0, 0, 0, 0.8);
@@ -122,6 +61,7 @@ body {
     .el-input__inner {
       background-color: transparent;
       color: #fff;
+      font-size: 14px;
     }
     .el-form {
       .el-form-item {
@@ -130,7 +70,7 @@ body {
             border: none;
             border-bottom: 1px solid white;
             border-radius: unset;
-            font-size: larger;
+            font-size: 14px;
           }
         }
         .captcha {
@@ -155,11 +95,8 @@ body {
     }
   }
 }
-/deep/ .el-button--success {
+/deep/ .el-button.el-button--success.handleBtn{
   width: 100%;
-}
-.login {
-  text-align: center;
 }
 .psd_reg {
   color: #fff;
