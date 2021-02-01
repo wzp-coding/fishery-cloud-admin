@@ -2,125 +2,133 @@
   <div>
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item>对虾管理</el-breadcrumb-item>
-      <el-breadcrumb-item>虾苗进货</el-breadcrumb-item>
+      <el-breadcrumb-item>渔业管理</el-breadcrumb-item>
+      <el-breadcrumb-item>种苗进货</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
-    <TheCardAll>
-      <div slot="CardTitle">
-        <el-col :span="4">
-          <i class="el-icon-s-help"></i>
-          <span>虾苗进货</span>
-        </el-col>
-        <el-col style="width: 75px; float: right">
-          <download-excel
-            class="export-excel-wrapper"
-            name="虾苗进货信息导出.xls"
-          >
-            <el-button type="success">导出</el-button>
-          </download-excel>
-        </el-col>
-        <el-col style="float: right; width: 100px; margin-right: 10px">
-          <el-button type="primary">添加虾苗</el-button>
-        </el-col>
-      </div>
-      <el-table-column type="expand" slot="cardExpand">
-        <template slot-scope="props">
-          <el-form label-position="left" label-width="170px">
-            <el-row style="margin-bottom: 0">
-              <el-col :span="12">
-                <el-form-item label="虾苗批次名称" class="down-label">
+      <TheCardHead>
+        <div slot="CardTitle">
+          <el-col :span="4">
+            <i class="el-icon-s-help"></i>
+            <span>种苗进货</span>
+          </el-col>
+          <el-col style="width: 75px; float: right">
+            <download-excel
+              class="export-excel-wrapper"
+              name="种苗进货信息导出.xls"
+              :data="germchitInfoList"
+              :fields="json_fields"
+            >
+              <el-button type="success">导出</el-button>
+            </download-excel>
+          </el-col>
+          <el-col style="float: right; width: 100px; margin-right: 10px">
+            <el-button type="primary" @click="dialogVisible = true"
+              >种苗进货</el-button
+            >
+          </el-col>
+        </div>
+      </TheCardHead>
+      <el-table border stripe :data="germchitInfoList" row-key="id">
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-form label-position="left" label-width="170px">
+              <TheSeedPurchaseLayout>
+                <el-form-item
+                  label="种苗批次名称"
+                  class="down-label"
+                  slot="pre"
+                >
+                  <span>{{ props.row.creatorName }}</span>
+                </el-form-item>
+                <el-form-item label="种苗品种" class="down-label" slot="after">
                   <span>无</span>
                 </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="虾苗品种" class="down-label">
+              </TheSeedPurchaseLayout>
+              <TheSeedPurchaseLayout>
+                <el-form-item label="种苗产地" class="down-label">
                   <span>无</span>
                 </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row style="margin-bottom: 0">
-              <el-col :span="12">
-                <el-form-item label="虾苗产地" class="down-label">
-                  <span>无</span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="虾苗供应商" class="down-label">
-                  <span>无</span>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row style="margin-bottom: 0">
-              <el-col :span="12">
-                <el-form-item label="虾苗数量/尾" class="down-label">
-                  <span>无</span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="剩余数量/尾" class="down-label">
-                  <span>无</span>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row style="margin-bottom: 0">
-              <el-col :span="12">
-                <el-form-item label="产量/kg" class="down-label">
-                  <span>无</span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="创建者" class="down-label">
-                  <span>无</span>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row style="margin-bottom: 0">
-              <el-col :span="12">
-                <el-form-item label="创建时间" class="down-label">
-                  <span>无</span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="供应商联系电话" class="down-label">
-                  <span>无</span>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-form-item label="质检图片" class="down-label">
-              <div class="downBox">
-                <img :src="props.row.qualityInspection" alt />
-                <span class="mask">
-                  <span
-                    class="mask-icon1"
-                    @click="previewInfo(props.row.qualityInspection)"
-                  >
-                    <i class="el-icon-zoom-in"></i>
+              </TheSeedPurchaseLayout>
+              <el-row style="margin-bottom: 0">
+                <el-col :span="12">
+                  <el-form-item label="种苗产地" class="down-label">
+                    <span>无</span>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="种苗供应商" class="down-label">
+                    <span>无</span>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row style="margin-bottom: 0">
+                <el-col :span="12">
+                  <el-form-item label="种苗数量/尾" class="down-label">
+                    <span>无</span>
+                  </el-form-item>
+                </el-col>
+                <!-- <el-col :span="12">
+                  <el-form-item label="剩余数量/尾" class="down-label">
+                    <span>无</span>
+                  </el-form-item>
+                </el-col> -->
+              </el-row>
+              <el-row style="margin-bottom: 0">
+                <el-col :span="12">
+                  <el-form-item label="产量/kg" class="down-label">
+                    <span>无</span>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="创建者" class="down-label">
+                    <span>无</span>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row style="margin-bottom: 0">
+                <el-col :span="12">
+                  <el-form-item label="创建时间" class="down-label">
+                    <span>无</span>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="供应商联系电话" class="down-label">
+                    <span>无</span>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-form-item label="质检图片" class="down-label">
+                <div class="downBox">
+                  <img :src="props.row.qualityInspection" alt />
+                  <span class="mask">
+                    <span class="mask-icon1">
+                      <i class="el-icon-zoom-in"></i>
+                    </span>
                   </span>
-                </span>
-              </div>
-            </el-form-item>
-          </el-form>
-        </template>
-      </el-table-column>
-      <div slot="ordinary">
-        <el-table-column
-          prop="shrimpBatchName"
-          label="虾苗批次名称"
+                </div>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
+        <!-- <el-table-column
+          prop="creatorName"
+          label="种苗批次名称"
         ></el-table-column>
         <el-table-column
           prop="shrimpSpecies"
-          label="虾苗品种"
+          label="种苗品种"
         ></el-table-column>
         <el-table-column
-          prop="shrimpNumber"
-          label="虾苗数量/尾"
-        ></el-table-column>
-        <el-table-column
+          prop="purchaseAmount"
+          label="种苗购买数量/尾"
+        ></el-table-column> -->
+        <el-table-column prop="creatorName" label="操作人"></el-table-column>
+        <!-- <el-table-column
           prop="remainNumber"
           label="剩余数量/尾"
-        ></el-table-column>
-        <el-table-column prop="yield" label="产量kg"></el-table-column>
+        ></el-table-column> -->
+        <!-- <el-table-column prop="yield" label="产量kg"></el-table-column> -->
         <el-table-column label="操作" width="130px">
           <template slot-scope="scope">
             <!-- 修改按钮 -->
@@ -128,31 +136,108 @@
               type="primary"
               icon="el-icon-edit"
               size="mini"
-              @click="showEditDialog(scope.row.id)"
-              :disabled="!permissionVisable.traceability_shrimp_update"
+              @click="editEvent(scope.row.id)"
             ></el-button>
             <!-- 删除按钮 -->
-            <!-- type="danger": 红色警告按钮 -->
             <el-button
               type="danger"
               icon="el-icon-delete"
               size="mini"
-              @click="removeShrimpById(scope.row.id)"
-              :disabled="!permissionVisable.traceability_shrimp_delete"
+              @click="removePurchaseInfo(scope.row.id)"
             ></el-button>
           </template>
         </el-table-column>
-      </div>
-      <ThePagination slot="pagination"></ThePagination>
-    </TheCardAll>
+      </el-table>
+      <ThePagination
+        @fatherMethod="paginationChangeEvent"
+        :toPagination="paginationInfo"
+      ></ThePagination>
     </el-card>
+    <el-dialog :visible.sync="dialogVisible" width="27%" title="种苗进货" @close="puchaseClose">
+      <el-form :model="addPurchaseInfo" label-width="80px" ref="purchaseFormRef">
+        <el-form-item label="种苗品种" prop="germchitSpecies">
+          <el-select v-model="addPurchaseInfo.germchitId" placeholder="请选择">
+            <el-option
+              v-for="item in allSeedInfo"
+              :key="item.id"
+              :label="item.germchitSpecies"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="进货量" prop="purchaseAmount">
+          <el-input-number
+            controls-position="right"
+            :min="1"
+            v-model="addPurchaseInfo.purchaseAmount"
+          ></el-input-number>
+        </el-form-item>
+        <el-form-item label="操作者" prop="creatorName">
+          <el-input v-model="addPurchaseInfo.creatorName"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="addPurchaseInfoEvent"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
+    <el-dialog :visible.sync="editDialogVisible" title="修改订单信息" width="27%" >
+      <el-form :model="editPurchaseInfo" label-width="105px">
+        <el-form-item label="进货量" prop="purchaseAmount" >
+          <el-input-number controls-position="right" :min="1" v-model="editPurchaseInfo.purchaseAmount" ></el-input-number>
+        </el-form-item>
+        <el-form-item label="操作者" prop="creatorName" > 
+          <el-input v-model="editPurchaseInfo.creatorName" ></el-input>
+        </el-form-item>
+        <el-form-item label="修改进货时间" prop="gmtCreate" controls-position="right">
+          <el-date-picker
+            v-model="editPurchaseInfo.gmtCreate"
+            type="datetime"
+            placeholder="选择日期时间"
+          ></el-date-picker>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="editPurchaseInfoEvent"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
+    <!-- <TheDialogAll :toDialogInfo="toDialogPurchase" :FormInfo="addPurchaseInfo">
+    
+      <el-form-item label="虾苗品种" prop="shrimpSpecies">
+        <el-select
+          v-model="allPurchaseInfo.germchitSpecies"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in allPurchaseInfo"
+            :key="item.id"
+            :value="item.germchitBatchName"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="进货量">
+        <el-input-number
+          controls-position="right"
+          :min="1"
+          v-model="allPurchaseInfo.purchaseAmount"
+        ></el-input-number>
+      </el-form-item>
+      <el-form-item label="操作者">
+        <el-input v-model="allPurchaseInfo.creatorName"></el-input>
+      </el-form-item>
+      <span slot="footer" class="dialog-footer">
+        <el-button>取 消</el-button>
+        <el-button type="primary" @click="addPurchaseInfoEvent"
+          >确 定</el-button
+        >
+      </span>
+    </TheDialogAll> -->
     <!-- echarts视图 -->
-    <el-card style="margin-top: 1rem" v-show="!!ShrimpName">
-      <div style="display: flex">
-        <div ref="stockChart" style="width: 52%; height: 376px"></div>
-        <div ref="outChart" style="width: 45%; height: 376px"></div>
-      </div>
-    </el-card>
   </div>
 </template>
 
@@ -161,209 +246,189 @@ import TheCardAll from "../components/ccy/TheCardAll";
 import TheCardHead from "../components/ccy/TheCardHead";
 import ThePagination from "../components/ccy/ThePagination";
 import TheDialogAll from "../components/ccy/TheDialogAll";
+import TheSeedPurchaseLayout from "../components/ccy/TheSeedPurchaseLayout";
 import { mapState } from "vuex";
 export default {
   data() {
     return {
-      token: window.localStorage.getItem("token"),
-
-    appear:true,
-      // 现有的虾类产量
-      ShrimpOutValue: [],
-
-      // 现有的虾类品众
-      ShrimpName: [],
-
-      // 数值和名称
-      ShrimpValue: [],
-
-      // 基地编号
-      baseId: this.defines.baseId,
-
-      // 用于存放人员信息
-      personInfoList: [],
-
-      // 虾苗列表
-      ShrimpList: [],
-
-      // 虾苗品种列表
-      ShrimpSpeciesList: [],
-
-      // 查询到的虾苗批次信息对象，用于修改信息
-      editForm: {
+      dialogVisible: false,
+      editDialogVisible: false,
+      baseId: "1248910886228332544",
+      supplyInfo: {
+        // id:'',                //入库信息ID
+        baseId: "1248910886228332544",
+        gmtCreate: "", //创建时间
+        gmtModified: "", //修改时间
+        inWeight: "",
+        operatorIdentity: "", //操作者身份
+        operatorName: "", //操作者姓名
+        supplyId: "", //投入品ID
+        supplyName: "", //投入品名称
+        supplyTypeName: "", //投入品类型名字
+        warehouseNumber: "", //仓库号
+      },
+      //查询所有种苗订单信息
+      germchitInfoList: [],
+      germchitInfo: {},
+      add: {
+        germchitBatchName: "",
+      },
+      toDialogPurchase: {
+        title: "种苗进货",
+        dialogVisible: false,
+      },
+      //获取所有种苗信息
+      allSeedInfo: [],
+      //种苗进货请求对象
+      germchitSpecies: "",
+      addPurchaseInfo: {
+        germchitId: "",
+        creatorName: "",
+        baseId: "1248910886228332544",
+        purchaseAmount: 1,
+      },
+      paginationInfo: {
+        total: 0,
+        page: 1,
+        size: 3,
+      },
+      editPurchaseInfo: {
+        creatorName: "",
+        purchaseAmount: "",
+        gmtCreate: "",
+        gmtModified: "",
         id: "",
-        shrimpBatchName: "",
-        shrimpSpecies: "",
-        shrimpOrigin: "",
-        shrimpSupplier: "",
-        shrimpNumber: "",
-        yield: 0,
-        baseId: "",
-        createBy: "",
-        createDate: "",
-        remainNumber: 0,
-        // 质检图片
-        qualityInspection: "",
-        // 供应商电话
-        supplierPhone: "",
+        baseId: "1248910886228332544",
       },
-
-      // 添加虾苗批次的表单数据
-      addeForm: {
-        // 虾苗批次名称
-        shrimpBatchName: "无",
-        // 虾苗品种
-        shrimpSpecies: "",
-        // 虾苗产地
-        shrimpOrigin: "",
-        // 虾苗供应商
-        shrimpSupplier: "",
-        // 虾苗数量
-        shrimpNumber: "",
-        // 基地编号
-        baseId: "",
-        // 创建者
-        createBy: "",
-        // 创建时间
-        createDate: "",
-        // 剩余数量
-        remainNumber: "",
-        // 质检图片
-        qualityInspection: "",
-        // 供应商联系电话
-        supplierPhone: "",
-      },
-
-      // 添加表单的验证规则对象
-      addeFormRules: {
-        shrimpBatchName: [
-          { required: true, message: "请输入虾苗批次名称", trigger: "blur" },
-          {
-            min: 2,
-            max: 10,
-            message: "虾苗批次名称的长度在2~10个字符之间",
-            trigger: "blur",
-          },
-        ],
-        supplierPhone: [
-          { required: true, message: "请输入供应商联系电话", trigger: "blur" },
-          {
-            min: 2,
-            max: 15,
-            message: "供应商联系电话的长度在2~15个字符之间",
-            trigger: "blur",
-          },
-        ],
-        shrimpSpecies: [
-          { required: true, message: "请输入虾苗品种", trigger: "blur" },
-        ],
-        shrimpOrigin: [
-          { required: true, message: "请输入虾苗产地", trigger: "blur" },
-        ],
-        shrimpSupplier: [
-          { required: true, message: "请输入虾苗供应商", trigger: "blur" },
-          {
-            min: 2,
-            max: 10,
-            message: "虾苗供应商名称的长度在2~10个字符之间",
-            trigger: "blur",
-          },
-        ],
-        shrimpNumber: [
-          { required: true, message: "请输入虾苗数量", trigger: "blur" },
-        ],
-        createBy: [
-          { required: true, message: "请输入创建者", trigger: "blur" },
-        ],
-      },
-
-      // 修改表单的验证规则对象
-      editFormRules: {
-        shrimpBatchName: [
-          { required: true, message: "请输入虾苗批次名称", trigger: "blur" },
-          {
-            min: 2,
-            max: 10,
-            message: "虾苗批次名称的长度在2~10个字符之间",
-            trigger: "blur",
-          },
-        ],
-        shrimpSpecies: [
-          { required: true, message: "请输入虾苗品种", trigger: "blur" },
-        ],
-        shrimpOrigin: [
-          { required: true, message: "请输入虾苗产地", trigger: "blur" },
-        ],
-        shrimpSupplier: [
-          { required: true, message: "请输入虾苗供应商", trigger: "blur" },
-          {
-            min: 2,
-            max: 10,
-            message: "虾苗供应商名称的长度在2~10个字符之间",
-            trigger: "blur",
-          },
-        ],
-        shrimpNumber: [
-          { required: true, message: "请输入虾苗数量", trigger: "blur" },
-        ],
-        createBy: [
-          { required: true, message: "请输入创建者", trigger: "blur" },
-        ],
-        createDate: [
-          { required: true, message: "请输入创建时间", trigger: "blur" },
-        ],
-        yield: [{ required: true, message: "请输入产量", trigger: "blur" }],
-      },
-      // 放大图片路径
-      previewImg: "",
-
-      // 控制放大面板的显示和隐藏
-      isPreview: false,
-
-      // 控制添加虾苗的开关
-      addDialogVisible: false,
-
-      // 控制修改虾苗信息对话框的显示和隐藏
-      aditDialogVisible: false,
-
-      // 用于控制分页的当前页码和条数
-      pageInfo: {
-        // 当前页码
-        pagenum: 1,
-        // 每页显示条数
-        pagesize: 4,
-      },
-      // 总条数
-      total: 0,
-
-      // 导出表格信息
-      json_fields: {
-        虾苗批次名称: "shrimpBatchName",
-        虾苗品种: "shrimpSpecies",
-        虾苗产地: "shrimpOrigin",
-        虾苗供应商: "shrimpSupplier",
-        供应商电话: "supplierPhone",
-        "虾苗数量/尾": "shrimpNumber",
-        "剩余数量/尾": "remainNumber",
-        产量kg: "yield",
-        创建者: "createBy",
-        创建时间: "createDate",
-      },
-
-      json_meta: [
-        [
-          {
-            " key ": " charset ",
-            " value ": " utf- 8 ",
-          },
-        ],
-      ],
     };
   },
   components: {
     TheCardAll,
     ThePagination,
     TheDialogAll,
+    TheCardHead,
+    TheSeedPurchaseLayout,
+  },
+  created() {
+    // this.getSupplyInfo();
+    this.getGermchitInfo();
+    this.getGermchitPurchaseInfo();
+    this.getAllPurchaseInfo();
+    // germchitManagerController
+  },
+  methods: {
+    //获取投入品信息
+    // getSupplyInfo() {},
+    //根据基地获取种苗订单信息
+    async getGermchitPurchaseInfo() {
+      const { data: res } = await this.$germchitManagerController.get(
+        `/order/${this.baseId}/${this.paginationInfo.size}/${this.paginationInfo.page}`
+      );
+      console.log(res);
+      this.paginationInfo.total = res.data.total;
+      this.germchitInfoList = res.data.records;
+      // this.germchitInfoList.forEach((e)=>{
+      //   console.log(e);
+      // })
+      // console.log(this.germchitInfoList);
+      // for (let i = 0; i < this.germchitInfoList.length; i++) {
+      //   this.getGermchitInfo(this.germchitInfoList[i].germchitId, i);
+      //   console.log(i);
+      // }
+    },
+    // 分页组件事件
+    paginationChangeEvent(size, page) {
+      this.paginationInfo.size = size;
+      this.paginationInfo.page = page;
+      this.getGermchitPurchaseInfo();
+    },
+    
+    //根据种苗ID获取种苗信息
+    async getGermchitInfo(id, index) {
+      console.log(id);
+      const { data: res } = await this.$germchit.get(`${id}`);
+      console.log(res);
+    },
+    //获取所有商家种苗信息
+    async getAllPurchaseInfo() {
+      const { data: res } = await this.$germchit.get();
+      this.allSeedInfo = res.data;
+      console.log(res);
+      // germchitSpecies
+    },
+    timeFormat(date) {
+      var y = date.getFullYear();
+      var m = date.getMonth() + 1;
+      m = m < 10 ? "0" + m : m;
+      var d = date.getDate();
+      d = d < 10 ? "0" + d : d;
+      var h = date.getHours();
+      h = h < 10 ? "0" + h : h;
+      var minute = date.getMinutes();
+      minute = minute < 10 ? "0" + minute : minute;
+      var second = date.getSeconds();
+      second = second < 10 ? "0" + second : second;
+      return y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second;
+    },
+    async addPurchaseInfoEvent() {
+      console.log(this.addPurchaseInfo);
+      const { data: res } = await this.$germchitManagerController.post(
+        "purchase",
+        this.addPurchaseInfo
+      );
+      console.log(res);
+      this.$message.success("进货成功");
+      this.dialogVisible = false
+    },
+    // 删除订单
+    async removePurchaseInfo(id) {
+      console.log(id);
+      const confirmResult = await this.$confirm(
+        "此操作将永久删除该订单信息, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+        // .catch 用于捕获错误返回给confirmResult
+      ).catch((err) => {
+        return err;
+      });
+      // 如果用户确认删除，则返回值为字符串 confirm
+      // 如果用户取消了删除， 则返回值为字符串 cancel
+      if (confirmResult !== "confirm") {
+        // this.$message.info: 灰色提示框
+        return this.$message.info("已取消删除");
+      }
+      const { data: res } = await this.$germchitManagerController.delete(
+        `/order/${id}`
+      );
+      console.log(res);
+      this.$message.success("删除虾苗信息成功！！");
+      this.getGermchitPurchaseInfo();
+    },
+    //修改订单信息
+    editEvent(id){
+      this.editDialogVisible = true
+      this.editPurchaseInfo.id = id
+      console.log(this.editPurchaseInfo);
+    },
+    async editPurchaseInfoEvent() {
+      this.editPurchaseInfo.gmtCreate = this.timeFormat(
+        this.editPurchaseInfo.gmtCreate
+      );
+      let date = new Date()
+      this.editPurchaseInfo.gmtModified = this.timeFormat(date)
+      console.log(this.editPurchaseInfo);
+      const {data: res} = await this.$germchitManagerController.put(`order`,this.editPurchaseInfo)
+      console.log(res);
+      this.editDialogVisible = false
+      this.getGermchitPurchaseInfo()
+    },
+    puchaseClose(){
+      this.$refs.purchaseFormRef.resetFields()
+    }
   },
 };
 </script>

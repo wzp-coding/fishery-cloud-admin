@@ -2,14 +2,16 @@
   <div>
     <el-dialog
     class="dialog"
+    :width="toDialogInfo.width"
       @close="addDialogClosed"
       :title="toDialogInfo.title"
       :visible.sync="toDialogInfo.dialogVisible"
     >
       <!--主体区域-->
+      <slot name="forAdd"></slot>
       <el-form
         :model="FormInfo"
-        label-width="110px"
+        label-width="100px"
         :rules="toDialogInfo.FormRules"
         ref="addeFormRef"
       >
@@ -29,6 +31,7 @@ export default {
       title: String,
       dialogVisible: Boolean,
       FormRules: Object,
+      width:String
     },
     FormInfo: {
       type: Object,
@@ -46,7 +49,8 @@ export default {
   methods: {
     //表单验证
     setWidth(){
-      console.log(document.getElementsByClassName('dialog'));
+      // console.log(document.getElementsByClassName('dialog'));
+      // console.log(this.FormInfo);
     },
     dialogVerification() {
       this.$refs['addeFormRef'].validate((valid) => {

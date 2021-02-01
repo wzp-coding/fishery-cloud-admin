@@ -12,11 +12,14 @@
             <i class="el-icon-s-order"></i>
             <span>鱼苗信息</span>
           </el-col>
+          <el-col style="float: right; width: 100px; margin-right: 10px">
+            <el-button type="primary" @click="addGermchit">添加种苗</el-button>
+          </el-col>
         </div>
       </TheCardHead>
-      <el-table border stripe :data="allSeedInfo">
-        <el-table-column type="expand">
-          <template slot-scope="props">
+      <el-table border stripe :data="allSeedInfo" >
+        <el-table-column type="expand" >
+          <template slot-scope="props" >
             <el-form
               label-position="left"
               inline
@@ -385,7 +388,8 @@ export default {
       this.$message.success("删虾苗信息成功！！");
       this.getSeedInfoList(3, 1);
     },
-
+    //添加种苗信息
+    addGermchit(){},
     purchaseView(id) {
       this.toDialogPurchase.dialogVisible = true;
       this.purchaseInfo.germchitId = id;
@@ -405,6 +409,10 @@ export default {
       second = second < 10 ? "0" + second : second;
       return y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second;
     },
+    ev1(){
+      // alert('11')
+      console.log('111');
+    }
   },
 };
 </script>

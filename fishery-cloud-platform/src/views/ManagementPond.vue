@@ -29,6 +29,7 @@
             :key="item.pondId"
             @getPondList="eventRefresh"
             v-show="reRender"
+            @fatherMethod="getPondList"
           ></pond>
         </div>
       </TheCardHead>
@@ -38,6 +39,7 @@
       ></ThePagination>
     </el-card>
     <!-- @click="dialogFormVisible = false" -->
+    <!-- 添加池塘对话框 -->
     <TheDialogAll
       :toDialogInfo="addPondInfo"
       ref="addeFormRef"
@@ -45,26 +47,30 @@
       page="currentPage"
       size="currentSize"
     >
-      <el-form-item label="池塘名称" prop="name">
-        <el-input v-model="addeForm.name"></el-input>
-      </el-form-item>
-      <el-form-item label="池塘类型" prop="type">
-        <el-input v-model="addeForm.type"></el-input>
-      </el-form-item>
-      <el-form-item label="池塘面积/m²" prop="area">
-        <el-input-number
-          v-model="addeForm.area"
-          controls-position="right"
-          :min="1"
-        ></el-input-number>
-      </el-form-item>
-      <el-form-item label="池塘深度/m" prop="depth">
-        <el-input-number
-          v-model="addeForm.depth"
-          controls-position="right"
-          :min="1"
-        ></el-input-number>
-      </el-form-item>
+      <div slot="forAdd">
+        <el-form :model="addeForm" :rules="addPondInfo.FormRules">
+          <el-form-item label="池塘名称" prop="name">
+            <el-input v-model="addeForm.name"></el-input>
+          </el-form-item>
+          <el-form-item label="池塘类型" prop="type">
+            <el-input v-model="addeForm.type"></el-input>
+          </el-form-item>
+          <el-form-item label="池塘面积/m²" prop="area">
+            <el-input-number
+              v-model="addeForm.area"
+              controls-position="right"
+              :min="1"
+            ></el-input-number>
+          </el-form-item>
+          <el-form-item label="池塘深度/m" prop="depth">
+            <el-input-number
+              v-model="addeForm.depth"
+              controls-position="right"
+              :min="1"
+            ></el-input-number>
+          </el-form-item>
+        </el-form>
+      </div>
       <span slot="footer">
         <el-row :gutter="80" class="elrow">
           <el-col :span="5" :offset="9">
@@ -80,7 +86,8 @@
         </el-row>
       </span>
     </TheDialogAll>
-    <TheDialogAll :toDialogInfo="editPondInfo"> </TheDialogAll>
+    <!-- 修改池塘信息对话框 -->
+    <!-- <TheDialogAll :toDialogInfo="editPondInfo"></TheDialogAll> -->
     <!-- <TheDialogAll :toDialogInfo="farmInfo"></TheDialogAll>  -->
     <!-- <TheDialogAll :toDialogInfo="adviseInput" >
 
@@ -188,18 +195,24 @@ export default {
   },
   created() {
     this.getPondList(this.addPondInfo.size, 1); //获取池塘信息
-    // this.createPond();
+
     this.test();
   },
   methods: {
     async getPondList(size, page) {
+      console.log("获取池塘信息");
+      // this.reRender= false;
       const { data: res } = await this.$pondController.get(
         `getInfo/${this.baseId}/${size}/${page}`
       );
       if (res.statusCode !== 2000) {
         console.log(res);
         this.pondList = res.data.records;
+        for (let i = 0; i < this.pondList.length; i++) {
+          this.pondList[i].pondType = this.pondList[i].type;
+        }
         this.addPondInfo.total = res.data.total;
+        this.reRender = true;
       } else {
         console.log("查询池塘信息失败");
       }
@@ -216,7 +229,7 @@ export default {
       console.log(this.addeForm);
       this.addPondInfo.baseId = "1248910886228332544";
       const { data: res } = await this.$pondController.post(
-        `/create}`,
+        `create}`,
         this.addeForm
       );
       if (res.statusCode !== 20000) {
@@ -253,6 +266,20 @@ export default {
     // 监听捕捞对话框的关闭事件,关闭时对表单进行重置
     catchDialogClosed() {
       this.$refs.catchFormRef.resetFields();
+    },
+    timeFormat(date) {
+      var y = date.getFullYear();
+      var m = date.getMonth() + 1;
+      m = m < 10 ? "0" + m : m;
+      var d = date.getDate();
+      d = d < 10 ? "0" + d : d;
+      var h = date.getHours();
+      h = h < 10 ? "0" + h : h;
+      var minute = date.getMinutes();
+      minute = minute < 10 ? "0" + minute : minute;
+      var second = date.getSeconds();
+      second = second < 10 ? "0" + second : second;
+      return y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second;
     },
   },
 };

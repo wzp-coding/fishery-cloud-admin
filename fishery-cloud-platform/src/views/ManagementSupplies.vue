@@ -23,17 +23,17 @@
         <TheCardAll>
           <div slot="CardTitle">
             <el-col style="width: 100px; float: right; margin-left: 10px">
-              <el-button type="primary">农资入库</el-button>
+              <el-button type="primary" @click="toDialogAddInfo.dialogVisible = true">农资入库</el-button>
             </el-col>
-            <el-col style="width: 100px; float: right">
-              <el-select @change="typeChange1">
+            <!-- <el-col style="width: 100px; float: right">
+              <el-select >
                 <el-option> </el-option>
               </el-select>
-            </el-col>
+            </el-col> -->
           </div>
           <div slot="ordinary">
             <el-table-column type="index"> </el-table-column>
-            <el-table-column
+            <!-- <el-table-column
               prop="suppliesName"
               label="农资名称"
             ></el-table-column>
@@ -57,7 +57,7 @@
                   scope.row.remainNumber
                 }}</el-tag>
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column label="操作" width="180px">
               <template slot-scope="scope">
                 <!-- 修改按钮 -->
@@ -65,10 +65,7 @@
                   type="primary"
                   icon="el-icon-edit"
                   size="mini"
-                  @click="inEditDialog(scope.row.id)"
-                  :disabled="
-                    !permissionVisable.traceability_agricultural_update
-                  "
+                  
                 ></el-button>
                 <!-- 出库按钮 -->
                 <el-tooltip
@@ -81,10 +78,7 @@
                     type="warning"
                     icon="el-icon-upload2"
                     size="mini"
-                    @click="deliveryDialog(scope.row.id)"
-                    :disabled="
-                      !permissionVisable.traceability_agricultural_select
-                    "
+                    
                   ></el-button>
                 </el-tooltip>
                 <!-- 删除按钮 -->
@@ -93,10 +87,7 @@
                   type="danger"
                   icon="el-icon-delete"
                   size="mini"
-                  @click="removeSuppliesInById(scope.row.id)"
-                  :disabled="
-                    !permissionVisable.traceability_agricultural_delete
-                  "
+                  
                 ></el-button>
               </template>
             </el-table-column>
@@ -105,10 +96,10 @@
         </TheCardAll>
       </el-tab-pane>
       <el-tab-pane label="出库记录">
-        <TheCardAll>
+        <TheCardAll :toCardInfo="toCardInfoOut">
           <div slot="CardTitle">
             <el-col style="width: 100px; float: right; margin-bottom: 10px">
-              <el-select v-model="selectType2" @change="typeChange2">
+              <!-- <el-select v-model="selectType2" @change="typeChange2">
                 <el-option
                   v-for="item in type"
                   :key="item.value"
@@ -116,11 +107,11 @@
                   :value="item.value"
                 >
                 </el-option>
-              </el-select>
+              </el-select> -->
             </el-col>
           </div>
           <div slot="ordinary">
-            <el-table-column type="index"> </el-table-column>
+            <!-- <el-table-column type="index"> </el-table-column>
             <el-table-column
               prop="suppliesName"
               label="农资名称"
@@ -138,7 +129,7 @@
             <el-table-column
               prop="outNumber"
               label="出库数量(kg)"
-            ></el-table-column>
+            ></el-table-column> -->
             <el-table-column label="操作" width="180px">
               <template slot-scope="scope">
                 <!-- 修改按钮 -->
@@ -146,10 +137,6 @@
                   type="primary"
                   icon="el-icon-edit"
                   size="small"
-                  @click="outEditDialog(scope.row.id)"
-                  :disabled="
-                    !permissionVisable.traceability_agricultural_update
-                  "
                 ></el-button>
                 <!-- 删除按钮 -->
                 <!-- type="danger": 红色警告按钮 -->
@@ -157,10 +144,7 @@
                   type="danger"
                   icon="el-icon-delete"
                   size="small"
-                  @click="removeSuppliesOutById(scope.row.id)"
-                  :disabled="
-                    !permissionVisable.traceability_agricultural_delete
-                  "
+                
                 ></el-button>
               </template>
             </el-table-column>
@@ -168,6 +152,33 @@
         </TheCardAll>
       </el-tab-pane>
     </el-tabs>
+    <TheDialogAll :toDialogInfo="toDialogAddInfo">
+      <el-form-item label="操作者身份" prop="operatorIdentity">
+        <el-input v-model="addInfo.operatorIdentity"></el-input>
+      </el-form-item>
+      <el-form-item label="操作者姓名" prop="operatorName">
+        <el-input v-model="addInfo.operatorName"></el-input>
+      </el-form-item>
+      <el-form-item label="投入品类别" prop="supplyTypeName">
+        <el-input v-model="addInfo.supplyTypeName"></el-input>
+      </el-form-item>
+      <el-form-item label="请输入仓库号" prop="warehouseNumber">
+        <el-input v-model="addInfo.warehouseNumber"></el-input>
+      </el-form-item>
+      <!-- <el-form-item label="">
+        <el-input v-model=""></el-input>
+      </el-form-item>
+      <el-form-item label="">
+        <el-input v-model=""></el-input>
+      </el-form-item> -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="toDialogAddInfo.dialogVisible = false">取消</el-button>
+        <el-button type="primary" 
+        @click="addBaseSupply"
+          >确 定</el-button
+        >
+      </span>
+    </TheDialogAll>
   </div>
 </template>
 
@@ -182,6 +193,48 @@ export default {
     ThePagination,
     TheDialogAll,
   },
+  data(){
+    return {
+      baseId:'1248910886228332544',
+      baseSupplyList:[],
+      paginationInfo:{
+        page:1,
+        size:3,
+        total:0
+      },
+      addInfo:{
+        baseId:1248910886228332544,
+        gmtCreate:'',
+        inWeight:'',
+        operatorIdentity:'',
+        operatorName:'',
+        supplyId:'',
+        supplyName:'',
+        supplyTypeName:'',
+        warehouseNumber:''
+      },
+      toDialogAddInfo:{
+        title:'农资入库',
+        width:'23%',
+        dialogVisible:false,
+        FormInfo:this.addInfo
+      },
+      //传入组件的出库记录
+      toCardInfoOut:[]
+    }
+  },
+  created(){
+    this.getBaseSupplyInfo()
+  },
+  methods:{
+    async getBaseSupplyInfo(){
+      const {data: res} = await this.$baseSupply.get(`in/${this.baseId}/${this.paginationInfo.size}/${this.paginationInfo.page}`)
+      console.log(res);
+    },
+    async addBaseSupply(){
+      console.log(this.addInfo);
+    }
+  }
 };
 </script>
 
