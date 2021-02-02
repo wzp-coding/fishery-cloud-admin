@@ -13,7 +13,7 @@
             <span>鱼苗信息</span>
           </el-col>
           <el-col style="float: right; width: 100px; margin-right: 10px">
-            <el-button type="primary" @click="addGermchit">添加种苗</el-button>
+            <el-button type="primary" >添加种苗</el-button>
           </el-col>
         </div>
       </TheCardHead>
@@ -144,10 +144,10 @@
     </el-card>
     <TheDialogAll :toDialogInfo="toDialogEditInfo" :FormInfo="editInfo">
       <TheLayout>
-        <el-form-item label="种苗批次名称" slot="pre" prop="germchitBatchName">
+        <el-form-item label-width="120px" label="种苗批次名称" slot="pre" prop="germchitBatchName">
           <el-input v-model="editInfo.germchitBatchName"></el-input>
         </el-form-item>
-        <el-form-item label="种苗品种" slot="after" prop="germchitSpecies">
+        <el-form-item label-width="100px" label="种苗品种" slot="after" prop="germchitSpecies">
           <el-select v-model="editInfo.germchitSpecies" placeholder="请选择">
             <el-option
               v-for="item in allSeedSpecise"
@@ -159,7 +159,7 @@
         </el-form-item>
       </TheLayout>
       <TheLayout>
-        <el-form-item label="种苗产地" slot="pre" prop="germchitOrigin">
+        <el-form-item label-width="120px" label="种苗产地" slot="pre" prop="germchitOrigin">
           <el-input v-model="editInfo.germchitOrigin"></el-input>
         </el-form-item>
         <el-form-item
@@ -171,7 +171,7 @@
         </el-form-item>
       </TheLayout>
       <TheLayout>
-        <el-form-item label="放苗时间" slot="pre" prop="gmtModified">
+        <el-form-item label-width="120px" label="放苗时间" slot="pre" prop="gmtModified">
           <el-date-picker
             v-model="editInfo.gmtModified"
             type="datetime"
@@ -184,6 +184,7 @@
       </TheLayout>
       <TheLayout>
         <el-form-item
+        label-width="120px"
           label="供应商电话"
           slot="pre"
           prop="germchitSupplierPhone"
@@ -263,6 +264,7 @@ export default {
         title: "修改信息",
         dialogVisible: false,
         addeForm:this.editInfo,
+        width:'50%',
         FormRules: {
           germchitBatchName: [
             { required: true, message: "请输入批次名称", trigger: "blur" },
@@ -308,6 +310,7 @@ export default {
       toDialogPurchase: {
         title: "订单信息",
         dialogVisible: false,
+        width:'20%'
       },
       purchaseInfo: {
         creatorName: "", //操作者
@@ -322,6 +325,9 @@ export default {
     this.getSeedInfoSpecies();
   },
   methods: {
+    test(){
+      console.log(this.$store.state);
+    },
     //获取所有种苗信息 分页
     async getSeedInfoList(size, page) {
       const { data: res } = await this.$germchit.get(`${size}/${page}`);
