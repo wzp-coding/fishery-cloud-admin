@@ -3,11 +3,12 @@
     <div class="box" :style="boxHeight">
       <h2>智慧渔业云服务平台</h2>
       <el-tabs v-model="activeName" @tab-click="handleTabClick" :stretch="true">
-      <!-- 表单区域 -->
+        <!-- 表单区域 -->
         <el-tab-pane label="密码登录" name="passwordLogin">
           <Form
             :callback="handleSubmit"
             :options="['phone', 'password', 'captcha']"
+            ref="passwordLogin"
           ></Form>
         </el-tab-pane>
         <el-tab-pane label="短信登录" name="messageLogin">
@@ -25,6 +26,7 @@
 
 <script>
 import Form from "../../components/wzp/user_info/Form";
+import { mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -40,6 +42,7 @@ export default {
     Form,
   },
   methods: {
+    ...mapMutations(['setUserInfo']),
     handleTabClick(tab) {
       // console.log("tab: ", tab);
       this.activeName = tab.name;
@@ -51,7 +54,7 @@ export default {
     },
     // 向登录接口发起请求
     async handleSubmit(form) {
-      console.log("form: ", form);
+      // console.log("form: ", form);
       let { phoneCode, phone, captcha, password } = form;
       let url;
       if (this.activeName === "passwordLogin") {
@@ -59,13 +62,15 @@ export default {
       } else {
         url = `/user/loginByPhone?phone=${phone}&code=${phoneCode}`;
       }
-      const { data: res } = await this.$authority.post(url);
-      console.log("res: ", res);
-      if(res.statusCode === 20000){
+      const { data: res, headers } = await this.$authority.post(url);
+      // console.log("res: ", res);
+      if (res.statusCode === 20000) {
+        localStorage.setItem("token", headers.token);
+        this.$store.commit('setUserInfo', res.data)
         this.elMessage.success(res.message);
         this.$router.push("/digital-base");
-      }else{
-        // console.log('this.Message: ', this.Message);
+      } else {
+        this.$refs.passwordLogin.getCaptcha();
         this.elMessage.error(res.message);
       }
     },

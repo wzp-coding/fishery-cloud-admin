@@ -178,10 +178,10 @@ export default {
 
     // 短信验证码
     let phoneCode = (
-      <el-form-item label="验证码" prop="phoneCode">
+      <el-form-item label="验证码" prop="phoneCode" inline={true}>
         <el-input
           placeholder="短信验证码"
-          style="width: 110px"
+          style="width: 100px"
           vModel={this.form.phoneCode}
         ></el-input>
         <el-button
@@ -332,7 +332,7 @@ export default {
     // 根据手机号发送验证码
    sendCode() {
       this.$refs.form.validateField("phone", async (err)=> {
-        // console.log(err);
+        console.log(err);
         if (!err) {
           // console.log("发送验证码");
           // 类型：1是修改资料，2是登录，3是注册
@@ -361,7 +361,7 @@ export default {
      this.url  = res.data.img;
     }
   },
-  created() {
+  mounted() {
     this.getCaptcha();
   },
 };

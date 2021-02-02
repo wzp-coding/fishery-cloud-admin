@@ -38,6 +38,12 @@ export default {
       const url = `/user/register?phone=${phone}&password=${password}&code=${phoneCode}`;
       const { data: res } = await this.$authority.post(url);
       console.log("res: ", res);
+      if(res.statusCode === 20000){
+        this.elMessage.success(res.message);
+        this.$router.push('/login');
+      }else{
+        this.elMessage.error(res.message);
+      }
     },
   },
 };

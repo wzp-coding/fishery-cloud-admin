@@ -1,5 +1,9 @@
-import Vue from 'vue';
-// const req =
+import axios from 'axios';
+
+(async function getPermission() {
+    const { data: res } = await axios.get('http://119.23.218.131:9102/function');
+    console.log('res: ', res);
+})()
 const permissionList = [
     {
         "id": "1324928826706341888",
@@ -563,6 +567,7 @@ const permissionList = [
         ]
     }
 ]
+
 const oneLevel = new Map();
 const twoevel = new Map();
 
