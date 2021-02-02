@@ -141,12 +141,12 @@ export default {
     // 获取虾苗信息
     async getShrimpById(id) {
       // 调用根据ID查询用户信息接口
-      const { data: res } = await this.$managementOrder.get(id);
+      const { data: res } = await this.$managementOrder.get('order/'+id);
       console.log("this.$managementOrder--->",this.$managementOrder)
-      if (res.code !== 20000) {
+      if (res.statusCode !== 20000) {
         return this.$message.error("查询该虾苗信息失败！！");
       }
-      this.form = res.data || {};
+      this.form = res.data;
       console.log("this.form: ", this.form);
     },
     // 展示物流信息的对话框

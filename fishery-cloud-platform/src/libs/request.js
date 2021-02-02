@@ -24,7 +24,7 @@ const baseURLObject = {
     waterData:"http://8.129.175.45:57110/waterData/",
     monitor:"http://8.129.175.45:57110/monitor/",
     plant: "http://119.23.218.131:9111/",
-    managementOrder:"http://119.23.218.131:9107/logistics/order/",
+    managementOrder:"http://119.23.218.131:9107/logistics/",
 
 }
 

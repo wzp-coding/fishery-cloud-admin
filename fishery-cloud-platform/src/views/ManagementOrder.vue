@@ -103,7 +103,7 @@
                 type="warning"
                 icon="el-icon-tickets"
                 size="mini"
-                @click="toShowShrimpInfo(scope.row.shrimpId)"
+                @click="toShowShrimpInfo('1353643502189223938')"
               ></el-button>
             </el-tooltip>
 
@@ -554,16 +554,16 @@ export default {
     // // 展示修改的对话框
     async showEditDialog(id) {
       // 调用根据ID查询用户信息接口
-      const { data: res } = await this.$originAxios.get("/logistics/order/" + "{"+id+"}");
-      if (res.code !== 20000) {
-        return this.$message.error("查询该订单信息失败！！");
-      }
-      console.log(res);1
-      this.editForm = res.data;
-      // this.getShrimpRemainById(this.editForm.shrimpId);
-      this.constWeight = res.data.weight;
-      console.log(this.editForm)
-      this.aditDialogVisible = true;
+      // const { data: res } = await this.$originAxios.get("/logistics/order/" + "{"+id+"}");
+      // if (res.code !== 20000) {
+      //   return this.$message.error("查询该订单信息失败！！");
+      // }
+      // console.log(res);
+      // this.editForm = res.data;
+      // // this.getShrimpRemainById(this.editForm.shrimpId);
+      // this.constWeight = res.data.weight;
+      // console.log(this.editForm)
+      // this.aditDialogVisible = true;
     },
 
     
