@@ -2,39 +2,36 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-// 导入样式(element-ui和自己定义的global.css)
+// 导入组件库和样式(element-ui和自己定义的global.css)
 import './plugins/element'
 import './assets/css/global.css'
 // 导入字体图标
 import './assets/fonts/iconfont.css'
 
+// 封装axios并且把包挂载到原型对象上
+import axiosObject from './util/request'
+Vue.use(axiosObject)
+
 // 安装vue-cookies
 import VueCookies from 'vue-cookies'
 Vue.use(VueCookies)
 
+// 导入全局注册的自定义组件
+import './util/components'
+
 // 安装自定义指令
-import Directives from "./libs/directives/index"
+import Directives from "./util/directives/index"
 Vue.use(Directives)
 
-// 封装axios并且把包挂载到原型对象上
-import axiosObject from './libs/request'
-Vue.use(axiosObject)
-
 // 安装lodash
-import lodash from './libs/lodash';
+import lodash from './util/lodash';
 Vue.use(lodash);
 
 // 安装echarts并且全局挂载
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
 
-// 导出表格
-import JsonExcel from 'vue-json-excel'
-Vue.component('downloadExcel', JsonExcel)
 
-// 拖拽组件
-import draggable from 'vuedraggable'
-Vue.component('Draggable', draggable)
 
 new Vue({
   router,

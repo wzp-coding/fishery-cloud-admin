@@ -6,29 +6,54 @@
         <span>智慧渔业云服务平台</span>
       </div>
       <div>
-        <img class="avatar" src="../../assets/131.jpg" />
-        <el-dropdown  @command="loginOut">
+        <el-avatar size="large" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+        <el-dropdown @command="loginOut">
           <span class="el-dropdown-link" @click="showUserInfo">
             个人中心<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>退出登录</el-dropdown-item>
+            <el-dropdown-item style="width:60px">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </el-header>
+    <el-dialog
+      title="个人信息"
+      :visible.sync="dialogVisible"
+      width="60%"
+      :before-close="beforeClose"
+    >
+      <InfoUser></InfoUser>
+    </el-dialog>
   </div>
 </template>
 <script>
+import InfoUser from "../wzp/InfoUser";
 export default {
+  data() {
+    return {
+      dialogVisible: false,
+    };
+  },
+  components: {
+    InfoUser,
+  },
   methods: {
     // 退出登录操作
     loginOut() {
       // localStorage.setItem("token", "");
       this.$router.push("/login");
     },
-    showUserInfo(){
-    }
+    showUserInfo() {
+      this.dialogVisible = !this.dialogVisible;
+    },
+    beforeClose(done) {
+      this.$confirm("是否保存修改内容后关闭？")
+        .then((_) => {
+          done();
+        })
+        .catch((_) => {});
+    },
   },
 };
 </script>
@@ -54,6 +79,9 @@ export default {
       // 图标与字体距离
       margin-left: 15px;
     }
+  }
+  .el-dropdown-link {
+    cursor: pointer;
   }
   .avatar {
     width: 40px;

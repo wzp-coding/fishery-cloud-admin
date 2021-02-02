@@ -1,4 +1,5 @@
 <template>
+
   <div>
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -65,19 +66,19 @@
           label="收货地址"
         ></el-table-column>
         <el-table-column label="二维码" width="150">
-          <template slot-scope="scope">
+          <template slot-scope="">
             <!-- 物流二维码按钮 -->
             <el-button
               type="primary"
               size="mini"
-              @click="logisticsOrcode(scope.row.adultShrimpId)"
+              @click="logisticsOrcode()"
               >物流</el-button
             >
             <!-- 溯源二维码按钮 -->
             <el-button
               type="success"
               size="mini"
-              @click="originOrcode(scope.row.adultShrimpId)"
+              @click="originOrcode()"
               >溯源</el-button
             >
           </template>
@@ -118,7 +119,7 @@
                 icon="el-icon-truck"
                 size="mini"
                 @click="
-                  toShowLogisticsInfo(scope.row.adultShrimpId)
+                  toShowLogisticsInfo(adultShrimpId)
                 "
               ></el-button>
             </el-tooltip>
@@ -148,144 +149,88 @@
     </el-card>
 
     <!-- 修改订单信息的对话框 -->
-    <el-dialog
-      title="修改订单信息"
-      :visible.sync="aditDialogVisible"
-      width="30%"
-      @close="aditDialogClosed"
+    <Show-change
+    :edit-form-rules="editFormRules"
+    :edit-form="editForm"
+    :adit-dialog-visible="aditDialogVisible"
+    :remain="remain"
+    :personInfoList="personInfoList"
+    :constWeight="constWeight"
+    :options="options"
+    @changenotifyParent="changenotifyParent"
+    @getOrderList="getOrderList"
     >
-      <!-- 内容主题区 -->
-      <el-form
-        :model="editForm"
-        :rules="editFormRules"
-        ref="editFormRef"
-        label-width="120px"
-      >
-        <el-form-item label="客户名" prop="customerName">
-          <el-input v-model="editForm.customerName"></el-input>
-        </el-form-item>
-        <el-form-item label="客户类型" prop="customerType">
-          <el-select v-model="editForm.customerType" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="金额/元" prop="money">
-          <el-input-number
-            v-model="editForm.money"
-            controls-position="right"
-            :min="0"
-          ></el-input-number>
-        </el-form-item>
-        <el-form-item label="重量/kg" prop="weight">
-          <el-input-number
-            v-model="editForm.weight"
-            controls-position="right"
-            :min="0"
-            :max="remain + constWeight"
-          ></el-input-number>
-        </el-form-item>
-        <el-form-item label="操作人" prop="createBy">
-          <el-select v-model="editForm.createBy" placeholder="请选择">
-            <el-option
-              v-for="(item, i) in personInfoList"
-              :key="i"
-              :value="item.name"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="创建日期" prop="createDate">
-          <el-date-picker
-            v-model="editForm.createDate"
-            type="datetime"
-            placeholder="选择日期时间"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="收货地址" prop="receiptAddress">
-          <el-input v-model="editForm.receiptAddress"></el-input>
-        </el-form-item>
-      </el-form>
-      <!-- 页脚 -->
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="aditDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editOrderInfo">确 定</el-button>
-      </span>
-    </el-dialog>
+    </Show-change>
 
     <!-- 展示虾苗信息 或者 物流信息-->
-    <show-info
+    <Show-info
       :title="title"
       :is-logistics="isLogistics"
       :dialog-visible="dialogVisible"
       :id="showInfoId"
       @notifyParent="ChangeDialogVisible"
-    ></show-info>
+    ></Show-info>
 
-    <!-- 物流二维码 -->
-    <el-dialog
-      title="物流二维码"
-      width="30%"
-      :visible.sync="isShowLCode"
-      @close="closeCode(1)"
+<!-- 展示物流 或者 溯源二维码 -->
+    <Show-orinfo
+    :ortitle="orTitle"
+    :is-show-code="isShowCode"
+    :adult-shrimp-id="adultShrimpId"
+    :options="options"
+    @notifyParent2="closeCode"
+    
     >
-      <div id="lcode" ref="lcode" style="margin: auto"></div>
-      <p style="text-align: center; font-size: 20px">
-        溯源码 {{ adultShrimpId }}
-      </p>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="isShowLCode = false">取 消</el-button>
-        <el-button type="primary" @click="toLcodeWeb(adultShrimpId)"
-          >确 定</el-button
-        >
-      </div>
-    </el-dialog>
-
-    <!-- 溯源二维码 -->
-    <el-dialog
-      title="溯源二维码"
-      width="30%"
-      :visible.sync="isShowOCode"
-      @close="closeCode(2)"
-    >
-      <div id="ocode" ref="ocode" style="margin: auto"></div>
-      <p style="text-align: center; font-size: 20px">
-        溯源码 {{ adultShrimpId }}
-      </p>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="isShowOCode = false">取 消</el-button>
-        <el-button type="primary" @click="toOcodeWeb(adultShrimpId)"
-          >确 定</el-button
-        >
-      </div>
-    </el-dialog>
+    </Show-orinfo>
+   
   </div>
 </template>
 
 <script>
 import QRCode from "qrcodejs2";
-import ShowInfo from "../components/cgx/ShowInfo";
+import ShowInfo from   "../components/cgx/ManagementOrder/ShowInfo/ShowInfo1";
+import ShowOrinfo from "../components/cgx/ManagementOrder/ShowOrcode/ShowOrcode2";
+import ShowChange from "../components/cgx/ManagementOrder/ModifyInformation/ShowChange";
 export default {
   components: {
     ShowInfo,
+    ShowOrinfo,
+    ShowChange,
   },
   data() {
     return {
+      // 假数据
+      data:{
+        baseId: "1248910886228332544",
+        createBy: "李老板",
+        fishingStatus: "1",
+        fishingTime: "2020-09-10 22:04:12",
+        id: "1304057615399129088",
+        inputNum: 100,
+        pondId: "1304057557677117440",
+        remain: 400,
+        seedlingTime: "2020-09-10 22:02:17",
+        shrimpBatchName: "斑节A1",
+        shrimpOrigin: "中国湛江",
+        shrimpSpecies: "斑节对虾",
+        shrimpSupplier: "广东海洋大学",
+        specification: "30~40",
+        yield: 1000,
+      },
       // 传递给子组件
       title: "虾苗信息",
       isLogistics: false,
       showInfoId: "",
       dialogVisible: false,
       // -----------------------------------
-      token: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxMzE5OTg5MjAwMjg1MTcxNzEyIiwic3ViIjoi6ICB5p2_IiwiaWF0IjoxNjExMTIyOTE4LCJyb2xlcyI6InVzZXIiLCJleHAiOjE2MTExODMzOTh9.Pg7aUlzkg1ZJ7QsSwdyJDqe5bfJyWMXnWgvHVjZCVcQ",
+      //传给二维码组件
+      orTitle:"",
+      isShowCode:false,
+      // 当前点击订单的城虾id
+      adultShrimpId: "1304076777332805632",
+      // -----------------------------------
+      token: window.localStorage.getItem("token"),
       // 基地编号
-      baseId: "1248910886228332544",
+      baseId: 1248910886228332544,
       // 是否显示物流二维码页面
       isShowLCode: false,
       // 是否显示溯源二维码页面
@@ -299,7 +244,7 @@ export default {
       },
 
       // 总条数
-      total: 0,
+      total: 8,
 
       // 控制修改订单信息对话框的显示和隐藏
       aditDialogVisible: false,
@@ -308,7 +253,7 @@ export default {
       constWeight: 0,
 
       // 保存虾苗剩余量
-      remain: 0,
+      remain: 400,
 
       // 修改表单的验证规则对象
       editFormRules: {
@@ -353,18 +298,307 @@ export default {
       ],
 
       // 用于存放人员信息
-      personInfoList: [],
+      personInfoList: [
+       
+      ],
 
       // 订单列表
-      OrderList: [],
+      OrderList: [{
+        addressLatitude: "22.27534",
+        addressLongitude: "114.16546",
+        adultShrimpId: "1304076777332805632",
+        baseId: "1316658083052785664",
+        createBy: "张三",
+        createDate: "2020-09-10 23:18:25",
+        customerName: "长江水产",
+        customerType: "企业",
+        id: "1304076779169910784",
+        logisticsId: "1304076778272329728",
+        money: 1000,
+        receiptAddress: "中国香港特别行政区香港特别行政区中西区花旗銀行大廈",
+        shrimpBatchName: "斑节A1",
+        shrimpId: "1304057615399129088",
+        weight: 100,
+      },
+      {
+        addressLatitude: "22.27534",
+        addressLongitude: "114.16546",
+        adultShrimpId: "1304076777332805632",
+        baseId: "1316658083052785664",
+        createBy: "张三",
+        createDate: "2020-09-10 23:18:25",
+        customerName: "长江水产",
+        customerType: "企业",
+        id: "1304076779169910784",
+        logisticsId: "1304076778272329728",
+        money: 1000,
+        receiptAddress: "中国香港特别行政区香港特别行政区中西区花旗銀行大廈",
+        shrimpBatchName: "斑节A1",
+        shrimpId: "1304057615399129088",
+        weight: 100,
+      },{
+        addressLatitude: "22.27534",
+        addressLongitude: "114.16546",
+        adultShrimpId: "1304076777332805632",
+        baseId: "1316658083052785664",
+        createBy: "张三",
+        createDate: "2020-09-10 23:18:25",
+        customerName: "长江水产",
+        customerType: "企业",
+        id: "1304076779169910784",
+        logisticsId: "1304076778272329728",
+        money: 1000,
+        receiptAddress: "中国香港特别行政区香港特别行政区中西区花旗銀行大廈",
+        shrimpBatchName: "斑节A1",
+        shrimpId: "1304057615399129088",
+        weight: 100,
+      },{
+        addressLatitude: "22.27534",
+        addressLongitude: "114.16546",
+        adultShrimpId: "1304076777332805632",
+        baseId: "1316658083052785664",
+        createBy: "张三",
+        createDate: "2020-09-10 23:18:25",
+        customerName: "长江水产",
+        customerType: "企业",
+        id: "1304076779169910784",
+        logisticsId: "1304076778272329728",
+        money: 1000,
+        receiptAddress: "中国香港特别行政区香港特别行政区中西区花旗銀行大廈",
+        shrimpBatchName: "斑节A1",
+        shrimpId: "1304057615399129088",
+        weight: 100,
+      }
+      ],
 
       // 修改：查询到的订单信息
-      editForm: {},
+      editForm: {
+        addressLatitude: "22.27534",
+        addressLongitude: "114.16546",
+        adultShrimpId: "1304076777332805632",
+        baseId: "1316658083052785664",
+        createBy: "张三",
+        createDate: "2020-09-10 23:18:25",
+        customerName: "长江水产",
+        customerType: "企业",
+        id: "1304076779169910784",
+        logisticsId: "1304076778272329728",
+        money: 1000,
+        receiptAddress: "中国香港特别行政区香港特别行政区中西区花旗銀行大廈",
+        shrimpBatchName: "斑节A1",
+        shrimpId: "1304057615399129088",
+        weight: 100,
+      },
 
       
-      // 当前点击订单的城虾id
-      adultShrimpId: "",
+
     };
+  },
+  // created() {
+  //   this.setNode();
+  // },
+  methods: {
+
+    // 展示虾苗信息时要传递给子组件的信息
+    toShowShrimpInfo(id) {
+    this.title = "虾苗信息";
+      this.isLogistics = false;
+      this.showInfoId = id;
+      this.dialogVisible = true;
+    },
+    // 展示物流信息时要传递给子组件的信息
+    toShowLogisticsInfo(id) {
+      this.title = "物流信息";
+      this.isLogistics = true;
+      this.showInfoId = id;
+      this.dialogVisible = true;
+    },
+    // 展示信息子组件关闭时触发改变dialogVisible
+    ChangeDialogVisible() {
+      this.dialogVisible = !this.dialogVisible;
+    },
+    // -----------------------------------------------
+    // 页面刷新 再次获取baseId
+    // setNode() {
+    //   if (this.baseId !== "") {
+    //     this.getOrderList();
+    //     this.getPersonInfoList();
+    //   } else {
+    //     const loading = this.$loading({
+    //       lock: true,
+    //       text: "Loading",
+    //       spinner: "el-icon-loading",
+    //       background: "rgba(0, 0, 0, 0.7)",
+    //     });
+    //     setTimeout(() => {
+    //       this.baseId = this.defines.baseId;
+    //       this.getOrderList();
+    //       this.getPersonInfoList();
+    //       loading.close();
+    //     }, 1000);
+    //   }
+    // },
+    // 物流二维码弹窗
+    logisticsOrcode() {
+      this.adultShrimpId = "1304076777332805632";
+      this.orTitle="物流二维码"
+      this.isShowCode = true;
+      this.$nextTick(() => {
+        this.createlcode();
+      });
+    },
+    // 溯源二维码弹窗
+    originOrcode() {
+      this.adultShrimpId = "1304076777332805632";
+      this.orTitle="溯源二维码"
+      this.isShowCode = true;
+      this.$nextTick(() => {
+        this.createocode();
+      });
+    },
+    // // 前往判断是否收货页面
+    toLcodeWeb(id) {
+      this.$router.push({
+        path: "/IsArriveLcode",
+        query: { id: id },
+      });
+    },
+    // 前往判断是否收货页面
+    toOcodeWeb(id) {
+      this.$router.push({
+        path: "/IsArriveOcode",
+        query: { id: id },
+      });
+    },
+    // 生成物流二维码
+    createlcode() {
+      new QRCode("orcode", {
+        width: 250,
+        height: 250,
+      }).makeCode(
+        "http://106.75.132.85:9002/#/IsArriveLcode?id=" + this.adultShrimpId
+      );
+    },
+    // 生成溯源二维码
+    createocode() {
+      new QRCode("orcode", {
+        width: 250,
+        height: 250,
+      }).makeCode(
+        "http://106.75.132.85:9002/#/IsArriveOcode?id=" + this.adultShrimpId
+      );
+    },
+    // 关闭弹框,清除已经生成的二维码
+    closeCode() {
+      this.isShowCode = false;
+      console.log("isShowCode1---->",this.isShowCode)
+    },
+    // 监听pagesize(每页显示条数)改变事件
+    handleSizeChange(newSize) {
+      this.pageInfo.pagesize = newSize;
+      this.getOrderList();
+    },
+    // 改变修改信息对话框触发时改变aditDialogVisible
+    changenotifyParent(){
+      this.aditDialogVisible = false;
+    },
+    // 监听页码值改变的事件
+    handleCurrentChange(newPage) {
+      this.pageInfo.pagenum = newPage;
+      this.getOrderList();
+    },
+
+    // 获取人员信息
+    // async getPersonInfoList() {
+    //   const { data: res } = await this.$http.get(
+    //     `${this.$limit}/user/getBaseMember`,
+    //     {
+    //       headers: {
+    //         Authorization: this.token,
+    //       },
+    //     }
+    //   );
+    //   this.personInfoList = res.data;
+    //   console.log(this.personInfoList);
+    // },
+
+    // // 获取订单信息
+    async getOrderList() {
+      const { data: res } = await this.$http.post(
+        `/order/search/${this.pageInfo.pagenum}/${this.pageInfo.pagesize}`,
+        {
+          baseId: this.baseId,
+        }
+      );
+      console.log("执行出错:",res);
+      if (res.code !== 20000) {
+        return this.$message.error("获取虾苗订单列表失败！！");
+      }
+      this.OrderList = res.data.rows;
+      this.total = res.data.total;
+      console.log("OrderList:",OrderList)
+      console.log("total:",total)
+    },
+
+    // // 获取虾苗剩余量
+    async getShrimpRemainById(id) {
+      // 调用根据ID查询用户信息接口
+      console.log(id);
+      const { data: res } = await this.$originAxios.get("/shrimp/" + id);
+      if (res.code !== 20000) {
+        return this.$message.error("查询该虾苗剩余量失败！！");
+      }
+      this.remain = res.data.remain;
+    },
+
+    // // 展示修改的对话框
+    async showEditDialog(id) {
+      // 调用根据ID查询用户信息接口
+      const { data: res } = await this.$originAxios.get("/logistics/order/" + "{"+id+"}");
+      if (res.code !== 20000) {
+        return this.$message.error("查询该订单信息失败！！");
+      }
+      console.log(res);1
+      this.editForm = res.data;
+      // this.getShrimpRemainById(this.editForm.shrimpId);
+      this.constWeight = res.data.weight;
+      console.log(this.editForm)
+      this.aditDialogVisible = true;
+    },
+
+    
+
+    // // 根据id删除对应的订单信息
+    // async removeOrderById(id) {
+    //   // 前提：在elementUI中挂载confirm
+    //   // （提示消息，标题文本，｛确认按钮的文本，取消按钮的文本，提示的类型｝）
+    //   const confirmResult = await this.$confirm(
+    //     "此操作将永久删除该订单信息, 是否继续?",
+    //     "提示",
+    //     {
+    //       confirmButtonText: "确定",
+    //       cancelButtonText: "取消",
+    //       type: "warning",
+    //     }
+    //     // .catch 用于捕获错误返回给confirmResult
+    //   ).catch((err) => {
+    //     return err;
+    //   });
+    //   // 如果确认删除，则返回值为字符串 confirm
+    //   // 如果取消了删除， 则返回值为字符串 cancel
+    //   if (confirmResult !== "confirm") {
+    //     // this.$message.info: 灰色提示框
+    //     return this.$message.info("已取消删除");
+    //   }
+    //   const { data: res } = await this.$http.delete("/order/" + id);
+    //   if (res.code !== 20000) {
+    //     return this.$message.error("删除订单信息失败");
+    //   }
+    //   this.$message.success("删除订单信息成功！！");
+    //   this.getOrderList();
+    // },
+
+    
   },
 };
 </script>
@@ -383,3 +617,4 @@ export default {
   height: 480px;
 }
 </style>
+>>>>>>> c8aba1c1744b85dbb07ac9c209d617647127392c

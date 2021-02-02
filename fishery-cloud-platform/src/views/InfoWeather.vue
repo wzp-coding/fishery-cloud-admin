@@ -1,10 +1,7 @@
 <template>
   <div>
     <!--面包区域区域——start-->
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item>设备管理</el-breadcrumb-item>
-      <el-breadcrumb-item>气象设备</el-breadcrumb-item>
-    </el-breadcrumb>
+    <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
     <!--面包区域区域——end-->
 
     <!--卡片视图区域——start-->
@@ -38,7 +35,7 @@
               设备数量：{{totalequipment}}台
             </el-col>
             <el-col :span="9" :push="3">
-              <SearchDevice :equipmentList="equipmentList" @searchdate="searchdate = $event"></SearchDevice>
+              <SearchDevice @getequipmentList="getequipmentList" @searchfor="searchfor($event)" :SearchType="SearchType"></SearchDevice>
             </el-col>
           </el-row>
           <!--设备信息列表区域——start-->
@@ -97,14 +94,18 @@ import InfoWeatherAddDevice from '../components/yzc/InfoWeather/InfoWeatherAddDe
 import SearchDevice from '../components/yzc/SearchDevice.vue'
 // 引入分页组件
 import Pagination from '../components/yzc/pagination'
+import Breadcrumb from '../components/public_components/Breadcrumb'
 export default {
   components: {
     InfoWeatherAddDevice,
     SearchDevice,
-    Pagination
+    Pagination,
+    Breadcrumb
   },
   data() {
     return {
+      breadcrumbs:["设备管理","气象设备"],
+      SearchType:'气象设备',
       typeId:'0',
       baseId:'1248910886228332544',
       //---------------设备信息列表相关属性——start
@@ -160,6 +161,14 @@ export default {
     this.getpondList()
   },
   methods: {
+    // 搜索
+    searchfor(info) {
+      if(info !== []) {
+        this.equipmentList = info
+      }else {
+        this.getequipmentList()
+      }
+    },
     // 获取设备信息
     async getequipmentList() {
       const {data:res} = await this.$equipment.get(`/findAllByBaseId/${this.baseId}/${this.typeId}/${this.page_index}/${this.page_size}`)

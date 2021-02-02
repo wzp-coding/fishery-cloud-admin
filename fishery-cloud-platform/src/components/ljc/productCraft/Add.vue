@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 添加区域开始 -->
-    <el-button type="primary" @click="addDialogVisible = true">{{
+    <el-button type="primary" @click="addDialogVisible = true" style="margin-top: 20px">{{
       formTitle
     }}</el-button>
     <!-- 添加区域结束 -->
@@ -11,17 +11,29 @@
       :title="formTitle"
       :visible.sync="addDialogVisible"
       @close="addDialogClosed"
+      width="40%"
     >
-      <el-form :model="addFrom" ref="addFromRef" :rules="formRules">
-        <el-form-item :label="labels.productName" prop="productName">
-          <el-input v-model="addFrom.productName"></el-input>
+      <el-form
+        :model="addFrom"
+        ref="addFromRef"
+        :rules="formRules"
+        label-width="100px"
+        label-position="left"
+        :hide-required-asterisk="true"
+      >
+        <el-form-item :label="labels.sort" prop="sort">
+          <el-input-number
+            v-model="addFrom.sort"
+            controls-position="right"
+            :min="1"
+          ></el-input-number>
         </el-form-item>
-        <el-form-item :label="labels.germchitId" prop="germchitId">
-          <el-select v-model="addFrom.germchitId">
+        <el-form-item :label="labels.craftId" prop="craftId">
+          <el-select v-model="addFrom.craftId">
             <el-option
-              v-for="item in germchitIds"
+              v-for="item in craftInfos"
               :key="item.id"
-              :label="item.name"
+              :label="item.craftName"
               :value="item.id"
             >
             </el-option>
@@ -37,18 +49,19 @@
   </div>
 </template>
 <script>
-import ljc from "../product/product";
+import ljc from "../productCraft/productCraft";
 export default {
   props: {
-    processingFactoryId: {},
+    productId: {},
     labels: {},
+    craftInfo: {},
   },
   data() {
     return {
       model: new ljc(this),
 
       // 表单名称
-      formTitle: "添加加工产品",
+      formTitle: "添加加工工艺",
 
       // 控制添加表单的显示与隐藏
       addDialogVisible: false,
@@ -58,23 +71,22 @@ export default {
     };
   },
   computed: {
-    //获取种苗编号列表
-    germchitIds() {
-      return this.model.germchitIds;
-    },
-
     // 验证规则
     formRules() {
       return this.model.formRules;
     },
+
+    craftInfos() {
+      return this.craftInfo[0];
+    },
   },
   created() {},
   methods: {
-    /* 添加加工厂开始 */
+    /* 添加开始 */
     addInfo() {
       this.$refs.addFromRef.validate(async (val) => {
         if (!val) return false;
-        this.addFrom.processingFactoryId = this.processingFactoryId;
+        this.addFrom.productId = this.productId;
         const { data: res } = await this.model.addInfo(this.addFrom);
         if (res.statusCode == 20000) {
           this.$message.success(res.message);
@@ -83,7 +95,7 @@ export default {
         this.addDialogVisible = false;
       });
     },
-    /* 添加加工厂结束 */
+    /* 添加结束 */
 
     /* 监听窗口关闭事件开始 */
     addDialogClosed() {

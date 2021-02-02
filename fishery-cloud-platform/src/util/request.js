@@ -12,8 +12,9 @@ import get from 'lodash/get';
  * 如果一定需要原生纯净的axios,那么可以通过this.$originAxios来调用
  */
 const baseURLObject = {
-    auth:"http://106.75.154.40:9003",
-    user:"http://106.75.154.40:9003/user",
+    authority:"http://119.23.218.131:9102/authority",
+    captcha:"http://119.23.218.131:9102/captcha",
+    function:"http://119.23.218.131:9102/function",
     management:"http://119.23.218.131:9103",
     base:'http://119.23.218.131:9103/base',
     pondController:"http://119.23.218.131:9103/pond",   //池塘模块
@@ -25,8 +26,13 @@ const baseURLObject = {
     equipment:"http://8.129.175.45:57110/equipment",
     warning:"http://8.129.175.45:57110/warning/",
     meteorologicalData:"http://8.129.175.45:57110/meteorologicalData/",
-    waterData:"http://8.129.175.45:57110/waterData/"
+    waterData:"http://8.129.175.45:57110/waterData/",
+    monitor:"http://8.129.175.45:57110/monitor/",
+    plant: "http://119.23.218.131:9111/",
+    managementOrder:"http://119.23.218.131:9107/logistics/order/",
+    message:"http://119.23.218.131:9109/message/"
 }
+
 // 异常拦截处理器
 const errorHandler = (error) => {
     const status = get(error, 'response.status');
@@ -55,8 +61,9 @@ const errorHandler = (error) => {
  * 需要添加请求头请在下面自己加
  */
 const axiosObject = {};
-for (const key in baseURLObject){
-    console.table({ [key]: baseURLObject[key] })
+const axiosArray = [];
+for (const key in baseURLObject) {
+    axiosArray[key] = baseURLObject[key]
     axiosObject[key] = axios.create({
         // API 请求的默认前缀
         baseURL: baseURLObject[key],
@@ -68,12 +75,12 @@ for (const key in baseURLObject){
         // 让每个请求携带自定义 token 请根据实际情况自行修改
         config.headers = {
             Authorization: `bearer ${localStorage.getItem('token')}`,
-            xip: window.localStorage.getItem("Ip")
+            xip: localStorage.getItem("Ip")
         }
         return config;
     }, errorHandler)
 }
-
+console.table(axiosArray);
 // 添加一个纯净的axios
 axiosObject.originAxios = axios.create();
 

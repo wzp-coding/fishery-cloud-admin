@@ -13,14 +13,14 @@
         <!--标题——end-->
 
         <!--查询区域(主要内容)——start-->
-        <el-row>
-            <el-card class="box-card">
-                <el-row>
+        <el-row style="margin-bottom:0px">
+            <el-card shadow="hover" style="border:0">
+                <el-row style="margin-bottom:0px">
 
                     <!--查询表单区域——start-->
                     <el-col :span="19" :push="5">
                         <el-form :model="searchForm" :rules="searchFormRules" ref="searchFormRef" label-width="100px">
-                            <el-row>
+                            <el-row style="margin-bottom:0px">
                                 <el-col :span="8">
                                     <el-form-item label="设备名称" prop="equipmentName">
                                         <el-select v-model="searchForm.equipmentId" value-key="id" placeholder="请选择要查询的设备">
@@ -44,7 +44,7 @@
                 <!--查询表单区域——end-->
 
                 <!--查询结果表格——start-->
-                <el-row>
+                <el-row style="margin-bottom:0">
                     <WeatherData ref="weather" v-show="ShowWeatherData"></WeatherData>
                     <WaterData ref="water" v-show="ShowWaterData"></WaterData>
                 </el-row>

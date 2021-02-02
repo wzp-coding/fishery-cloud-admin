@@ -1,14 +1,11 @@
 <template>
     <div>
         <!-- 面包屑导航区域——start -->
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item>设备管理</el-breadcrumb-item>
-            <el-breadcrumb-item>气象设备</el-breadcrumb-item>
-            <el-breadcrumb-item>气象预警阀值</el-breadcrumb-item>
-        </el-breadcrumb>
+        <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
         <!-- 面包屑导航区域——end -->
 
         <el-card class="box-card">
+
         <!--头部区域 标题and按钮 start-->
         <el-row :gutter="30" class="globalHeader" style="margin-bottom:20px;padding-bottom:45px">
         <el-col :span="16">
@@ -30,42 +27,23 @@
         <el-dialog title="水质预警" :visible.sync="addDialogVisible" width="35%" @close="addDialogClosed">
             
             <!--表单内容——start-->
-            <el-form :model="addeForm" ref="addeFormRef" label-width="100px">
-                <el-form-item label="气温 ℃">
-                    <el-input v-model="addeForm.airTemperature"></el-input>
-                </el-form-item>
-                <el-form-item label="电能 mV">
-                    <el-input v-model="addeForm.electricEnergy"></el-input>
-                </el-form-item>
-                <el-form-item label="工作状态">
-                    <el-select v-model="addeForm.equipmentWorking" placeholder="请选择">
-                        <el-option v-for="item in status" :key="item.value" :label="item.text" :value="item.value">
-                        </el-option>
+            <el-form :model="addeForm" :rules="addeFormRules" ref="addeFormRef" label-width="100px">
+                <el-form-item label="通道的名称">
+                    <el-select v-model="addeForm.channelName" placeholder="请选择通道的名称">
+                        <el-option v-for="item in equipmentOptions" :key="item.value" :label="item.value" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="湿度 %">
-                    <el-input v-model="addeForm.humidity"></el-input>
+                <el-form-item label="单位" prop="unit">
+                    <el-input v-model="addeForm.unit"></el-input>
                 </el-form-item>
-                <el-form-item label="光照 Lux">
-                    <el-input v-model="addeForm.illumination"></el-input>
+                <el-form-item label="最大值" prop="maxValues">
+                    <el-input v-model="addeForm.maxValues"></el-input>
                 </el-form-item>
-                <el-form-item label="雨量 mm">
-                    <el-input v-model="addeForm.rain"></el-input>
+                <el-form-item label="最小值" prop="minValues">
+                    <el-input v-model="addeForm.minValues"></el-input>
                 </el-form-item>
-                <el-form-item label="土湿 %">
-                    <el-input v-model="addeForm.soilMoisture"></el-input>
-                </el-form-item>
-                <el-form-item label="土温 ℃">
-                    <el-input v-model="addeForm.soilTemperature"></el-input>
-                </el-form-item>
-                <el-form-item label="风向">
-                    <el-input v-model="addeForm.windDirect"></el-input>
-                </el-form-item>
-                <el-form-item label="风速 m/s">
-                    <el-input v-model="addeForm.windSpeed"></el-input>
-                </el-form-item>
-                <el-form-item label="采集时间">
-                    <el-date-picker v-model="addeForm.acquisitionTime" type="datetime" placeholder="选择时间"></el-date-picker>
+                <el-form-item label="更新时间">
+                    <el-date-picker v-model="addeForm.updateDate" type="datetime" placeholder="选择更新时间"></el-date-picker>
                 </el-form-item>
             </el-form>
             <!--表单内容——end-->
@@ -80,39 +58,39 @@
         </el-dialog>
         <!--添加阈值的对话框——end-->
 
-        <!--修改水质预警阈值设置对话框——start-->
-        <el-dialog title="编辑信息" :visible.sync="editDialogVisible" width="35%" @close="aditDialogClosed">
+        <!--修改气象预警阈值设置对话框——start-->
+        <el-dialog title="编辑信息" :visible.sync="editDialogVisible" width="35%">
 
-            <!--表单内容——start -->
-            <el-form :model="addeForm" :rules="addeFormRules" ref="addeFormRef" label-width="100px">
+            <!--表单内容——start-->
+            <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="100px">
                 <el-form-item label="通道的名称">
-                    <el-select v-model="addeForm.channelName" placeholder="请选择通道的名称">
+                    <el-select v-model="editForm.channelName" placeholder="请选择通道的名称">
                         <el-option v-for="item in equipmentOptions" :key="item.value" :label="item.value" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="单位" prop="unit">
-                    <el-input v-model="addeForm.unit"></el-input>
+                    <el-input v-model="editForm.unit"></el-input>
                 </el-form-item>
-                <el-form-item label="最大值" prop="maxValue">
-                    <el-input v-model="addeForm.maxValue"></el-input>
+                <el-form-item label="最大值" prop="maxValues">
+                    <el-input v-model="editForm.maxValues"></el-input>
                 </el-form-item>
-                <el-form-item label="最小值" prop="minValue">
-                    <el-input v-model="addeForm.minValue"></el-input>
+                <el-form-item label="最小值" prop="minValues">
+                    <el-input v-model="editForm.minValues"></el-input>
                 </el-form-item>
                 <el-form-item label="更新时间">
-                    <el-date-picker v-model="addeForm.updateDate" type="datetime" placeholder="选择更新时间"></el-date-picker>
+                    <el-date-picker v-model="editForm.updateDate" type="datetime" placeholder="选择更新时间"></el-date-picker>
                 </el-form-item>
             </el-form>
             <!--表单内容——end-->
 
             <!--底部按钮区域——start-->
             <span slot="footer" class="dialog-footer">
-                <el-button @click="editDialogVisible = false">取 消</el-button>
+                <el-button @click="aditDialogClosed()">取 消</el-button>
                 <el-button type="primary" @click="editwarningInfo">确 定</el-button>
             </span>
             <!--底部按钮区域——end-->
         </el-dialog>
-        <!--修改水质预警阈值设置对话框——end-->
+        <!--修改气象预警阈值设置对话框——end-->
 
         <!--预警列表区域——start-->
         <el-table :data="warningList" border stripe>
@@ -124,15 +102,15 @@
                 </template>
             </el-table-column>
             <el-table-column prop="channelName" label="通道的名称" width="180"></el-table-column>
-            <el-table-column prop="maxValue" label="最大值" width="120"></el-table-column>
-            <el-table-column prop="minValue" label="最小值" width="120"></el-table-column>
+            <el-table-column prop="maxValues" label="最大值" width="120"></el-table-column>
+            <el-table-column prop="minValues" label="最小值" width="120"></el-table-column>
             <el-table-column prop="unit" label="单位" width="120"></el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope" width="200px">
                     <div>
                     <!--状态按钮-->
                     <span style="margin:15px">
-                        <el-switch v-model="scope.row.isUse" active-value='1' inactive-value='0' active-color="#13ce66" inactive-color="#ff4949" active-text="启动" inactive-text="关闭" ></el-switch>
+                        <el-switch v-model="scope.row.isUse" active-value='1' inactive-value='0' active-color="#13ce66" inactive-color="#ff4949" active-text="启动" inactive-text="关闭" @change="changeCode(scope.row)"></el-switch>
                     </span>
                     <!--修改参数按钮-->
                     <span style="margin:15px">
@@ -158,58 +136,83 @@
 <script>
 // 引入分页组件
 import Pagination from '../components/yzc/pagination'
+import Breadcrumb from '../components/public_components/Breadcrumb'
 export default {
     components: {
-        Pagination
+        Pagination,
+        Breadcrumb
     },
     data() {
         return {
-            baseId:'1248910886228332544',
-            // -----------关于添加阈值对话框的属性——start
-            // 该设备的id
+            breadcrumbs:["设备管理","气象设备","气象预警阈值"],
             equipmentId: '',
+            // -----------关于添加阈值对话框的属性——start
             // 控制对话框的显示隐藏 默认隐藏
             addDialogVisible: false,
-            // 气象设备的：电能，光照，风速，风向，气温，湿度，雨量，土温，土湿
+            // 气象设备的参数
             equipmentOptions: [
-                {
-                   value: '电能'
-                },
-                {
-                    value: '光照'
-                },
-                {
-                   value: '风速'
-                },
-                {
-                   value: '风向'
-                },
-                {
-                   value: '气温'
-                },
-                {
-                   value: '湿度'
-                },
-                {
-                   value: '雨量'
-                },
-                {
-                   value: '土温'
-                },
-                {
-                   value: '土湿'
-                }
+                {value: '气温'},
+                {value: '电能'},
+                {value: '湿度'},
+                {value: '光照'},
+                {value: '雨量'},
+                {value: '土湿'},
+                {value: '土温'},
+                {value: '风向'},
+                {value: '风速'},
             ],
             // 添加表单的数据
-            addeForm: {},
+            addeForm: {
+                channelName: '',
+                unit: '',
+                maxValues: '',
+                minValues: '',
+                updateDate: '',
+                isUse: '0',
+            },
+            // 添加表单的验证规则对象
+            addeFormRules: {
+                channelName: [
+                    { required: true, message: '请输入通道的名称', trigger: 'blur' }
+                ],
+                maxValues: [
+                    { required: true, message: '请输入最大值', trigger: 'blur' }
+                ],
+                minValues: [
+                    { required: true, message: '请输入最小值', trigger: 'blur' }
+                ],
+                unit: [
+                    { required: true, message: '请输入单位', trigger: 'blur' }
+                ],
+                updateDate: [
+                    { required: true, message: '请选择时间', trigger: 'blur' }
+                ]
+            },
             // -----------关于添加阈值对话框的属性——end
 
             // -----------关于编辑阈值参数对话框的属性——start
-
             // 控制修改预警阈值的对话框显示与隐藏
             editDialogVisible: false,
             // editForm用于存放所修改对象信息
             editForm: {},
+            // 修改预警阈值表单的验证规则
+            editFormRules: {
+                channelName: [
+                    { required: true, message: '请输入通道的名称', trigger: 'blur' }
+                ],
+                maxValues: [
+                    { required: true, message: '请输入最大值', trigger: 'blur' }
+                ],
+                minValues: [
+                    { required: true, message: '请输入最小值', trigger: 'blur' }
+                ],
+                unit: [
+                    { required: true, message: '请输入单位', trigger: 'blur' }
+                ],
+                updateDate: [
+                    { required: true, message: '请选择时间', trigger: 'blur' }
+                ]
+            },
             // -----------关于编辑阈值参数对话框的属性——end
 
             // -----------关于预警列表的属性——start
@@ -232,19 +235,18 @@ export default {
         this.getwarningList()
     },
     methods:{
-        // 获取预警信息列表
+        // 获取预警信息
         async getwarningList() {
-            const {data:res} = await this.$meteorologicalData.post(`search/${this.page_index}/${this.page_size}`,{
-                //baseId: "1248910886228332544",
+            const {data:res} = await this.$warning.post(`search/${this.page_index}/${this.page_size}`,{
                 equipmentId:this.equipmentId
             })
             if(res.statusCode!==20000) {
-                return this.$message.error('获取设备阈值信息失败！')
+                return this.$message.error('获取信息列表失败！')
             }
             this.warningList = res.data.records
             this.page_total = res.data.total
         },
-        // 返回按钮 返回气象设备页面
+        // 返回按钮 返回水质设备页面
         back() {
             this.$router.push('/info-weather')
         },
@@ -254,50 +256,67 @@ export default {
         },
         // 用于添加阈值对话框的确定按钮 点击提交表单并关闭对话框
         async addwarning() {
-            this.addeForm.acquisitionTime = this.checkTime(this.addeForm.acquisitionTime)
-            this.addeForm.equipmentId = this.equipmentId
-            this.addeForm.baseId = this.baseId
-            const {data:res} = await this.$originAxios.post('http://8.129.175.45:57110/meteorologicalData',this.addeForm)
+            this.$refs.addeFormRef.validate(async valid => {
+                if(!valid) return false
+                this.addeForm.equipmentId = this.equipmentId
+                this.addeForm.updateDate = this.checkTime(this.addeForm.updateDate)
+                const {data:res} = await this.$warning.post('',this.addeForm)
+                if(res.statusCode!==20000) {
+                    return this.$message.error('添加失败！')
+                }
+                this.$message.success('添加成功！')
+                this.getwarningList()
+                this.addDialogVisible = false
+            })
+        },
+        // 修改设备状态
+        async changeCode(info) {
+            const {data:res} = await this.$warning.put(`${info.id}`,info)
             if(res.statusCode!==20000) {
-                return this.$message.error('添加失败！')
+                return this.$message.error('修改状态失败！')
             }
+            this.$message.success('修改成功')
             this.getwarningList()
-            this.$message.success('添加成功！')
-            this.addDialogVisible = false
         },
         // 监听添加对话框的关闭事件,关闭时对表单进行重置 并清除第一个选项 即addForm.channelName中的数据
         addDialogClosed() {
         // 表单方法：resetFields：对整个表单进行重置，将所有字段值重置为初始值并移除校验结果
             this.$refs.addeFormRef.resetFields()
             this.addeForm.channelName = ''
-        },
-        // 页码改变
-        pageChange(page) {
-            this.page_index = page.pageindex
-            this.page_size = page.pagesize
-            this.getwarningList()
+            this.addeForm.updateDate = ''
         },
         // 用于编辑按钮 点击展示修改对话框
-        async showEditDialog(id) {
-            const {data:res} = await this.$originAxios.get(`http://8.129.175.45:57110/meteorologicalData/${id}`)
-            this.editForm = res.data
+        showEditDialog(info) {
+            this.editForm = info
             this.editDialogVisible = true
         },
         // 监听修改对话框的关闭事件 进行重置
         aditDialogClosed() {
             this.$refs.editFormRef.resetFields()
             this.addeForm.channelName = ''
+            this.editDialogVisible = false
         },
         // editwarningInfo用于修改对话框的确定按钮 点击提交修改信息并关闭对话框
         async editwarningInfo() {
-            const {data:res} = await this.$originAxios.put(`http://8.129.175.45:57110/meteorologicalData/${this.editForm.id}`,this.editForm)
-            if(res.statusCode!==20000) {
-                return this.$message.error('修改信息失败！')
-            }
-            this.getwarningList()
-            this.$message.success('修改成功')
+            this.editForm.updateDate = this.checkTime(this.editForm.updateDate)
+            this.$refs.editFormRef.validate(async valid => {
+                if(!valid) return false
+                const {data:res} = await this.$warning.put(`${this.editForm.id}`,this.editForm)
+                if(res.statusCode!==20000) {
+                    return this.$message.error('修改状态失败！')
+                }
+                this.$message.success('修改成功')
+                this.getwarningList()
+            })
             this.editDialogVisible = false
+            this.aditDialogClosed()
         },
+        // 页码改变
+        pageChange(page) {
+            this.page_index = page.pageindex
+            this.page_size = page.pagesize
+            this.getwarningList()
+        },   
       // 根据id删除设备
        async deletemessage(id) {
            const confirmResult = await this.$confirm('此操作将永久删除该阈值, 是否继续?', '提示', {
@@ -310,7 +329,7 @@ export default {
             if (confirmResult !== 'confirm') {
                 return this.$message.info('已取消删除')
             }
-            const {data:res} = await this.$originAxios.delete(`http://8.129.175.45:57110/meteorologicalData/${id}`)
+            const {data:res} = await this.$warning.delete(`${id}`)
             if(res.statusCode!==20000) {
            return this.$message.error('删除设备失败！')
           }
@@ -339,16 +358,4 @@ export default {
 .formSwitchClass{
   line-height: 25px;
 }
-.demo-table-expand {
-    font-size: 0;
-  }
-.demo-table-expand label {
-    width: 90px;
-    color: #99a9bf;
-  }
-.demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
-  }
 </style>

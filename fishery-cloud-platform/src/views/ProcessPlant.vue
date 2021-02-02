@@ -1,27 +1,22 @@
 <template>
   <div>
     <!-- 面包屑导航开始 -->
-    <TheBreadcrumb :breadcrumbInfo="breadcrumbInfo" />
+    <Breadcrumb :breadcrumbInfo="breadcrumbInfo" />
     <!-- 面包屑导航结束 -->
 
     <!-- 卡片视图区域开始 -->
     <el-card>
       <!-- 标题区域开始 -->
-      <TheTitle :myTitle="myTitle" :icon="icon" />
+      <Title :myTitle="myTitle" :icon="icon" />
       <!-- 标题区域结束 -->
 
       <!-- 添加区域开始 -->
-      <TheAdd
-        @changeAddDialogVisible="changeAddDialogVisible()"
-        @getAllInfo="getAllInfo()"
-        :labels="labels"
-        :baseId="baseId"
-      />
+      <Add @getAllInfo="getAllInfo()" :labels="labels" :baseId="baseId" />
       <!-- 添加区域结束 -->
 
       <!-- 列表区域开始 -->
-      <ThePlantTable
-        :plantList="plantList"
+      <Table
+        :allList="allList"
         :labels="labels"
         :title="myTitle"
         @getAllInfo="getAllInfo()"
@@ -29,7 +24,7 @@
       <!-- 列表区域结束 -->
 
       <!-- 换页开始 -->
-      <ThePagination
+      <Pagination
         :pageNum="pageNum"
         :pageSize="pageSize"
         :total="total"
@@ -42,19 +37,19 @@
 </template>
 <script>
 import ljc from "../components/ljc/processPlant/processPlant";
-import TheBreadcrumb from "../components/ljc/public/breadcrumb";
-import TheTitle from "../components/ljc/public/title";
-import TheAdd from "../components/ljc/processPlant/TheAdd";
-import ThePlantTable from "../components/ljc/processPlant/TheTable";
-import ThePagination from "../components/ljc/public/pagination";
+import Breadcrumb from "../components/ljc/public/breadcrumb";
+import Title from "../components/ljc/public/title";
+import Add from "../components/ljc/processPlant/Add";
+import Table from "../components/ljc/processPlant/Table";
+import Pagination from "../components/ljc/public/pagination";
 
 export default {
   components: {
-    TheBreadcrumb,
-    TheTitle,
-    TheAdd,
-    ThePlantTable,
-    ThePagination,
+    Breadcrumb,
+    Title,
+    Add,
+    Table,
+    Pagination,
   },
   data() {
     return {
@@ -73,11 +68,7 @@ export default {
       // 每页显示总条数
       pageSize: 4,
       // 总数据
-      plantList: [],
-      // 获取总数据错误信息
-      getErrorInfo: "获取加工厂信息失败",
-      // 基地ID
-      baseId: "1350657222372835330",
+      allList: [],
     };
   },
   computed: {
@@ -86,9 +77,9 @@ export default {
       return this.model.labels;
     },
     // 基地ID
-    // baseId() {
-    //   return localStorage.getItem("baseId");
-    // },
+    baseId() {
+      return localStorage.getItem("baseId");
+    },
   },
   created() {
     this.getAllInfo();
@@ -102,16 +93,17 @@ export default {
       }
       this.pageNum = pageNum;
       this.pageSize = pageSize;
-      await this.model
-        .getAllInfo(this.baseId, pageNum, pageSize)
-        .then((val) => {
-          if (val.status !== 200) {
-            this.$message.error(this.getErrorInfo);
-          }
-          this.plantList = [];
-          this.plantList.push(val.data.data.records);
-          this.total = val.data.data.total;
-        });
+      const { data: res } = await this.model.getAllInfo(
+        this.baseId,
+        pageNum,
+        pageSize
+      );
+      if (res.statusCode !== 20000) {
+        this.$message.error(res.message);
+      }
+      this.allList = [];
+      this.allList.push(res.data.records);
+      this.total = res.data.total;
     },
   },
 };
