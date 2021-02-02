@@ -18,6 +18,7 @@ export default {
           "phoneCode",
           "loginId",
           "captcha",
+          "userName",
         ];
         let valid = true;
         arr.some((option) => {
@@ -50,6 +51,7 @@ export default {
         callback();
       }
     };
+
     var validateConfirmPassword = (rule, value, callback) => {
       if (this.form.confirmPassword === "") {
         callback(new Error("请再次输入密码"));
@@ -80,7 +82,9 @@ export default {
         phoneCode: "",
         loginId: "",
         captcha: "",
+        userName: "",
       },
+
       //表单验证规则
       rules: {
         // 验证用户ID是否合法
@@ -93,6 +97,7 @@ export default {
             trigger: "blur",
           },
         ],
+
         // 验证密码
         password: [
           {
@@ -101,6 +106,7 @@ export default {
             required: true,
           },
         ],
+
         // 确认密码
         confirmPassword: [
           {
@@ -109,6 +115,7 @@ export default {
             trigger: "blur",
           },
         ],
+
         // 用户名
         userName: [
           { required: true, message: "请输入用户名", trigger: "blur" },
@@ -119,6 +126,7 @@ export default {
             trigger: "blur",
           },
         ],
+
         // 手机
         phone: [
           {
@@ -132,6 +140,7 @@ export default {
             message: "号码必须以1开头且长度是11位",
           },
         ],
+
         // 图形验证码
         captcha: [
           { required: true, message: "请输入验证码", trigger: "blur" },
@@ -141,9 +150,10 @@ export default {
             trigger: "blur",
           },
         ],
+
         // 短信验证码
         phoneCode: [
-          { required: true, message: "请输入手机验证码", trigger: "blur" },
+          { required: true, message: "请输入短信验证码", trigger: "blur" },
           {
             len: 6,
             message: "长度为6个字符",
@@ -165,6 +175,7 @@ export default {
         ></el-input>
       </el-form-item>
     );
+
     // 短信验证码
     let phoneCode = (
       <el-form-item label="验证码" prop="phoneCode">
@@ -182,21 +193,23 @@ export default {
         </el-button>
       </el-form-item>
     );
+
     // 图形验证码
     let captcha = (
-      <el-form-item prop="captcha">
+      <el-form-item prop="captcha" label="验证码">
         <el-input
           type="text"
           placeholder="请输入验证码"
           vModel={this.form.captcha}
           class="captcha"
         ></el-input>
-        <img src={"data:image/png;base64," + this.url} />
+        <img src={"data:image/png;base64," + this.url} onClick={()=>{this.getCaptcha()}} />
       </el-form-item>
     );
-    // 设置密码
+
+    // 密码
     let password = (
-      <el-form-item label="设置密码" prop="password">
+      <el-form-item label="密码" prop="password">
         <el-input
           vModel={this.form.password}
           placeholder="设置密码"
@@ -205,6 +218,7 @@ export default {
         ></el-input>
       </el-form-item>
     );
+
     // 确认密码
     let confirmPassword = (
       <el-form-item label="确认密码" prop="confirmPassword">
@@ -217,6 +231,7 @@ export default {
         ></el-input>
       </el-form-item>
     );
+
     // 用户ID
     let loginId = (
       <el-form-item prop="loginId">
@@ -230,14 +245,27 @@ export default {
         ></el-input>
       </el-form-item>
     );
+
+    // 用户名
+    let userName = (
+      <el-form-item label="用户名" prop="userName">
+        <el-input
+          vModel={this.form.userName}
+          placeholder="请输入用户名"
+          prefix-icon="el-icon-user"
+        ></el-input>
+      </el-form-item>
+    );
+
     // 按钮
     let btn = (
       <el-form-item>
-        <el-button type="success" class="handleBtn" onClick={() => this.cb()}>
+        <el-button type="success" size="medium" class="handleBtn" onClick={() => this.cb()}>
           {this.btnText}
         </el-button>
       </el-form-item>
     );
+
     // 所有的表单选项
     let allOptions = {
       phone,
@@ -246,13 +274,15 @@ export default {
       password,
       confirmPassword,
       loginId,
+      userName,
     };
     return (
       <el-form
         {...{
           props: {
             model: this.form,
-            rules: this.rules,
+            // -----------------------------------------------------------------------------------------------------------
+            // rules: this.rules,
           },
         }}
         ref="form"
@@ -286,17 +316,53 @@ export default {
         }
       });
     },
+
+    // 验证码发送倒计时
+    startCountDown(){
+      let timer = setInterval(()=>{
+        if(this.count>0){
+          this.count--;
+        }else{
+          clearInterval(timer);
+          this.isSended = false;
+        }
+      },1000);
+    },
+
     // 根据手机号发送验证码
-    sendCode() {
-      this.$refs.form.validateField("phone", function (err) {
+   sendCode() {
+      this.$refs.form.validateField("phone", async (err)=> {
         // console.log(err);
         if (!err) {
-          console.log("发送验证码");
+          // console.log("发送验证码");
+          // 类型：1是修改资料，2是登录，3是注册
+          let type;
+          if (this.button === "登录") {
+            type = 2;
+          } else if (this.button === "注册") {
+            type = 3;
+          } else if (this.button === "找回密码") {
+            type = 1;
+          }
+          let url = `/sendVerify/${type}/${this.form.phone}`;
+          const { data: res } = await this.$message.get(url);
+          console.log('res: ', res);
+          // 已成功发送信息，开始倒计时
+          this.isSended = true;
+          this.startCountDown();
         }
       });
     },
+
+    // 点击图片获取验证码
+    async getCaptcha(){
+     const {data:res} = await this.$captcha.post('/getCaptcha')
+    //  console.log('res: ', res);
+     this.url  = res.data.img;
+    }
+  },
+  created() {
+    this.getCaptcha();
   },
 };
 </script>
-<style lang="less" scoped>
-</style>

@@ -1,33 +1,73 @@
 <template>
   <body>
-    <div class="box">
+    <div class="box" :style="boxHeight">
       <h2>智慧渔业云服务平台</h2>
+      <el-tabs v-model="activeName" @tab-click="handleTabClick" :stretch="true">
       <!-- 表单区域 -->
-      <Form :callback="handleSubmit"></Form>
-      <el-row class="psd_reg">
+        <el-tab-pane label="密码登录" name="passwordLogin">
+          <Form
+            :callback="handleSubmit"
+            :options="['phone', 'password', 'captcha']"
+          ></Form>
+        </el-tab-pane>
+        <el-tab-pane label="短信登录" name="messageLogin">
+          <Form :callback="handleSubmit"></Form>
+        </el-tab-pane>
+      </el-tabs>
+      <div style="display: flex; justify-content: flex-end">
         <router-link to="/forgetPassword">找回密码</router-link>
+        <el-divider direction="vertical"></el-divider>
         <router-link to="/register">注册</router-link>
-      </el-row>
+      </div>
     </div>
   </body>
 </template>
 
 <script>
-import Form from '../../components/wzp/user_info/Form'
+import Form from "../../components/wzp/user_info/Form";
 export default {
   data() {
     return {
+      // 默认登录方式
+      activeName: "passwordLogin",
+      // 切换登录方式设置背景高度
+      boxHeight: "height:440px",
+
       token: localStorage.getItem("token"),
     };
   },
-  components:{
+  components: {
     Form,
   },
   methods: {
+    handleTabClick(tab) {
+      // console.log("tab: ", tab);
+      this.activeName = tab.name;
+      if (tab.name === "passwordLogin") {
+        this.boxHeight = "height:440px";
+      } else {
+        this.boxHeight = "height:390px";
+      }
+    },
     // 向登录接口发起请求
-    handleSubmit(form) {
-      console.log('form: ', form);
-      // this.$router.push("/digital-base");
+    async handleSubmit(form) {
+      console.log("form: ", form);
+      let { phoneCode, phone, captcha, password } = form;
+      let url;
+      if (this.activeName === "passwordLogin") {
+        url = `/user/login?password=${password}&phone=${phone}&code=${captcha}`;
+      } else {
+        url = `/user/loginByPhone?phone=${phone}&code=${phoneCode}`;
+      }
+      const { data: res } = await this.$authority.post(url);
+      console.log("res: ", res);
+      if(res.statusCode === 20000){
+        this.elMessage.success(res.message);
+        this.$router.push("/digital-base");
+      }else{
+        // console.log('this.Message: ', this.Message);
+        this.elMessage.error(res.message);
+      }
     },
   },
 };
@@ -45,7 +85,6 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    height: 350px;
     width: 400px;
     padding: 40px;
     background: rgba(0, 0, 0, 0.8);
@@ -89,19 +128,13 @@ body {
           display: block;
           left: -1%;
           float: right;
-          margin-top: 9px;
+          height: 40px;
         }
       }
     }
   }
 }
-/deep/ .el-button.el-button--success.handleBtn{
-  width: 100%;
-}
-.psd_reg {
+/deep/.el-tabs__item {
   color: #fff;
-  font-size: 14px;
-  display: flex;
-  justify-content: space-between;
 }
 </style>

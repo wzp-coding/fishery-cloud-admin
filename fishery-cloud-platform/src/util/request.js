@@ -12,8 +12,9 @@ import get from 'lodash/get';
  * 如果一定需要原生纯净的axios,那么可以通过this.$originAxios来调用
  */
 const baseURLObject = {
-    auth:"http://106.75.154.40:9003",
-    user:"http://106.75.154.40:9003/user",
+    authority:"http://119.23.218.131:9102/authority",
+    captcha:"http://119.23.218.131:9102/captcha",
+    function:"http://119.23.218.131:9102/function",
     management:"http://119.23.218.131:9103",
     pondController:"http://119.23.218.131:9103/pond",   //池塘模块
     germchit:"http://119.23.218.131:9103/germchit"   ,   //种苗模块
@@ -25,7 +26,7 @@ const baseURLObject = {
     monitor:"http://8.129.175.45:57110/monitor/",
     plant: "http://119.23.218.131:9111/",
     managementOrder:"http://119.23.218.131:9107/logistics/order/",
-
+    message:"http://119.23.218.131:9109/message/"
 }
 
 // 异常拦截处理器
@@ -70,7 +71,7 @@ for (const key in baseURLObject) {
         // 让每个请求携带自定义 token 请根据实际情况自行修改
         config.headers = {
             Authorization: `bearer ${localStorage.getItem('token')}`,
-            xip: window.localStorage.getItem("Ip")
+            xip: localStorage.getItem("Ip")
         }
         return config;
     }, errorHandler)

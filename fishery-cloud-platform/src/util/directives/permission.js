@@ -1,3 +1,5 @@
+import Vue from 'vue';
+// const req =
 const permissionList = [
     {
         "id": "1324928826706341888",

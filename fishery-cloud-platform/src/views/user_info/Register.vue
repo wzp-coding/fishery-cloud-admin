@@ -6,7 +6,11 @@
           <p style="font-size: 26px">注册页面</p>
         </div>
         <div class="lxl-form">
-          <Form :callback="handleSubmit" :options="['phone','password','confirmPassword','phoneCode']" button="注册"></Form>
+          <Form
+            :callback="handleSubmit"
+            :options="['phone', 'password', 'confirmPassword', 'phoneCode']"
+            button="注册"
+          ></Form>
         </div>
         <div style="display: flex; justify-content: flex-end">
           <router-link to="/login">登录</router-link>
@@ -18,34 +22,23 @@
   </div>
 </template>
 <script>
-import Form from '../../components/wzp/user_info/Form'
+import Form from "../../components/wzp/user_info/Form";
 export default {
   data() {
-    
-    return {
-      // 第1，2个为计时器
-      count: "",
-      url: "",
-      regForm: {
-        captcha: "",
-        phoneCode: "",
-        userName: "",
-        password: "",
-        checkpassword: "",
-        phone: "",
-      },
-      
-    };
+    return {};
   },
-  components:{
+  components: {
     Form,
   },
   created() {},
   methods: {
-    handleSubmit(form){
-      console.log('form: ', form);
-
-    }
+    async handleSubmit(form) {
+      console.log("form: ", form);
+      let { phoneCode, phone, password } = form;
+      const url = `/user/register?phone=${phone}&password=${password}&code=${phoneCode}`;
+      const { data: res } = await this.$authority.post(url);
+      console.log("res: ", res);
+    },
   },
 };
 </script>
