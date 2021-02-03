@@ -244,7 +244,7 @@ export default {
       },
 
       // 总条数
-      total: 8,
+      total: "",
 
       // 控制修改订单信息对话框的显示和隐藏
       aditDialogVisible: false,
@@ -415,7 +415,7 @@ export default {
     },
     // 展示信息子组件关闭时触发改变dialogVisible
     ChangeDialogVisible() {
-      this.dialogVisible = !this.dialogVisible;
+      this.dialogVisible = false;
     },
     // -----------------------------------------------
     // 页面刷新 再次获取baseId
@@ -563,7 +563,7 @@ export default {
       // // this.getShrimpRemainById(this.editForm.shrimpId);
       // this.constWeight = res.data.weight;
       // console.log(this.editForm)
-      // this.aditDialogVisible = true;
+      this.aditDialogVisible = true;
     },
 
     

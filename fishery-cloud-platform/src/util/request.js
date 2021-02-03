@@ -25,13 +25,8 @@ const baseURLObject = {
     waterData:"http://8.129.175.45:57110/waterData/",
     monitor:"http://8.129.175.45:57110/monitor/",
     plant: "http://119.23.218.131:9111/",
-<<<<<<< HEAD:fishery-cloud-platform/src/libs/request.js
-    managementOrder:"http://119.23.218.131:9107/logistics/",
+    managementOrder:"http://119.23.218.131:9114/order/",
 
-=======
-    managementOrder:"http://119.23.218.131:9107/logistics/order/",
-    message:"http://119.23.218.131:9109/message/"
->>>>>>> 149e5181e2fc584d055293d7fda4fce4ee5b4171:fishery-cloud-platform/src/util/request.js
 }
 
 // 异常拦截处理器

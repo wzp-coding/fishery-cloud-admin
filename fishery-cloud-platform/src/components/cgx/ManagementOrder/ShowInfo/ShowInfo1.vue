@@ -68,9 +68,11 @@
     ></Form-e >
     </el-form>
     <!-- 内容主题区 物流信息 -->
-    <map
-    :map-name="'base'"
-    ></map>
+    <Map
+    v-if="isLogistics"
+    @getCenterAddress="setAddress"
+    @getAroundPoi="setpoi"
+    ></Map>
      <!-- 页脚 -->
       <span slot="footer" class="dialog-footer">
         <el-button @click="DialogClosed">取 消</el-button>
@@ -79,7 +81,7 @@
   
 </template>
 <script>
-import Map from "../../../public_components/Map";
+import Map from "../../../public_components/MyLocationPicker";
 import FormE from "./elFormItem";
 import TimeE1 from "./elFormtime";
 import FormE2 from "../../Memorandum/Memorandum"
@@ -133,6 +135,12 @@ export default {
     },
   },
   methods: {
+    setpoi(poi){
+      console.log("pio-->",poi)
+    },
+    setAddress(address){
+      console.log("address--->",address)
+    },
     // 监听修改对话框的关闭事件，关闭时重置
     DialogClosed() {
       // 通知父组件的dialogVisible变为false
@@ -147,7 +155,7 @@ export default {
         return this.$message.error("查询该虾苗信息失败！！");
       }
       this.form = res.data;
-      console.log("this.form: ", this.form);
+      console.log("this.form->> ", this.form);
     },
     // 展示物流信息的对话框
     async getLogisticsById(id) {
