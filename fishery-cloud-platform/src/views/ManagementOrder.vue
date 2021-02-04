@@ -17,6 +17,9 @@
           <i class="el-icon-document"></i>
           <span>订单管理</span>
         </el-col>
+        <div style="width: 75px; float: right;padding:0 25px 0 0">
+          <el-button type="primary" style=" " @click="createdialogVisible=true">创建订单</el-button>
+        </div>
       </el-row>
 
       <!-- 订单信息列表区域 -->
@@ -181,7 +184,13 @@
     
     >
     </Show-orinfo>
-   
+
+    <!--展示创建订单-->
+    <Create-order
+    :createdialogVisible="createdialogVisible"
+    @createnotifyParent="changecreatedialogVisible"
+    >
+    </Create-order>
   </div>
 </template>
 
@@ -190,32 +199,19 @@ import QRCode from "qrcodejs2";
 import ShowInfo from   "../components/cgx/ManagementOrder/ShowInfo/ShowInfo1";
 import ShowOrinfo from "../components/cgx/ManagementOrder/ShowOrcode/ShowOrcode2";
 import ShowChange from "../components/cgx/ManagementOrder/ModifyInformation/ShowChange";
+import CreateOrder from '../components/cgx/ManagementOrder/CreateOrder/createOrder.vue';
 export default {
   components: {
     ShowInfo,
     ShowOrinfo,
     ShowChange,
+    CreateOrder,
   },
   data() {
     return {
-      // 假数据
-      data:{
-        baseId: "1248910886228332544",
-        createBy: "李老板",
-        fishingStatus: "1",
-        fishingTime: "2020-09-10 22:04:12",
-        id: "1304057615399129088",
-        inputNum: 100,
-        pondId: "1304057557677117440",
-        remain: 400,
-        seedlingTime: "2020-09-10 22:02:17",
-        shrimpBatchName: "斑节A1",
-        shrimpOrigin: "中国湛江",
-        shrimpSpecies: "斑节对虾",
-        shrimpSupplier: "广东海洋大学",
-        specification: "30~40",
-        yield: 1000,
-      },
+      // 传给创建订单组件
+      createdialogVisible:false,
+
       // 传递给子组件
       title: "虾苗信息",
       isLogistics: false,
@@ -398,7 +394,10 @@ export default {
   //   this.setNode();
   // },
   methods: {
-
+  // 关闭创建订单组件
+  changecreatedialogVisible(){
+    this.createdialogVisible=false;
+  },
     // 展示虾苗信息时要传递给子组件的信息
     toShowShrimpInfo(id) {
     this.title = "虾苗信息";
