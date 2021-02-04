@@ -58,11 +58,11 @@ export default {
       let { phoneCode, phone, captcha, password } = form;
       let url;
       if (this.activeName === "passwordLogin") {
-        url = `/user/login?password=${password}&phone=${phone}&code=${captcha}`;
+        url = `/login?password=${password}&phone=${phone}&code=${captcha}`;
       } else {
-        url = `/user/loginByPhone?phone=${phone}&code=${phoneCode}`;
+        url = `/loginByPhone?phone=${phone}&code=${phoneCode}`;
       }
-      const { data: res, headers } = await this.$authority.post(url);
+      const { data: res, headers } = await this.$user.post(url);
       // console.log("res: ", res);
       if (res.statusCode === 20000) {
         localStorage.setItem("token", headers.token);

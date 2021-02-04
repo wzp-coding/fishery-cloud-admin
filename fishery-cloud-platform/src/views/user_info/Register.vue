@@ -35,8 +35,8 @@ export default {
     async handleSubmit(form) {
       console.log("form: ", form);
       let { phoneCode, phone, password } = form;
-      const url = `/user/register?phone=${phone}&password=${password}&code=${phoneCode}`;
-      const { data: res } = await this.$authority.post(url);
+      const url = `/register?phone=${phone}&password=${password}&code=${phoneCode}`;
+      const { data: res } = await this.$user.post(url);
       console.log("res: ", res);
       if(res.statusCode === 20000){
         this.elMessage.success(res.message);

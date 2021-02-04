@@ -12,7 +12,7 @@ import get from 'lodash/get';
  * 如果一定需要原生纯净的axios,那么可以通过this.$originAxios来调用
  */
 const baseURLObject = {
-    authority:"http://119.23.218.131:9102/authority",
+    user:"http://119.23.218.131:9102/authority/user",
     captcha:"http://119.23.218.131:9102/captcha",
     function:"http://119.23.218.131:9102/function",
     management:"http://119.23.218.131:9103",

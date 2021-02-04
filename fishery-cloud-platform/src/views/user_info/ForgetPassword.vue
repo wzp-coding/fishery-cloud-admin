@@ -31,8 +31,8 @@ export default {
     async handleSubmit(form){
       console.log('form: ', form);
       let {phoneCode} = form;
-      const url = `/user/retrievePassword/${phoneCode}`
-      const {data:res} = await this.$authority.post(url,form)
+      const url = `/retrievePassword/${phoneCode}`
+      const {data:res} = await this.$user.post(url,form)
       console.log('res: ', res);
     }
   },
