@@ -283,7 +283,7 @@ import ThePagination from "../components/ccy/ThePagination";
 import TheDialogAll from "../components/ccy/TheDialogAll";
 import TheDialogLayout from "../components/ccy/TheDialogLayout";
 import TheInfoSupplyLayout from "../components/ccy/TheInfoSupplyLayout";
-import LoginVue from "./Login.vue";
+// import LoginVue from "./Login.vue";
 export default {
   name: "Suppliesinfo",
   data() {
@@ -385,6 +385,8 @@ export default {
     TheDialogAll,
     TheDialogLayout,
     TheInfoSupplyLayout,
+    // LoginVue,
+    TheCardHead
   },
   created() {
     this.getAllSupplInfo();

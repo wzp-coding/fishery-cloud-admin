@@ -92,7 +92,7 @@
               </template>
             </el-table-column>
           </div>
-          <ThePagination slot="pagination"></ThePagination>
+          <ThePagination :toPagination="paginationInfoIn"></ThePagination>
         </TheCardAll>
       </el-tab-pane>
       <el-tab-pane label="出库记录">
@@ -153,24 +153,7 @@
       </el-tab-pane>
     </el-tabs>
     <TheDialogAll :toDialogInfo="toDialogAddInfo">
-      <el-form-item label="操作者身份" prop="operatorIdentity">
-        <el-input v-model="addInfo.operatorIdentity"></el-input>
-      </el-form-item>
-      <el-form-item label="操作者姓名" prop="operatorName">
-        <el-input v-model="addInfo.operatorName"></el-input>
-      </el-form-item>
-      <el-form-item label="投入品类别" prop="supplyTypeName">
-        <el-input v-model="addInfo.supplyTypeName"></el-input>
-      </el-form-item>
-      <el-form-item label="请输入仓库号" prop="warehouseNumber">
-        <el-input v-model="addInfo.warehouseNumber"></el-input>
-      </el-form-item>
-      <!-- <el-form-item label="">
-        <el-input v-model=""></el-input>
-      </el-form-item>
-      <el-form-item label="">
-        <el-input v-model=""></el-input>
-      </el-form-item> -->
+      
       <span slot="footer" class="dialog-footer">
         <el-button @click="toDialogAddInfo.dialogVisible = false">取消</el-button>
         <el-button type="primary" 
@@ -179,6 +162,7 @@
         >
       </span>
     </TheDialogAll>
+    <supplyInDialog :toDialogAddInfo="toDialogAddInfo"></supplyInDialog>
   </div>
 </template>
 
@@ -187,11 +171,13 @@ import TheCardAll from "../components/ccy/TheCardAll";
 import TheCardHead from "../components/ccy/TheCardHead";
 import ThePagination from "../components/ccy/ThePagination";
 import TheDialogAll from "../components/ccy/TheDialogAll";
+import supplyInDialog from "../components/ccy/managementSupply/supplyInDialog"
 export default {
   components: {
     TheCardAll,
     ThePagination,
     TheDialogAll,
+    supplyInDialog
   },
   data(){
     return {
@@ -212,6 +198,19 @@ export default {
         supplyName:'',
         supplyTypeName:'',
         warehouseNumber:''
+      },
+      toSupplyInfo:{
+        dialogVisible:false,
+      },
+      paginationInfoIn:{
+        total:'',
+        page:'',
+        size:''
+      },
+      paginationInfoOut:{
+        total:'',
+        page:'',
+        size:''
       },
       toDialogAddInfo:{
         title:'农资入库',
