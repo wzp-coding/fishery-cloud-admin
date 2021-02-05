@@ -63,7 +63,7 @@ export default {
         url = `/loginByPhone?phone=${phone}&code=${phoneCode}`;
       }
       const { data: res, headers } = await this.$user.post(url);
-      // console.log("res: ", res);
+      console.log("res: ", res);
       if (res.statusCode === 20000) {
         localStorage.setItem("token", headers.token);
         this.$store.commit('setUserInfo', res.data)

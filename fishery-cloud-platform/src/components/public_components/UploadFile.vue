@@ -22,7 +22,7 @@ import "@uppy/core/dist/style.css";
 import "@uppy/dashboard/dist/style.css";
 import { DashboardModal } from "@uppy/vue";
 import Uppy from "@uppy/core";
-import Tus from "@uppy/Tus";
+import Tus from "@uppy/tus";
 export default {
   props: {
     uploadSuccess: {

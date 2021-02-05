@@ -20,20 +20,22 @@
 <script>
 import Form from '../../components/wzp/user_info/Form'
 export default {
-  data() {
-    return {
-    };
-  },
   components:{
     Form,
   },
   methods: {
     async handleSubmit(form){
-      console.log('form: ', form);
+      // console.log('form: ', form);
       let {phoneCode} = form;
       const url = `/retrievePassword/${phoneCode}`
       const {data:res} = await this.$user.post(url,form)
-      console.log('res: ', res);
+      if(res.statusCode === 20000){
+        this.elMessage.success(res.message);
+        this.$router.push('/login');
+      }else{
+        this.elMessage.error(res.message);
+      }
+      // console.log('res: ', res);
     }
   },
 
