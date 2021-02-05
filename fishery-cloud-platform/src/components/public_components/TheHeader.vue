@@ -48,7 +48,7 @@ export default {
       this.dialogVisible = !this.dialogVisible;
     },
     beforeClose(done) {
-      this.$confirm("是否保存修改内容后关闭？")
+      this.elConfirm("是否保存修改内容后关闭？")
         .then((_) => {
           done();
         })

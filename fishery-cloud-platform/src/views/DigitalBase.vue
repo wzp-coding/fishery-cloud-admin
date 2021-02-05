@@ -157,6 +157,8 @@ export default {
     },
   },
   created() {
+    
+    console.log('this.$store.state.userInfo: ', this.$store.state.userInfo);
     if (!localStorage.getItem("componentData")) {
       // 第一次载入页面
       this.componentCheckedData = this.componentData.filter(
