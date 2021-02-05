@@ -276,6 +276,7 @@ export default {
       loginId,
       userName,
     };
+
     return (
       <el-form
         {...{
@@ -358,12 +359,9 @@ export default {
     async getCaptcha(){
      const {data:res} = await this.$captcha.post('/getCaptcha')
     //  console.log('res: ', res);
-     console.log('res.data.img: ', res.data.img);
+    //  console.log('res.data.img: ', res.data.img);
      this.url  = res.data.img;
     }
-  },
-  mounted() {
-    this.getCaptcha();
   },
 };
 </script>

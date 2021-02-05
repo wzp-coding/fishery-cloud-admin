@@ -42,7 +42,7 @@ export default {
     Form,
   },
   methods: {
-    ...mapMutations(['setUserInfo']),
+    ...mapMutations(["setUserInfo"]),
     handleTabClick(tab) {
       // console.log("tab: ", tab);
       this.activeName = tab.name;
@@ -66,14 +66,20 @@ export default {
       console.log("res: ", res);
       if (res.statusCode === 20000) {
         localStorage.setItem("token", headers.token);
-        this.$store.commit('setUserInfo', res.data)
+        this.$store.commit("setUserInfo", res.data);
         this.elMessage.success(res.message);
         this.$router.push("/digital-base");
       } else {
         this.$refs.passwordLogin.getCaptcha();
+        console.log("login.vue");
         this.elMessage.error(res.message);
       }
     },
+  },
+  mounted() {
+    if (this.activeName === "passwordLogin") {
+      this.$refs.passwordLogin.getCaptcha();
+    }
   },
 };
 </script>
