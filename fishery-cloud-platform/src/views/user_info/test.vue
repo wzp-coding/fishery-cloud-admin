@@ -26,6 +26,17 @@ export default {
     handleOpen() {
       this.isOpen = true;
     },
+    testApi(){
+      this.$user.get('/getBase').then(getBase=>{
+        console.log('getBase: ', getBase);
+      })
+      this.$user.get('/self').then(self=>{
+        console.log('self: ', self);
+      })
+    }
+  },
+  created() {
+    this.testApi();
   },
 };
 </script>
