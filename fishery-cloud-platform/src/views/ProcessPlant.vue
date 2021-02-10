@@ -69,7 +69,7 @@ export default {
       pageSize: 4,
       // 总数据
       allList: [],
-      baseId: "1248910886228332544",
+      baseId: "1350657222372835330",
     };
   },
   computed: {
