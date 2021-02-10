@@ -1,24 +1,25 @@
 <template>
 <el-dialog
-      title="顾客列表"
+      title="列表"
       :visible.sync="CustomerVisible"
       width="50%"
       @close="closed"
 > 
   <el-table
-    :data="tableData.filter(data => !search || data.address.toLowerCase().includes(search.toLowerCase())||data.name.toLowerCase().includes(search.toLowerCase()))"
+    :data="tableData.filter(data => !search || data.customerName.toLowerCase().includes(search.toLowerCase())||
+    data.phoneNumber.toLowerCase().includes(search.toLowerCase()))"
     style="width: 100%">
     <el-table-column
-      label="Date"
-      prop="date">
+      label="客户名"
+      prop="customerName">
     </el-table-column>
     <el-table-column
-      label="Name"
-      prop="name">
+      label="电话"
+      prop="phoneNumber">
     </el-table-column>
     <el-table-column
-      label="address"
-      prop="address">
+      label="收货地址"
+      prop="receiveAddress">
     </el-table-column>
     <el-table-column
       align="right">
@@ -29,13 +30,14 @@
           placeholder="输入关键字搜索"/>
       </template>
       <template slot-scope="scope">
-        <el-button
-          size="mini"
-          @click="handleEdit(scope.row)">选择</el-button>
+        <el-button 
+        size="mini"
+        @click="handleEdit(scope.row)">选择</el-button>
       </template>
     </el-table-column>
   </el-table>
    <span slot="footer" class="dialog-footer">
+       <el-button @click="closed">确 定</el-button>
         <el-button @click="closed">取 消</el-button>
       </span>
 </el-dialog> 
@@ -50,24 +52,9 @@
       },
     data() {
       return {
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
-        search: ''
+        tableData: [],
+        search: '',
+        baseid:"1350657222372835330",
       }
     },
     methods: {
@@ -77,15 +64,20 @@
         },
       handleEdit(row) {
         this.$emit("setCustomer",row);
+        console.log(row)
       },
-      handleDelete(index, row) {
-        console.log(index, row)
-        },
         // 获取顾客数据
-        getComputedlist(){
-        }
-            
-
+       async getComputedlist(){
+        const { data: res } = await this.$Customer.get(this.baseid);
+        console.log("customer--->",res.data)
+      if (res.statusCode !== 20000) {
+        return this.$message.error("查询该虾苗信息失败！！");
+      }
+      this.tableData = res.data;
+        },
+      },
+      created() {
+          this.getComputedlist();
       },
     
   }

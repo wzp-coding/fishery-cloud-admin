@@ -35,14 +35,20 @@
         ></el-table-column> -->
 
         <el-table-column
-          prop="customerName"
+          prop="targetName"
           label="客户名"
           width="120"
         ></el-table-column>
         <el-table-column
-          prop="customerType"
+          prop="targetType"
+          :formatter="settargetType"
           label="客户类型"
           width="50"
+        ></el-table-column>
+        <el-table-column
+          prop="productName"
+          label="产品名"
+          width="100"
         ></el-table-column>
         <el-table-column
           prop="money"
@@ -55,17 +61,12 @@
           width="100"
         ></el-table-column>
         <el-table-column
-          prop="createBy"
-          label="创建者"
-          width="100"
-        ></el-table-column>
-        <el-table-column
-          prop="createDate"
+          prop="gmtCreate"
           label="创建时间"
           width="100"
         ></el-table-column>
         <el-table-column
-          prop="receiptAddress"
+          prop="receiveAddress"
           label="收货地址"
         ></el-table-column>
         <el-table-column label="二维码" width="150">
@@ -200,6 +201,7 @@ import ShowInfo from   "../components/cgx/ManagementOrder/ShowInfo/ShowInfo1";
 import ShowOrinfo from "../components/cgx/ManagementOrder/ShowOrcode/ShowOrcode2";
 import ShowChange from "../components/cgx/ManagementOrder/ModifyInformation/ShowChange";
 import CreateOrder from '../components/cgx/ManagementOrder/CreateOrder/createOrder.vue';
+
 export default {
   components: {
     ShowInfo,
@@ -209,6 +211,8 @@ export default {
   },
   data() {
     return {
+      // 判断
+      a : ['个人', '企业', '加工厂', '冷库'],
       // 传给创建订单组件
       createdialogVisible:false,
 
@@ -226,7 +230,7 @@ export default {
       // -----------------------------------
       token: window.localStorage.getItem("token"),
       // 基地编号
-      baseId: 1248910886228332544,
+      baseId: '1350657222372835330',
       // 是否显示物流二维码页面
       isShowLCode: false,
       // 是否显示溯源二维码页面
@@ -236,7 +240,7 @@ export default {
         // 当前页码
         pagenum: 1,
         // 每页显示条数
-        pagesize: 4,
+        pagesize: 10,
       },
 
       // 总条数
@@ -299,72 +303,7 @@ export default {
       ],
 
       // 订单列表
-      OrderList: [{
-        addressLatitude: "22.27534",
-        addressLongitude: "114.16546",
-        adultShrimpId: "1304076777332805632",
-        baseId: "1316658083052785664",
-        createBy: "张三",
-        createDate: "2020-09-10 23:18:25",
-        customerName: "长江水产",
-        customerType: "企业",
-        id: "1304076779169910784",
-        logisticsId: "1304076778272329728",
-        money: 1000,
-        receiptAddress: "中国香港特别行政区香港特别行政区中西区花旗銀行大廈",
-        shrimpBatchName: "斑节A1",
-        shrimpId: "1304057615399129088",
-        weight: 100,
-      },
-      {
-        addressLatitude: "22.27534",
-        addressLongitude: "114.16546",
-        adultShrimpId: "1304076777332805632",
-        baseId: "1316658083052785664",
-        createBy: "张三",
-        createDate: "2020-09-10 23:18:25",
-        customerName: "长江水产",
-        customerType: "企业",
-        id: "1304076779169910784",
-        logisticsId: "1304076778272329728",
-        money: 1000,
-        receiptAddress: "中国香港特别行政区香港特别行政区中西区花旗銀行大廈",
-        shrimpBatchName: "斑节A1",
-        shrimpId: "1304057615399129088",
-        weight: 100,
-      },{
-        addressLatitude: "22.27534",
-        addressLongitude: "114.16546",
-        adultShrimpId: "1304076777332805632",
-        baseId: "1316658083052785664",
-        createBy: "张三",
-        createDate: "2020-09-10 23:18:25",
-        customerName: "长江水产",
-        customerType: "企业",
-        id: "1304076779169910784",
-        logisticsId: "1304076778272329728",
-        money: 1000,
-        receiptAddress: "中国香港特别行政区香港特别行政区中西区花旗銀行大廈",
-        shrimpBatchName: "斑节A1",
-        shrimpId: "1304057615399129088",
-        weight: 100,
-      },{
-        addressLatitude: "22.27534",
-        addressLongitude: "114.16546",
-        adultShrimpId: "1304076777332805632",
-        baseId: "1316658083052785664",
-        createBy: "张三",
-        createDate: "2020-09-10 23:18:25",
-        customerName: "长江水产",
-        customerType: "企业",
-        id: "1304076779169910784",
-        logisticsId: "1304076778272329728",
-        money: 1000,
-        receiptAddress: "中国香港特别行政区香港特别行政区中西区花旗銀行大廈",
-        shrimpBatchName: "斑节A1",
-        shrimpId: "1304057615399129088",
-        weight: 100,
-      }
+      OrderList: [
       ],
 
       // 修改：查询到的订单信息
@@ -390,10 +329,15 @@ export default {
 
     };
   },
-  // created() {
-  //   this.setNode();
-  // },
+  created() {
+    this.setNode();
+  },
   methods: {
+    // 客户类型判断传入
+    settargetType(row){
+      // console.log("dsfsv",row);
+      return this.a[row.targetType-1]
+    },
   // 关闭创建订单组件
   changecreatedialogVisible(){
     this.createdialogVisible=false;
@@ -418,25 +362,24 @@ export default {
     },
     // -----------------------------------------------
     // 页面刷新 再次获取baseId
-    // setNode() {
-    //   if (this.baseId !== "") {
-    //     this.getOrderList();
-    //     this.getPersonInfoList();
-    //   } else {
-    //     const loading = this.$loading({
-    //       lock: true,
-    //       text: "Loading",
-    //       spinner: "el-icon-loading",
-    //       background: "rgba(0, 0, 0, 0.7)",
-    //     });
-    //     setTimeout(() => {
-    //       this.baseId = this.defines.baseId;
-    //       this.getOrderList();
-    //       this.getPersonInfoList();
-    //       loading.close();
-    //     }, 1000);
-    //   }
-    // },
+    setNode() {
+      if (this.baseId !== "") {
+        this.getOrderList();
+        // this.getPersonInfoList();
+      } else {
+        const loading = this.$loading({
+          lock: true,
+          text: "Loading",
+          spinner: "el-icon-loading",
+          background: "rgba(0, 0, 0, 0.7)",
+        });
+        setTimeout(() => {
+          this.getOrderList();
+          this.getPersonInfoList();
+          loading.close();
+        }, 1000);
+      }
+    },
     // 物流二维码弹窗
     logisticsOrcode() {
       this.adultShrimpId = "1304076777332805632";
@@ -523,20 +466,17 @@ export default {
 
     // // 获取订单信息
     async getOrderList() {
-      const { data: res } = await this.$http.post(
-        `/order/search/${this.pageInfo.pagenum}/${this.pageInfo.pagesize}`,
-        {
-          baseId: this.baseId,
-        }
+      const { data: res } = await this.$managementOrder.get(
+        `baseOrder/${this.baseId}/${this.pageInfo.pagenum}/${this.pageInfo.pagesize}`
       );
-      console.log("执行出错:",res);
-      if (res.code !== 20000) {
+      console.log("结果:",res);
+      if (res.statusCode !== 20000) {
         return this.$message.error("获取虾苗订单列表失败！！");
       }
-      this.OrderList = res.data.rows;
+      this.OrderList = res.data.records;
       this.total = res.data.total;
-      console.log("OrderList:",OrderList)
-      console.log("total:",total)
+      console.log("OrderList:",this.OrderList)
+      console.log("total:",this.total)
     },
 
     // // 获取虾苗剩余量
