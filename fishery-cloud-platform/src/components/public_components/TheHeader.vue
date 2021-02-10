@@ -41,7 +41,7 @@ export default {
   methods: {
     // 退出登录操作
     loginOut() {
-      // localStorage.setItem("token", "");
+      localStorage.removeItem("token");
       this.$router.push("/login");
     },
     showUserInfo() {

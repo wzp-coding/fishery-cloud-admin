@@ -326,6 +326,7 @@ export default {
         }else{
           clearInterval(timer);
           this.isSended = false;
+          this.count = 60;
         }
       },1000);
     },
@@ -347,10 +348,13 @@ export default {
           }
           let url = `/sendVerify/${type}/${this.form.phone}`;
           const { data: res } = await this.$message.get(url);
-          console.log('res: ', res);
+          // console.log('res: ', res);
           // 已成功发送信息，开始倒计时
           this.isSended = true;
+          this.elMessage.success(res.message);
           this.startCountDown();
+        }else{
+          this.elMessage.error(res.message);
         }
       });
     },
