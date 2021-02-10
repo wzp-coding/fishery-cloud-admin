@@ -1,4 +1,5 @@
 <script>
+import ShowInfo1Vue from "../../cgx/ManagementOrder/ShowInfo/ShowInfo1.vue";
 export default {
   props: {
     callback: {
@@ -19,6 +20,8 @@ export default {
           "loginId",
           "captcha",
           "userName",
+          "email",
+          "avatar",
         ];
         let valid = true;
         arr.some((option) => {
@@ -35,7 +38,13 @@ export default {
       type: String,
       default: "登录",
       validator(val) {
-        return ["登录", "注册", "找回密码"].includes(val);
+        return ["登录", "注册", "找回密码", "修改信息"].includes(val);
+      },
+    },
+    defaultForm: {
+      type: Object,
+      default() {
+        return {};
       },
     },
   },
@@ -76,13 +85,15 @@ export default {
 
       // 表单
       form: {
-        phone: "",
+        phone: this.defaultForm.phone,
         password: "",
         confirmPassword: "",
         phoneCode: "",
-        loginId: "",
+        loginId: this.defaultForm.phone,
         captcha: "",
-        userName: "",
+        userName: this.defaultForm.phone,
+        email: this.defaultForm.email,
+        avatar: this.defaultForm.avatar,
       },
 
       //表单验证规则
@@ -104,6 +115,10 @@ export default {
             validator: validatePassword,
             trigger: "blur",
             required: true,
+          },
+          {
+            pattern: /^[a-zA-Z]\w{5,17}$/,
+            message: "以字母开头，长度在6~18之间，只能包含字母、数字和下划线",
           },
         ],
 
@@ -160,6 +175,18 @@ export default {
             trigger: "blur",
           },
         ],
+
+        // 邮箱
+        email: [
+          { required: true, message: "请输入邮箱", trigger: "blur" },
+          {
+            pattern: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+            message: "邮箱格式不正确",
+          },
+        ],
+
+        // 头像
+        avatar: [{ required: true, message: "请上传图片", trigger: "blur" }],
       },
     };
   },
@@ -203,7 +230,12 @@ export default {
           vModel={this.form.captcha}
           class="captcha"
         ></el-input>
-        <img src={"data:image/png;base64," + this.url} onClick={()=>{this.getCaptcha()}} />
+        <img
+          src={"data:image/png;base64," + this.url}
+          onClick={() => {
+            this.getCaptcha();
+          }}
+        />
       </el-form-item>
     );
 
@@ -257,11 +289,23 @@ export default {
       </el-form-item>
     );
 
-    // 按钮
-    let btn = (
-      <el-form-item>
-        <el-button type="success" size="medium" class="handleBtn" onClick={() => this.cb()}>
-          {this.btnText}
+    // 邮箱
+    let email = (
+      <el-form-item label="邮箱" prop="email">
+        <el-input
+          vModel={this.form.email}
+          placeholder="请输入邮箱"
+          prefix-icon="el-icon-message"
+        ></el-input>
+      </el-form-item>
+    );
+
+    // 头像
+    let avatar = (
+      <el-form-item label="头像" prop="avatar" inline={true}>
+        <el-avatar size={50} src={this.form.avatar}></el-avatar>
+        <el-button size="small" type="primary">
+          上传头像
         </el-button>
       </el-form-item>
     );
@@ -275,7 +319,23 @@ export default {
       confirmPassword,
       loginId,
       userName,
+      email,
+      avatar,
     };
+
+    // 按钮
+    let btn = (
+      <el-form-item>
+        <el-button
+          type="success"
+          size="medium"
+          class="handleBtn"
+          onClick={() => this.cb()}
+        >
+          {this.btnText}
+        </el-button>
+      </el-form-item>
+    );
 
     return (
       <el-form
@@ -292,6 +352,10 @@ export default {
         {
           // 渲染表单选项
           this.options.map((component) => allOptions[component])
+        }
+        {
+          // 插槽
+          this.$slots.showInfo
         }
         {
           // 渲染按钮
@@ -319,21 +383,21 @@ export default {
     },
 
     // 验证码发送倒计时
-    startCountDown(){
-      let timer = setInterval(()=>{
-        if(this.count>0){
+    startCountDown() {
+      let timer = setInterval(() => {
+        if (this.count > 0) {
           this.count--;
-        }else{
+        } else {
           clearInterval(timer);
           this.isSended = false;
           this.count = 60;
         }
-      },1000);
+      }, 1000);
     },
 
     // 根据手机号发送验证码
-   sendCode() {
-      this.$refs.form.validateField("phone", async (err)=> {
+    sendCode() {
+      this.$refs.form.validateField("phone", async (err) => {
         console.log(err);
         if (!err) {
           // console.log("发送验证码");
@@ -353,19 +417,32 @@ export default {
           this.isSended = true;
           this.elMessage.success(res.message);
           this.startCountDown();
-        }else{
+        } else {
           this.elMessage.error(res.message);
         }
       });
     },
 
     // 点击图片获取验证码
-    async getCaptcha(){
-     const {data:res} = await this.$captcha.post('/getCaptcha')
-    //  console.log('res: ', res);
-    //  console.log('res.data.img: ', res.data.img);
-     this.url  = res.data.img;
-    }
+    async getCaptcha() {
+      const { data: res } = await this.$captcha.post("/getCaptcha");
+      //  console.log('res: ', res);
+      //  console.log('res.data.img: ', res.data.img);
+      this.url = res.data.img;
+    },
+
+    // 点击上传图片
+    async uploadAvatar(res, file) {
+      console.log("file: ", file);
+      console.log("res: ", res);
+    },
   },
 };
 </script>
+<style lang="less" scoped>
+.avatar {
+  display: inline-block;
+  vertical-align: 20px;
+  margin-left: 20px;
+}
+</style>
