@@ -51,6 +51,14 @@
             <span>环境监测</span>
           </template>
         </el-menu-item>
+        <el-menu-item index="/disease-diagnosis">
+          <template slot="title">
+            <!-- 图标 -->
+            <i class="el-icon-search"></i>
+            <!-- 文本 -->
+            <span>疾病诊断</span>
+          </template>
+        </el-menu-item>
       </el-submenu>
       <!-- 渔业管理 -->
       <el-submenu index="2">

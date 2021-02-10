@@ -12,7 +12,7 @@
           <span>监控设备</span>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary" @click="ShowAddDevice=true" round>添加设备</el-button>
+          <el-button type="primary" @click="ShowAddDevice=true">添加设备</el-button>
         </el-col>
       </el-row>
       <!--标题区域——send-->
@@ -58,7 +58,7 @@
             </el-table-column>
             <el-table-column label="操作" align="center">
               <template slot-scope="scope">
-              <el-tooltip content="删除设备"><el-button type="danger" icon="el-icon-delete" circle @click="deletedevice(scope.row.id)"></el-button></el-tooltip>
+              <el-tooltip content="删除设备"><el-button type="danger" icon="el-icon-delete" size="mini" @click="deletedevice(scope.row.id)"></el-button></el-tooltip>
               </template>
             </el-table-column>
             </el-table>
@@ -94,7 +94,7 @@ export default {
       total:0,
       // 控制添加监控设备卡片的显示隐藏
       ShowAddDevice: false,
-      baseId:'1248910886228332544',
+      baseId:this.$store.state.userInfo.baseId,
       //---------------设备信息列表相关属性——start
       //equipmentList 存放设备信息
       equipmentList:[],
@@ -127,9 +127,8 @@ export default {
       const {data:res} = await this.$base.post(`search/${this.page_index}/${this.page_size}`,{
         baseId: this.baseId
       })
-      console.log(res);
       if(res.statusCode!==20000) {
-        return this.$message.error('获取监控设备信息列表失败！')
+        return this.elMessage.error('获取监控设备信息列表失败！')
       }
       this.equipmentList = res.data.records
       this.total = res.data.total
@@ -139,7 +138,7 @@ export default {
     },
     // 用于设备删除按钮 根据id删除设备
     async deletedevice(id) {
-      const confirmResult = await this.$confirm('此操作将永久删除该设备信息, 是否继续?', '提示', {
+      const confirmResult = await this.elConfirm('此操作将永久删除该设备信息, 是否继续?', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
@@ -147,23 +146,23 @@ export default {
         return err         
       });
       if (confirmResult !== 'confirm') {
-        return this.$message.info('已取消删除')
+        return this.elMessage.info('已取消删除')
       }
       const {data:res} = await this.$base.delete(`/${id}`)
       if(res.statusCode!==20000) {
-        return this.$message.error('删除设备失败！')
+        return this.elMessage.error('删除设备失败！')
       }
-      this.$message.success('删除设备成功！')
+      this.elMessage.success('删除设备成功！')
       this.getequipmentList()
     },
     // 修改设备的状态 即是否溯源
     async changeCode(id,status) {
       await this.$monitor.get(`modify/${id}/${status}`).then(res=> {
         if(res.data.statusCode!==20000) {
-          return this.$message.error('修改失败！')
+          return this.elMessage.error('修改失败！')
         }
         this.getequipmentList()
-        this.$message.success('修改成功！')
+        this.elMessage.success('修改成功！')
       })
     },
     // 页码改变

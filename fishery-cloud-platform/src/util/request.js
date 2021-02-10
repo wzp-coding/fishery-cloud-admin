@@ -24,6 +24,7 @@ const baseURLObject = {
     meteorologicalData:"http://119.23.218.131:9110/meteorologicalData/",
     waterData:"http://119.23.218.131:9110/waterData/",
     monitor:"http://119.23.218.131:9110/monitor/",
+    diagnose:"http://119.23.218.131:9112/search/diagnose",
     plant: "http://119.23.218.131:9111/",
     managementOrder:"http://119.23.218.131:9107/logistics/order/",
     message:"http://119.23.218.131:9109/message/"

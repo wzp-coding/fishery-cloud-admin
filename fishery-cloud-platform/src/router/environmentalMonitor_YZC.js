@@ -5,6 +5,7 @@ import ManagementWaterQualityWarn from '../views/ManagementWaterQualityWarn.vue'
 import ManagementWeatherWarn from '../views/ManagementWeatherWarn.vue'
 import InfoWeather from '../views/InfoWeather.vue'
 import InfoWaterQuality from '../views/InfoWaterQuality.vue'
+import DiseaseDiagnosis from '../views/DiseaseDiagnosis.vue'
 export default [
     {
         // 实况监控
@@ -41,4 +42,9 @@ export default [
         path: '/info-water-quality',
         component: InfoWaterQuality
     },
+    {
+        // 疾病诊断
+        path: '/disease-diagnosis',
+        component: DiseaseDiagnosis
+    }
 ]

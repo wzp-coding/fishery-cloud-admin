@@ -16,8 +16,8 @@
         </el-col>
          <el-col :span="6" :push="4">
              <div class="grid-content bg-purple">
-                 <el-button type="primary" round @click="ShowAddDialog()">添加阈值</el-button>
-                 <el-button type="primary" round @click="back()">返回</el-button>
+                 <el-button type="primary" @click="ShowAddDialog()">添加阈值</el-button>
+                 <el-button type="primary" @click="back()">返回</el-button>
              </div>
          </el-col>
         </el-row>
@@ -114,11 +114,11 @@
                     </span>
                     <!--修改参数按钮-->
                     <span style="margin:15px">
-                        <el-button type="primary" icon="el-icon-edit" circle @click="showEditDialog(scope.row)"></el-button>
+                        <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row)"></el-button>
                     </span>
                     <!--删除按钮-->
                     <span style="margin:15px">
-                        <el-button type="danger" icon="el-icon-delete" circle @click="deletemessage(scope.row.id)"></el-button>
+                        <el-button type="danger" icon="el-icon-delete" size="mini" @click="deletemessage(scope.row.id)"></el-button>
                     </span>
                     </div>
                 </template>
@@ -237,11 +237,6 @@ export default {
         this.equipmentId = this.$route.query.equipmentId
         this.getwarningList()
     },
-    watch: {
-        editForm: function() {
-            console.log(this.editForm);
-        }
-    },
     methods:{
         // 获取预警信息
         async getwarningList() {
@@ -249,9 +244,8 @@ export default {
                 equipmentId:this.equipmentId
             })
             if(res.statusCode!==20000) {
-                return this.$message.error('获取信息列表失败！')
+                return this.elMessage.error('获取信息列表失败！')
             }
-            console.log(res.data.records);
             this.warningList = res.data.records
             this.page_total = res.data.total
         },
@@ -271,9 +265,9 @@ export default {
                 this.addeForm.updateDate = this.checkTime(this.addeForm.updateDate)
                 const {data:res} = await this.$warning.post('',this.addeForm)
                 if(res.statusCode!==20000) {
-                    return this.$message.error('添加失败！')
+                    return this.elMessage.error('添加失败！')
                 }
-                this.$message.success('添加成功！')
+                this.elMessage.success('添加成功！')
                 this.getwarningList()
                 this.addDialogVisible = false
             })
@@ -302,9 +296,9 @@ export default {
                 if(!valid) return false
                 const {data:res} = await this.$warning.put(`${this.editForm.id}`,this.editForm)
                 if(res.statusCode!==20000) {
-                    return this.$message.error('修改状态失败！')
+                    return this.elMessage.error('修改状态失败！')
                 }
-                this.$message.success('修改成功')
+                this.elMessage.success('修改成功')
                 this.getwarningList()
             })
             this.editDialogVisible = false
@@ -314,9 +308,9 @@ export default {
         async changeCode(info) {
             const {data:res} = await this.$warning.put(`${info.id}`,info)
             if(res.statusCode!==20000) {
-                return this.$message.error('修改状态失败！')
+                return this.elMessage.error('修改状态失败！')
             }
-            this.$message.success('修改成功')
+            this.elMessage.success('修改成功')
             this.getwarningList()
         },
         // 页码改变
@@ -327,7 +321,7 @@ export default {
         },   
       // 根据id删除设备
        async deletemessage(id) {
-           const confirmResult = await this.$confirm('此操作将永久删除该阈值, 是否继续?', '提示', {
+           const confirmResult = await this.elConfirm('此操作将永久删除该阈值, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
@@ -335,13 +329,13 @@ export default {
                return err         
             });
             if (confirmResult !== 'confirm') {
-                return this.$message.info('已取消删除')
+                return this.elMessage.info('已取消删除')
             }
             const {data:res} = await this.$warning.delete(`${id}`)
             if(res.statusCode!==20000) {
-           return this.$message.error('删除设备失败！')
+           return this.elMessage.error('删除设备失败！')
           }
-            this.$message.success('删除设备成功！')
+            this.elMessage.success('删除设备成功！')
             this.getwarningList()
         },
         // 格式化时间
@@ -355,7 +349,6 @@ export default {
             const min = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()
             const sec = d.getSeconds() < 10 ? '0' + d.getSeconds() : d.getSeconds()
             const times = d.getFullYear() + '-' + month + '-' + day + ' ' + hours + ':' + min + ':' + sec
-            console.log(times);
             return times
         },
     }

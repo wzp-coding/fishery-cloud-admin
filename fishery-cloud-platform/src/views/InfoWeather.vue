@@ -14,7 +14,7 @@
           <span>气象设备</span>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary" @click="ShowAddDevice=true" round>添加设备</el-button>
+          <el-button type="primary" @click="ShowAddDevice=true">添加设备</el-button>
         </el-col>
       </el-row>
       <!--标题区域——send-->
@@ -47,11 +47,11 @@
             <el-table-column prop="username" label="用户名称"></el-table-column>
             <el-table-column prop="baseName" label="基地名称"></el-table-column>
             <el-table-column prop="remarks" label="备注信息"></el-table-column>
-            <el-table-column label="操作" width="170px" align="center">
+            <el-table-column label="操作" width="180px" align="center">
               <template slot-scope="scope">
-              <el-tooltip content="修改设备信息"><el-button type="primary" icon="el-icon-edit" circle @click="editshow(scope.row)"></el-button></el-tooltip>
-              <el-tooltip content="修改气象预警阈值"><el-button type="success" icon="el-icon-data-line" circle @click="ToManagementWQW(scope.row.equipmentId)"></el-button></el-tooltip>
-              <el-tooltip content="删除设备"><el-button type="danger" icon="el-icon-delete" circle @click="deletedevice(scope.row.id)"></el-button></el-tooltip>
+              <el-tooltip content="修改设备信息"><el-button type="primary" icon="el-icon-edit" size="mini" @click="editshow(scope.row)"></el-button></el-tooltip>
+              <el-tooltip content="修改气象预警阈值"><el-button type="success" icon="el-icon-data-line" size="mini" @click="ToManagementWQW(scope.row.equipmentId)"></el-button></el-tooltip>
+              <el-tooltip content="删除设备"><el-button type="danger" icon="el-icon-delete" size="mini" @click="deletedevice(scope.row.id)"></el-button></el-tooltip>
               </template>
             </el-table-column>
             </el-table>
@@ -107,7 +107,7 @@ export default {
       breadcrumbs:["设备管理","气象设备"],
       SearchType:'气象设备',
       typeId:'0',
-      baseId:'1248910886228332544',
+      baseId:this.$store.state.userInfo.baseId,
       //---------------设备信息列表相关属性——start
       //equipmentList 存放设备信息
       equipmentList:[],
@@ -173,7 +173,7 @@ export default {
     async getequipmentList() {
       const {data:res} = await this.$equipment.get(`/findAllByBaseId/${this.baseId}/${this.typeId}/${this.page_index}/${this.page_size}`)
       if (res.statusCode!==20000) {
-        return this.$message.error('获取信息列表失败！')
+        return this.elMessage.error('获取信息列表失败！')
       }
       this.equipmentList = res.data.records
       this.page_total = res.data.total
@@ -183,18 +183,17 @@ export default {
     async getpondList() {
       const {data:res} = await this.$equipment.get(`http://119.23.218.131:9103/pond/getInfo/${this.baseId}/500/1`)
       if(res.statusCode !== 20000) {
-        return this.$message.error('获取池塘信息失败！')
+        return this.elMessage.error('获取池塘信息失败！')
       }
       this.pondList = res.data.records
     },
     // 确定按钮 提交修改信息表单
     async editEquipmentInfo() {
-      console.log(this.editForm);
       const {data:res} = await this.$equipment.put(`/${this.editForm.id}`,this.editForm)
       if(res.statusCode !== 20000) {
-        return this.$message.error('修改信息失败！')
+        return this.elMessage.error('修改信息失败！')
       }
-      this.$message.success('修改成功')
+      this.elMessage.success('修改成功')
       this.getequipmentList()
       this.editDialogVisible = false
     },
@@ -213,7 +212,6 @@ export default {
     },
     // 显示修改设备信息对话框 并把修改对象信息存入editForm展示
     editshow(editinfo) {
-      console.log(editinfo);
       this.editForm = editinfo
       this.editDialogVisible = true
     },
@@ -229,7 +227,7 @@ export default {
     },
     // 用于设备删除按钮 根据id删除设备
     async deletedevice(id) {
-      const confirmResult = await this.$confirm('此操作将永久删除该设备信息, 是否继续?', '提示', {
+      const confirmResult = await this.elConfirm('此操作将永久删除该设备信息, 是否继续?', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
@@ -237,13 +235,13 @@ export default {
         return err         
       });
       if (confirmResult !== 'confirm') {
-        return this.$message.info('已取消删除')
+        return this.elMessage.info('已取消删除')
       }
       const {data:res} = await this.$equipment.delete(`/${id}`)
       if(res.statusCode!==20000) {
-        return this.$message.error('删除设备失败！')
+        return this.elMessage.error('删除设备失败！')
       }
-      this.$message.success('删除设备成功！')
+      this.elMessage.success('删除设备成功！')
       this.getequipmentList()
     },
   }

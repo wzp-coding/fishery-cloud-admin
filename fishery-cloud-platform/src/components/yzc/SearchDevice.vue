@@ -13,43 +13,36 @@ export default {
         return {
             // 搜索输入
             searchinput: '',
-            fff:[]
+            fff:[],
+            baseId:this.$store.state.userInfo.baseId
         }
     },
-    // watch: {
-    //     searchinput: function() {
-    //         const input = this.searchinput
-    //         const searchdate = this.equipmentList.filter(value => {
-    //             return value.equipmentName.match(input)
-    //         })
-    //         this.$emit('searchdate',searchdate)
-    //     }
-    // }
     methods: {
         async search () {
             if(this.searchinput == '') {
-                return this.$message.error('请输入搜索内容')
+                return this.elMessage.error('请输入搜索内容')
             }
             if(this.SearchType === '水质设备'||this.SearchType === '气象设备') {
                 await this.$equipment.post('search/1/5',{
-                    equipmentName:this.searchinput
+                    equipmentName:this.searchinput,
+                    baseId:this.baseId
                 }).then(res=> {
                     if(res.data.statusCode !== 20000) {
                         return this.$messsge.error('查询失败')
                     }
-                    this.$message.success('查询成功')
+                    this.elMessage.success('查询成功')
                     this.$emit('searchfor',res.data.data.records)
                 })
             }
             if(this.SearchType === '监控设备') {
                 await this.$base.post('/search/1/5',{
-                    deviceSerial:this.searchinput
+                    deviceSerial:this.searchinput,
+                    baseId:this.baseId
                 }).then(res => {
-                    console.log(res);
                     if(res.data.statusCode !== 20000) {
                         return this.$messsge.error('查询失败')
                     }
-                    this.$message.success('查询成功')
+                    this.elMessage.success('查询成功')
                     this.$emit('searchfor',res.data.data.records)
                 })
             }

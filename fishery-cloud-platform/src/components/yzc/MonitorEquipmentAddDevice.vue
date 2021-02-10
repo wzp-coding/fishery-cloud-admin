@@ -39,7 +39,7 @@
 export default {
     data() {
         return {
-            baseId:'1248910886228332544',
+            baseId:this.$store.state.userInfo.baseId,
             baseList:[],
             // 存放添加表单数据
             addForm: {
@@ -89,14 +89,13 @@ export default {
         adddevice() {
             this.addForm.baseId = this.baseId
             this.addForm.createDate = this.getnowtime()
-            console.log(this.addForm);
             this.$monitor.post('add',this.addForm).then(res  => {
                 if(res.data.statusCode!==20000) {
-                    return this.$message.error('添加失败！')
+                    return this.elMessage.error('添加失败！')
                 }
                 this.$emit('ShowAddDevice',false)
                 this.$emit('getequipmentList')
-                this.$message.success('添加成功！')
+                this.elMessage.success('添加成功！')
                 this.HideAddDevice()
             })
         },

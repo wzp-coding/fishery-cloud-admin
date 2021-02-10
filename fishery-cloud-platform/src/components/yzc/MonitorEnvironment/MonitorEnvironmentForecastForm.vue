@@ -38,7 +38,7 @@
         <!--按钮区域——start-->
         <el-row>
             <el-col :push="15">
-                <el-button type="primary" @click="sendfrom" round>开始预测</el-button>
+                <el-button type="primary" @click="sendfrom">开始预测</el-button>
             </el-col>
         </el-row>
         <!--按钮区域——end-->

@@ -15,7 +15,7 @@
                     <span>环境预测</span>
                 </el-col>
                 <el-col :span="2">
-                    <el-button type="primary" round @click="SwitchingFunction">数据查询</el-button>
+                    <el-button type="primary" @click="SwitchingFunction">数据查询</el-button>
                 </el-col>
             </el-row>
             <!--标题区域——end-->
@@ -129,7 +129,7 @@ export default {
             breadcrumbs:["我的基地","环境监测"],
             warn: '无',
             //----------预测内容表单相关属性——start
-            baseId:'1248910886228332544',
+            baseId:this.$store.state.userInfo.baseId,
             // 表单内容是否显示
             showfrom: true,
             // forecaseForm用于存放需要预测的信息(从预测表单子组件获得)
@@ -191,7 +191,6 @@ export default {
                 baseId:this.baseId
             })
             this.equipmentList = res.data
-            console.log(this.equipmentList)
         },
         // 用于预测结果卡片中的预测按钮 关闭预测closeforecast 清空接收预测信息的对象 在关闭预测后预测内容区域表单置空
         closeforecast() {
@@ -225,7 +224,6 @@ export default {
             const res = new Date(totals).toString() // 毫秒数转字符串，截取，取值
             lists.push(this.checkTime(res))
             }
-            // console.log(lists)
             return lists
         },
         // 格式化时间
@@ -262,13 +260,12 @@ export default {
             // this.$forecast.post(`${myflag}/${this.forecaseForm.arithmetic}/1/50`,form)
             const {data:res} = await this.$originAxios.post(`http://106.75.154.40:9004/datarecord/forecast${myflag}/${forecaseForm.arithmetic}/1/500`,form)
             if(res.code !== 200) {
-                return this.$message.error(('预测失败'))
+                return this.elMessage.error(('预测失败'))
             }
             if (res.data.orgindata.length === 0) {
-                return this.$message.info('查无数据')
+                return this.elMessage.info('查无数据')
             }
-            console.log(res.data);
-            this.$message.success('预测成功')
+            this.elMessage.success('预测成功')
             this.warn = res.data.warn === true?'预测到接下来一段时间内，当前通道值可能会超出或低于阀值，请及时做出相应处理':'无'
             const length = this.getTimeLength(forecaseForm.startTime, forecaseForm.endTime)
             const xData = this.makeEchartXData(forecaseForm.startTime, this.interval, length)
