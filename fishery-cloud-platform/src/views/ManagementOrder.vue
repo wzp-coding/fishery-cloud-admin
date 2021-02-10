@@ -53,12 +53,12 @@
         <el-table-column
           prop="money"
           label="金额/元"
-          width="100"
+          width="70"
         ></el-table-column>
         <el-table-column
           prop="weight"
           label="重量/kg"
-          width="100"
+          width="70"
         ></el-table-column>
         <el-table-column
           prop="gmtCreate"
@@ -475,6 +475,7 @@ export default {
       }
       this.OrderList = res.data.records;
       this.total = res.data.total;
+      console.log("uersinfo-->",this.$store.state.userInfo.baseId)
       console.log("OrderList:",this.OrderList)
       console.log("total:",this.total)
     },
