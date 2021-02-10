@@ -81,10 +81,6 @@ export default {
     labels() {
       return this.model.labels;
     },
-    // 基地ID
-    // baseId() {
-    //   return localStorage.getItem("baseId");
-    // },
   },
   created() {
     this.getAllInfo();
