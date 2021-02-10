@@ -28,11 +28,11 @@ module.exports = class {
     /* 表单验证规则对象开始 */
     formRules = {
         productName: [
-            { required: true, message: "请输入产品名称", trigger: "blur" },
+            { required: true, message: `请输入${this.labels.productName}`, trigger: "blur" },
             {
                 min: 2,
                 max: 10,
-                message: "产品名称的长度在2~10个字符之间",
+                message: `${this.labels.productName}的长度在2~10个字符之间`,
                 trigger: "blur",
             },
         ],
@@ -86,15 +86,4 @@ module.exports = class {
         })
     }
     /* 修改结束 */
-
-    /* 删除开始 */
-    removeById(id) {
-        return new Promise((resolve) => {
-            this.vue.$plant.delete(`/processingFactory/product/${id}`)
-                .then((res) => {
-                    resolve(res);
-                })
-        })
-    }
-    /* 删除结束 */
 }

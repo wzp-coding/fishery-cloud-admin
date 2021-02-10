@@ -12,7 +12,7 @@
             个人中心<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>退出登录</el-dropdown-item>
+            <el-dropdown-item style="width:60px">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -41,14 +41,14 @@ export default {
   methods: {
     // 退出登录操作
     loginOut() {
-      // localStorage.setItem("token", "");
+      localStorage.removeItem("token");
       this.$router.push("/login");
     },
     showUserInfo() {
       this.dialogVisible = !this.dialogVisible;
     },
     beforeClose(done) {
-      this.$confirm("是否保存修改内容后关闭？")
+      this.elConfirm("是否保存修改内容后关闭？")
         .then((_) => {
           done();
         })

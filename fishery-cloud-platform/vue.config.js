@@ -14,7 +14,17 @@ module.exports = {
                 pathRewrite: {
                     '^/api': ''
                 }
-            }
+            },
+            '/host':{
+                target:"http://119.23.218.131:9102/",
+                ws: true,
+                //开启代理：在本地会创建一个虚拟服务端，然后发送请求的数据，并同时接收请求的数据，这样客户端端和服务端进行数据的交互就不会有跨域问题
+                changeOrigin: true,
+                // 将"/api去掉"(这样在浏览器看的时候不会看到api)
+                pathRewrite: {
+                    '^/host': ''
+                }
+            },
         }
     }
 }

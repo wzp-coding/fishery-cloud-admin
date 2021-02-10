@@ -11,19 +11,19 @@
   </div>
 </template>
 <script>
-import ljc from "../processPlant/processPlant";
-import ljcProduct from "../product/product";
 export default {
   props: {
+    // 要删除的ID
     id: {},
+    // 标题
     title: {},
-    tag: {},
+    // 删除路径
+    deleteUrl: {},
+    // 根路径
+    root: {},
   },
   data() {
-    return {
-      model: new ljc(this),
-      modelProduct: new ljcProduct(this),
-    };
+    return {};
   },
   created() {},
   methods: {
@@ -43,25 +43,15 @@ export default {
       if (confirmResult !== "confirm") {
         return this.$message.info("已取消删除");
       }
-      if (this.tag == "product") {
-        const { data: res } = await this.modelProduct.removeById(this.id);
-        this.messageInfo(res);
-      }
-      if (this.tag == "plant") {
-        const { data: res } = await this.model.removeById(this.id);
-        this.messageInfo(res);
-      }
-    },
-    /* 删除结束 */
-
-    /* 提示判断开始 */
-    messageInfo(res) {
+      const { data: res } = await this["$" + this.root].delete(
+        `${this.deleteUrl}/${this.id}`
+      );
       if (res.statusCode == 20000) {
         this.$emit("getAllInfo");
         this.$message.success(res.message);
       }
     },
-    /* 提示判断结束 */
+    /* 删除结束 */
   },
 };
 </script>

@@ -11,30 +11,44 @@
       :title="formTitle"
       :visible.sync="addDialogVisible"
       @close="addDialogClosed"
+      width="40%"
     >
-      <el-form :model="addFrom" ref="addFromRef" :rules="formRules">
-        <el-form-item
-          :label="labels.processingFactoryName"
-          prop="processingFactoryName"
-        >
-          <el-input v-model="addFrom.processingFactoryName"></el-input>
+      <el-form
+        :model="addFrom"
+        ref="addFromRef"
+        :rules="formRules"
+        label-width="100px"
+        label-position="left"
+        :hide-required-asterisk="true"
+      >
+        <el-form-item :label="labels.craftName" prop="craftName">
+          <el-input v-model="addFrom.craftName"></el-input>
         </el-form-item>
-        <el-form-item
-          :label="labels.processingFactoryAddress"
-          prop="processingFactoryAddress"
-        >
-          <el-input v-model="addFrom.processingFactoryAddress"></el-input>
+        <el-form-item :label="labels.craftDescription" prop="craftDescription">
+          <el-input
+            type="textarea"
+            placeholder="请输入内容"
+            v-model="addFrom.craftDescription"
+          >
+          </el-input>
         </el-form-item>
-        <el-form-item :label="labels.createPersonId" prop="createPersonId">
-          <el-select v-model="addFrom.createPersonId">
+        <el-form-item :label="labels.craftResponsible" prop="craftResponsible">
+          <el-select v-model="addFrom.craftResponsible">
             <el-option
               v-for="item in createPersonList"
               :key="item.id"
               :label="item.personName"
-              :value="item.id"
+              :value="item.personName"
             >
             </el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item :label="labels.craftTime" prop="craftTime">
+          <el-input-number
+            v-model="addFrom.craftTime"
+            controls-position="right"
+            :min="1"
+          ></el-input-number>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -46,62 +60,55 @@
   </div>
 </template>
 <script>
-import ljc from "../processPlant/processPlant";
+import ljc from "../craft/craft";
+import ljcPublic from "../public/public";
 export default {
   props: {
-    baseId: {},
+    processingFactoryId: {},
     labels: {},
   },
   data() {
     return {
       model: new ljc(this),
+      public: new ljcPublic(this),
 
       // 表单名称
-      formTitle: "添加加工厂",
+      formTitle: "添加加工工艺",
 
       // 控制添加表单的显示与隐藏
       addDialogVisible: false,
 
       // 添加信息
       addFrom: {},
-
-      /* 提示信息开始 */
-      addSuccessInfo: "添加加工厂成功！！",
-      addErrorInfo: "加工厂已存在，请重新输入",
-      /* 提示信息结束 */
-
     };
   },
   computed: {
     // 管理员数组
     createPersonList() {
-      return this.model.createPersonList;
+      return this.public.createPersonList;
     },
 
-    // 表单验证规则对象
+    // 验证规则
     formRules() {
       return this.model.formRules;
     },
   },
   created() {},
   methods: {
-    /* 添加加工厂开始 */
+    /* 添加开始 */
     addInfo() {
       this.$refs.addFromRef.validate(async (val) => {
         if (!val) return false;
-        this.addFrom.baseId = this.baseId;
-        console.log(this.addFrom);
-        await this.model.addInfo(this.addFrom).then((val) => {
-          if (val.status !== 200) {
-            this.$message.error(this.addErrorInfo);
-          }
-          this.$message.success(this.addSuccessInfo);
-          this.$emit("getAllInfo");
-          this.addDialogVisible = false;
-        });
+        this.addFrom.processingFactoryId = this.processingFactoryId;
+        const { data: res } = await this.model.addInfo(this.addFrom);
+        if (res.statusCode == 20000) {
+          this.$message.success(res.message);
+        }
+        this.$emit("getAllInfo");
+        this.addDialogVisible = false;
       });
     },
-    /* 添加加工厂结束 */
+    /* 添加结束 */
 
     /* 监听窗口关闭事件开始 */
     addDialogClosed() {

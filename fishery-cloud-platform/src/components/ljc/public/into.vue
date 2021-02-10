@@ -12,6 +12,7 @@
 export default {
   props: {
     id: {},
+    otherQuery: {},
     type: {},
     icon: {},
     size: {},
@@ -23,9 +24,10 @@ export default {
   created() {},
   methods: {
     into() {
+      this.otherQuery["ID"] = this.id;
       this.$router.push({
         path: this.path,
-        query: { ID: this.id },
+        query: this.otherQuery,
       });
     },
   },

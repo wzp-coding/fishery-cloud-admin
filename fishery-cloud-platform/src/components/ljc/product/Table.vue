@@ -1,27 +1,38 @@
 <template>
   <div>
     <!-- 表格开始 -->
-    <el-table :data="allList" border stripe>
-      >
+    <el-table
+      :data="allList"
+      border
+      stripe
+      :header-cell-style="{ 'text-align': 'center' }"
+    >
       <el-table-column type="index"> </el-table-column>
-      <el-table-column prop="id" :label="labels.id"></el-table-column>
+      <el-table-column
+        prop="id"
+        :label="labels.id"
+        align="center"
+      ></el-table-column>
       <el-table-column
         prop="productName"
         :label="labels.productName"
+        align="center"
       ></el-table-column>
       <el-table-column
         prop="germchitId"
         :label="labels.germchitId"
+        align="center"
       ></el-table-column>
       <el-table-column
         prop="processingFactoryId"
         :label="labels.processingFactoryId"
+        align="center"
       ></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-row :gutter="10">
             <el-col :span="6">
-              <TheEdit
+              <Edit
                 :id="scope.row.id"
                 :labels="labels"
                 :title="title"
@@ -35,20 +46,22 @@
                 placement="top"
                 :enterable="false"
               >
-                <TheInto
+                <Into
                   :id="scope.row.id"
                   type="warning"
                   icon="el-icon-d-arrow-right"
                   size="mini"
                   :path="path"
+                  :otherQuery="otherQuery"
                 />
               </el-tooltip>
             </el-col>
             <el-col :span="6">
-              <TheDelete
-                tag="product"
+              <Delete
                 :id="scope.row.id"
                 :title="title"
+                :root="root"
+                :deleteUrl="deleteUrl"
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
@@ -61,14 +74,14 @@
 </template>
 
 <script>
-import TheDelete from "../public/delete";
-import TheInto from "../public/into";
-import TheEdit from "../product/TheEdit";
+import Delete from "../public/delete";
+import Into from "../public/into";
+import Edit from "../product/Edit";
 export default {
   components: {
-    TheDelete,
-    TheEdit,
-    TheInto,
+    Delete,
+    Edit,
+    Into,
   },
   props: {
     // 表格数据
@@ -80,16 +93,30 @@ export default {
     // 主题
     title: {},
 
-    // 跳转路径
-    path: "/info-craft",
-
-    // 跳转信息
-    buttonInfo: "查看工艺",
+    // 加工厂编号
+    processingFactoryId: {},
   },
   data() {
-    return {};
+    return {
+      // 跳转信息
+      buttonInfo: "查看工艺",
+
+      // 跳转路径
+      path: "/info-craft",
+
+      // 删除接口的根路径标签
+      root: "plant",
+
+      // 删除接口的路径
+      deleteUrl: "/processingFactory/product",
+    };
   },
-  computed: {},
+  computed: {
+    // 跳转的其他参数对象
+    otherQuery() {
+      return { processingFactoryId: this.processingFactoryId };
+    },
+  },
   methods: {
     getAllInfo() {
       this.$emit("getAllInfo");

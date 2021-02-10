@@ -89,6 +89,11 @@ export default {
       validator(str) {
         return ["logistics", "base"].includes(str);
       },
+       default() {
+        return {
+          a:'base'
+        };
+      },
     },
   },
   methods: {
