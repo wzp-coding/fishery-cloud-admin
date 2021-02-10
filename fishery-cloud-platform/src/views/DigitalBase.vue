@@ -12,7 +12,6 @@
             style="float: right"
             plain
             @click="changeAuthorityShow"
-            v-permission="'aoijioasd'"
             >所持权限</el-button
           >
         </el-col>
