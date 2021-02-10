@@ -69,6 +69,7 @@ export default {
       pageSize: 4,
       // 总数据
       allList: [],
+      baseId: "1248910886228332544",
     };
   },
   computed: {
@@ -76,13 +77,10 @@ export default {
     labels() {
       return this.model.labels;
     },
-    // 基地ID
-    baseId() {
-      return localStorage.getItem("baseId");
-    },
   },
   created() {
     this.getAllInfo();
+    console.log(this.$store.userInfo);
   },
   methods: {
     // 获取表格信息

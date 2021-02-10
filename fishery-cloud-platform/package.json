@@ -7,6 +7,9 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@uppy/core": "^1.16.0",
+    "@uppy/tus": "^1.8.4",
+    "@uppy/vue": "^0.1.4",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "echarts": "^4.9.0",
