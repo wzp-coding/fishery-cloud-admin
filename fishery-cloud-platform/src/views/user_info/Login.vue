@@ -42,7 +42,7 @@ export default {
     Form,
   },
   methods: {
-    ...mapMutations(['setUserInfo']),
+    ...mapMutations(["setUserInfo"]),
     handleTabClick(tab) {
       // console.log("tab: ", tab);
       this.activeName = tab.name;
@@ -58,22 +58,28 @@ export default {
       let { phoneCode, phone, captcha, password } = form;
       let url;
       if (this.activeName === "passwordLogin") {
-        url = `/user/login?password=${password}&phone=${phone}&code=${captcha}`;
+        url = `/login?password=${password}&phone=${phone}&code=${captcha}`;
       } else {
-        url = `/user/loginByPhone?phone=${phone}&code=${phoneCode}`;
+        url = `/loginByPhone?phone=${phone}&code=${phoneCode}`;
       }
-      const { data: res, headers } = await this.$authority.post(url);
-      // console.log("res: ", res);
+      const { data: res, headers } = await this.$user.post(url);
+      console.log("res: ", res);
       if (res.statusCode === 20000) {
         localStorage.setItem("token", headers.token);
-        this.$store.commit('setUserInfo', res.data)
+        this.$store.commit("setUserInfo", res.data);
         this.elMessage.success(res.message);
         this.$router.push("/digital-base");
       } else {
         this.$refs.passwordLogin.getCaptcha();
+        console.log("login.vue");
         this.elMessage.error(res.message);
       }
     },
+  },
+  mounted() {
+    if (this.activeName === "passwordLogin") {
+      this.$refs.passwordLogin.getCaptcha();
+    }
   },
 };
 </script>

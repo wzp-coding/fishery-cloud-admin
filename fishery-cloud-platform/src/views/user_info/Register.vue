@@ -33,11 +33,11 @@ export default {
   created() {},
   methods: {
     async handleSubmit(form) {
-      console.log("form: ", form);
+      // console.log("form: ", form);
       let { phoneCode, phone, password } = form;
-      const url = `/user/register?phone=${phone}&password=${password}&code=${phoneCode}`;
-      const { data: res } = await this.$authority.post(url);
-      console.log("res: ", res);
+      const url = `/register?phone=${phone}&password=${password}&code=${phoneCode}`;
+      const { data: res } = await this.$user.post(url);
+      // console.log("res: ", res);
       if(res.statusCode === 20000){
         this.elMessage.success(res.message);
         this.$router.push('/login');
