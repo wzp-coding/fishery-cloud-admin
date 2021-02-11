@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import Authority from "../components/wzp/Authority";
+import Authority from "../components/wzp/digital_base/Authority";
 import {
   DraggableMap,
   DraggableWeatherCard,

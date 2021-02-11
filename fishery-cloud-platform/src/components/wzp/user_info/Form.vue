@@ -1,5 +1,4 @@
 <script>
-import ShowInfo1Vue from "../../cgx/ManagementOrder/ShowInfo/ShowInfo1.vue";
 export default {
   props: {
     callback: {
@@ -82,6 +81,9 @@ export default {
 
       //   按钮文本内容
       btnText: this.button,
+
+      // 打开上传文件弹窗标志
+      isOpen: false,
 
       // 表单
       form: {
@@ -304,9 +306,15 @@ export default {
     let avatar = (
       <el-form-item label="头像" prop="avatar" inline={true}>
         <el-avatar size={50} src={this.form.avatar}></el-avatar>
-        <el-button size="small" type="primary">
+        <el-button onClick={() => (this.isOpen = true)} class="avatar">
           上传头像
         </el-button>
+        <UploadFile
+          type='image'
+          upload-success={(file) => this.uploadAvatar(file)}
+          close-modal={() => (this.isOpen = false)}
+          is-open={this.isOpen}
+        ></UploadFile>
       </el-form-item>
     );
 
@@ -426,15 +434,13 @@ export default {
     // 点击图片获取验证码
     async getCaptcha() {
       const { data: res } = await this.$captcha.post("/getCaptcha");
-      //  console.log('res: ', res);
-      //  console.log('res.data.img: ', res.data.img);
       this.url = res.data.img;
     },
 
     // 点击上传图片
-    async uploadAvatar(res, file) {
-      console.log("file: ", file);
-      console.log("res: ", res);
+    async uploadAvatar(file) {
+      console.log('file: ', file);
+      this.form.avatar = file.url;
     },
   },
 };

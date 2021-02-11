@@ -1,7 +1,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import Form from "./user_info/Form";
+import Form from "./Form";
 export default {
   components: {
     Form,
@@ -17,6 +17,7 @@ export default {
   methods: {
     handleSubmit(form) {
       console.log("form: ", form);
+      
     },
   },
   created() {

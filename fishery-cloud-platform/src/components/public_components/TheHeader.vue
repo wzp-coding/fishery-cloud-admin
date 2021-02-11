@@ -20,7 +20,7 @@
     <el-dialog
       title="个人信息"
       :visible.sync="dialogVisible"
-      width="60%"
+      width="30%"
       :before-close="beforeClose"
     >
       <InfoUser></InfoUser>
@@ -28,7 +28,7 @@
   </div>
 </template>
 <script>
-import InfoUser from "../wzp/InfoUser";
+import InfoUser from "../wzp/user_info/InfoUser";
 export default {
   data() {
     return {
