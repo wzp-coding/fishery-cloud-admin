@@ -141,7 +141,7 @@
           </template>
         </el-table-column>
 
-        <ThePagination :toPagination="paginationInfo"></ThePagination>
+        <!-- <ThePagination :toPagination="paginationInfo"></ThePagination> -->
       </TheCardAll>
       <ThePagination
         :toPagination="paginationInfo"
@@ -268,8 +268,9 @@
         <el-button type="primary" @click="addSupplise">确 定</el-button>
       </span>
     </TheDialogAll>
-    <!-- 修改信息 -->
-    <TheDialogAll :toDialogInfo="toDialogEditInfo"></TheDialogAll>
+    <!-- 编辑信息 -->
+    <editSupply :toDialogInfo="toDialogEditInfo" @fatherMethod="getAllSupplInfo"></editSupply>
+    <!-- <TheDialogAll :toDialogInfo="toDialogEditInfo"></TheDialogAll> -->
     <el-dialog :visible.sync="isPreview">
       <img :src="previewImg" alt class="previewImg" />
     </el-dialog>
@@ -283,7 +284,8 @@ import ThePagination from "../components/ccy/ThePagination";
 import TheDialogAll from "../components/ccy/TheDialogAll";
 import TheDialogLayout from "../components/ccy/TheDialogLayout";
 import TheInfoSupplyLayout from "../components/ccy/TheInfoSupplyLayout";
-// import LoginVue from "./Login.vue";
+import editSupply from "../components/ccy/InfoSupply/editSupply"
+
 export default {
   name: "Suppliesinfo",
   data() {
@@ -386,7 +388,8 @@ export default {
     TheDialogLayout,
     TheInfoSupplyLayout,
     // LoginVue,
-    TheCardHead
+    TheCardHead,
+    editSupply,
   },
   created() {
     this.getAllSupplInfo();
@@ -449,11 +452,8 @@ export default {
       console.log(res);
     },
     editSupplyEvent(id) {
-      this.edifSupplyInfo = id;
-    },
-    async editSupply() {
-      console.log(id);
-      // const {data : res} = await this.$supplyController.put()
+      this.toDialogEditInfo.dialogVisible = true
+      this.toDialogEditInfo.id = id
     },
     /* 图片相关的方法 */
     // 查看资料放大图片

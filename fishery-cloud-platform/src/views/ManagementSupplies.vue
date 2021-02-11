@@ -20,178 +20,180 @@
     </el-row>
     <el-tabs type="border-card">
       <el-tab-pane label="入库记录">
-        <TheCardAll>
-          <div slot="CardTitle">
-            <el-col style="width: 100px; float: right; margin-left: 10px">
-              <el-button type="primary" @click="toDialogAddInfo.dialogVisible = true">农资入库</el-button>
-            </el-col>
-            <!-- <el-col style="width: 100px; float: right">
-              <el-select >
-                <el-option> </el-option>
-              </el-select>
-            </el-col> -->
-          </div>
-          <div slot="ordinary">
-            <el-table-column type="index"> </el-table-column>
-            <!-- <el-table-column
-              prop="suppliesName"
-              label="农资名称"
-            ></el-table-column>
-            <el-table-column
-              prop="inTime"
-              label="入库日期"
-              width="180px"
-            ></el-table-column>
-            <el-table-column prop="inOperator" label="操作人"></el-table-column>
-            <el-table-column prop="warehouse" label="仓库号"></el-table-column>
-            <el-table-column
-              prop="inNumber"
-              label="入库数量(kg)"
-            ></el-table-column>
-            <el-table-column prop="remainNumber" label="剩余数量(kg)">
-              <template slot-scope="scope">
-                <el-tag type="info" v-if="scope.row.remainNumber > 20">{{
-                  scope.row.remainNumber
-                }}</el-tag>
-                <el-tag type="danger" v-else>{{
-                  scope.row.remainNumber
-                }}</el-tag>
-              </template>
-            </el-table-column> -->
-            <el-table-column label="操作" width="180px">
-              <template slot-scope="scope">
-                <!-- 修改按钮 -->
+        <el-row>
+          <el-col style="width: 100px; float: right; margin-left: 10px">
+            <el-button
+              type="primary"
+              @click="toDialogAddInfo.dialogVisible = true"
+              >农资入库</el-button
+            >
+          </el-col>
+          <el-col>
+            <!-- <el-select v-model="selectType1" @change="typeChange1">
+              <el-option
+                v-for="item in type"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select> -->
+          </el-col>
+        </el-row>
+        <el-table :data="baseSupplyList" border stripe>
+          <el-table-column type="expand">
+            <template slot-scope="props">
+              <el-form label-position="left" inline label-width="170px">
+                <TheSeedPurchaseLayout>
+                  <el-form-item label="投入品名称" slot="pre">{{
+                    props.row.supplyName
+                  }}</el-form-item>
+                  <el-form-item label="投入品类型" slot="after">{{
+                    props.row.supplyTypeName
+                  }}</el-form-item>
+                </TheSeedPurchaseLayout>
+                <TheSeedPurchaseLayout>
+                  <el-form-item label="操作者身份" slot="pre">{{
+                    props.row.operatorName
+                  }}</el-form-item>
+                  <el-form-item label="操作中姓名" slot="after">{{
+                    props.row.operatorIdentity
+                  }}</el-form-item>
+                </TheSeedPurchaseLayout>
+                <TheSeedPurchaseLayout>
+                  <el-form-item label="存放仓库" slot="pre">{{
+                    props.row.warehouseNumber
+                  }}</el-form-item>
+                  <el-form-item label="入库重量" slot="after">{{
+                    props.row.inWeight
+                  }}</el-form-item>
+                </TheSeedPurchaseLayout>
+              </el-form>
+            </template>
+          </el-table-column>
+          <el-table-column prop="supplyName" label="农资名称"></el-table-column>
+          <el-table-column
+            prop="gmtCreate"
+            label="入库日期"
+            width="180px"
+          ></el-table-column>
+          <el-table-column
+            prop="supplyTypeName"
+            label="投入品类型"
+          ></el-table-column>
+          <el-table-column prop="operatorName" label="操作人"></el-table-column>
+          <el-table-column
+            prop="warehouseNumber"
+            label="仓库号"
+          ></el-table-column>
+          <el-table-column label="操作" width="180px">
+            <template slot-scope="scope">
+              <!-- 修改按钮 -->
+              <el-button
+                type="primary"
+                icon="el-icon-edit"
+                size="mini"
+                @click="editInEvent(scope.row.id)"
+              ></el-button>
+              <!-- 出库按钮 -->
+              <el-tooltip
+                effect="dark"
+                content="出库"
+                placement="top"
+                :enterable="false"
+              >
                 <el-button
-                  type="primary"
-                  icon="el-icon-edit"
+                  @click="delivery(scope.row.id)"
+                  type="warning"
+                  icon="el-icon-upload2"
                   size="mini"
-                  
                 ></el-button>
-                <!-- 出库按钮 -->
-                <el-tooltip
-                  effect="dark"
-                  content="出库"
-                  placement="top"
-                  :enterable="false"
-                >
-                  <el-button
-                    type="warning"
-                    icon="el-icon-upload2"
-                    size="mini"
-                    
-                  ></el-button>
-                </el-tooltip>
-                <!-- 删除按钮 -->
-                <!-- type="danger": 红色警告按钮 -->
-                <el-button
-                  type="danger"
-                  icon="el-icon-delete"
-                  size="mini"
-                  
-                ></el-button>
-              </template>
-            </el-table-column>
-          </div>
-          <ThePagination :toPagination="paginationInfoIn"></ThePagination>
-        </TheCardAll>
+              </el-tooltip>
+              <!-- 删除按钮 -->
+              <!-- type="danger": 红色警告按钮 -->
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                size="mini"
+                @click="removeSupplyIn(scope.row.id)"
+              ></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <ThePagination
+          :toPagination="paginationInfoIn"
+          @fatherMethod="paginationChangeEventIn"
+        ></ThePagination>
       </el-tab-pane>
       <el-tab-pane label="出库记录">
-        <TheCardAll :toCardInfo="toCardInfoOut">
-          <div slot="CardTitle">
-            <el-col style="width: 100px; float: right; margin-bottom: 10px">
-              <!-- <el-select v-model="selectType2" @change="typeChange2">
-                <el-option
-                  v-for="item in type"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select> -->
-            </el-col>
-          </div>
-          <div slot="ordinary">
-            <!-- <el-table-column type="index"> </el-table-column>
-            <el-table-column
-              prop="suppliesName"
-              label="农资名称"
-            ></el-table-column>
-            <el-table-column
-              prop="outTime"
-              label="出库日期"
-              width="180px"
-            ></el-table-column>
-            <el-table-column
-              prop="outOperator"
-              label="操作员"
-            ></el-table-column>
-            <el-table-column prop="warehouse" label="仓库号"></el-table-column>
-            <el-table-column
-              prop="outNumber"
-              label="出库数量(kg)"
-            ></el-table-column> -->
-            <el-table-column label="操作" width="180px">
-              <template slot-scope="scope">
-                <!-- 修改按钮 -->
-                <el-button
-                  type="primary"
-                  icon="el-icon-edit"
-                  size="small"
-                ></el-button>
-                <!-- 删除按钮 -->
-                <!-- type="danger": 红色警告按钮 -->
-                <el-button
-                  type="danger"
-                  icon="el-icon-delete"
-                  size="small"
-                
-                ></el-button>
-              </template>
-            </el-table-column>
-          </div>
-        </TheCardAll>
+        <el-row>
+          <el-col style="float:right;width:70px;">
+            <el-button type="success">导出</el-button>
+          </el-col>
+          <el-col style="float:right;width:75px; margin-right: 30px">
+            <el-button type="primary" @click="toDialogAddOut.dialogVisible = true">农资出库</el-button>
+          </el-col>
+        </el-row>
+        <el-table :data="baseSupplyOutList">
+
+        </el-table>
       </el-tab-pane>
     </el-tabs>
     <TheDialogAll :toDialogInfo="toDialogAddInfo">
-      
       <span slot="footer" class="dialog-footer">
-        <el-button @click="toDialogAddInfo.dialogVisible = false">取消</el-button>
-        <el-button type="primary" 
-        @click="addBaseSupply"
-          >确 定</el-button
+        <el-button @click="toDialogAddInfo.dialogVisible = false"
+          >取消</el-button
         >
+        <el-button type="primary" @click="addBaseSupply">确 定</el-button>
       </span>
     </TheDialogAll>
-    <supplyInDialog :toDialogAddInfo="toDialogAddInfo"></supplyInDialog>
+    <supplyInDialog
+      :toDialogAddInfo="toDialogAddInfo"
+      @fatherMethod="getBaseSupplyInfo"
+    ></supplyInDialog>
+    <supplyOutDialog :toDialogInfo="toDialogAddOut" ></supplyOutDialog>
+    <editSupplyIn :dialogInfo="toEditSupplyIn" @fatherMethod="getBaseSupplyInfo"></editSupplyIn>
   </div>
 </template>
 
 <script>
 import TheCardAll from "../components/ccy/TheCardAll";
-import TheCardHead from "../components/ccy/TheCardHead";
 import ThePagination from "../components/ccy/ThePagination";
 import TheDialogAll from "../components/ccy/TheDialogAll";
-import supplyInDialog from "../components/ccy/managementSupply/supplyInDialog"
+import editSupplyIn from "../components/ccy/managementSupply/editSupplyIn"
+import supplyInDialog from "../components/ccy/managementSupply/supplyInDialog";
+import TheSeedPurchaseLayout from "../components/ccy/TheSeedPurchaseLayout";
+import supplyOutDialog from "../components/ccy/managementSupply/supplyOutDialog"
 export default {
   components: {
     TheCardAll,
     ThePagination,
     TheDialogAll,
-    supplyInDialog
+    supplyInDialog,
+    TheSeedPurchaseLayout,
+    editSupplyIn,
+    supplyOutDialog
   },
-  data(){
+  data() {
     return {
-      baseId:'1248910886228332544',
-      baseSupplyList:[],
-      paginationInfo:{
-        page:1,
-        size:3,
-        total:0
+      baseId: "1248910886228332544",
+      baseSupplyList: [],
+      baseSupplyOutList:[],
+      addInfo: {
+        baseId: 1248910886228332544,
+        gmtCreate: "",
+        inWeight: "",
+        operatorIdentity: "",
+        operatorName: "",
+        supplyId: "",
+        supplyName: "",
+        supplyTypeName: "",
+        warehouseNumber: "",
       },
-      addInfo:{
-        baseId:1248910886228332544,
-        gmtCreate:'',
-        inWeight:'',
+      editInfo:{
+        baseId:"1248910886228332544",
+        id:'',
+        inWeight:"1",
         operatorIdentity:'',
         operatorName:'',
         supplyId:'',
@@ -199,41 +201,92 @@ export default {
         supplyTypeName:'',
         warehouseNumber:''
       },
-      toSupplyInfo:{
-        dialogVisible:false,
+      toSupplyInfo: {
+        dialogVisible: false,
       },
-      paginationInfoIn:{
-        total:'',
-        page:'',
-        size:''
+      paginationInfoIn: {
+        total: 0,
+        page: 1,
+        size: 3,
       },
-      paginationInfoOut:{
-        total:'',
-        page:'',
-        size:''
+      paginationInfoOut: {
+        total: 0,
+        page: 1,
+        size: 3,
       },
-      toDialogAddInfo:{
-        title:'农资入库',
-        width:'23%',
-        dialogVisible:false,
-        FormInfo:this.addInfo
+      toDialogAddInfo: {
+        title: "农资入库",
+        width: "23%",
+        dialogVisible: false,
+        FormInfo: this.addInfo,
+      },
+      //农资出库
+      toDialogAddOut:{
+        dialogVisible: false,
+      },
+      toEditSupplyIn:{
+        dialogVisible: false,
+        id:''
       },
       //传入组件的出库记录
-      toCardInfoOut:[]
-    }
+      toCardInfoOut: [],
+    };
   },
-  created(){
-    this.getBaseSupplyInfo()
+  created() {
+    this.getBaseSupplyInfo();
+    this.getOutSupplyInfo();
   },
-  methods:{
-    async getBaseSupplyInfo(){
-      const {data: res} = await this.$baseSupply.get(`in/${this.baseId}/${this.paginationInfo.size}/${this.paginationInfo.page}`)
+  methods: {
+    async getBaseSupplyInfo() {
+      const { data: res } = await this.$baseSupply.get(
+        `in/${this.baseId}/${this.paginationInfoIn.size}/${this.paginationInfoIn.page}`
+      );
       console.log(res);
+      this.baseSupplyList = res.data.records;
+      this.paginationInfoIn.total = res.data.total
     },
-    async addBaseSupply(){
+    async addBaseSupply() {
       console.log(this.addInfo);
+    },
+    paginationChangeEventIn(size, page) {
+      this.paginationInfoIn.page = page;
+      this.paginationInfoIn.size = size;
+      this.getBaseSupplyInfo()
+    },
+    // 出库
+    async delivery(id){
+      // const {data : res} = await this.$baseSupply.put('in')
+      console.log(res);
+      console.log(id);
+    },
+    async getOutSupplyInfo(){
+      const {data : res} = await this.$baseSupply.get(`out/${this.baseId}/${this.paginationInfoOut.size}/${this.paginationInfoOut.page}`)
+      console.log(res);
+      this.baseSupplyOutList = res.data.records
+    },
+    editInEvent(id){
+      this.toEditSupplyIn.dialogVisible = true;
+      this.toEditSupplyIn.id = id;
+    },
+    // 删除入库记录
+    async removeSupplyIn(id){
+      const {data: res} = await this.$baseSupply.delete(`in/${id}`)
+      console.log(res);
+      if(res.statusCode === 20000) {
+        console.log('删除成功');
+        this.getBaseSupplyInfo()
+      }
+    },
+    //获取出库记录
+    async getSupplyOutInfo(){
+      const {data : res} = await this.$baseSupply.get(`out/${this.baseId}/${this.paginationInfoOut.size}/${this.paginationInfoOut.page}`)
+      console.log(res);
+      if(res.statusCode === 20000){
+        this.baseSupplyOutList = res.data.records
+        console.log(this.baseSupplyOutList);
+      }
     }
-  }
+  },
 };
 </script>
 

@@ -86,6 +86,7 @@
         </el-row>
       </span>
     </TheDialogAll>
+    
     <!-- 修改池塘信息对话框 -->
     <!-- <TheDialogAll :toDialogInfo="editPondInfo"></TheDialogAll> -->
     <!-- <TheDialogAll :toDialogInfo="farmInfo"></TheDialogAll>  -->
@@ -99,7 +100,8 @@
 import TheCardHead from "../components/ccy/TheCardHead";
 import TheDialogAll from "../components/ccy/TheDialogAll";
 import ThePagination from "../components/ccy/ThePagination";
-import pond from "../components/ccy/pond";
+import pond from "../components/ccy/ManagementPond/pond";
+
 export default {
   components: { TheCardHead, pond, ThePagination, TheDialogAll },
   data() {
