@@ -1,5 +1,6 @@
 <template>
   <div id="digitalbase">
+    <!-- 面包屑 -->
     <Breadcrumb :breadcrumbs="['我的基地', '数字基地']"></Breadcrumb>
     <div class="cardBody">
       <el-row class="globalHeader" style="margin-bottom: 20px">
@@ -11,11 +12,12 @@
             type="primary"
             style="float: right"
             plain
-            @click="changeAuthorityShow"
+            @click="isShowAuthority = true"
             >所持权限</el-button
           >
         </el-col>
       </el-row>
+      <!-- 模块选择 -->
       <el-row
         ><span>组件模块：</span>
         <el-checkbox
@@ -34,6 +36,7 @@
           >保存自定义</el-button
         >
       </el-row>
+      <!-- 模块布局 -->
       <el-row justify="space-around" type="flex">
         <!-- <el-col :span="6">
           <InfoBase></InfoBase>
@@ -64,20 +67,21 @@
         </Draggable>
       </el-row>
     </div>
+    <!-- 权限弹框 -->
     <Authority
       :dialog-visible="isShowAuthority"
-      @notifyParent="changeAuthorityShow"
+      @close="() => (this.isShowAuthority = false)"
     ></Authority>
   </div>
 </template>
 
 <script>
-import Authority from "../components/wzp/digital_base/Authority";
+import Authority from "../../components/wzp/Authority";
 import {
   DraggableMap,
   DraggableWeatherCard,
   DraggableInfoBase,
-} from "../util/draggable";
+} from "../../util/draggable";
 
 export default {
   name: "DigitalBase",
@@ -121,11 +125,6 @@ export default {
     };
   },
   methods: {
-    // 所持权限  按钮
-    changeAuthorityShow() {
-      this.isShowAuthority = !this.isShowAuthority;
-    },
-
     // 保存自定义  按钮
     saveComponentData() {
       // 保存选中模块的调整顺序
@@ -141,18 +140,18 @@ export default {
     // 多选框触发事件
     handleChange(item) {
       // 模块选择的时候，componentData变化了，更新componentCheckedData
-      if(item.checked){
+      if (item.checked) {
         // 选中
         this.componentCheckedData.push(item);
-      }else{
+      } else {
         // 取消选中
-        this.componentCheckedData.some((inner,index,origin)=>{
-          if(inner.id == item.id){
-            Array.prototype.splice.call(origin,index,1);
+        this.componentCheckedData.some((inner, index, origin) => {
+          if (inner.id == item.id) {
+            Array.prototype.splice.call(origin, index, 1);
             return true;
           }
           return false;
-        })
+        });
       }
     },
   },

@@ -1,12 +1,18 @@
 <template>
   <el-dialog
-    :visible.sync="dialogVisible"
-    :before-close="ChangeDialogVisible"
+    :visible="dialogVisible"
+    :before-close="(done)=>{this.$emit('close');done()}"
     width="55%"
     center
     title="拥有权限"
   >
-    <el-row v-for="(one,index) in permissionList" :key="one.id" :class="index === 0?['vcenter','bdbottom','bdtop']:['vcenter','bdbottom']">
+    <el-row
+      v-for="(one, index) in dataList"
+      :key="one.id"
+      :class="
+        index === 0 ? ['vcenter', 'bdbottom', 'bdtop'] : ['vcenter', 'bdbottom']
+      "
+    >
       <!-- 渲染一级权限 -->
       <el-col :span="5">
         <el-row
@@ -19,7 +25,7 @@
         <el-row
           v-for="two in one.children"
           :key="two.id"
-           :class="['vcenter','bdheight']"
+          :class="['vcenter', 'bdheight']"
         >
           <el-col :span="6">
             <el-tag type="success">
@@ -45,19 +51,42 @@
 <script>
 import { mapState } from "vuex";
 export default {
+  data() {
+    return {
+      dataList:[]
+    }
+  },
   props: {
     dialogVisible: {
       type: Boolean,
       required: true,
+    },
+    roleId: {
+      type: String,
     },
   },
   computed: {
     ...mapState(["permissionList"]),
   },
   methods: {
-    ChangeDialogVisible() {
-      this.$emit("notifyParent");
-    },
+    // 根据roleId获取权限列表
+    async getFunctionByRoleId(roleId){
+      const {data:res} = await this.$function.get(`/findFunction/${roleId}`);
+      if(res.statusCode === 20000){
+        this.dataList = res.data;
+      }else{
+        this.elMessage.error(res.message);
+      }
+    }
+  },
+  created() {
+    if(this.roleId){
+      // 查看角色权限（权限管理页面）
+      this.getFunctionByRoleId(this.roleId);
+    }else{
+      // 查看登录用户权限（数字基地页面）
+      this.dataList = this.permissionList;
+    }
   },
 };
 </script>
@@ -74,7 +103,7 @@ export default {
   border-top: 1px dashed #ccc;
   padding-top: 20px;
 }
-.bdheight{
+.bdheight {
   height: 20px;
 }
 </style>

@@ -1,6 +1,5 @@
-
 <script>
-import Form from "./Form";
+import Form from "../Form";
 export default {
   components: {
     Form,
@@ -22,17 +21,17 @@ export default {
   },
   methods: {
     async handleSubmit(form) {
-      // console.log("form: ", form);
       form.id = this.infoForm.id;
+      console.log("form: ", form);
       // const { data: res } = await this.$user.put("/user", form);
-      console.log('handleSubmit: ', res);
-      if (res.statusCode === 20000) {
-        this.isUpdated = true;
-        this.elMessage.success(res.message);
-        this.closeCallback();
-      } else {
-        this.elMessage.error(res.message);
-      }
+      // console.log('handleSubmit: ', res);
+      // if (res.statusCode === 20000) {
+      //   this.isUpdated = true;
+      //   this.elMessage.success(res.message);
+      //   this.closeCallback();
+      // } else {
+      //   this.elMessage.error(res.message);
+      // }
     },
     async getSelfInfo() {
       const { data: res } = await this.$user.get("/self");

@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import Form from "../../components/wzp/user_info/Form";
+import Form from "../../components/wzp/Form";
 import { mapMutations } from "vuex";
 export default {
   data() {

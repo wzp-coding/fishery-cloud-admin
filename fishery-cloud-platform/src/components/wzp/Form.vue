@@ -37,7 +37,9 @@ export default {
       type: String,
       default: "登录",
       validator(val) {
-        return ["登录", "注册", "找回密码", "修改信息","修改密码"].includes(val);
+        return ["登录", "注册", "找回密码", "修改信息", "修改密码"].includes(
+          val
+        );
       },
     },
     defaultForm: {
@@ -95,7 +97,9 @@ export default {
         captcha: "",
         userName: this.defaultForm.username,
         email: this.defaultForm.email,
-        avatar: this.defaultForm.avatar || "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+        avatar:
+          this.defaultForm.avatar ||
+          "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
       },
 
       //表单验证规则
@@ -301,16 +305,19 @@ export default {
         ></el-input>
       </el-form-item>
     );
-
+    // 这尼玛就离谱，src也变了，就是加载不出来。直接放字符串就行
+    // <el-avatar size={50} src={this.form.avatar} ref="avatar"></el-avatar>（313行）
     // 头像
     let avatar = (
-      <el-form-item label="头像" prop="avatar" inline={true}>
-        <el-avatar size={50} src={this.form.avatar}>无</el-avatar>
-        <el-button onClick={() => (this.isOpen = true)} class="avatar">
+      <el-form-item label="头像" inline={true}>
+        <img class="avatar" src={this.form.avatar}>
+          无
+        </img>
+        <el-button onClick={() => (this.isOpen = true)} class="uploadAvatar">
           上传头像
         </el-button>
         <UploadFile
-          type='image'
+          type="image"
           upload-success={(file) => this.uploadAvatar(file)}
           close-modal={() => (this.isOpen = false)}
           is-open={this.isOpen}
@@ -439,16 +446,21 @@ export default {
 
     // 点击上传图片
     async uploadAvatar(file) {
-      // console.log('file: ', file);
+      console.log("file: ", file);
       this.form.avatar = file.url;
     },
   },
 };
 </script>
 <style lang="less" scoped>
-.avatar {
+.uploadAvatar {
   display: inline-block;
   vertical-align: 20px;
   margin-left: 20px;
+}
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }
 </style>
