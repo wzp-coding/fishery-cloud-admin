@@ -37,7 +37,7 @@ export default {
       type: String,
       default: "登录",
       validator(val) {
-        return ["登录", "注册", "找回密码", "修改信息"].includes(val);
+        return ["登录", "注册", "找回密码", "修改信息","修改密码"].includes(val);
       },
     },
     defaultForm: {
@@ -91,11 +91,11 @@ export default {
         password: "",
         confirmPassword: "",
         phoneCode: "",
-        loginId: this.defaultForm.phone,
+        loginId: this.defaultForm.id,
         captcha: "",
-        userName: this.defaultForm.phone,
+        userName: this.defaultForm.username,
         email: this.defaultForm.email,
-        avatar: this.defaultForm.avatar,
+        avatar: this.defaultForm.avatar || "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
       },
 
       //表单验证规则
@@ -305,7 +305,7 @@ export default {
     // 头像
     let avatar = (
       <el-form-item label="头像" prop="avatar" inline={true}>
-        <el-avatar size={50} src={this.form.avatar}></el-avatar>
+        <el-avatar size={50} src={this.form.avatar}>无</el-avatar>
         <el-button onClick={() => (this.isOpen = true)} class="avatar">
           上传头像
         </el-button>
@@ -406,7 +406,7 @@ export default {
     // 根据手机号发送验证码
     sendCode() {
       this.$refs.form.validateField("phone", async (err) => {
-        console.log(err);
+        // console.log(err);
         if (!err) {
           // console.log("发送验证码");
           // 类型：1是修改资料，2是登录，3是注册
@@ -415,7 +415,7 @@ export default {
             type = 2;
           } else if (this.button === "注册") {
             type = 3;
-          } else if (this.button === "找回密码") {
+          } else if (this.button === "找回密码" || this.button === "修改密码") {
             type = 1;
           }
           let url = `/sendVerify/${type}/${this.form.phone}`;
@@ -439,7 +439,7 @@ export default {
 
     // 点击上传图片
     async uploadAvatar(file) {
-      console.log('file: ', file);
+      // console.log('file: ', file);
       this.form.avatar = file.url;
     },
   },
