@@ -1,7 +1,13 @@
 <template>
   <el-dialog
     :visible="dialogVisible"
-    :before-close="(done)=>{this.$emit('close');done()}"
+    :before-close="
+      (done) => {
+        this.$emit('close');
+        done();
+      }
+    "
+    @open="openProxy"
     width="55%"
     center
     title="拥有权限"
@@ -53,8 +59,9 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      dataList:[]
-    }
+      dataList: [],
+      preRoleId: undefined,
+    };
   },
   props: {
     dialogVisible: {
@@ -70,23 +77,30 @@ export default {
   },
   methods: {
     // 根据roleId获取权限列表
-    async getFunctionByRoleId(roleId){
-      const {data:res} = await this.$function.get(`/findFunction/${roleId}`);
-      if(res.statusCode === 20000){
+    async getFunctionByRoleId(roleId) {
+      this.preRoleId = roleId;
+      const { data: res } = await this.$function.get(`/findFunction/${roleId}`);
+      // console.log("res: ", res);
+      if (res.statusCode === 20000) {
+        res.data.length === 0 ? this.elMessage.info("暂无权限") : "";
         this.dataList = res.data;
-      }else{
+      } else {
         this.elMessage.error(res.message);
       }
-    }
-  },
-  created() {
-    if(this.roleId){
-      // 查看角色权限（权限管理页面）
-      this.getFunctionByRoleId(this.roleId);
-    }else{
-      // 查看登录用户权限（数字基地页面）
-      this.dataList = this.permissionList;
-    }
+    },
+
+    // 打开之前判断处理
+    async openProxy() {
+      if (this.roleId) {
+        if (this.roleId !== this.preRoleId) {
+          // 查看角色权限（权限管理页面）
+          await this.getFunctionByRoleId(this.roleId);
+        }
+      } else {
+        // 查看登录用户权限（数字基地页面）
+        this.dataList = this.permissionList;
+      }
+    },
   },
 };
 </script>

@@ -1,10 +1,11 @@
 <template>
   <el-pagination
+    v-if="total > pageSize"
     @size-change="handleSizeChange"
     @current-change="handleCurrentChange"
     :current-page="currentPage"
     :page-sizes="pageSizes"
-    :page-size="paseSize"
+    :page-size="pageSize"
     layout="total, sizes, prev, pager, next, jumper"
     :total="total"
   >
@@ -12,29 +13,40 @@
 </template>
 <script>
 export default {
-    props: {
-        func:{
-            type:Function
-        }
+  props: {
+    func: {
+      type: Function,
     },
-    data:{
-        currentPage:1,
-        total:undefined,
-        paseSize:undefined,
-        pageSizes:[5,10,15,20],
+  },
+  data() {
+    return {
+      currentPage: 1,
+      pageSize: 5,
+      total: 0,
+      pageSizes: [5, 10, 15, 20],
+    };
+  },
+  methods: {
+    // 改变currentPage
+    handleCurrentChange(page) {
+      //   console.log(page);
+      this.currentPage = page;
+      this.func(page, this.pageSize);
     },
-    methods: {
-        // 改变currentPage
-        handleCurrentChange(){
-            
-        },
-        
-        // 改变size
-        handleSizeChange(){
 
-        }
+    // 改变size
+    handleSizeChange(size) {
+      //   console.log(size);
+      this.pageSize = size;
+      this.func(this.currentPage, size);
     },
+  },
+  async created() {
+    const { total, size, page, sizes } = await this.func();
+    this.total = total;
+    size ? (this.pageSize = size) : "";
+    page ? (this.currentPage = page) : "";
+    sizes ? (this.pageSizes = sizes) : "";
+  },
 };
 </script>
-<style lang="less" scoped>
-</style>

@@ -120,6 +120,7 @@ export default {
           checked: true,
         },
       ],
+      
       // 存放被选中的可拖拽组件
       componentCheckedData: [],
     };
