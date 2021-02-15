@@ -12,8 +12,8 @@
       <el-form-item label="操作者姓名" prop="operatorName">
         <el-input v-model="addInfo.operatorName"></el-input>
       </el-form-item>
-      <el-form-item label="投入品类别" prop="supplyTypeName">
-        <el-input v-model="addInfo.supplyTypeName"></el-input>
+      <el-form-item label="投入品类别" prop="supplyTypeName" >
+        <el-input v-model="addInfo.supplyTypeName" :disabled="true"></el-input>
       </el-form-item>
       <el-form-item label="请输入仓库号" prop="warehouseNumber">
         <el-input v-model="addInfo.warehouseNumber"></el-input>
@@ -54,6 +54,7 @@ export default {
   data() {
     return {
       supplyList: [],
+      baseId: "1248910886228332544",
       addInfo: {
         baseId: "1248910886228332544",
         outWeight: 1,
@@ -69,6 +70,7 @@ export default {
   },
   created() {
     this.getSupplyList();
+    // this.searchSupplyInfo();
   },
   methods: {
     //创建出库记录
@@ -84,6 +86,7 @@ export default {
     },
     async getSupplyList() {
       const { data: res } = await this.$supplyController.get();
+      console.log(this.toDialogInfo.id);
       console.log(res);
       this.supplyList = res.data;
     },
@@ -100,7 +103,8 @@ export default {
     },
     closeEvent(){
         this.$refs.formRef.resetFields();
-    }
+    },
+    
   },
 };
 </script>

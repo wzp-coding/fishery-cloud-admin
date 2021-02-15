@@ -198,7 +198,6 @@ export default {
   created() {
     this.getPondList(this.addPondInfo.size, 1); //获取池塘信息
 
-    this.test();
   },
   methods: {
     async getPondList(size, page) {
@@ -219,9 +218,7 @@ export default {
         console.log("查询池塘信息失败");
       }
     },
-    test() {
-      console.log(this);
-    },
+    
     eventRefresh() {
       this.reRender = false;
       this.getPondList(this.addPondInfo.size, 1);

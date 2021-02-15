@@ -48,6 +48,7 @@
               type="success"
               icon="el-icon-wind-power"
               size="mini"
+              @click="toCatchingInfo.dialogVisible = true"
             ></el-button>
           </el-tooltip>
           <!-- 有投放的才有投料选项 -->
@@ -62,6 +63,7 @@
               icon="el-icon-caret-bottom"
               type="warning"
               size="mini"
+              @click="toFeedInfo.dialogVisible = true"
             ></el-button>
           </el-tooltip>
           <!-- 投苗过的不可以再投 -->
@@ -160,35 +162,41 @@
         <el-button type="primary" @click="farmInfoEvent">确 定</el-button>
       </span>
     </TheDialogAll>
+    <!-- 基地投料 -->
+    <feedPond :toDialogInfo="toFeedInfo"></feedPond>
     <!-- 基地投苗 -->
     <!-- <farming :toDialogInfo="toFarmDialogInfo"></farming> -->
+    <!-- 池塘捕捞 -->
+    <catching :toDialogInfo="toCatchingInfo"></catching>
   </div>
 </template>
 
 <script>
 import TheDialogAll from "../TheDialogAll";
-
+import feedPond from "../ManagementPond/feedPond"
 import farming from "../ManagementPond/farming";
+import catching from "../ManagementPond/catching"
 export default {
   components: {
     TheDialogAll,
     farming,
-   
+    feedPond,
+    catching
   },
   props: {
     toPond: {
       type: Object,
-      area: String,
-      depth: String,
-      // type: String,
-      inputNum: String, //投放数量
-      seedingTime: String, //苗时间
-      catchTime: String, //上次捕捞时间
-      catchStatus: Number, //捕捞状态
-      name: String,
-      creator: String,
-      pondId: String,
-      pondtype: String,
+      // area: String,
+      // depth: String,
+      // // type: String,
+      // inputNum: String, //投放数量
+      // seedingTime: String, //苗时间
+      // catchTime: String, //上次捕捞时间
+      // catchStatus: Number, //捕捞状态
+      // name: String,
+      // creator: String,
+      // pondId: String,
+      // pondtype: String,
     },
   },
   data() {
@@ -199,6 +207,7 @@ export default {
         title: "修改池塘信息",
         dialogVisible: false, //控制对话框隐藏
         addeForm: this.editInfo,
+        width:'30%',
         // 修改表单的验证规则对象
         FormRules: {
           name: [
@@ -263,6 +272,16 @@ export default {
           ],
         },
       },
+      // 投料
+      toFeedInfo:{
+        pondId:this.toPond.pondId,
+        dialogVisible: false,
+      },
+      //捕捞
+      toCatchingInfo:{
+        pondId:this.toPond.pondId,
+        dialogVisible: false,
+      }
     };
   },
   created() {
@@ -282,6 +301,8 @@ export default {
       } else {
         console.log("查询池塘信息失败");
       }
+      this.toFeedInfo.pondId = this.toPond.pondId
+      console.log(this.toFeedInfo);
     },
    
 

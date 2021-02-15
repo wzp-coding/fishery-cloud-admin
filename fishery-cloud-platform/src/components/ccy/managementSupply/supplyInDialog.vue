@@ -55,7 +55,6 @@ export default {
   data() {
     return {
       supplyList: [],
-
       addInfo: {
         baseId: '1248910886228332544',
         // gmtCreate: "",

@@ -81,11 +81,16 @@
             prop="supplyTypeName"
             label="投入品类型"
           ></el-table-column>
+           <el-table-column
+            prop="inWeight"
+            label="入库重量"
+          ></el-table-column>
           <el-table-column prop="operatorName" label="操作人"></el-table-column>
           <el-table-column
             prop="warehouseNumber"
             label="仓库号"
           ></el-table-column>
+        
           <el-table-column label="操作" width="180px">
             <template slot-scope="scope">
               <!-- 修改按钮 -->
@@ -103,7 +108,7 @@
                 :enterable="false"
               >
                 <el-button
-                  @click="delivery(scope.row.id)"
+                  @click="delivery(scope.row.supplyId)"
                   type="warning"
                   icon="el-icon-upload2"
                   size="mini"
@@ -223,6 +228,7 @@ export default {
       //农资出库
       toDialogAddOut:{
         dialogVisible: false,
+        id:'',
       },
       toEditSupplyIn:{
         dialogVisible: false,
@@ -254,10 +260,12 @@ export default {
       this.getBaseSupplyInfo()
     },
     // 出库
-    async delivery(id){
+    async delivery(supplyId){
       // const {data : res} = await this.$baseSupply.put('in')
-      console.log(res);
-      console.log(id);
+      // console.log(res);
+      this.toDialogAddOut.dialogVisible = true
+      this.toDialogAddOut.id = supplyId
+      console.log(supplyId);
     },
     async getOutSupplyInfo(){
       const {data : res} = await this.$baseSupply.get(`out/${this.baseId}/${this.paginationInfoOut.size}/${this.paginationInfoOut.page}`)
