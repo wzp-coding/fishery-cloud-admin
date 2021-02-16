@@ -254,7 +254,7 @@
 </template>
 
 <script>
-import Map from '../components/cgx/InfoLogistics/Map'
+import Map from '../../components/cgx/InfoLogistics/Map'
 export default {
   components: {
     Map,

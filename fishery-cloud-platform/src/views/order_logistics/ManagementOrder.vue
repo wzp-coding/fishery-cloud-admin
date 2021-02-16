@@ -197,10 +197,10 @@
 
 <script>
 import QRCode from "qrcodejs2";
-import ShowInfo from   "../components/cgx/ManagementOrder/ShowInfo/ShowInfo1";
-import ShowOrinfo from "../components/cgx/ManagementOrder/ShowOrcode/ShowOrcode2";
-import ShowChange from "../components/cgx/ManagementOrder/ModifyInformation/ShowChange";
-import CreateOrder from '../components/cgx/ManagementOrder/CreateOrder/createOrder.vue';
+import ShowInfo from   "../../components/cgx/ManagementOrder/ShowInfo/ShowInfo1";
+import ShowOrinfo from "../../components/cgx/ManagementOrder/ShowOrcode/ShowOrcode2";
+import ShowChange from "../../components/cgx/ManagementOrder/ModifyInformation/ShowChange";
+import CreateOrder from '../../components/cgx/ManagementOrder/CreateOrder/createOrder.vue';
 
 export default {
   components: {

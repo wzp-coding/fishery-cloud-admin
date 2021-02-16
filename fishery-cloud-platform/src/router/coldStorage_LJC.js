@@ -1,4 +1,4 @@
-import ColdStorage from '../views/ColdStorage.vue';
+import ColdStorage from '../views/aquaculture_production/ColdStorage.vue';
 
 export default [
     {

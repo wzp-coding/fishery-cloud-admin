@@ -165,12 +165,12 @@
 </template>
 
 <script>
-import TheCardHead from "../components/ccy/TheCardHead";
-import ThePagination from "../components/ccy/ThePagination";
-import TheLayout from "../components/ccy/TheLayout";
-import addSeed from "../components/ccy/InfoSeed/addSeed";
-import editSeed from "../components/ccy/InfoSeed/editSeed";
-import purchaseSeed from "../components/ccy/InfoSeed/purchaseSeed";
+import TheCardHead from "../../components/ccy/TheCardHead";
+import ThePagination from "../../components/ccy/ThePagination";
+import TheLayout from "../../components/ccy/TheLayout";
+import addSeed from "../../components/ccy/InfoSeed/addSeed";
+import editSeed from "../../components/ccy/InfoSeed/editSeed";
+import purchaseSeed from "../../components/ccy/InfoSeed/purchaseSeed";
 export default {
   components: {
     ThePagination,

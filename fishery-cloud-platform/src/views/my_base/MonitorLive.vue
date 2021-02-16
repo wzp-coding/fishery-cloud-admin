@@ -22,7 +22,7 @@
     </div>
 </template>
 <script>
-import Breadcrumb from '../components/public_components/Breadcrumb'
+import Breadcrumb from '../../components/public_components/Breadcrumb'
 export default {
     components: {
         Breadcrumb

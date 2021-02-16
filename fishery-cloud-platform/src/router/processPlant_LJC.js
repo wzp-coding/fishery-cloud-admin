@@ -1,9 +1,9 @@
-import InfoProduct from '../views/InfoProduct.vue';
-import ProcessPlant from '../views/ProcessPlant.vue';
-import InfoPlant from '../views/InfoPlant.vue';
-import InfoCraft from '../views/InfoCraft.vue';
-import InfoInput from '../views/InfoInput.vue';
-import ManagementInputsClassification from '../views/ManagementInputsClassification.vue';
+import InfoProduct from '../views/aquaculture_production/InfoProduct.vue';
+import ProcessPlant from '../views/aquaculture_production/ProcessPlant.vue';
+import InfoPlant from '../views/aquaculture_production/InfoPlant.vue';
+import InfoCraft from '../views/aquaculture_production/InfoCraft.vue';
+import InfoInput from '../views/aquaculture_production/InfoInput.vue';
+import ManagementInputsClassification from '../views/management_base/ManagementInputsClassification.vue';
 export default [
     {
         // 产品信息

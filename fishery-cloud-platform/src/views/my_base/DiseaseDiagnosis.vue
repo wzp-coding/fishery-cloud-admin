@@ -27,10 +27,10 @@
 </template>
 
 <script>
-import SearchDisease from '../components/yzc/Diagnosis/SearchDisease'
-import MyAritcles from '../components/yzc/Diagnosis/MyAritcles'
-import Breadcrumb from '../components/public_components/Breadcrumb'
-import SearchDiseaseDiagnosis from '../components/yzc/Diagnosis/SearchDiseaseDiagnosis'
+import SearchDisease from '../../components/yzc/Diagnosis/SearchDisease'
+import MyAritcles from '../../components/yzc/Diagnosis/MyAritcles'
+import Breadcrumb from '../../components/public_components/Breadcrumb'
+import SearchDiseaseDiagnosis from '../../components/yzc/Diagnosis/SearchDiseaseDiagnosis'
 export default {
     components: {
         SearchDisease,

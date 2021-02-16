@@ -1,11 +1,11 @@
-import MonitorLive from '../views/MonitorLive.vue'
-import MonitorEquipment from '../views/MonitorEquipment.vue'
-import MonitorEnvironment from '../views/MonitorEnvironment.vue'
-import ManagementWaterQualityWarn from '../views/ManagementWaterQualityWarn.vue'
-import ManagementWeatherWarn from '../views/ManagementWeatherWarn.vue'
-import InfoWeather from '../views/InfoWeather.vue'
-import InfoWaterQuality from '../views/InfoWaterQuality.vue'
-import DiseaseDiagnosis from '../views/DiseaseDiagnosis.vue'
+import MonitorLive from '../views/my_base/MonitorLive.vue'
+import MonitorEquipment from '../views/management_device/MonitorEquipment.vue'
+import MonitorEnvironment from '../views/my_base/MonitorEnvironment.vue'
+import ManagementWaterQualityWarn from '../views/my_base/ManagementWaterQualityWarn.vue'
+import ManagementWeatherWarn from '../views/my_base/ManagementWeatherWarn.vue'
+import InfoWeather from '../views/management_device/InfoWeather.vue'
+import InfoWaterQuality from '../views/management_device/InfoWaterQuality.vue'
+import DiseaseDiagnosis from '../views/my_base/DiseaseDiagnosis.vue'
 export default [
     {
         // 实况监控

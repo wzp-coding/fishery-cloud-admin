@@ -97,10 +97,10 @@
 </template>
 
 <script>
-import TheCardHead from "../components/ccy/TheCardHead";
-import TheDialogAll from "../components/ccy/TheDialogAll";
-import ThePagination from "../components/ccy/ThePagination";
-import pond from "../components/ccy/ManagementPond/pond";
+import TheCardHead from "../../components/ccy/TheCardHead";
+import TheDialogAll from "../../components/ccy/TheDialogAll";
+import ThePagination from "../../components/ccy/ThePagination";
+import pond from "../../components/ccy/ManagementPond/pond";
 
 export default {
   components: { TheCardHead, pond, ThePagination, TheDialogAll },

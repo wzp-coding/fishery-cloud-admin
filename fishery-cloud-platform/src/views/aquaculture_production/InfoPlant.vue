@@ -22,11 +22,11 @@
   </div>
 </template>
 <script>
-import Breadcrumb from "../components/ljc/public/breadcrumb";
-import Title from "../components/ljc/public/title";
-import Product from "../components/ljc/product/TheProduct";
-import Craft from "../components/ljc/craft/TheCraft";
-import Input from "../components/ljc/input/TheInput";
+import Breadcrumb from "../../components/ljc/public/breadcrumb";
+import Title from "../../components/ljc/public/title";
+import Product from "../../components/ljc/product/TheProduct";
+import Craft from "../../components/ljc/craft/TheCraft";
+import Input from "../../components/ljc/input/TheInput";
 export default {
   components: {
     Breadcrumb,

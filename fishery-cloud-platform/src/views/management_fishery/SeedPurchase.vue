@@ -275,12 +275,12 @@
 </template>
 
 <script>
-import TheCardAll from "../components/ccy/TheCardAll";
-import TheCardHead from "../components/ccy/TheCardHead";
-import ThePagination from "../components/ccy/ThePagination";
-import TheDialogAll from "../components/ccy/TheDialogAll";
-import chartView from "../components/ccy/seedPurchase/chartView";
-import TheSeedPurchaseLayout from "../components/ccy/TheSeedPurchaseLayout";
+import TheCardAll from "../../components/ccy/TheCardAll";
+import TheCardHead from "../../components/ccy/TheCardHead";
+import ThePagination from "../../components/ccy/ThePagination";
+import TheDialogAll from "../../components/ccy/TheDialogAll";
+import chartView from "../../components/ccy/seedPurchase/chartView";
+import TheSeedPurchaseLayout from "../../components/ccy/TheSeedPurchaseLayout";
 export default {
   data() {
     return {

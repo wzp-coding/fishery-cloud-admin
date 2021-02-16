@@ -55,9 +55,9 @@
 </template>
 
 <script>
-import TheCardAll from "../components/ccy/TheCardAll";
-import ThePagination from "../components/ccy/ThePagination";
-import TheDialogAll from "../components/ccy/TheDialogAll";
+import TheCardAll from "../../components/ccy/TheCardAll";
+import ThePagination from "../../components/ccy/ThePagination";
+import TheDialogAll from "../../components/ccy/TheDialogAll";
 export default {
   components: {
     TheCardAll,

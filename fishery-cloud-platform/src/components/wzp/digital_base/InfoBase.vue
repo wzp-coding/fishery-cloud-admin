@@ -44,8 +44,8 @@ export default {
   },
   methods: {
     // 获取基地信息
-    async getBaseInfo() {
-      const { data: res } = await this.$base.get();
+    async getBaseInfo(baseId) {
+      const { data: res } = await this.$base.get(`/${baseId}`);
       console.log("getBaseInfo: ", res);
       if(res.statusCode === 20000){
         this.baseInfo = res.data;
@@ -66,7 +66,7 @@ export default {
     }
   },
   created() {
-    this.getBaseInfo();
+    this.getBaseInfo(this.$store.state.userInfo.baseId);
     this.getPondInfo(this.$store.state.userInfo.baseId);
   },
 };

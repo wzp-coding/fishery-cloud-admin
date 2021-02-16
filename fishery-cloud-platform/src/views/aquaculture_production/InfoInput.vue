@@ -10,22 +10,12 @@
       <el-page-header @back="goBack" :content="myTitle"> </el-page-header>
       <!-- 标题区域结束 -->
 
-      <!-- 步骤条开始 -->
-      <el-steps :active="3" simple class="steps">
-        <el-step
-          :title="item.craftName"
-          v-for="item in allList[0]"
-          :key="item.sort"
-        ></el-step>
-      </el-steps>
-      <!-- 步骤条结束 -->
-
       <!-- 添加区域开始 -->
       <Add
         @getAllInfo="getAllInfo()"
         :labels="labels"
-        :productId="productId"
-        :craftInfo="craftInfo"
+        :craftId="craftId"
+        :inputInfo="inputInfo"
       />
       <!-- 添加区域结束 -->
 
@@ -34,8 +24,7 @@
         :allList="allList"
         :labels="labels"
         :title="myTitle"
-        :craftInfo="craftInfo"
-        :productId="productId"
+        :craftId="craftId"
         @getAllInfo="getAllInfo()"
       />
       <!-- 列表区域结束 -->
@@ -53,29 +42,29 @@
   </div>
 </template>
 <script>
-import ljc from "../components/ljc/productCraft/productCraft";
-import Breadcrumb from "../components/ljc/public/breadcrumb";
-import Add from "../components/ljc/productCraft/Add";
-import Table from "../components/ljc/productCraft/Table";
-import Pagination from "../components/ljc/public/pagination";
+import ljc from "../../components/ljc/craftInput/craftInput";
+import Breadcrumb from "../../components/ljc/public/breadcrumb";
+import Pagination from "../../components/ljc/public/pagination";
+import Add from "../../components/ljc/craftInput/Add";
+import Table from "../../components/ljc/craftInput/Table";
+
 export default {
   components: {
     Breadcrumb,
+    Pagination,
     Add,
     Table,
-    Pagination,
   },
   data() {
     return {
       // js
       model: new ljc(this),
 
-      /* 面包屑导航区信息开始 */
-      breadcrumbInfo: ["养殖生产", "加工厂", "加工信息管理", "产品工艺信息"],
-      /* 面包屑导航区信息结束 */
+      //  面包屑导航
+      breadcrumbInfo: ["养殖生产", "加工厂", "加工信息管理", "工艺投入品信息"],
 
       // 标题信息
-      myTitle: "产品工艺信息",
+      myTitle: "工艺投入品信息",
 
       // 数据总条数
       total: 0,
@@ -89,8 +78,8 @@ export default {
       // 总数据
       allList: [],
 
-      // 全部工艺信息
-      craftInfo: [],
+      // 所有投入品信息
+      inputInfo: [],
     };
   },
   computed: {
@@ -99,19 +88,19 @@ export default {
       return this.model.labels;
     },
 
-    // 产品编号
-    productId() {
+    // 工艺ID
+    craftId() {
       return this.$route.query.ID;
     },
 
-    // 工厂编号
+    // 工厂Id
     processingFactoryId() {
       return this.$route.query.processingFactoryId;
     },
   },
   created() {
     this.getAllInfo();
-    this.getCraftInfo();
+    this.getInputInfo();
   },
   methods: {
     /* 返回开始 */
@@ -125,11 +114,11 @@ export default {
     /* 返回结束 */
 
     /* 获取全部工艺信息开始 */
-    async getCraftInfo() {
-      const { data: res } = await this.model.getCraftInfo(
+    async getInputInfo() {
+      const { data: res } = await this.model.getInputInfo(
         this.processingFactoryId
       );
-      this.craftInfo.push(res.data);
+      this.inputInfo.push(res.data);
     },
     /* 获取全部工艺信息结束 */
 
@@ -142,11 +131,10 @@ export default {
       this.pageNum = pageNum;
       this.pageSize = pageSize;
       const { data: res } = await this.model.getAllInfo(
-        this.productId,
+        this.craftId,
         pageNum,
         pageSize
       );
-
       if (res.statusCode !== 20000) {
         this.$message.error(res.message);
       }

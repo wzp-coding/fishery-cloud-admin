@@ -1,13 +1,13 @@
 import DigitalBase from '../views/my_base/DigitalBase.vue'     //
-import SeedPurchase from '../views/SeedPurchase.vue'    //
-import InfoSeed from '../views/InfoSeed.vue'           //
-import InfoCustomer from '../views/InfoCustomer.vue'   //客户管理
-import InfoSupplies from '../views/InfoSupplies.vue'    //
-import InfoBase from '../views/InfoBase.vue'
-import InfoPond from '../views/InfoPond.vue'
-import ManagementStaff from '../views/ManagementStaff.vue'      //
-import ManagementSupplies from '../views/ManagementSupplies.vue'       //
-import ManagementPond from '../views/ManagementPond.vue'    //
+import SeedPurchase from '../views/management_fishery/SeedPurchase.vue'    //
+import InfoSeed from '../views/management_fishery/InfoSeed.vue'           //
+import InfoCustomer from '../views/management_base/InfoCustomer.vue'   //客户管理
+import InfoSupplies from '../views/management_fishery/InfoSupplies.vue'    //
+import InfoBase from '../views/management_base/InfoBase.vue'
+import InfoPond from '../views/management_fishery/InfoPond.vue'
+import ManagementStaff from '../views/management_base/ManagementStaff.vue'      //
+import ManagementSupplies from '../views/management_fishery/ManagementSupplies.vue'       //
+import ManagementPond from '../views/management_fishery/ManagementPond.vue'    //
 import ManagementAuthority from '../views/management_base/ManagementAuthority.vue'    //权限管理
 export default [
     {

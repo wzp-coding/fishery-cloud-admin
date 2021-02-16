@@ -75,11 +75,11 @@
 </template>
 
 <script>
-import MonitorEquipmentAddDevice from '../components/yzc/MonitorEquipmentAddDevice'
-import SearchDevice from '../components/yzc/SearchDevice'
+import MonitorEquipmentAddDevice from '../../components/yzc/MonitorEquipmentAddDevice'
+import SearchDevice from '../../components/yzc/SearchDevice'
 // 引入分页组件
-import Pagination from '../components/yzc/pagination'
-import Breadcrumb from '../components/public_components/Breadcrumb'
+import Pagination from '../../components/yzc/pagination'
+import Breadcrumb from '../../components/public_components/Breadcrumb'
 export default {
   components: {
     MonitorEquipmentAddDevice,

@@ -185,8 +185,8 @@
 </template>
 
 <script>
-import TheCardHead from "../components/ccy/TheCardHead";
-import InfoBaseLayout from "../components/ccy/InfoBaseLayout";
+import TheCardHead from "../../components/ccy/TheCardHead";
+import InfoBaseLayout from "../../components/ccy/InfoBaseLayout";
 export default {
   data() {
     return {

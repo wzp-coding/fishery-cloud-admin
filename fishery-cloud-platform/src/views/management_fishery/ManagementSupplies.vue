@@ -157,13 +157,13 @@
 </template>
 
 <script>
-import TheCardAll from "../components/ccy/TheCardAll";
-import ThePagination from "../components/ccy/ThePagination";
-import TheDialogAll from "../components/ccy/TheDialogAll";
-import editSupplyIn from "../components/ccy/managementSupply/editSupplyIn"
-import supplyInDialog from "../components/ccy/managementSupply/supplyInDialog";
-import TheSeedPurchaseLayout from "../components/ccy/TheSeedPurchaseLayout";
-import supplyOutDialog from "../components/ccy/managementSupply/supplyOutDialog"
+import TheCardAll from "../../components/ccy/TheCardAll";
+import ThePagination from "../../components/ccy/ThePagination";
+import TheDialogAll from "../../components/ccy/TheDialogAll";
+import editSupplyIn from "../../components/ccy/managementSupply/editSupplyIn"
+import supplyInDialog from "../../components/ccy/managementSupply/supplyInDialog";
+import TheSeedPurchaseLayout from "../../components/ccy/TheSeedPurchaseLayout";
+import supplyOutDialog from "../../components/ccy/managementSupply/supplyOutDialog"
 export default {
   components: {
     TheCardAll,

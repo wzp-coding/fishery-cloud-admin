@@ -14,6 +14,9 @@
       <Add @getAllInfo="getAllInfo()" :labels="labels" :baseId="baseId" />
       <!-- 添加区域结束 -->
 
+      <!-- 查看全部信息区域开始 -->
+      <!-- 查看全部信息区域结束 -->
+
       <!-- 列表区域开始 -->
       <Table
         :allList="allList"
@@ -36,12 +39,12 @@
   </div>
 </template>
 <script>
-import ljc from "../components/ljc/processPlant/processPlant";
-import Breadcrumb from "../components/ljc/public/breadcrumb";
-import Title from "../components/ljc/public/title";
-import Add from "../components/ljc/processPlant/Add";
-import Table from "../components/ljc/processPlant/Table";
-import Pagination from "../components/ljc/public/pagination";
+import ljc from "../../components/ljc/coldStorage/coldStorage";
+import Breadcrumb from "../../components/ljc/public/breadcrumb";
+import Title from "../../components/ljc/public/title";
+import Pagination from "../../components/ljc/public/pagination";
+import Add from "../../components/ljc/coldStorage/Add";
+import Table from "../../components/ljc/coldStorage/Table";
 
 export default {
   components: {
@@ -56,11 +59,11 @@ export default {
       // js
       model: new ljc(this),
       // 标题图标
-      icon: "el-icon-house",
+      icon: "el-icon-mobile",
       // 面包屑导航信息
-      breadcrumbInfo: ["养殖生产", "加工厂"],
+      breadcrumbInfo: ["养殖生产", "冷库"],
       // 标题信息
-      myTitle: "加工厂",
+      myTitle: "冷库",
       // 数据总条数
       total: 0,
       // 当前页码,
@@ -69,6 +72,7 @@ export default {
       pageSize: 4,
       // 总数据
       allList: [],
+      // 基地ID
       baseId: "1350657222372835330",
     };
   },
@@ -80,7 +84,7 @@ export default {
   },
   created() {
     this.getAllInfo();
-    console.log(this.$store.userInfo);
+    console.log(this.baseId);
   },
   methods: {
     // 获取表格信息
@@ -99,6 +103,7 @@ export default {
       if (res.statusCode !== 20000) {
         this.$message.error(res.message);
       }
+      console.log(res.data.records);
       this.allList = [];
       this.allList.push(res.data.records);
       this.total = res.data.total;

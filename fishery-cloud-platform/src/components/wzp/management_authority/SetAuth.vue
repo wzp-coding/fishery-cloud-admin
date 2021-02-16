@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     defaultCheckedIds() {
-      const tem = [];
+      const tem = [""];
       this.checkedIds.forEach((one) => {
         tem.push(one.id);
         if (one.children) {
@@ -77,7 +77,7 @@ export default {
   methods: {
     async setAuth(roleId) {
       const selectedIds = this.$refs.tree.getCheckedKeys();
-      console.log("roleId: ", roleId);
+      // console.log("roleId: ", roleId);
       console.log(this.$refs.tree.getCheckedKeys());
       console.log(JSON.stringify({ "functionIdList": selectedIds }));
       const { data: res } = await this.$function.post(
@@ -89,6 +89,7 @@ export default {
 
     // 根据roleId获取 已授予 权限列表
     async getFunctionByRoleId(roleId) {
+      console.log('roleId: ', roleId);
       const { data: res } = await this.$function.get(`/findFunction/${roleId}`);
       console.log("getFunctionByRoleId: ", res);
       if (res.statusCode === 20000) {
@@ -112,6 +113,7 @@ export default {
 
     // 打开后处理函数
     async openProxy() {
+      console.log("open")
       // 打开后先获取已授予的权限
       await this.getFunctionByRoleId(this.roleId);
     },
@@ -119,6 +121,9 @@ export default {
   created() {
     // 获取所有权限
     this.getAuthList();
+  },
+  destroyed() {
+    console.log("destroyed")
   },
 };
 </script>

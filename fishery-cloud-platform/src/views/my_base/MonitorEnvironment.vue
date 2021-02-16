@@ -104,10 +104,10 @@
 
 <script>
 // 引入子组件
-import MonitorEnvironmentDeviceQuery from '../components/yzc/MonitorEnvironment/MonitorEnvironmentDeviceQuery'
-import MonitorEnvironmentForecastForm from '../components/yzc/MonitorEnvironment/MonitorEnvironmentForecastForm'
-import MonitorEnvironmentForecastFormrevise from '../components/yzc/MonitorEnvironment/MonitorEnvironmentForecastFormrevise'
-import Breadcrumb from '../components/public_components/Breadcrumb'
+import MonitorEnvironmentDeviceQuery from '../../components/yzc/MonitorEnvironment/MonitorEnvironmentDeviceQuery'
+import MonitorEnvironmentForecastForm from '../../components/yzc/MonitorEnvironment/MonitorEnvironmentForecastForm'
+import MonitorEnvironmentForecastFormrevise from '../../components/yzc/MonitorEnvironment/MonitorEnvironmentForecastFormrevise'
+import Breadcrumb from '../../components/public_components/Breadcrumb'
 export default {
     components: {
         MonitorEnvironmentDeviceQuery,
