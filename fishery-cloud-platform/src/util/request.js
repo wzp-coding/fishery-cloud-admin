@@ -13,23 +13,34 @@ import get from 'lodash/get';
  */
 const baseURLObject = {
     user:"http://119.23.218.131:9102/authority/user",
+    role:"http://119.23.218.131:9102/authority/role",
     captcha:"http://119.23.218.131:9102/captcha",
     function:"http://119.23.218.131:9102/function",
+
     management:"http://119.23.218.131:9103",
     pondController:"http://119.23.218.131:9103/pond",   //池塘模块
     germchit:"http://119.23.218.131:9103/germchit"   ,   //种苗模块
-    base:"http://8.129.175.45:57110/base",
-    equipment:"http://8.129.175.45:57110/equipment",
-    warning:"http://8.129.175.45:57110/warning/",
-    meteorologicalData:"http://8.129.175.45:57110/meteorologicalData/",
-    waterData:"http://8.129.175.45:57110/waterData/",
-    monitor:"http://8.129.175.45:57110/monitor/",
+    germchitManagerController:"http://119.23.218.131:9103/base/germchit",  //基地种苗管理模块
+    baseSupply:"http://119.23.218.131:9103/base/supply",           //基地投入品模块
+    supplyController:"http://119.23.218.131:9103/supply",           //商家投入品管理
+    
+    base:'http://119.23.218.131:9103/base',
+    equipment: "http://119.23.218.131:9110/equipment",
+    warning: "http://119.23.218.131:9110/warning/",
+    meteorologicalData: "http://119.23.218.131:9110/meteorologicalData/",
+    waterData: "http://119.23.218.131:9110/waterData/",
+    monitor: "http://119.23.218.131:9110/monitor/",
+    
+    storage:"http://119.23.218.131:9101/",
+    message:"http://119.23.218.131:9109/message/",
+    diagnose:"http://119.23.218.131:9112/search/diagnose",
     plant: "http://119.23.218.131:9111/",
     managementOrder:"http://119.23.218.131:9114/order/",
     Customer:"http://119.23.218.131:9114/customer/"
 
 }
 
+console.table(baseURLObject);
 // 异常拦截处理器
 const errorHandler = (error) => {
     const status = get(error, 'response.status');
@@ -58,9 +69,7 @@ const errorHandler = (error) => {
  * 需要添加请求头请在下面自己加
  */
 const axiosObject = {};
-const axiosArray = [];
 for (const key in baseURLObject) {
-    axiosArray[key] = baseURLObject[key]
     axiosObject[key] = axios.create({
         // API 请求的默认前缀
         baseURL: baseURLObject[key],
@@ -71,13 +80,13 @@ for (const key in baseURLObject) {
         // 如果 token 存在
         // 让每个请求携带自定义 token 请根据实际情况自行修改
         config.headers = {
-            Authorization: `bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
             xip: localStorage.getItem("Ip")
         }
         return config;
     }, errorHandler)
 }
-console.table(axiosArray);
+
 // 添加一个纯净的axios
 axiosObject.originAxios = axios.create();
 

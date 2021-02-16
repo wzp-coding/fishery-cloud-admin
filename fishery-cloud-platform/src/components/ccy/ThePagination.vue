@@ -16,9 +16,9 @@
     props:{
       toPagination:{
         type:Object,
-        total:Number,
-        size:Number,
-        page:Number
+        // total:Number,
+        // size:Number,
+        // page:Number
       },
     },
     methods: {

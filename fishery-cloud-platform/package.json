@@ -7,6 +7,10 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@uppy/core": "^1.16.0",
+    "@uppy/locales": "^1.17.1",
+    "@uppy/tus": "^1.8.4",
+    "@uppy/vue": "^0.1.4",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "echarts": "^4.9.0",
@@ -15,8 +19,6 @@
     "nprogress": "^0.2.0",
     "qrcodejs2": "0.0.2",
     "vue": "^2.6.11",
-    "vue-cookies": "^1.7.3",
-    "vue-fragment": "^1.5.1",
     "vue-json-excel": "^0.3.0",
     "vue-router": "^3.2.0",
     "vuedraggable": "^2.24.3",

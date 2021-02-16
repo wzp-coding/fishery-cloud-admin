@@ -1,7 +1,6 @@
 import Login from '../views/user_info/Login.vue'
 import Register from '../views/user_info/Register.vue'
 import ForgetPassword from '../views/user_info/ForgetPassword.vue'
-import test from '../views/user_info/test.vue'
 import Vue from "vue"
 export default [
     {
@@ -45,6 +44,6 @@ export default [
         // 测试页面
         path: '/test',
         name: 'test',
-        component:test
+        component: () => import('../views/user_info/test.vue')
     }
 ]

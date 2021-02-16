@@ -11,6 +11,11 @@
       :collapse="isCollapse"
       router
       :default-active="activePath"
+      @select="
+        (activePath) => {
+          this.activePath = activePath;
+        }
+      "
     >
       <!-- unique-opened:是否只保持一个子菜单的展开 -->
       <!-- collapse：是否水平折叠收起菜单 -->
@@ -49,6 +54,14 @@
             <i class="el-icon-cloudy-and-sunny"></i>
             <!-- 文本 -->
             <span>环境监测</span>
+          </template>
+        </el-menu-item>
+        <el-menu-item index="/disease-diagnosis">
+          <template slot="title">
+            <!-- 图标 -->
+            <i class="el-icon-search"></i>
+            <!-- 文本 -->
+            <span>疾病诊断</span>
           </template>
         </el-menu-item>
       </el-submenu>
@@ -258,6 +271,21 @@ export default {
       // 被激活的链接地址
       activePath: "/digital-base",
     };
+  },
+  created() {
+    // 每次刷新重新渲染Vue时，获取上次preActivePath
+    const preActivePath = sessionStorage.getItem("preActivePath");
+    // console.log("preActivePath: ", preActivePath);
+    if (preActivePath) {
+      this.activePath = preActivePath;
+      // 移除session
+      sessionStorage.removeItem("preActivePath");
+    }
+
+    // 在页面刷新之前将activePath存在sessionStorage(监听刷新触发的事件)
+    window.addEventListener("beforeunload", () => {
+      sessionStorage.setItem("preActivePath", this.activePath);
+    });
   },
 };
 </script>
