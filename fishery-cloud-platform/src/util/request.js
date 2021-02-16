@@ -16,22 +16,25 @@ const baseURLObject = {
     role:"http://119.23.218.131:9102/authority/role",
     captcha:"http://119.23.218.131:9102/captcha",
     function:"http://119.23.218.131:9102/function",
+
     management:"http://119.23.218.131:9103",
-    base:'http://119.23.218.131:9110/base',
     pondController:"http://119.23.218.131:9103/pond",   //池塘模块
     germchit:"http://119.23.218.131:9103/germchit"   ,   //种苗模块
+    germchitManagerController:"http://119.23.218.131:9103/base/germchit",  //基地种苗管理模块
+    baseSupply:"http://119.23.218.131:9103/base/supply",           //基地投入品模块
+    supplyController:"http://119.23.218.131:9103/supply",           //商家投入品管理
+    
+    base:'http://119.23.218.131:9103/base',
     equipment: "http://119.23.218.131:9110/equipment",
     warning: "http://119.23.218.131:9110/warning/",
     meteorologicalData: "http://119.23.218.131:9110/meteorologicalData/",
     waterData: "http://119.23.218.131:9110/waterData/",
     monitor: "http://119.23.218.131:9110/monitor/",
-    germchitManagerController:"http://119.23.218.131:9103/base/germchit",  //基地种苗管理模块
-    baseSupply:"http://119.23.218.131:9103/base/supply",           //基地投入品模块
-    supplyController:"http://119.23.218.131:9103/supply",           //商家投入品管理
+    
+    storage:"http://119.23.218.131:9101/",
+    message:"http://119.23.218.131:9109/message/",
     diagnose:"http://119.23.218.131:9112/search/diagnose",
     plant: "http://119.23.218.131:9111/",
-    message:"http://119.23.218.131:9109/message/",
-    storage:"http://119.23.218.131:9101/",
     managementOrder:"http://119.23.218.131:9114/order/",
     Customer:"http://119.23.218.131:9114/customer/"
 

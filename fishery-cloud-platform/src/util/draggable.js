@@ -16,7 +16,7 @@ const DraggableMap = {
     render(h) {
         return (
             <el-col span={11}>
-                <Map map-name="base"></Map>
+                <Map map-name="base" center-point={{ lat: this.$store.state.baseInfo.positionLatitude, lng: this.$store.state.baseInfo.positionLongitude,content:this.$store.state.baseInfo.name }}></Map>
             </el-col>
         );
     },

@@ -30,6 +30,7 @@
   </el-card>
 </template>
 <script>
+import {mapMutations} from 'vuex'
 export default {
   data() {
     return {
@@ -43,12 +44,14 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["setBaseInfo"]),
     // 获取基地信息
     async getBaseInfo(baseId) {
       const { data: res } = await this.$base.get(`/${baseId}`);
       console.log("getBaseInfo: ", res);
       if(res.statusCode === 20000){
         this.baseInfo = res.data;
+        this.$store.commit("setBaseInfo",res.data);
       }else{
         this.elMessage.error(res.message);
       }

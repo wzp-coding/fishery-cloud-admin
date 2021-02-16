@@ -8,7 +8,10 @@ const state = {
   userInfo: {},
 
   // 该用户的所有权限
-  permissionList: []
+  permissionList: [],
+
+  // 该用户的基地信息
+  baseInfo:{}
 }
 
 const mutations = {
@@ -21,6 +24,11 @@ const mutations = {
   // 设置权限
   setPermissionList(state, data) {
     state.permissionList = data;
+  },
+
+  // 设置基地信息（一个用户一个基地）
+  setBaseInfo(state,data){
+    state.baseInfo = data;
   }
 }
 export default new Vuex.Store({
