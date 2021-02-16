@@ -58,11 +58,22 @@
           ></el-input-number>
         </el-form-item>
         <el-form-item
-          :label="labels.refrigeratoryTemperaturel"
-          prop="refrigeratoryTemperaturel"
+          :label="labels.refrigeratoryArea"
+          prop="refrigeratoryArea"
         >
           <el-input-number
-            v-model="editForm.refrigeratoryTemperaturel"
+            v-model="editForm.refrigeratoryArea"
+            controls-position="right"
+            :min="1"
+          ></el-input-number>
+        </el-form-item>
+
+        <el-form-item
+          :label="labels.refrigeratoryTemperature"
+          prop="refrigeratoryTemperature"
+        >
+          <el-input-number
+            v-model="editForm.refrigeratoryTemperature"
             controls-position="right"
           ></el-input-number>
         </el-form-item>
@@ -138,7 +149,7 @@ export default {
         if (res.statusCode == 20000) {
           this.$emit("getAllInfo");
           this.editDialogVisible = false;
-          this.$message.success(res.message);
+          this.elMessage.success(res.message);
         }
       });
     },

@@ -10,12 +10,14 @@ module.exports = class {
         gmtCreate: "创建时间",
         gmtModified: "修改时间",
         id: "冷库Id",
+        refrigeratoryArea: "冷库面积(平方米)",
         refrigeratoryAddress: "冷库地址",
         refrigeratoryIntroduce: "冷库介绍",
         refrigeratoryPositionLatitude: "冷库地址经度",
         refrigeratoryPositionLongitude: "冷库地址纬度",
-        refrigeratoryTemperaturel: "冷库温度",
-        refrigeratoryCapacity: "冷库总容量",
+        refrigeratoryTemperature: "冷库温度(度)",
+        refrigeratoryUsedCapacity:　"冷库已用容量(kg)",
+        refrigeratoryCapacity: "冷库总容量(kg)",
     }
     /* 标签结束 */
 
@@ -48,13 +50,18 @@ module.exports = class {
             { required: true, message: `请输入${this.labels.refrigeratoryIntroduce}`, trigger: "blur" },
         ],
         // 冷库容量
-        refrigeratoryTemperaturel: [
+        refrigeratoryTemperature: [
             { required: true, message: `请输入${this.labels.refrigeratoryTemperaturel}`, trigger: "blur" },
         ],
         // 冷库温度
         refrigeratoryCapacity: [
             { required: true, message: `请输入${this.labels.refrigeratoryCapacity}`, trigger: "blur" },
         ],
+        // 冷库面积
+        refrigeratoryArea: [
+            { required: true, message: `请输入${this.labels.refrigeratoryArea}`, trigger: "blur" },
+        ],
+
 
 
     }

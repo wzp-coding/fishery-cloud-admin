@@ -55,11 +55,22 @@
           ></el-input-number>
         </el-form-item>
         <el-form-item
-          :label="labels.refrigeratoryTemperaturel"
-          prop="refrigeratoryTemperaturel"
+          :label="labels.refrigeratoryArea"
+          prop="refrigeratoryArea"
         >
           <el-input-number
-            v-model="addFrom.refrigeratoryTemperaturel"
+            v-model="addFrom.refrigeratoryArea"
+            controls-position="right"
+            :min="1"
+          ></el-input-number>
+        </el-form-item>
+
+        <el-form-item
+          :label="labels.refrigeratoryTemperature"
+          prop="refrigeratoryTemperature"
+        >
+          <el-input-number
+            v-model="addFrom.refrigeratoryTemperature"
             controls-position="right"
           ></el-input-number>
         </el-form-item>
@@ -126,9 +137,11 @@ export default {
       this.$refs.addFromRef.validate(async (val) => {
         if (!val) return false;
         this.addFrom.baseId = this.baseId;
+        this.addFrom.refrigeratoryPositionLatitude = "111";
+        this.addFrom.refrigeratoryPositionLongitude = "20";
         const { data: res } = await this.model.addInfo(this.addFrom);
         if (res.statusCode == 20000) {
-          this.$message.success(res.message);
+          this.elMessage.success(res.message);
         }
         this.$emit("getAllInfo");
         this.addDialogVisible = false;

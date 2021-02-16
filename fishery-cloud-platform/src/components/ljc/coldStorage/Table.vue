@@ -48,8 +48,8 @@
             </el-row>
             <el-row :gutter="20">
               <el-col :span="6">
-                <el-form-item :label="labels.refrigeratoryTemperaturel">
-                  <span>{{ props.row.refrigeratoryTemperaturel }}</span>
+                <el-form-item :label="labels.refrigeratoryTemperature">
+                  <span>{{ props.row.refrigeratoryTemperature }}</span>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
@@ -83,8 +83,8 @@
         align="center"
       ></el-table-column>
       <el-table-column
-        prop="refrigeratoryTemperaturel"
-        :label="labels.refrigeratoryTemperaturel"
+        prop="refrigeratoryTemperature"
+        :label="labels.refrigeratoryTemperature"
         align="center"
       ></el-table-column>
       <el-table-column

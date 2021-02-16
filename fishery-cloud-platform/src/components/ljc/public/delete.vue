@@ -29,7 +29,7 @@ export default {
   methods: {
     /* 删除开始 */
     async removeById() {
-      const confirmResult = await this.$confirm(
+      const confirmResult = await this.elConfirm(
         `此操作将永久删除${this.title}, 是否继续?`,
         "提示",
         {
@@ -41,14 +41,14 @@ export default {
         return err;
       });
       if (confirmResult !== "confirm") {
-        return this.$message.info("已取消删除");
+        return this.elMessage.info("已取消删除");
       }
       const { data: res } = await this["$" + this.root].delete(
         `${this.deleteUrl}/${this.id}`
       );
-      if (res.statusCode == 20000) {
+      if (res.statusCode == 20000) {  
         this.$emit("getAllInfo");
-        this.$message.success(res.message);
+        this.elMessage.success(res.message);
       }
     },
     /* 删除结束 */

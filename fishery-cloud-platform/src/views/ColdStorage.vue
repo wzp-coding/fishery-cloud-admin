@@ -73,7 +73,7 @@ export default {
       // 总数据
       allList: [],
       // 基地ID
-      baseId: "1248910886228332544",
+      baseId: "1350657222372835330",
     };
   },
   computed: {
@@ -103,6 +103,7 @@ export default {
       if (res.statusCode !== 20000) {
         this.$message.error(res.message);
       }
+      console.log(res.data.records);
       this.allList = [];
       this.allList.push(res.data.records);
       this.total = res.data.total;
