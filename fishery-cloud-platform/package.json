@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@uppy/core": "^1.16.0",
+    "@uppy/locales": "^1.17.1",
     "@uppy/tus": "^1.8.4",
     "@uppy/vue": "^0.1.4",
     "axios": "^0.21.1",
