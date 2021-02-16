@@ -13,14 +13,14 @@
     <el-row>
       <el-col :span="8">
         <div class="imgBox">
-          <img src="../../assets/pond.jpg" alt="" />
+          <img src="../../../assets/pond.jpg" alt="" />
         </div>
       </el-col>
       <el-col :span="15">
         <!-- <p>池塘名称：</p> -->
         <p>池塘面积/m²：{{ toPond.area }}</p>
         <p>池塘深度/m：{{ toPond.depth }}</p>
-        <p>池塘类型：{{ toPond.pondtype }}</p>
+        <!-- <p>池塘类型：{{ toPond.pondtype }}</p> -->
         <p v-show="toPond.inputNum">投放尾数/尾：{{ toPond.inputNum }}</p>
         <p v-show="toPond.seedingTime">投苗时间：{{ toPond.seedingTime }}</p>
         <p v-show="toPond.catchTime">上次捕捞时间：{{ toPond.catchTime }}</p>
@@ -135,6 +135,7 @@
         </el-row>
       </span>
     </TheDialogAll>
+    <!-- 基地投苗 -->
     <TheDialogAll :toDialogInfo="toDialogFarmInfo">
       <el-form-item label="投入品类型">
         <el-select v-model="farmInfo.germchitId" placeholder="请选择投入品类型">
@@ -148,26 +149,31 @@
         </el-select>
       </el-form-item>
       <el-form-item label="投放量kg" prop="inputNum">
-          <el-input-number
-            v-model="farmInfo.inputNum"
-            controls-position="right"
-            :min="0.01"
-          ></el-input-number>
-        </el-form-item>
-        <!-- 底部区域 -->
+        <el-input-number
+          v-model="farmInfo.inputNum"
+          controls-position="right"
+          :min="0.01"
+        ></el-input-number>
+      </el-form-item>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="farmInfo.dialogVisible = false">取 消</el-button>
+        <el-button @click="toDialogFarmInfo.dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="farmInfoEvent">确 定</el-button>
       </span>
     </TheDialogAll>
+    <!-- 基地投苗 -->
+    <!-- <farming :toDialogInfo="toFarmDialogInfo"></farming> -->
   </div>
 </template>
 
 <script>
-import TheDialogAll from "../ccy/TheDialogAll";
+import TheDialogAll from "../TheDialogAll";
+
+import farming from "../ManagementPond/farming";
 export default {
   components: {
     TheDialogAll,
+    farming,
+   
   },
   props: {
     toPond: {
@@ -234,17 +240,20 @@ export default {
         creator: "boss",
       },
       germchitList: [], // 种苗信息列表
-      farmInfo:{
-        germchitId:'',
-        inputNum:1,      //投入量
-        pondId:this.toPond.pondId,
-        baseId:'1248910886228332544'
+      toFarmDialogInfo:{
+        dialogVisible: false,
+      },
+      farmInfo: {
+        germchitId: "",
+        inputNum: 1, //投入量
+        pondId: this.toPond.pondId,
+        baseId: "1248910886228332544",
       },
       toDialogFarmInfo: {
         title: "投苗信息面板",
         dialogVisible: false,
-        germchitId:'',    //投入品ID
-        inputNum:1,      //投入量
+        germchitId: "", //投入品ID
+        inputNum: 1, //投入量
         FormRules: {
           shrimpId: [
             { required: true, message: "请输入虾苗批次名称", trigger: "blur" },
@@ -257,10 +266,8 @@ export default {
     };
   },
   created() {
-    // this.getPondList(3,1);  //获取池塘信息
-    this.getGermchitList();
+    this.getGermchitList();  //获取池塘信息
     this.getGermchit();
-    this.temp();
     this.getgetGermchitByBase();
   },
   methods: {
@@ -276,9 +283,7 @@ export default {
         console.log("查询池塘信息失败");
       }
     },
-    temp() {
-      console.log(this.toPond);
-    },
+   
 
     async editPondInfo() {
       // this.$refs.addeFormRef.dialogVerification()
@@ -307,7 +312,6 @@ export default {
       const { data: res } = await this.$germchitManagerController.get(
         `${this.baseId}`
       );
-      
     },
     //删除池塘
     async deletePond(pondId) {
@@ -325,19 +329,23 @@ export default {
       const { data: res } = await this.$germchit.get();
       // console.log(res);
       this.germchitList = res.data;
-      console.log(res.data);
-      // germchitSpecies
+      console.log(res.data); 
     },
-    async getgetGermchitByBase(){
-      const {data: res} = await this.$germchitManagerController.get(`${this.baseId}`)
+    async getgetGermchitByBase() {
+      const { data: res } = await this.$germchitManagerController.get(
+        `${this.baseId}`
+      );
       console.log(res);
     },
-    async farmInfoEvent(){
-      console.log(JSON.stringify(this.farmInfo))
+    async farmInfoEvent() {
+      console.log(JSON.stringify(this.farmInfo));
       // console.log(this.farmInfo);
-      const {data: res} = await this.$pondController.post(`/farming`,this.farmInfo)
+      const { data: res } = await this.$pondController.post(
+        `/farming`,
+        this.farmInfo
+      );
       console.log(res);
-    }
+    },
   },
 };
 </script>

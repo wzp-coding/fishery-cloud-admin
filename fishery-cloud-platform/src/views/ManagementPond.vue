@@ -23,33 +23,54 @@
         <div class="bigBox" slot="bigBox">
           <!-- 池塘子组件 -->
           <!-- :toPond="pondList" -->
-          <pond :toPond="item" v-for="item in pondList" :key="item.pondId"></pond>
+          <pond
+            :toPond="item"
+            v-for="item in pondList"
+            :key="item.pondId"
+            @getPondList="eventRefresh"
+            v-show="reRender"
+            @fatherMethod="getPondList"
+          ></pond>
         </div>
       </TheCardHead>
-      <ThePagination :toPagination="addPondInfo" @fatherMethod="getPondList"></ThePagination>
+      <ThePagination
+        :toPagination="addPondInfo"
+        @fatherMethod="getPondList"
+      ></ThePagination>
     </el-card>
     <!-- @click="dialogFormVisible = false" -->
-    <TheDialogAll :toDialogInfo="addPondInfo" ref="addeFormRef" :addFormInfo="addeForm" page="currentPage" size="currentSize" >
-        <el-form-item label="池塘名称" prop="name">
-          <el-input v-model="addeForm.name"></el-input>
-        </el-form-item>
-        <el-form-item label="池塘类型" prop="type">
-          <el-input v-model="addeForm.type"></el-input>
-        </el-form-item>
-        <el-form-item label="池塘面积/m²" prop="area">
-          <el-input-number
-            v-model="addeForm.area"
-            controls-position="right"
-            :min="1"
-          ></el-input-number>
-        </el-form-item>
-        <el-form-item label="池塘深度/m" prop="depth">
-          <el-input-number
-            v-model="addeForm.depth"
-            controls-position="right"
-            :min="1"
-          ></el-input-number>
-        </el-form-item>
+    <!-- 添加池塘对话框 -->
+    <TheDialogAll
+      :toDialogInfo="addPondInfo"
+      ref="addeFormRef"
+      :FormInfo="addeForm"
+      page="currentPage"
+      size="currentSize"
+    >
+      <div slot="forAdd">
+        <el-form :model="addeForm" :rules="addPondInfo.FormRules">
+          <el-form-item label="池塘名称" prop="name">
+            <el-input v-model="addeForm.name"></el-input>
+          </el-form-item>
+          <el-form-item label="池塘类型" prop="type">
+            <el-input v-model="addeForm.type"></el-input>
+          </el-form-item>
+          <el-form-item label="池塘面积/m²" prop="area">
+            <el-input-number
+              v-model="addeForm.area"
+              controls-position="right"
+              :min="1"
+            ></el-input-number>
+          </el-form-item>
+          <el-form-item label="池塘深度/m" prop="depth">
+            <el-input-number
+              v-model="addeForm.depth"
+              controls-position="right"
+              :min="1"
+            ></el-input-number>
+          </el-form-item>
+        </el-form>
+      </div>
       <span slot="footer">
         <el-row :gutter="80" class="elrow">
           <el-col :span="5" :offset="9">
@@ -65,6 +86,10 @@
         </el-row>
       </span>
     </TheDialogAll>
+    
+    <!-- 修改池塘信息对话框 -->
+    <!-- <TheDialogAll :toDialogInfo="editPondInfo"></TheDialogAll> -->
+    <!-- <TheDialogAll :toDialogInfo="farmInfo"></TheDialogAll>  -->
     <!-- <TheDialogAll :toDialogInfo="adviseInput" >
 
     </TheDialogAll> -->
@@ -75,38 +100,38 @@
 import TheCardHead from "../components/ccy/TheCardHead";
 import TheDialogAll from "../components/ccy/TheDialogAll";
 import ThePagination from "../components/ccy/ThePagination";
-import pond from "../components/ccy/pond";
+import pond from "../components/ccy/ManagementPond/pond";
+
 export default {
   components: { TheCardHead, pond, ThePagination, TheDialogAll },
   data() {
     return {
+      reRender: true,
       //全部池塘信息
-      pondList:[],
-      baseId:'1248910886228332544',     //基地ID
+      pondList: [],
+      baseId: "1248910886228332544", //基地ID
       // 添加池塘的表单数据
       addeForm: {
-        area: "",       //池塘面积
-        baseId: "1248910886228332544",     //基地id
-        creator:'boss',  //创建者
-        depth: "",      //池塘深度
-        // gmtCreate:'',
-        // gmtModified:'',
-        // id:'2',          //池塘编号
-        // isDeleted:'0',
-        name: "",       //池塘名称  
-        type: "",       //池塘类型
+        //与对话框的输入数据绑定
+        area: "", //池塘面积
+        baseId: "1248910886228332544", //基地id
+        creator: "boss", //创建者
+        depth: "", //池塘深度
+        name: "", //池塘名称
+        type: "", //池塘类型
         // version:0
       },
       addPondInfo: {
         title: "添加池塘",
         dialogVisible: false,
-        total:0,
-        size:3,
-        page:1,
+        total: 0,
+        size: 3,
+        page: 1,
+        pondId: "",
         // sizeGroup:[3,6,9],
-        addeForm:this.addeForm,
+        addeForm: this.addeForm,
         // 添加表单的验证规则对象
-        addeFormRules: {
+        FormRules: {
           name: [
             { required: true, message: "请输入池塘名称", trigger: "blur" },
             {
@@ -137,76 +162,95 @@ export default {
       editPondInfo: {
         title: "修改池塘信息",
         dialogVisible: false,
-        
+      },
+      //投苗
+      germchitList: [], // 种苗信息列表
+      farmInfo: {
+        title: "投苗信息面板",
+        dialogVisible: false,
       },
       // 建议卡信息输入表单
       kindForm: {
         pondVolume: 0,
         pondDeep: 0,
-        shrimpKindId: '',
-        shrimpMethod: '',
+        shrimpKindId: "",
+        shrimpMethod: "",
       },
       //建议卡输入
-      adviseInput:{
-        title:'池塘信息输入',
+      adviseInput: {
+        title: "池塘信息输入",
         dialogVisible: false,
         // 建议卡的信息输入的验证规则对象
         kindFormRules: {
-        kindName: [
-          { required: true, message: '请输入虾的品种', trigger: 'blur' },
-        ],
-        pondVolume: [
-          { required: true, message: '请输入池塘面积', trigger: 'blur' },
-        ],
-        pondDeep: [
-          { required: true, message: '请输入池塘深度', trigger: 'blur' },
-        ],
+          kindName: [
+            { required: true, message: "请输入虾的品种", trigger: "blur" },
+          ],
+          pondVolume: [
+            { required: true, message: "请输入池塘面积", trigger: "blur" },
+          ],
+          pondDeep: [
+            { required: true, message: "请输入池塘深度", trigger: "blur" },
+          ],
+        },
       },
-      }
     };
   },
   created() {
-    this.getPondList(this.addPondInfo.size,1);  //获取池塘信息
-    // this.createPond();
-    this.test()
+    this.getPondList(this.addPondInfo.size, 1); //获取池塘信息
+
+    this.test();
   },
   methods: {
-    async getPondList(size,page) {
+    async getPondList(size, page) {
+      console.log("获取池塘信息");
+      // this.reRender= false;
       const { data: res } = await this.$pondController.get(
         `getInfo/${this.baseId}/${size}/${page}`
       );
       if (res.statusCode !== 2000) {
         console.log(res);
         this.pondList = res.data.records;
-        this.addPondInfo.total = res.data.total
+        for (let i = 0; i < this.pondList.length; i++) {
+          this.pondList[i].pondType = this.pondList[i].type;
+        }
+        this.addPondInfo.total = res.data.total;
+        this.reRender = true;
       } else {
         console.log("查询池塘信息失败");
       }
     },
-    test(){
+    test() {
       console.log(this);
+    },
+    eventRefresh() {
+      this.reRender = false;
+      this.getPondList(this.addPondInfo.size, 1);
     },
     //创建池塘
     async createPond() {
       console.log(this.addeForm);
-      this.addPondInfo.baseId = '1248910886228332544';
-      const { data: res } = await this.$pondController.post(`/create}`,this.addeForm);
+      this.addPondInfo.baseId = "1248910886228332544";
+      const { data: res } = await this.$pondController.post(
+        `create}`,
+        this.addeForm
+      );
       if (res.statusCode !== 20000) {
         console.log("请求创建池塘失败");
       } else {
         console.log(res);
         this.addPondInfo.dialogVisible = !this.addPondInfo.dialogVisible;
-        this.getPondList(this.addPondInfo.size,this.addPondInfo.page);
-        this.$message.success('添加池塘成功!!')
+        this.getPondList(this.addPondInfo.size, this.addPondInfo.page);
+        this.reRender = true;
+        this.$message.success("添加池塘成功!!");
       }
       console.log(res);
-},
-    addPondEvent() {    //确认添加池塘事件
+    },
+    addPondEvent() {
+      //确认添加池塘事件
       console.log("创建池塘事件");
       this.$refs.addeFormRef.dialogVerification();
     },
 
-    
     //触发子组件的表单验证表单验证
     verification() {
       this.$refs.addeFormRef.dialogVerification();
@@ -217,6 +261,27 @@ export default {
       //   console.log("验证不通过");
       //   return false;
       // }
+    },
+    parentMehod() {
+      this.createPond();
+    },
+    // 监听捕捞对话框的关闭事件,关闭时对表单进行重置
+    catchDialogClosed() {
+      this.$refs.catchFormRef.resetFields();
+    },
+    timeFormat(date) {
+      var y = date.getFullYear();
+      var m = date.getMonth() + 1;
+      m = m < 10 ? "0" + m : m;
+      var d = date.getDate();
+      d = d < 10 ? "0" + d : d;
+      var h = date.getHours();
+      h = h < 10 ? "0" + h : h;
+      var minute = date.getMinutes();
+      minute = minute < 10 ? "0" + minute : minute;
+      var second = date.getSeconds();
+      second = second < 10 ? "0" + second : second;
+      return y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second;
     },
   },
 };
