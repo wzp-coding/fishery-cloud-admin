@@ -31,7 +31,7 @@ export default {
         return {
             breadcrumbs:["我的基地","实况监控"],
             // 默认基地
-            baseId: '1248910886228332544',
+            baseId: this.$store.state.userInfo.baseId,
             baseList:[],
             // 所监控的设备台数
             total:0
@@ -43,10 +43,12 @@ export default {
     methods: {
         async getbaseList() {
             this.$monitor.get(`trace?baseId=${this.baseId}`).then(res=>{
-                if(res.data.statusCode!==20000) {
-                    return this.$message.error('获取基地信息失败')
+                if(res.data.statusCode==20003) {
+                    return this.elMessage.error(res.data.message)
                 }
-                console.log(res.data.data);
+                if(res.data.statusCode!==20000) {
+                    return this.elMessage.error('获取基地信息失败')
+                }
                 this.baseList = res.data.data
                 this.total = res.data.data.length
             })
