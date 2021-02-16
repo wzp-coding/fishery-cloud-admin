@@ -16,7 +16,7 @@ const DraggableMap = {
     render(h) {
         return (
             <el-col span={11}>
-                <Map map-name="logistics"></Map>
+                <Map map-name="base"></Map>
             </el-col>
         );
     },

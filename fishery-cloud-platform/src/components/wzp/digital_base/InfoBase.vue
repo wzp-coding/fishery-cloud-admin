@@ -8,23 +8,23 @@
     <el-row class="baseInformation">
       <p>
         <i class="el-icon-office-building"></i>
-        {{ baseInfo.baseName }}
+        {{ baseInfo.name }}
       </p>
       <p>
         <i class="el-icon-user"></i>
-        {{ baseInfo.createBy }}
+        {{ baseInfo.creator }}
       </p>
       <p>
         <i class="el-icon-map-location"></i>
-        {{ baseInfo.baseAddr }}
+        {{ baseInfo.address }}
       </p>
       <p>
         <i class="el-icon-pie-chart"></i>
-        池塘总面积：{{ pondInfo.volume }}m²
+        池塘总面积：{{ pondInfo.totalAmount }}m²
       </p>
       <p>
         <i class="el-icon-data-line"></i>
-        池塘数量：{{ pondInfo.pondNum }}
+        池塘数量：{{ pondInfo.totalArea }}个
       </p>
     </el-row>
   </el-card>
@@ -34,10 +34,7 @@ export default {
   data() {
     return {
       baseInfo: {},
-      pondInfo: {
-        volume: 0,
-        pondNum: 0,
-      },
+      pondInfo: {},
       carousels: [
         "http://134.175.208.235/group1/M00/00/28/rBAAD1_YZIyAHq-UAAGH2TCKbN0940.jpg",
         "http://134.175.208.235/group1/M00/00/29/rBAAD1_5Q3eAB1JXAAFNS57b_0o146.jpg",
@@ -45,7 +42,33 @@ export default {
       ],
     };
   },
-  methods: {},
+  methods: {
+    // 获取基地信息
+    async getBaseInfo() {
+      const { data: res } = await this.$base.get();
+      console.log("getBaseInfo: ", res);
+      if(res.statusCode === 20000){
+        this.baseInfo = res.data;
+      }else{
+        this.elMessage.error(res.message);
+      }
+    },
+
+    // 获取基地池塘的总数量、总面积
+    async getPondInfo(baseId){
+      const { data: res } = await this.$pondController.get(`/count/${baseId}`);
+      console.log("getPondInfo: ", res);
+      if(res.statusCode === 20000){
+        this.pondInfo = res.data;
+      }else{
+        this.elMessage.error(res.message);
+      }
+    }
+  },
+  created() {
+    this.getBaseInfo();
+    this.getPondInfo(this.$store.state.userInfo.baseId);
+  },
 };
 </script>
 <style lang="less">

@@ -38,16 +38,6 @@
       </el-row>
       <!-- 模块布局 -->
       <el-row justify="space-around" type="flex">
-        <!-- <el-col :span="6">
-          <InfoBase></InfoBase>
-        </el-col>
-        <el-col :span="11">
-          <Map map-name="base"></Map>
-        </el-col>
-        <el-col :span="6">
-          <WeatherCard></WeatherCard>
-        </el-col> -->
-
         <!-- 使用draggable组件 v-model绑定数组 -->
         <Draggable
           @start="drag = true"
@@ -120,7 +110,7 @@ export default {
           checked: true,
         },
       ],
-      
+
       // 存放被选中的可拖拽组件
       componentCheckedData: [],
     };

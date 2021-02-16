@@ -97,13 +97,13 @@ export default {
   },
   methods: {
     // 分页获取角色
-    async getRoleList(page = 1, size = 1) {
+    async getRoleList(page = 1, size = 5) {
       let { data: res } = await this.$role.get(`/${page}/${size}`);
-      // console.log("res: ", res);
+      // console.log("getRoleList: ", res);
       if (res.statusCode === 20000) {
         res = res.data;
         this.roleList = res.records;
-        const options = { page, size, total: res.total,sizes:[1,2,3,4] };
+        const options = { page, size, total: res.total };
         return options;
       } else {
         this.elMessage.error(res.message);

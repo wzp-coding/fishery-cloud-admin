@@ -66,11 +66,12 @@ export default {
         url = `/loginByPhone?phone=${phone}&code=${phoneCode}`;
       }
       const { data: res, headers } = await this.$user.post(url);
-      // console.log("res: ", res);
+      // console.log("user: ", res);
       if (res.statusCode === 20000) {
         localStorage.setItem("token", headers.token);
         this.$store.commit("setUserInfo", res.data);
-        await this.getFunctionByBaseIdAndBaseIdentity();
+        const { id: roleId } = await this.getRoleIdByLoginId(res.data.id);
+        await this.getFunctionByRoleId(roleId);
         this.elMessage.success(res.message);
         this.$router.push("/digital-base");
       } else {
@@ -79,10 +80,22 @@ export default {
       }
     },
 
-    // 查询该用户的所有权限，并存到vuex中
-    async getFunctionByBaseIdAndBaseIdentity() {
-      const { data: res } = await this.$function.get();
-      this.$store.commit("setPermissionList", res.data);
+    // 根据loginId得到roleId
+    async getRoleIdByLoginId(loginId) {
+      const { data: res } = await this.$role.get(`/getByUserId/${loginId}`);
+      // console.log("getRoleIdByLoginId: ", res);
+      return res.data[0];
+    },
+
+    // 根据loginId得到的roleId查询登录用户的权限，并存到vuex中
+    async getFunctionByRoleId(roleId) {
+      const { data: res } = await this.$function.get(`/findFunction/${roleId}`);
+      // console.log("getFunctionByRoleId: ", res);
+      if(res.statusCode === 20000){
+        this.$store.commit("setPermissionList", res.data);
+      }else{
+        this.elMessage.error(res.message);
+      }
     },
   },
   mounted() {
