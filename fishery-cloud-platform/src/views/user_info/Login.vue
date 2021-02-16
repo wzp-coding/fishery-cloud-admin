@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import Form from "../../components/wzp/user_info/Form";
+import Form from "../../components/wzp/Form";
 import { mapMutations } from "vuex";
 export default {
   data() {
@@ -35,14 +35,16 @@ export default {
       // 切换登录方式设置背景高度
       boxHeight: "height:440px",
 
-      token: localStorage.getItem("token"),
+      token: undefined,
     };
   },
   components: {
     Form,
   },
   methods: {
-    ...mapMutations(["setUserInfo"]),
+    ...mapMutations(["setUserInfo", "setPermissionList"]),
+
+    // 切换登录方式
     handleTabClick(tab) {
       // console.log("tab: ", tab);
       this.activeName = tab.name;
@@ -52,6 +54,7 @@ export default {
         this.boxHeight = "height:390px";
       }
     },
+
     // 向登录接口发起请求
     async handleSubmit(form) {
       // console.log("form: ", form);
@@ -63,17 +66,23 @@ export default {
         url = `/loginByPhone?phone=${phone}&code=${phoneCode}`;
       }
       const { data: res, headers } = await this.$user.post(url);
-      console.log("res: ", res);
+      // console.log("res: ", res);
       if (res.statusCode === 20000) {
         localStorage.setItem("token", headers.token);
         this.$store.commit("setUserInfo", res.data);
+        await this.getFunctionByBaseIdAndBaseIdentity();
         this.elMessage.success(res.message);
         this.$router.push("/digital-base");
       } else {
         this.$refs.passwordLogin.getCaptcha();
-        console.log("login.vue");
         this.elMessage.error(res.message);
       }
+    },
+
+    // 查询该用户的所有权限，并存到vuex中
+    async getFunctionByBaseIdAndBaseIdentity() {
+      const { data: res } = await this.$function.get();
+      this.$store.commit("setPermissionList", res.data);
     },
   },
   mounted() {

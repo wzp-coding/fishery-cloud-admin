@@ -1,4 +1,4 @@
-import DigitalBase from '../views/DigitalBase.vue'     //
+import DigitalBase from '../views/my_base/DigitalBase.vue'     //
 import SeedPurchase from '../views/SeedPurchase.vue'    //
 import InfoSeed from '../views/InfoSeed.vue'           //
 import InfoCustomer from '../views/InfoCustomer.vue'   //客户管理
@@ -8,7 +8,7 @@ import InfoPond from '../views/InfoPond.vue'
 import ManagementStaff from '../views/ManagementStaff.vue'      //
 import ManagementSupplies from '../views/ManagementSupplies.vue'       //
 import ManagementPond from '../views/ManagementPond.vue'    //
-import ManagementAuthority from '../views/ManagementAuthority.vue'    //权限管理
+import ManagementAuthority from '../views/management_base/ManagementAuthority.vue'    //权限管理
 export default [
     {
         // 数字基地

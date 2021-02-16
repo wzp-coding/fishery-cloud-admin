@@ -13,6 +13,7 @@ import get from 'lodash/get';
  */
 const baseURLObject = {
     user:"http://119.23.218.131:9102/authority/user",
+    role:"http://119.23.218.131:9102/authority/role",
     captcha:"http://119.23.218.131:9102/captcha",
     function:"http://119.23.218.131:9102/function",
     management:"http://119.23.218.131:9103",
@@ -31,6 +32,7 @@ const baseURLObject = {
 
 }
 
+console.table(baseURLObject);
 // 异常拦截处理器
 const errorHandler = (error) => {
     const status = get(error, 'response.status');
@@ -59,9 +61,7 @@ const errorHandler = (error) => {
  * 需要添加请求头请在下面自己加
  */
 const axiosObject = {};
-const axiosArray = [];
 for (const key in baseURLObject) {
-    axiosArray[key] = baseURLObject[key]
     axiosObject[key] = axios.create({
         // API 请求的默认前缀
         baseURL: baseURLObject[key],
@@ -72,13 +72,13 @@ for (const key in baseURLObject) {
         // 如果 token 存在
         // 让每个请求携带自定义 token 请根据实际情况自行修改
         config.headers = {
-            Authorization: `bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
             xip: localStorage.getItem("Ip")
         }
         return config;
     }, errorHandler)
 }
-console.table(axiosArray);
+
 // 添加一个纯净的axios
 axiosObject.originAxios = axios.create();
 

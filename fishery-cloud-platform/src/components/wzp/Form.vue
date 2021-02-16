@@ -19,6 +19,8 @@ export default {
           "loginId",
           "captcha",
           "userName",
+          "email",
+          "avatar",
         ];
         let valid = true;
         arr.some((option) => {
@@ -35,7 +37,15 @@ export default {
       type: String,
       default: "登录",
       validator(val) {
-        return ["登录", "注册", "找回密码"].includes(val);
+        return ["登录", "注册", "找回密码", "修改信息", "修改密码"].includes(
+          val
+        );
+      },
+    },
+    defaultForm: {
+      type: Object,
+      default() {
+        return {};
       },
     },
   },
@@ -74,15 +84,22 @@ export default {
       //   按钮文本内容
       btnText: this.button,
 
+      // 打开上传文件弹窗标志
+      isOpen: false,
+
       // 表单
       form: {
-        phone: "",
+        phone: this.defaultForm.phone,
         password: "",
         confirmPassword: "",
         phoneCode: "",
-        loginId: "",
+        loginId: this.defaultForm.id,
         captcha: "",
-        userName: "",
+        userName: this.defaultForm.username,
+        email: this.defaultForm.email,
+        avatar:
+          this.defaultForm.avatar ||
+          "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
       },
 
       //表单验证规则
@@ -104,6 +121,10 @@ export default {
             validator: validatePassword,
             trigger: "blur",
             required: true,
+          },
+          {
+            pattern: /^[a-zA-Z]\w{5,17}$/,
+            message: "以字母开头，长度在6~18之间，只能包含字母、数字和下划线",
           },
         ],
 
@@ -160,6 +181,18 @@ export default {
             trigger: "blur",
           },
         ],
+
+        // 邮箱
+        email: [
+          { required: true, message: "请输入邮箱", trigger: "blur" },
+          {
+            pattern: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+            message: "邮箱格式不正确",
+          },
+        ],
+
+        // 头像
+        avatar: [{ required: true, message: "请上传图片", trigger: "blur" }],
       },
     };
   },
@@ -203,7 +236,12 @@ export default {
           vModel={this.form.captcha}
           class="captcha"
         ></el-input>
-        <img src={"data:image/png;base64," + this.url} onClick={()=>{this.getCaptcha()}} />
+        <img
+          src={"data:image/png;base64," + this.url}
+          onClick={() => {
+            this.getCaptcha();
+          }}
+        />
       </el-form-item>
     );
 
@@ -257,12 +295,33 @@ export default {
       </el-form-item>
     );
 
-    // 按钮
-    let btn = (
-      <el-form-item>
-        <el-button type="success" size="medium" class="handleBtn" onClick={() => this.cb()}>
-          {this.btnText}
+    // 邮箱
+    let email = (
+      <el-form-item label="邮箱" prop="email">
+        <el-input
+          vModel={this.form.email}
+          placeholder="请输入邮箱"
+          prefix-icon="el-icon-message"
+        ></el-input>
+      </el-form-item>
+    );
+    // 这尼玛就离谱，src也变了，就是加载不出来。直接放字符串就行
+    // <el-avatar size={50} src={this.form.avatar} ref="avatar"></el-avatar>（313行）
+    // 头像
+    let avatar = (
+      <el-form-item label="头像" inline={true}>
+        <img class="avatar" src={this.form.avatar}>
+          无
+        </img>
+        <el-button onClick={() => (this.isOpen = true)} class="uploadAvatar">
+          上传头像
         </el-button>
+        <UploadFile
+          type="image"
+          upload-success={(file) => this.uploadAvatar(file)}
+          close-modal={() => (this.isOpen = false)}
+          is-open={this.isOpen}
+        ></UploadFile>
       </el-form-item>
     );
 
@@ -275,7 +334,23 @@ export default {
       confirmPassword,
       loginId,
       userName,
+      email,
+      avatar,
     };
+
+    // 按钮
+    let btn = (
+      <el-form-item>
+        <el-button
+          type="success"
+          size="medium"
+          class="handleBtn"
+          onClick={() => this.cb()}
+        >
+          {this.btnText}
+        </el-button>
+      </el-form-item>
+    );
 
     return (
       <el-form
@@ -292,6 +367,10 @@ export default {
         {
           // 渲染表单选项
           this.options.map((component) => allOptions[component])
+        }
+        {
+          // 插槽
+          this.$slots.showInfo
         }
         {
           // 渲染按钮
@@ -319,21 +398,22 @@ export default {
     },
 
     // 验证码发送倒计时
-    startCountDown(){
-      let timer = setInterval(()=>{
-        if(this.count>0){
+    startCountDown() {
+      let timer = setInterval(() => {
+        if (this.count > 0) {
           this.count--;
-        }else{
+        } else {
           clearInterval(timer);
           this.isSended = false;
+          this.count = 60;
         }
-      },1000);
+      }, 1000);
     },
 
     // 根据手机号发送验证码
-   sendCode() {
-      this.$refs.form.validateField("phone", async (err)=> {
-        console.log(err);
+    sendCode() {
+      this.$refs.form.validateField("phone", async (err) => {
+        // console.log(err);
         if (!err) {
           // console.log("发送验证码");
           // 类型：1是修改资料，2是登录，3是注册
@@ -342,26 +422,45 @@ export default {
             type = 2;
           } else if (this.button === "注册") {
             type = 3;
-          } else if (this.button === "找回密码") {
+          } else if (this.button === "找回密码" || this.button === "修改密码") {
             type = 1;
           }
           let url = `/sendVerify/${type}/${this.form.phone}`;
           const { data: res } = await this.$message.get(url);
-          console.log('res: ', res);
+          // console.log('res: ', res);
           // 已成功发送信息，开始倒计时
           this.isSended = true;
+          this.elMessage.success(res.message);
           this.startCountDown();
+        } else {
+          this.elMessage.error(res.message);
         }
       });
     },
 
     // 点击图片获取验证码
-    async getCaptcha(){
-     const {data:res} = await this.$captcha.post('/getCaptcha')
-    //  console.log('res: ', res);
-    //  console.log('res.data.img: ', res.data.img);
-     this.url  = res.data.img;
-    }
+    async getCaptcha() {
+      const { data: res } = await this.$captcha.post("/getCaptcha");
+      this.url = res.data.img;
+    },
+
+    // 点击上传图片
+    async uploadAvatar(file) {
+      console.log("file: ", file);
+      this.form.avatar = file.url;
+    },
   },
 };
 </script>
+<style lang="less" scoped>
+.uploadAvatar {
+  display: inline-block;
+  vertical-align: 20px;
+  margin-left: 20px;
+}
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+</style>

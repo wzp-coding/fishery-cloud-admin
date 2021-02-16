@@ -18,7 +18,7 @@
   </div>
 </template>
 <script>
-import Form from '../../components/wzp/user_info/Form'
+import Form from '../../components/wzp/Form'
 export default {
   components:{
     Form,
