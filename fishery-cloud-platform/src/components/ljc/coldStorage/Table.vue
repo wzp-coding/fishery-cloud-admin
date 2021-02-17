@@ -171,8 +171,8 @@
 import Delete from "../public/delete";
 import Edit from "../coldStorage/Edit";
 import Into from "../public/into";
-import In from "../coldStorage/In";
-import Out from "../coldStorage/Out";
+import In from "../coldStorageInfo/In/Add";
+import Out from "../coldStorageInfo/Out/Add";
 export default {
   components: {
     Delete,
