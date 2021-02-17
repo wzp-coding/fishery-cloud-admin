@@ -11,7 +11,6 @@
       :data="authList"
       :props="defaultProps"
       default-expand-all
-      :default-checked-keys="defaultCheckedIds"
       node-key="id"
       show-checkbox
     ></el-tree>
@@ -50,48 +49,53 @@ export default {
     };
   },
   computed: {
+    // 获取树结构的checkIds中的所有叶子节点
     defaultCheckedIds() {
-      const tem = [""];
+      let tem = [""];
       this.checkedIds.forEach((one) => {
-        tem.push(one.id);
-        if (one.children) {
+        if (one.children.length !== 0) {
           one.children.forEach((two) => {
-            tem.push(two.id);
-            if (two.children) {
+            if (two.children.length !== 0) {
               two.children.forEach((three) => {
                 tem.push(three.id);
               });
+            } else {
+              // two是叶子节点
+              tem.push(two.id);
             }
           });
+        } else {
+          // one是叶子节点
+          tem.push(one.id);
         }
       });
-      console.log('tem: ', tem);
       return tem;
     },
   },
-  watch: {
-    defaultCheckedIds(val) {
-      console.log("defaultCheckedIds: ", val);
-    },
-  },
   methods: {
+    // 点击分配按钮
     async setAuth(roleId) {
-      const selectedIds = this.$refs.tree.getCheckedKeys();
-      // console.log("roleId: ", roleId);
-      console.log(this.$refs.tree.getCheckedKeys());
-      console.log(JSON.stringify({ "functionIdList": selectedIds }));
-      const { data: res } = await this.$function.post(
-        `/${roleId}`,
-        { "functionIdList": selectedIds }
-      );
-      console.log("functionIdList: ", res);
+      // 这里注意：还要获取半选中的父节点
+      const selectedIds = this.$refs.tree
+        .getHalfCheckedKeys()
+        .concat(this.$refs.tree.getCheckedKeys());
+      // console.log("selectedIds: ", selectedIds);
+      const { data: res } = await this.$function.post(`/${roleId}`, {
+        functionIdList: selectedIds,
+      });
+      // console.log("functionIdList: ", res);
+      if (res.statusCode === 20000) {
+        this.elMessage.success(res.message);
+        this.$emit("close");
+      } else {
+        this.elMessage.error(res.message);
+      }
     },
 
     // 根据roleId获取 已授予 权限列表
     async getFunctionByRoleId(roleId) {
-      console.log('roleId: ', roleId);
       const { data: res } = await this.$function.get(`/findFunction/${roleId}`);
-      console.log("getFunctionByRoleId: ", res);
+      // console.log("getFunctionByRoleId: ", res);
       if (res.statusCode === 20000) {
         // 设置checkedIds
         this.checkedIds = res.data;
@@ -113,17 +117,16 @@ export default {
 
     // 打开后处理函数
     async openProxy() {
-      console.log("open")
+      // console.log("open")
       // 打开后先获取已授予的权限
       await this.getFunctionByRoleId(this.roleId);
+      // 这里设置已授权的权限，注意defaultCheckedIds包含的只有叶子节点
+      this.$refs.tree.setCheckedKeys(this.defaultCheckedIds);
     },
   },
   created() {
     // 获取所有权限
     this.getAuthList();
-  },
-  destroyed() {
-    console.log("destroyed")
   },
 };
 </script>
