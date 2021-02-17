@@ -9,7 +9,7 @@ import './assets/css/global.css'
 import './assets/fonts/iconfont.css'
 
 // 封装axios并且把包挂载到原型对象上
-import axiosObject from './util/request'
+import axiosObject from './util/request/index'
 Vue.use(axiosObject)
 
 // 导入全局注册的自定义组件
