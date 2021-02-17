@@ -1,5 +1,5 @@
-import ManagementOrder from '../views/ManagementOrder.vue';
-import InfoLogistics from '../views/InfoLogistics.vue';
+import ManagementOrder from '../views/order_logistics/ManagementOrder.vue';
+import InfoLogistics from '../views/order_logistics/InfoLogistics.vue';
 export default [
     {
         // 订单管理

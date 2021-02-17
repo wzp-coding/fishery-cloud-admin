@@ -2,7 +2,7 @@
         <el-card class="box-card">
             <el-row>
                 <el-col :span="20"><span>修改参数</span></el-col>
-                <el-col :span="4"><el-button type="primary" size="mini">预测</el-button></el-col>
+                <el-col :span="4"><el-button type="primary" size="mini" @click="sendfrom">预测</el-button></el-col>
             </el-row>
             <el-divider></el-divider>
             <el-row>
@@ -90,6 +90,14 @@ export default {
                 ]
             }
         }
+    },
+    methods: {
+        sendfrom() {
+            this.$refs.forecaseFormRef.validate(async valid => {
+                if(!valid) return false
+                this.$emit('getForecastData',this.forecaseForm)
+            })
+        },
     }
 }
 </script>

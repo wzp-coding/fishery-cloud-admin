@@ -1,6 +1,6 @@
 import Map from "../components/public_components/Map";
-import WeatherCard from "../components/wzp/WeatherCard";
-import InfoBase from "../components/wzp/InfoBase";
+import WeatherCard from "../components/wzp/digital_base/WeatherCard";
+import InfoBase from "../components/wzp/digital_base/InfoBase";
 const DraggableInfoBase = {
     components: { InfoBase },
     render(h) {
@@ -16,7 +16,7 @@ const DraggableMap = {
     render(h) {
         return (
             <el-col span={11}>
-                <Map map-name="logistics"></Map>
+                <Map map-name="base" center-point={{ lat: this.$store.state.baseInfo.positionLatitude, lng: this.$store.state.baseInfo.positionLongitude,content:this.$store.state.baseInfo.name }}></Map>
             </el-col>
         );
     },

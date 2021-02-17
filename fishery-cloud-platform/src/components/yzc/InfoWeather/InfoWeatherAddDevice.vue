@@ -41,7 +41,7 @@ export default {
         return {
             // 基地信息
             baseList:[],
-            baseId:'1248910886228332544',
+            baseId:this.$store.state.userInfo.baseId,
             // 存放添加表单数据
             addForm: {
                 id:'',
@@ -85,7 +85,6 @@ export default {
         },
         // 该方法改变父组件中的ShowAddDevice来控制自身的显示隐藏 同时调用表单方法清除addFrom中数据
         HideAddDevice() {
-            console.log(this.addForm);
             this.$emit('ShowAddDevice',false)
             this.$refs.addFormRef.resetFields()
         },
@@ -97,9 +96,9 @@ export default {
                 this.addForm.updateTime = this.getnowtime()
                 const {data:res} = await this.$equipment.post('',this.addForm)
                 if(res.statusCode!==20000) {
-                    return this.$message.error('添加失败！')
+                    return this.elMessage.error('添加失败！')
                 }
-                this.$message.success('添加成功！')
+                this.elMessage.success('添加成功！')
                 // 触发父组件重新获取列表
                 this.$emit('getequipmentList')
                 this.HideAddDevice()

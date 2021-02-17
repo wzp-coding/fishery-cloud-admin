@@ -40,27 +40,31 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+// 不需要权限的路由
+const NoAuthRouters = ['/login', '/register', '/forgetPassword']
+
 // 挂载路由导航守卫
 router.beforeEach((to, from, next) => {
   NProgress.start();
-  // if (to.path !== '/login' && !localStorage.getItem('token')) {
-  //   next('/login');
-  //   Message.error('请您登录账户');  
-  // } else if (to.path !== 'digital-base' && to.matched.length === 0) {
-  //   next('/digital-base');
-  //   Message.error('无效路径');
-  // } else {
+  if (NoAuthRouters.includes(to.path)) {
+    // 当跳转的页面不需要权限时，直接过
     next();
-  // }
+  } else if (!localStorage.getItem('token')) {
+    // 当跳转到需要token的页面，且不带token，需要重新登录
+    next('/login');
+    Message.error('请您登录账户');
+  } else if (to.path !== 'digital-base' && to.matched.length === 0) {
+    // 此时已经正常进入页面了，处理一下非法跳转
+    next('/digital-base');
+    Message.error('无效路径');
+  } else {
+    // 合法的页面跳转
+    next();
+  }
 })
 router.afterEach(to => {
   NProgress.done();
 })
 
-// console.log(routes);
-// 解决路由访问重复时报错问题：
-// const originalPush = VueRouter.prototype.push
-// VueRouter.prototype.push = function push(location) {
-//   return originalPush.call(this, location).catch(err => err)
-// }
 export default router

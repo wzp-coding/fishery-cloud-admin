@@ -1,0 +1,6 @@
+export default {
+    management: "http://119.23.218.131:9103",
+    message: "http://119.23.218.131:9109/message/",
+    managementOrder: "http://119.23.218.131:9114/order/",
+    Customer: "http://119.23.218.131:9114/customer/",
+}

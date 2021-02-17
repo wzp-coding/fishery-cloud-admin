@@ -1,7 +1,7 @@
 import permission from './permission'
 // 自定义指令
 const directives = {
-    permission
+    auth:permission
 }
 
 export default {

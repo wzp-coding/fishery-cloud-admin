@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import Form from "../../components/wzp/user_info/Form";
+import Form from "../../components/wzp/Form";
 import { mapMutations } from "vuex";
 export default {
   data() {
@@ -35,14 +35,16 @@ export default {
       // 切换登录方式设置背景高度
       boxHeight: "height:440px",
 
-      token: localStorage.getItem("token"),
+      token: undefined,
     };
   },
   components: {
     Form,
   },
   methods: {
-    ...mapMutations(['setUserInfo']),
+    ...mapMutations(["setUserInfo", "setPermissionList"]),
+
+    // 切换登录方式
     handleTabClick(tab) {
       // console.log("tab: ", tab);
       this.activeName = tab.name;
@@ -52,21 +54,24 @@ export default {
         this.boxHeight = "height:390px";
       }
     },
+
     // 向登录接口发起请求
     async handleSubmit(form) {
       // console.log("form: ", form);
       let { phoneCode, phone, captcha, password } = form;
       let url;
       if (this.activeName === "passwordLogin") {
-        url = `/user/login?password=${password}&phone=${phone}&code=${captcha}`;
+        url = `/login?password=${password}&phone=${phone}&code=${captcha}`;
       } else {
-        url = `/user/loginByPhone?phone=${phone}&code=${phoneCode}`;
+        url = `/loginByPhone?phone=${phone}&code=${phoneCode}`;
       }
-      const { data: res, headers } = await this.$authority.post(url);
-      // console.log("res: ", res);
+      const { data: res, headers } = await this.$user.post(url);
+      // console.log("user: ", res);
       if (res.statusCode === 20000) {
         localStorage.setItem("token", headers.token);
-        this.$store.commit('setUserInfo', res.data)
+        this.$store.commit("setUserInfo", res.data);
+        const { id: roleId } = await this.getRoleIdByLoginId(res.data.id);
+        await this.getFunctionByRoleId(roleId);
         this.elMessage.success(res.message);
         this.$router.push("/digital-base");
       } else {
@@ -74,6 +79,29 @@ export default {
         this.elMessage.error(res.message);
       }
     },
+
+    // 根据loginId得到roleId
+    async getRoleIdByLoginId(loginId) {
+      const { data: res } = await this.$role.get(`/getByUserId/${loginId}`);
+      // console.log("getRoleIdByLoginId: ", res);
+      return res.data[0];
+    },
+
+    // 根据loginId得到的roleId查询登录用户的权限，并存到vuex中
+    async getFunctionByRoleId(roleId) {
+      const { data: res } = await this.$function.get(`/findFunction/${roleId}`);
+      // console.log("getFunctionByRoleId: ", res);
+      if(res.statusCode === 20000){
+        this.$store.commit("setPermissionList", res.data);
+      }else{
+        this.elMessage.error(res.message);
+      }
+    },
+  },
+  mounted() {
+    if (this.activeName === "passwordLogin") {
+      this.$refs.passwordLogin.getCaptcha();
+    }
   },
 };
 </script>
