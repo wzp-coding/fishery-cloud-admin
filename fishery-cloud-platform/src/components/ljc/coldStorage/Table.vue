@@ -122,14 +122,7 @@
                 placement="top"
                 :enterable="false"
               >
-                <In
-                  :id="scope.row.id"
-                  type="warning"
-                  icon="el-icon-d-arrow-right"
-                  size="mini"
-                  :path="path"
-                  :otherQuery="otherQuery"
-                />
+                <In :id="scope.row.id" :labels="labels" />
               </el-tooltip>
             </el-col>
             <el-col :span="8">
@@ -139,14 +132,7 @@
                 placement="top"
                 :enterable="false"
               >
-                <Out
-                  :id="scope.row.id"
-                  type="warning"
-                  icon="el-icon-d-arrow-right"
-                  size="mini"
-                  :path="path"
-                  :otherQuery="otherQuery"
-                />
+                <Out :id="scope.row.id" :labels="labels" />
               </el-tooltip>
             </el-col>
 
@@ -179,7 +165,7 @@ export default {
     Edit,
     Into,
     In,
-    Out
+    Out,
   },
   props: {
     // 表格数据
