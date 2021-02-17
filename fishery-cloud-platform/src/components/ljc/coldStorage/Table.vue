@@ -78,11 +78,6 @@
         align="center"
       ></el-table-column>
       <el-table-column
-        prop="refrigeratoryIntroduce"
-        :label="labels.refrigeratoryIntroduce"
-        align="center"
-      ></el-table-column>
-      <el-table-column
         prop="refrigeratoryTemperature"
         :label="labels.refrigeratoryTemperature"
         align="center"
@@ -120,6 +115,40 @@
                 />
               </el-tooltip>
             </el-col>
+            <el-col :span="8">
+              <el-tooltip
+                effect="dark"
+                :content="infoIn"
+                placement="top"
+                :enterable="false"
+              >
+                <In
+                  :id="scope.row.id"
+                  type="warning"
+                  icon="el-icon-d-arrow-right"
+                  size="mini"
+                  :path="path"
+                  :otherQuery="otherQuery"
+                />
+              </el-tooltip>
+            </el-col>
+            <el-col :span="8">
+              <el-tooltip
+                effect="dark"
+                :content="infoOut"
+                placement="top"
+                :enterable="false"
+              >
+                <Out
+                  :id="scope.row.id"
+                  type="warning"
+                  icon="el-icon-d-arrow-right"
+                  size="mini"
+                  :path="path"
+                  :otherQuery="otherQuery"
+                />
+              </el-tooltip>
+            </el-col>
 
             <el-col :span="8">
               <Delete
@@ -142,11 +171,15 @@
 import Delete from "../public/delete";
 import Edit from "../coldStorage/Edit";
 import Into from "../public/into";
+import In from "../coldStorage/In";
+import Out from "../coldStorage/Out";
 export default {
   components: {
     Delete,
     Edit,
     Into,
+    In,
+    Out
   },
   props: {
     // 表格数据
@@ -165,6 +198,12 @@ export default {
     return {
       // 跳转信息
       buttonInfo: "查看出入库信息",
+
+      // 入库信息
+      infoIn: "入库",
+
+      // 出库信息
+      infoOut: "出库",
 
       // 跳转路径
       path: "/cold-storageInfo",
