@@ -1,5 +1,10 @@
 import axios from 'axios';
 import get from 'lodash/get';
+import wzp from './wzp'
+import ccy from './ccy'
+import yzc from './yzc'
+import cgx from './cgx'
+import ljc from './ljc'
 /**
  * baseURL 对象{Object}
  * key:定义你们要请求的名字(每个人可以自定义,建议按模块名称定义，比如权限模块就用Authority)
@@ -12,32 +17,26 @@ import get from 'lodash/get';
  * 如果一定需要原生纯净的axios,那么可以通过this.$originAxios来调用
  */
 const baseURLObject = {
-    user:"http://119.23.218.131:9102/authority/user",
-    role:"http://119.23.218.131:9102/authority/role",
-    captcha:"http://119.23.218.131:9102/captcha",
-    function:"http://119.23.218.131:9102/function",
+    // >>>>>>>>>> 吴泽鹏
+    ...wzp,
+    // <<<<<<<<<<<
 
-    management:"http://119.23.218.131:9103",
-    pondController:"http://119.23.218.131:9103/pond",   //池塘模块
-    germchit:"http://119.23.218.131:9103/germchit"   ,   //种苗模块
-    germchitManagerController:"http://119.23.218.131:9103/base/germchit",  //基地种苗管理模块
-    baseSupply:"http://119.23.218.131:9103/base/supply",           //基地投入品模块
-    supplyController:"http://119.23.218.131:9103/supply",           //商家投入品管理
-    
-    base:'http://119.23.218.131:9103/base',
-    equipment: "http://119.23.218.131:9110/equipment",
-    warning: "http://119.23.218.131:9110/warning/",
-    meteorologicalData: "http://119.23.218.131:9110/meteorologicalData/",
-    waterData: "http://119.23.218.131:9110/waterData/",
-    monitor: "http://119.23.218.131:9110/monitor/",
-    
-    storage:"http://119.23.218.131:9101/",
-    message:"http://119.23.218.131:9109/message/",
-    diagnose:"http://119.23.218.131:9112/search/diagnose",
-    plant: "http://119.23.218.131:9111/",
-    managementOrder:"http://119.23.218.131:9114/order/",
-    Customer:"http://119.23.218.131:9114/customer/"
+    // >>>>>>>>>>> 陈灿毅
+    ...ccy,
+    // <<<<<<<<<<<
 
+    // >>>>>>>>>>> 杨泽长
+    ...yzc,
+    // <<<<<<<<<<<
+
+    // >>>>>>>>>>> 陈国鑫
+    ...cgx,
+    // <<<<<<<<<<<
+    
+    // >>>>>>>>>>> 李佳成
+    ...ljc,
+    // <<<<<<<<<<<
+    
 }
 
 console.table(baseURLObject);
