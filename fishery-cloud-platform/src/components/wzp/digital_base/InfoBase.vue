@@ -48,7 +48,7 @@ export default {
     // 获取基地信息
     async getBaseInfo(baseId) {
       const { data: res } = await this.$base.get(`/${baseId}`);
-      console.log("getBaseInfo: ", res);
+      // console.log("getBaseInfo: ", res);
       if(res.statusCode === 20000){
         this.baseInfo = res.data;
         this.$store.commit("setBaseInfo",res.data);
@@ -60,7 +60,7 @@ export default {
     // 获取基地池塘的总数量、总面积
     async getPondInfo(baseId){
       const { data: res } = await this.$pondController.get(`/count/${baseId}`);
-      console.log("getPondInfo: ", res);
+      // console.log("getPondInfo: ", res);
       if(res.statusCode === 20000){
         this.pondInfo = res.data;
       }else{

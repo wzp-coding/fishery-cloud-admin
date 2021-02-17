@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 // 导入组件库和样式(element-ui和自己定义的global.css)
 import './plugins/element'
-import './assets/css/global.css'
+import './assets/less/global.less'
 // 导入字体图标
 import './assets/fonts/iconfont.css'
 

@@ -125,7 +125,7 @@ export default {
       );
       // 保存所有模块
       localStorage.setItem("componentData", JSON.stringify(this.componentData));
-      this.$message.success("保存成功");
+      this.elMessage.success("保存成功");
     },
 
     // 多选框触发事件

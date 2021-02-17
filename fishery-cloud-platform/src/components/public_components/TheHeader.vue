@@ -1,14 +1,14 @@
 <template>
   <div>
     <!-- 头部区域 -->
-    <el-header>
+    <el-header :style="curTheme.header">
       <div>
         <span>智慧渔业云服务平台</span>
       </div>
       <div>
         <el-avatar
           size="large"
-          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+          :src="$store.state.userInfo.avatar"
         ></el-avatar>
         <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link" @click="isShowIU = true">
@@ -20,6 +20,9 @@
             >
             <el-dropdown-item style="width: 60px" command="loginOut"
               >退出登录</el-dropdown-item
+            >
+            <el-dropdown-item style="width: 60px" command="changeTheme"
+              >换肤</el-dropdown-item
             >
           </el-dropdown-menu>
         </el-dropdown>
@@ -34,24 +37,32 @@
 <script>
 import InfoUser from "../wzp/user_info/InfoUser";
 import ModifyPassword from "../wzp/user_info/ModifyPassword";
+import {mapState,mapMutations} from "vuex"
 export default {
   data() {
     return {
       isShowIU:false,
-      isShowMPD:false
+      isShowMPD:false,
+      curThemeName:'deepBlue'
     };
+  },
+  computed:{
+    ...mapState(['curTheme'])
   },
   components: {
     InfoUser,
     ModifyPassword
   },
   methods: {
+    ...mapMutations(['setTheme']),
+
     // 处理下拉框指令
     handleCommand(command){
       // console.log(command);
       switch(command){
         case 'loginOut':this.loginOut();break;
-        case 'modifyPassword':this.modifyPassword();break
+        case 'modifyPassword':this.modifyPassword();break;
+        case 'changeTheme':this.changeTheme();break;
       }
     },
 
@@ -65,13 +76,28 @@ export default {
     modifyPassword(){
       this.isShowMPD=true
     },
-    
+
+    // 换主题皮肤
+    changeTheme(){
+      if(this.curThemeName==='deepBlue'){
+        this.setTheme('lightWhite');
+        this.curThemeName = 'lightWhite'
+      }else{
+        this.setTheme('deepBlue');
+        this.curThemeName = 'deepBlue'
+      }
+    }
+  },
+  created() {
+    const curThemeName = localStorage.getItem('curTheme');
+    if(curThemeName){
+      this.setTheme(curThemeName);
+    }
   },
 };
 </script>
 <style lang="less" scoped>
 .el-header {
-  background-color: #062f4f;
   display: flex;
   // 左右贴边对齐
   justify-content: space-between;
@@ -79,8 +105,6 @@ export default {
   padding-left: 0;
   // y轴居中对齐
   align-items: center;
-  //文本颜色
-  color: #fff;
   //字体大小
   font-size: 20px;
   > div {

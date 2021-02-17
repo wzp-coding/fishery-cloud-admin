@@ -1,11 +1,11 @@
 <template>
-  <el-aside :width="isCollapse ? '64px' : '200px'" style="transition: 0.5s">
-    <div class="toggle-button" @click="isCollapse = !isCollapse">|||</div>
+  <el-aside :width="isCollapse ? '64px' : '200px'" :style="`transition: 0.5s;background:${curTheme.navbar.backgroundColor}`">
+    <div class="toggle-button" :style="`background:${curTheme.navbar.backgroundColor};color:${curTheme.navbar.textColor};`" @click="isCollapse = !isCollapse">|||</div>
     <!-- 侧边栏菜单区域 -->
     <el-menu
-      background-color="#0d3b53"
-      text-color="#fff"
-      active-text-color="#3e95ee"
+      :background-color="curTheme.navbar.backgroundColor"
+      :text-color="curTheme.navbar.textColor"
+      :active-text-color="curTheme.navbar.activeTextColor"
       unique-opened
       :collapse-transition="false"
       :collapse="isCollapse"
@@ -263,6 +263,7 @@
   </el-aside>
 </template>
 <script>
+import {mapState} from "vuex"
 export default {
   data() {
     return {
@@ -271,6 +272,9 @@ export default {
       // 被激活的链接地址
       activePath: "/digital-base",
     };
+  },
+  computed:{
+    ...mapState(['curTheme'])
   },
   created() {
     // 每次刷新重新渲染Vue时，获取上次preActivePath
@@ -291,7 +295,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .el-aside {
-  background-color: #0d3b53;
   .el-menu {
     border-right: none;
   }
@@ -303,18 +306,17 @@ export default {
 }
 
 .toggle-button {
-  background-color: #474e66;
   // 字体大小
   font-size: 10px;
   // 行高
   line-height: 24px;
-  // 字体颜色
-  color: #fff;
   // 水平居中
   text-align: center;
   // 字间距离
   letter-spacing: 0.2em;
   // 进过鼠标为小手
   cursor: pointer;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
 }
 </style>
