@@ -7,7 +7,7 @@
                 <span>数据查询</span>
             </el-col>
             <el-col :span="2">
-                <el-button type="primary" round @click="SwitchingFunction">环境预测</el-button>
+                <el-button type="primary" @click="SwitchingFunction">环境预测</el-button>
             </el-col>
         </el-row>
         <!--标题——end-->
@@ -35,8 +35,8 @@
 
                     <!--搜索按钮区域——start-->
                     <el-col :span="5" :pull="4">
-                        <el-button round type="primary" icon="el-icon-search" @click="searchDevice" >搜索</el-button>
-                        <el-button round type="primary" icon="el-icon-close" @click="CloseTable" >关闭</el-button>
+                        <el-button type="primary" icon="el-icon-search" @click="searchDevice" >搜索</el-button>
+                        <el-button type="primary" icon="el-icon-close" @click="CloseTable" >关闭</el-button>
                     </el-col>
                     <!--搜索按钮区域——end-->
 

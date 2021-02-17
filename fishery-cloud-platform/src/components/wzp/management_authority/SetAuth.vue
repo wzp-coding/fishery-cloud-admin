@@ -4,14 +4,14 @@
     :visible="visible"
     direction="rtl"
     @open="openProxy"
-    style="overflow:auto"
+    style="overflow: auto"
   >
     <el-tree
       ref="tree"
       :data="authList"
       :props="defaultProps"
       default-expand-all
-      :default-checked-keys="checkedIds"
+      :default-checked-keys="defaultCheckedIds"
       node-key="id"
       show-checkbox
     ></el-tree>
@@ -19,7 +19,7 @@
       <el-button
         style="float: right; margin: 0 20px"
         type="primary"
-        @click="getCheckedKeys"
+        @click="setAuth(roleId)"
         >分配</el-button
       >
       <el-button style="float: right" @click="() => this.$emit('close')"
@@ -47,51 +47,88 @@ export default {
       },
       authList: [],
       checkedIds: [],
-
     };
   },
+  computed: {
+    defaultCheckedIds() {
+      const tem = [""];
+      this.checkedIds.forEach((one) => {
+        tem.push(one.id);
+        if (one.children) {
+          one.children.forEach((two) => {
+            tem.push(two.id);
+            if (two.children) {
+              two.children.forEach((three) => {
+                tem.push(three.id);
+              });
+            }
+          });
+        }
+      });
+      console.log('tem: ', tem);
+      return tem;
+    },
+  },
+  watch: {
+    defaultCheckedIds(val) {
+      console.log("defaultCheckedIds: ", val);
+    },
+  },
   methods: {
-    getCheckedKeys() {
+    async setAuth(roleId) {
+      const selectedIds = this.$refs.tree.getCheckedKeys();
+      // console.log("roleId: ", roleId);
       console.log(this.$refs.tree.getCheckedKeys());
+      console.log(JSON.stringify({ "functionIdList": selectedIds }));
+      const { data: res } = await this.$function.post(
+        `/${roleId}`,
+        { "functionIdList": selectedIds }
+      );
+      console.log("functionIdList: ", res);
     },
 
     // 根据roleId获取 已授予 权限列表
     async getFunctionByRoleId(roleId) {
+      console.log('roleId: ', roleId);
       const { data: res } = await this.$function.get(`/findFunction/${roleId}`);
-        console.log("res: ", res);
+      console.log("getFunctionByRoleId: ", res);
       if (res.statusCode === 20000) {
         // 设置checkedIds
-
+        this.checkedIds = res.data;
       } else {
         this.elMessage.error(res.message);
       }
     },
 
-    // 根据roleId获取 可授予 的权限
-    async getAuthList(roleId) {
-      const { data: res } = await this.$function.get(
-        `/findOtherFunction/${roleId}`
-      );
-      console.log("res: ", res);
+    // 查询 所有权限
+    async getAuthList() {
+      const { data: res } = await this.$function.get();
+      // console.log("getAuthList: ", res);
       if (res.statusCode === 20000) {
-          this.authList = res.data;
-      }else {
+        this.authList = res.data;
+      } else {
         this.elMessage.error(res.message);
       }
     },
 
     // 打开后处理函数
     async openProxy() {
+      console.log("open")
       // 打开后先获取已授予的权限
       await this.getFunctionByRoleId(this.roleId);
-      // 再获取可授予的权限
-      await this.getAuthList(this.roleId);
     },
+  },
+  created() {
+    // 获取所有权限
+    this.getAuthList();
+  },
+  destroyed() {
+    console.log("destroyed")
   },
 };
 </script>
 <style lang="less" scoped>
 /deep/.el-drawer__body {
-    overflow: auto;
+  overflow: auto;
 }
 </style>

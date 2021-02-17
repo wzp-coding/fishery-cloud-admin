@@ -218,8 +218,8 @@
               </el-table-column>
               <el-table-column label="操作" width="140px" align="center">
                   <template slot-scope="scope">
-                      <el-button type="primary" icon="el-icon-edit" circle @click="showEditDialog(scope.row.id)"></el-button>
-                      <el-button type="danger" icon="el-icon-delete" circle @click="deletemessage(scope.row.id)"></el-button>
+                      <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row.id)"></el-button>
+                      <el-button type="danger" icon="el-icon-delete" size="mini" @click="deletemessage(scope.row.id)"></el-button>
                   </template>
               </el-table-column>
           </el-table>
@@ -243,7 +243,7 @@ export default {
         return {
             // 设备的编号
             equipmentId: '',
-            baseId:'1248910886228332544',
+            baseId:this.$store.state.userInfo.baseId,
             // -----------关于添加阈值对话框的属性——start
             // 控制对话框的显示隐藏 默认隐藏
             addDialogVisible: false,
@@ -328,9 +328,9 @@ export default {
                 equipmentId:this.id
             })
             if(res.statusCode!==20000) {
-                return this.$message.error('获取设备水质数据失败！')
+                return this.elMessage.error('获取设备水质数据失败！')
             }
-            this.$message.success('查询成功！')
+            this.elMessage.success('查询成功！')
             this.warningList = res.data.records
             this.page_total = res.data.total
         },
@@ -343,16 +343,14 @@ export default {
             this.addeForm.acquisitionTime = this.checkTime(this.addeForm.acquisitionTime)
             this.addeForm.equipmentId = this.equipmentId
             this.addeForm.baseId = this.baseId
-            console.log(this.addeForm);
             const {data:res} = await this.$waterData.post('',this.addeForm)
-            console.log(res);
             if(res.statusCode!==20000) {
                 this.addDialogClosed()
                 this.addDialogVisible = false
-                return this.$message.error('添加失败！')
+                return this.elMessage.error('添加失败！')
             }
             this.getwarningList()
-            this.$message.success('添加成功！')
+            this.elMessage.success('添加成功！')
             this.addDialogClosed()
             this.addDialogVisible = false
         },
@@ -380,18 +378,17 @@ export default {
         },
         // editwarningInfo用于修改对话框的确定按钮 点击提交修改信息并关闭对话框
         async editwarningInfo() {
-            console.log(this.editForm);
             const {data:res} = await this.$waterData.put(`${this.editForm.id}`,this.editForm)
             if(res.statusCode!==20000) {
-                return this.$message.error('修改信息失败！')
+                return this.elMessage.error('修改信息失败！')
             }
             this.getwarningList()
-            this.$message.success('修改成功')
+            this.elMessage.success('修改成功')
             this.editDialogVisible = false
         },
       // 根据id删除设备
        async deletemessage(id) {
-           const confirmResult = await this.$confirm('此操作将永久删除该阈值, 是否继续?', '提示', {
+           const confirmResult = await this.elConfirm('此操作将永久删除该阈值, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
@@ -399,15 +396,13 @@ export default {
                return err         
             });
             if (confirmResult !== 'confirm') {
-                return this.$message.info('已取消删除')
+                return this.elMessage.info('已取消删除')
             }
-            console.log(id);
             const {data:res} = await this.$waterData.delete(`${id}`)
-            console.log(res);
             if(res.statusCode!==20000) {
-           return this.$message.error('删除设备失败！')
+           return this.elMessage.error('删除设备失败！')
           }
-            this.$message.success('删除设备成功！')
+            this.elMessage.success('删除设备成功！')
             this.getwarningList()
         },
         // 格式化时间
@@ -421,7 +416,6 @@ export default {
             const min = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()
             const sec = d.getSeconds() < 10 ? '0' + d.getSeconds() : d.getSeconds()
             const times = d.getFullYear() + '-' + month + '-' + day + ' ' + hours + ':' + min + ':' + sec
-            console.log(times);
             return times
         },
     }

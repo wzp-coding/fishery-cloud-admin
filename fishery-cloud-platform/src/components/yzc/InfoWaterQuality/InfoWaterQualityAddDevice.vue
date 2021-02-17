@@ -52,7 +52,7 @@ export default {
     },
     data() {
         return {
-            baseId:'1248910886228332544',
+            baseId:this.$store.state.userInfo.baseId,
             // 基地名称
             baseList: [],
             // 存放添加表单数据
@@ -115,11 +115,11 @@ export default {
                 this.addForm.updateTime = this.getnowtime()
                 const {data:res} = await this.$equipment.post('',this.addForm)
                 if(res.statusCode !== 20000) {
-                    return this.$message.error('添加失败！')
+                    return this.elMessage.error('添加失败！')
                 }
 
                 this.HideAddDevice()
-                this.$message.success('添加成功！')
+                this.elMessage.success('添加成功！')
                 this.$emit('getequipmentList')
             })
         },

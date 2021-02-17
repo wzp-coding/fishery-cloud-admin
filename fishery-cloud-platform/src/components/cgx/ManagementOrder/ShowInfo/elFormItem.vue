@@ -21,4 +21,5 @@ export default {
     //     console.log("label1--->",this.label)
     // }
 }
+
 </script>
