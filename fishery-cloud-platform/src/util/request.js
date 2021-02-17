@@ -12,6 +12,7 @@ import get from 'lodash/get';
  * 如果一定需要原生纯净的axios,那么可以通过this.$originAxios来调用
  */
 const baseURLObject = {
+    // pondController:"http://119.23.218.131:9103/pond",
     authority:"http://119.23.218.131:9102/authority",
     captcha:"http://119.23.218.131:9102/captcha",
     function:"http://119.23.218.131:9102/function",
@@ -20,7 +21,7 @@ const baseURLObject = {
     pondController:"http://119.23.218.131:9103/pond",   //池塘模块
     germchit:"http://119.23.218.131:9103/germchit"   ,   //种苗模块
     germchitManagerController:"http://119.23.218.131:9103/base/germchit",  //基地种苗管理模块    
-    // pondController:"http://119.23.218.131:9103/pond",
+    
     baseSupply:"http://119.23.218.131:9103/base/supply",           //基地投入品模块
     supplyController:"http://119.23.218.131:9103/supply",           //商家投入品管理
     equipment:"http://8.129.175.45:57110/equipment",
