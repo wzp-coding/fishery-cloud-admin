@@ -13,20 +13,20 @@
             <span>种苗进货</span>
           </el-col>
           <el-col style="width: 75px; float: right">
-            <!-- <download-excel
-              class="export-excel-wrapper"
-              name="种苗进货信息导出.xls"
-              :data="germchitInfoList"
+            <downloadExcel
               :fields="json_fields"
-            > -->
-            <el-tooltip
-              effect="dark"
-              content="导出基地订单信息"
-              placement="top-start"
-              ><el-button @click="downLoadExcel" type="success">导出</el-button></el-tooltip
+              :data="germchitInfoList"
+              name="基地种苗订单信息导出.xls"
             >
-
-            <!-- </download-excel> -->
+              <el-tooltip
+                effect="dark"
+                content="导出基地订单信息"
+                placement="top-start"
+                ><el-button @click="downLoadExcel" type="success"
+                  >导出</el-button
+                ></el-tooltip
+              >
+            </downloadExcel>
           </el-col>
           <el-col style="float: right; width: 100px; margin-right: 10px">
             <el-button type="primary" @click="dialogVisible = true"
@@ -35,7 +35,7 @@
           </el-col>
         </div>
       </TheCardHead>
-      <el-table border stripe :data="germchitInfoList" >
+      <el-table border stripe :data="germchitInfoList">
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" label-width="170px">
@@ -287,7 +287,6 @@ export default {
       dialogVisible: false,
       editDialogVisible: false,
       baseId: "1248910886228332544",
-      
       supplyInfo: {
         // id:'',                //入库信息ID
         baseId: "1248910886228332544",
@@ -349,7 +348,7 @@ export default {
     this.getGermchitInfo();
     this.getGermchitPurchaseInfo();
     this.getAllPurchaseInfo();
-    
+
     // germchitManagerController
   },
   methods: {
@@ -468,11 +467,6 @@ export default {
       console.log(res);
       alert("种苗入库成功");
     },
-    async downLoadExcel(){
-      const {data: res} = await this.$germchitManagerController.get (`excel/${this.baseId}`)
-      console.log(res);
-    },
-    
   },
 };
 </script>

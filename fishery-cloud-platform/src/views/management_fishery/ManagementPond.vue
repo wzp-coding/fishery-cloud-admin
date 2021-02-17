@@ -17,30 +17,28 @@
             >
           </el-col>
           <el-col style="width: 120px; float: right">
-            <el-button type="success">养殖建议卡</el-button>
+            <el-button type="success" >养殖建议卡</el-button>
           </el-col>
         </div>
         <div class="bigBox" slot="bigBox">
           <!-- 池塘子组件 -->
-          <!-- :toPond="pondList" -->
           <pond
             :toPond="item"
             v-for="item in pondList"
             :key="item.pondId"
-            @getPondList="eventRefresh"
-            v-show="reRender"
             @fatherMethod="getPondList"
           ></pond>
         </div>
       </TheCardHead>
       <ThePagination
-        :toPagination="addPondInfo"
-        @fatherMethod="getPondList"
+        :toPagination="paginationInfo"
+        @fatherMethod="paginationChangeEvent"
       ></ThePagination>
     </el-card>
     <!-- @click="dialogFormVisible = false" -->
-    <!-- 添加池塘对话框 -->
-    <TheDialogAll
+    
+    
+    <!-- <TheDialogAll
       :toDialogInfo="addPondInfo"
       ref="addeFormRef"
       :FormInfo="addeForm"
@@ -85,8 +83,9 @@
           >
         </el-row>
       </span>
-    </TheDialogAll>
-    
+    </TheDialogAll> -->
+    <!-- 添加池塘 -->
+    <addPond :toDialogInfo="addPondInfo" @fatherMethods="getPondList"></addPond>
     <!-- 修改池塘信息对话框 -->
     <!-- <TheDialogAll :toDialogInfo="editPondInfo"></TheDialogAll> -->
     <!-- <TheDialogAll :toDialogInfo="farmInfo"></TheDialogAll>  -->
@@ -101,14 +100,19 @@ import TheCardHead from "../../components/ccy/TheCardHead";
 import TheDialogAll from "../../components/ccy/TheDialogAll";
 import ThePagination from "../../components/ccy/ThePagination";
 import pond from "../../components/ccy/ManagementPond/pond";
-
+import addPond from "../../components/ccy/ManagementPond/addPond"
 export default {
-  components: { TheCardHead, pond, ThePagination, TheDialogAll },
+  components: { TheCardHead, pond, ThePagination, TheDialogAll,addPond },
   data() {
     return {
-      reRender: true,
+     
       //全部池塘信息
       pondList: [],
+      paginationInfo:{
+        size:3,
+        page:1,
+        total:0
+      },
       baseId: "1248910886228332544", //基地ID
       // 添加池塘的表单数据
       addeForm: {
@@ -122,7 +126,7 @@ export default {
         // version:0
       },
       addPondInfo: {
-        title: "添加池塘",
+        
         dialogVisible: false,
         total: 0,
         size: 3,
@@ -196,31 +200,36 @@ export default {
     };
   },
   created() {
-    this.getPondList(this.addPondInfo.size, 1); //获取池塘信息
-
+    this.getPondList(); //获取池塘信息
   },
   methods: {
-    async getPondList(size, page) {
+    paginationChangeEvent(size, page){
+      this.paginationInfo.size = size
+      this.paginationInfo.page = page
+      this.getPondList()
+    },
+    async getPondList() {
       console.log("获取池塘信息");
       // this.reRender= false;
       const { data: res } = await this.$pondController.get(
-        `getInfo/${this.baseId}/${size}/${page}`
+        `getInfo/${this.baseId}/${this.paginationInfo.size}/${this.paginationInfo.page}`
       );
       if (res.statusCode !== 2000) {
         console.log(res);
         this.pondList = res.data.records;
-        for (let i = 0; i < this.pondList.length; i++) {
-          this.pondList[i].pondType = this.pondList[i].type;
-        }
+        // for (let i = 0; i < this.pondList.length; i++) {
+        //   this.pondList[i].pondType = this.pondList[i].type;
+        // }
         this.addPondInfo.total = res.data.total;
-        this.reRender = true;
+        this.paginationInfo.total = res.data.total
+      
       } else {
         console.log("查询池塘信息失败");
       }
     },
     
     eventRefresh() {
-      this.reRender = false;
+     
       this.getPondList(this.addPondInfo.size, 1);
     },
     //创建池塘
@@ -238,7 +247,7 @@ export default {
         this.addPondInfo.dialogVisible = !this.addPondInfo.dialogVisible;
         this.getPondList(this.addPondInfo.size, this.addPondInfo.page);
         this.reRender = true;
-        this.$message.success("添加池塘成功!!");
+        this.elMessage.success("添加池塘成功!!");
       }
       console.log(res);
     },
@@ -266,6 +275,7 @@ export default {
     catchDialogClosed() {
       this.$refs.catchFormRef.resetFields();
     },
+    
     timeFormat(date) {
       var y = date.getFullYear();
       var m = date.getMonth() + 1;

@@ -84,6 +84,7 @@ export default {
   created() {
     this.getSupplyList(); //获取基地所有投入品库存信息
   },
+  
   methods: {
     async createFeed() {
       const { data: res } = await this.$pondController.post(
@@ -91,10 +92,9 @@ export default {
         this.feedInfo
       );
       if (res.statusCode === 20000) {
-        alert("喂养成功");
-      }
-      console.log(res);
-      //   console.log(this.toDialogInfo);
+        this.elMessage.success('喂养成功');
+        this.toDialogInfo.dialogVisible = false
+      }  
     },
     async getSupplyList() {
       const { data: res } = await this.$baseSupply.get(`all/${this.baseId}`);
