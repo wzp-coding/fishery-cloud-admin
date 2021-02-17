@@ -87,7 +87,7 @@
         :label="labels.refrigeratoryCapacity"
         align="center"
       ></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" >
         <template slot-scope="scope">
           <el-row :gutter="20">
             <el-col :span="8">
@@ -98,6 +98,27 @@
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
+            <el-col :span="8">
+              <el-tooltip
+                effect="dark"
+                :content="infoIn"
+                placement="top"
+                :enterable="false"
+              >
+                <In :id="scope.row.id"/>
+              </el-tooltip>
+            </el-col>
+            <el-col :span="8">
+              <el-tooltip
+                effect="dark"
+                :content="infoOut"
+                placement="top"
+                :enterable="false"
+              >
+                <Out :id="scope.row.id" :labels="labels" />
+              </el-tooltip>
+            </el-col>
+
             <el-col :span="8">
               <el-tooltip
                 effect="dark"
@@ -113,26 +134,6 @@
                   :path="path"
                   :otherQuery="otherQuery"
                 />
-              </el-tooltip>
-            </el-col>
-            <el-col :span="8">
-              <el-tooltip
-                effect="dark"
-                :content="infoIn"
-                placement="top"
-                :enterable="false"
-              >
-                <In :id="scope.row.id" :labels="labels" />
-              </el-tooltip>
-            </el-col>
-            <el-col :span="8">
-              <el-tooltip
-                effect="dark"
-                :content="infoOut"
-                placement="top"
-                :enterable="false"
-              >
-                <Out :id="scope.row.id" :labels="labels" />
               </el-tooltip>
             </el-col>
 

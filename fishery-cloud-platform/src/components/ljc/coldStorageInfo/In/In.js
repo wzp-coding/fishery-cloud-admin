@@ -19,12 +19,6 @@ module.exports = class {
     formRules = {
         productName: [
             { required: true, message: `请输入${this.labels.productName}`, trigger: "blur" },
-            {
-                min: 2,
-                max: 10,
-                message: `${this.labels.productName}的长度在2~10个字符之间`,
-                trigger: "blur",
-            },
         ],
         refrigeratoryInCapacity: [
             { required: true, message: `请输入${this.labels.refrigeratoryInCapacity}`, trigger: "blur" },
@@ -58,7 +52,6 @@ module.exports = class {
 
     /* 添加开始 */
     addInfo(addFrom) {
-        console.log(addFrom);
         return new Promise((resolve) => {
             this.vue.$storage.post("/refrigeratoryInInfo/in", addFrom)
                 .then((res) => {
