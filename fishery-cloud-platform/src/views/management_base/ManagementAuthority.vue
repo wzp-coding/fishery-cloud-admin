@@ -85,11 +85,6 @@ export default {
       roleId: undefined,
     };
   },
-  watch:{
-    roleId(val){
-      console.log(val)
-    }
-  },
   components: {
     Authority,
     Pagination,

@@ -7,18 +7,21 @@
         <el-col :span="4">
           <i class="el-icon-s-data"></i><span>数字基地</span></el-col
         >
-        <el-col style="width: 100px; float: right">
+        <el-col style="width: 170px; float: right">
           <el-button
             type="primary"
-            style="float: right"
+            style="float: left"
             plain
             @click="isShowAuthority = true"
             >所持权限</el-button
           >
+          <More
+            :defLayout="() => (this.isShowModule = true)"
+            :saveLayout="saveLayout"
+          ></More>
         </el-col>
       </el-row>
-      <!-- 模块选择 -->
-      <el-row
+      <!-- <el-row
         ><span>组件模块：</span>
         <el-checkbox
           v-for="(item, index) in componentData"
@@ -35,11 +38,25 @@
           @click="saveComponentData"
           >保存自定义</el-button
         >
-      </el-row>
+      </el-row> -->
       <!-- 模块布局 -->
-      <el-row justify="space-around" type="flex">
-        <!-- 使用draggable组件 v-model绑定数组 -->
-        <Draggable
+      <DraggableWrap
+        :componentData="componentData"
+        justify="space-around"
+        type="flex"
+      >
+        <template v-slot:default="scope">
+          <component
+            style="margin: 5px"
+            v-for="item in scope.componentCheckedData"
+            :key="item.id"
+            :is="item.name"
+          />
+        </template>
+      </DraggableWrap>
+      <!-- <el-row justify="space-around" type="flex"> -->
+      <!-- 使用draggable组件 v-model绑定数组 -->
+      <!-- <Draggable
           @start="drag = true"
           @end="drag = false"
           animation="1000"
@@ -55,30 +72,32 @@
             />
           </transition-group>
         </Draggable>
-      </el-row>
+      </el-row> -->
     </div>
     <!-- 权限弹框 -->
     <Authority
       :dialog-visible="isShowAuthority"
       @close="() => (this.isShowAuthority = false)"
     ></Authority>
+
+    <!-- 模块选择框 -->
+    <ChooseModule
+      @close="() => (this.isShowModule = false)"
+      @choose="handleChoose"
+      :isShowModule="isShowModule"
+      :componentData="componentData"
+    ></ChooseModule>
   </div>
 </template>
 
 <script>
 import Authority from "../../components/wzp/Authority";
-import {
-  DraggableMap,
-  DraggableWeatherCard,
-  DraggableInfoBase,
-} from "../../util/draggable";
+import { DigitalBase as dragComps } from "../../util/draggable";
 
 export default {
   name: "DigitalBase",
   components: {
-    DraggableMap,
-    DraggableWeatherCard,
-    DraggableInfoBase,
+    ...dragComps,
     Authority,
   },
   data() {
@@ -86,8 +105,8 @@ export default {
       // 控制展示权限对话框
       isShowAuthority: false,
 
-      // 控制是否拖拽
-      drag: false,
+      // 控制展示模块选择框
+      isShowModule: false,
 
       // 存放可拖拽组件
       componentData: [
@@ -116,6 +135,25 @@ export default {
     };
   },
   methods: {
+    saveLayout() {},
+
+    // 选择模块时触发
+    handleChoose(item){
+      // console.log('item: ', item);
+      if (item.checked) {
+        // 选中
+        this.componentCheckedData.push(item);
+      } else {
+        // 取消选中
+        this.componentCheckedData.some((inner, index, origin) => {
+          if (inner.id == item.id) {
+            origin.splice( index, 1);
+            return true;
+          }
+          return false;
+        });
+      }
+    },
     // 保存自定义  按钮
     saveComponentData() {
       // 保存选中模块的调整顺序
@@ -127,39 +165,8 @@ export default {
       localStorage.setItem("componentData", JSON.stringify(this.componentData));
       this.elMessage.success("保存成功");
     },
-
-    // 多选框触发事件
-    handleChange(item) {
-      // 模块选择的时候，componentData变化了，更新componentCheckedData
-      if (item.checked) {
-        // 选中
-        this.componentCheckedData.push(item);
-      } else {
-        // 取消选中
-        this.componentCheckedData.some((inner, index, origin) => {
-          if (inner.id == item.id) {
-            Array.prototype.splice.call(origin, index, 1);
-            return true;
-          }
-          return false;
-        });
-      }
-    },
   },
-  created() {
-    if (!localStorage.getItem("componentData")) {
-      // 第一次载入页面
-      this.componentCheckedData = this.componentData.filter(
-        (item) => item.checked
-      );
-    } else {
-      // 第二次以后载入页面，获取上次保存的自定义视图
-      this.componentData = JSON.parse(localStorage.getItem("componentData"));
-      this.componentCheckedData = JSON.parse(
-        localStorage.getItem("componentCheckedData")
-      );
-    }
-  },
+  created() {},
 };
 </script>
 
