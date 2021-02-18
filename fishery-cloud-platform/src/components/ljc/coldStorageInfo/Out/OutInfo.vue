@@ -1,11 +1,7 @@
 <template>
   <div>
     <!-- 列表区域开始 -->
-    <Table
-      :allList="allList"
-      :labels="labels"
-      @getAllInfo="getAllInfo()"
-    />
+    <Table :allList="allList" :labels="labels" @getAllInfo="getAllInfo()" />
     <!-- 列表区域结束 -->
 
     <!-- 换页开始 -->
@@ -58,6 +54,9 @@ export default {
     },
   },
   created() {
+    this.getAllInfo();
+  },
+  updated() {
     this.getAllInfo();
   },
   methods: {

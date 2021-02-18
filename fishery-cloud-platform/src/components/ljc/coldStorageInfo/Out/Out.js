@@ -70,7 +70,7 @@ module.exports = class {
     /* 添加结束 */
 
     /* 根据ID查询信息开始 */
-    getInfoById(id) {
+    getInfoByIdOut(id) {
         return new Promise((resolve) => {
             this.vue.$storage.get(`/refrigeratoryOutInfo/in/${id}`)
                 .then((res) => {
