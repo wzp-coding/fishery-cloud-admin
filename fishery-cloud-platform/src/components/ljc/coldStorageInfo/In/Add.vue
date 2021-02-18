@@ -119,6 +119,7 @@ export default {
       return this.public.createPersonList;
     },
 
+    // 产品
     productsList() {
       return this.public.productsList;
     },

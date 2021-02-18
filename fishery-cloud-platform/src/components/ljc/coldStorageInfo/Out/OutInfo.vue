@@ -59,18 +59,8 @@ export default {
   },
   created() {
     this.getAllInfo();
-    this.getInputInfo();
   },
   methods: {
-    /* 获取全部信息开始 */
-    async getInputInfo() {
-      const { data: res } = await this.model.getInputInfo(
-        this.processingFactoryId
-      );
-      this.inputInfo.push(res.data);
-    },
-    /* 获取全部信息结束 */
-
     // 获取表格信息
     async getAllInfo(pageSize, pageNum) {
       if (pageNum == null || pageSize == null) {

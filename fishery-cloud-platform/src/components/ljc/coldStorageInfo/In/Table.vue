@@ -33,6 +33,11 @@
         :label="labels.warehousingPersonId"
         align="center"
       ></el-table-column>
+      <el-table-column
+        prop="refrigeratoryInDescription"
+        :label="labels.refrigeratoryInDescription"
+        align="center"
+      ></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-row :gutter="20">
@@ -40,14 +45,12 @@
               <Edit
                 :id="scope.row.id"
                 :labels="labels"
-                :title="title"
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
             <el-col :span="8">
               <Delete
                 :id="scope.row.id"
-                :title="title"
                 :root="root"
                 :deleteUrl="deleteUrl"
                 @getAllInfo="getAllInfo()"

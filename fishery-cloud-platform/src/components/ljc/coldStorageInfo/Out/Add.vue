@@ -159,10 +159,6 @@ export default {
       this.$refs.formRef.resetFields();
     },
     /* 监听窗口关闭事件关闭 */
-
-    change() {
-      console.log(this.productInfo);
-    },
   },
 };
 </script>
