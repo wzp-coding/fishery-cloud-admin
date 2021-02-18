@@ -5,7 +5,7 @@
       type="warning"
       icon="el-icon-upload2"
       size="mini"
-      @click="dialogVisible = true"
+      @click="getInfoById()"
     ></el-button>
     <!-- 按钮结束 -->
 
@@ -25,12 +25,12 @@
         :hide-required-asterisk="true"
       >
         <el-form-item :label="labels.productName">
-          <el-select v-model="form.productInfo">
+          <el-select v-model="form.productName" value-key="value" disabled>
             <el-option
               v-for="item in productsList"
-              :key="item.id"
-              :label="item.name"
-              :value="item"
+              :key="item.value"
+              :label="item.label"
+              :value="item.label"
             >
             </el-option>
           </el-select>
@@ -50,6 +50,7 @@
             </el-option>
           </el-select>
         </el-form-item>
+
         <el-form-item
           :label="labels.refrigeratoryInCapacity"
           prop="refrigeratoryInCapacity"
@@ -57,26 +58,41 @@
           <el-input-number
             v-model="form.refrigeratoryInCapacity"
             controls-position="right"
-            :min="1"
+            :min="0"
+            disabled
           ></el-input-number>
         </el-form-item>
+
         <el-form-item
-          :label="labels.refrigeratoryInDescription"
-          prop="refrigeratoryInDescription"
+          :label="labels.refrigeratoryOutCapacity"
+          prop="refrigeratoryOutCapacity"
+        >
+          <el-input-number
+            v-model="form.refrigeratoryOutCapacity"
+            controls-position="right"
+            :min="0"
+            :max="form.refrigeratoryInCapacity"
+          ></el-input-number>
+        </el-form-item>
+
+        <el-form-item
+          :label="labels.refrigeratoryOutDescription"
+          prop="refrigeratoryOutDescription"
         >
           <el-input
             type="textarea"
             placeholder="请输入内容"
-            v-model="form.refrigeratoryInDescription"
+            v-model="form.refrigeratoryOutDescription"
           >
           </el-input>
         </el-form-item>
+
         <el-form-item
-          :label="labels.refrigeratoryInTime"
-          prop="refrigeratoryInTime"
+          :label="labels.refrigeratoryOutTime"
+          prop="refrigeratoryOutTime"
         >
           <el-date-picker
-            v-model="form.refrigeratoryInTime"
+            v-model="form.refrigeratoryOutTime"
             type="datetime"
             placeholder="选择日期时间"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -109,8 +125,11 @@ export default {
       // 控制表单的显示与隐藏
       dialogVisible: false,
 
-      // 修改信息
+      // 信息
       form: {},
+
+      // 产品信息
+      productInfo: {},
     };
   },
   computed: {
@@ -119,39 +138,51 @@ export default {
       return this.public.createPersonList;
     },
 
-    productsList() {
-      return this.public.productsList;
-    },
-
     // 验证规则
     formRules() {
       return this.model.formRules;
     },
 
-    // 标签
+    // 产品
+    productsList() {
+      return this.public.productsList;
+    },
+
+    // 标题
     labels() {
       return this.model.labels;
     },
   },
   created() {},
   methods: {
-    /* 添加开始 */
+    /* 根据Id查询信息开始 */
+    async getInfoById() {
+      const { data: res } = await this.model.getInfoById(this.id);
+      console.log(res);
+      this.form.refrigeratoryInId = res.data.id;
+      this.form.productName = res.data.productName;
+      this.form.refrigeratoryId = res.data.refrigeratoryId;
+      this.form.refrigeratoryInCapacity = res.data.refrigeratoryInCapacity
+      console.log(this.form);
+      this.dialogVisible = true;
+    },
+    /* 根据Id查询信息结束 */
+
+    /* 修改开始 */
     addInfo() {
       this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
-        this.form.refrigeratoryId = this.id;
-        this.form.productName = this.form.productInfo.name;
-        this.form.processingBaseId = this.form.productInfo.id;
+        console.log(this.form);
         const { data: res } = await this.model.addInfo(this.form);
         console.log(res);
         if (res.statusCode == 20000) {
+          this.$emit("getAllInfo");
+          this.dialogVisible = false;
           this.elMessage.success(res.message);
         }
-        this.$emit("getAllInfo");
-        this.dialogVisible = false;
       });
     },
-    /* 添加结束 */
+    /* 修改结束 */
 
     /* 监听窗口关闭事件开始 */
     dialogClosed() {

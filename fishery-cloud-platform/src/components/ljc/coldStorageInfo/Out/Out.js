@@ -60,7 +60,6 @@ module.exports = class {
 
     /* 添加开始 */
     addInfo(addFrom) {
-        console.log(addFrom);
         return new Promise((resolve) => {
             this.vue.$storage.post("/refrigeratoryOutInfo/in", addFrom)
                 .then((res) => {
@@ -80,6 +79,19 @@ module.exports = class {
         })
     }
     /* 根据ID查询信息结束 */
+
+    /* 根据入库ID查询信息开始 */
+    getInfoById(id) {
+        return new Promise((resolve) => {
+            this.vue.$storage.get(`/refrigeratoryInInfo/in/${id}`)
+                .then((res) => {
+                    resolve(res);
+                })
+        })
+    }
+    /* 根据入库ID查询信息结束 */
+
+
 
     /* 修改开始 */
     editInfo(editForm) {

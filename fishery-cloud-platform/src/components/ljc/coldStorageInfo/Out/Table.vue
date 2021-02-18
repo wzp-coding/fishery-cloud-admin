@@ -78,10 +78,12 @@ export default {
   },
   data() {
     return {
+      // 主题
+      title: "出库",
       // 删除接口的根路径标签
       root: "storage",
       // 删除接口的路径
-      deleteUrl: "/refrigeratoryInInfo/in",
+      deleteUrl: "/refrigeratoryOutInfo/in",
     };
   },
   computed: {},
