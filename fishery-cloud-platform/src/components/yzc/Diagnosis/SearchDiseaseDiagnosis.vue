@@ -64,13 +64,16 @@ export default {
             ShowArticleDetail: false,
             srcList: [],
             total:0,
-            page_size:10,
+            page_size:5,
             page_index:1,
+            // 存储搜索框内数据
+            inputs:''
         }
     },
     methods: {
         // 开始查询 
         async getsearcharticles(input) {
+            this.inputs = input
             await this.$diagnose.post('',{
                 content:input,
                 current:this.page_index,
@@ -80,8 +83,8 @@ export default {
                 if(res.data.statusCode !== 20000) {
                     return this.elMessage.error('执行失败')
                 }
-                this.searcharticles = res.data.data
-                this.total = res.data.data.length
+                this.searcharticles = res.data.data.records
+                this.total = res.data.data.total
             })
         },
         // 打开文章详情页
@@ -94,7 +97,7 @@ export default {
         pageChange(page) {
           this.page_size = page.pagesize
           this.page_index = page.pageindex
-          this.getsearcharticles()
+          this.getsearcharticles(this.inputs)
         },
     }
 }
