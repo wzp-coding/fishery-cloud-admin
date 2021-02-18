@@ -87,10 +87,10 @@
         :label="labels.refrigeratoryCapacity"
         align="center"
       ></el-table-column>
-      <el-table-column label="操作" >
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-row :gutter="20">
-            <el-col :span="8">
+            <el-col :span="6">
               <Edit
                 :id="scope.row.id"
                 :labels="labels"
@@ -98,28 +98,17 @@
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
               <el-tooltip
                 effect="dark"
                 :content="infoIn"
                 placement="top"
                 :enterable="false"
               >
-                <In :id="scope.row.id"/>
+                <In :id="scope.row.id" />
               </el-tooltip>
             </el-col>
-            <el-col :span="8">
-              <el-tooltip
-                effect="dark"
-                :content="infoOut"
-                placement="top"
-                :enterable="false"
-              >
-                <Out :id="scope.row.id" :labels="labels" />
-              </el-tooltip>
-            </el-col>
-
-            <el-col :span="8">
+            <el-col :span="6">
               <el-tooltip
                 effect="dark"
                 :content="buttonInfo"
@@ -137,7 +126,7 @@
               </el-tooltip>
             </el-col>
 
-            <el-col :span="8">
+            <el-col :span="6">
               <Delete
                 :id="scope.row.id"
                 :title="title"
@@ -159,14 +148,12 @@ import Delete from "../public/delete";
 import Edit from "../coldStorage/Edit";
 import Into from "../public/into";
 import In from "../coldStorageInfo/In/Add";
-import Out from "../coldStorageInfo/Out/Add";
 export default {
   components: {
     Delete,
     Edit,
     Into,
     In,
-    Out,
   },
   props: {
     // 表格数据
@@ -177,9 +164,6 @@ export default {
 
     // 主题
     title: {},
-
-    // 加工厂编号
-    processingFactoryId: {},
   },
   data() {
     return {
@@ -188,9 +172,6 @@ export default {
 
       // 入库信息
       infoIn: "入库",
-
-      // 出库信息
-      infoOut: "出库",
 
       // 跳转路径
       path: "/cold-storageInfo",

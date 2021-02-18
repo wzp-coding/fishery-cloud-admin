@@ -25,11 +25,11 @@
         :hide-required-asterisk="true"
       >
         <el-form-item :label="labels.productName">
-          <el-select v-model="form.productInfo">
+          <el-select v-model="productInfo" value-key="value">
             <el-option
               v-for="item in productsList"
-              :key="item.id"
-              :label="item.name"
+              :key="item.value"
+              :label="item.label"
               :value="item"
             >
             </el-option>
@@ -112,6 +112,9 @@ export default {
 
       // 信息
       form: {},
+
+      // 产品信息
+      productInfo: {},
     };
   },
   computed: {
@@ -136,6 +139,9 @@ export default {
     async getInfoById() {
       const { data: res } = await this.model.getInfoById(this.id);
       this.form = res.data;
+      this.productInfo.value = this.form.processingBaseId;
+      this.productInfo.label = this.form.productName;
+      console.log(this.form);
       this.dialogVisible = true;
     },
     /* 根据Id查询信息结束 */
@@ -144,8 +150,11 @@ export default {
     editInfo() {
       this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
-        this.form.processingFactoryId = this.processingFactoryId;
+        this.form.processingBaseId = this.productInfo.value;
+        this.form.productName = this.productInfo.label;
+        console.log(this.form);
         const { data: res } = await this.model.editInfo(this.form);
+        console.log(res);
         if (res.statusCode == 20000) {
           this.$emit("getAllInfo");
           this.dialogVisible = false;

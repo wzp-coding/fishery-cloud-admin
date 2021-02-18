@@ -20,15 +20,12 @@ module.exports = class {
     /* 加工产品数组开始 */
     productsList = [
         {
-            name: "小龙虾",
-            id: "2222",
-            value: {}
-
+            label: "小龙虾",
+            value: "2222",
         },
         {
-            name: "多宝鱼",
-            id: "1111",
-            value: {}
+            label: "多宝鱼",
+            value: "1111",
         }
     ]
     /* 加工产品数组结束 */

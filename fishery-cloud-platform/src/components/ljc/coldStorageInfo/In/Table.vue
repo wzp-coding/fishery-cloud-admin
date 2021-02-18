@@ -49,9 +49,20 @@
               />
             </el-col>
             <el-col :span="8">
+              <el-tooltip
+                effect="dark"
+                content="出库"
+                placement="top"
+                :enterable="false"
+              >
+                <Out :id="scope.row.id" :labels="labels" />
+              </el-tooltip>
+            </el-col>
+            <el-col :span="8">
               <Delete
                 :id="scope.row.id"
                 :root="root"
+                :title="title"
                 :deleteUrl="deleteUrl"
                 @getAllInfo="getAllInfo()"
               />
@@ -66,11 +77,13 @@
 
 <script>
 import Delete from "../../public/delete";
+import Out from "../Out/Add";
 import Edit from "./Edit";
 export default {
   components: {
     Delete,
-    Edit
+    Edit,
+    Out,
   },
   props: {
     // 表格数据
@@ -81,6 +94,9 @@ export default {
   },
   data() {
     return {
+      // 标题信息
+      title: "入库信息",
+
       // 删除接口的根路径标签
       root: "storage",
       // 删除接口的路径

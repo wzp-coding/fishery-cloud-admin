@@ -25,11 +25,11 @@
         :hide-required-asterisk="true"
       >
         <el-form-item :label="labels.productName">
-          <el-select v-model="form.productInfo">
+          <el-select v-model="form.productInfo" value-key="value">
             <el-option
               v-for="item in productsList"
-              :key="item.id"
-              :label="item.name"
+              :key="item.value"
+              :label="item.label"
               :value="item"
             >
             </el-option>
@@ -141,8 +141,8 @@ export default {
       this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
         this.form.refrigeratoryId = this.id;
-        this.form.productName = this.form.productInfo.name;
-        this.form.processingBaseId = this.form.productInfo.id;
+        this.form.productName = this.form.productInfo.label;
+        this.form.processingBaseId = this.form.productInfo.value;
         const { data: res } = await this.model.addInfo(this.form);
         console.log(res);
         if (res.statusCode == 20000) {
@@ -161,9 +161,6 @@ export default {
     },
     /* 监听窗口关闭事件关闭 */
 
-    change() {
-      console.log(this.productInfo);
-    },
   },
 };
 </script>

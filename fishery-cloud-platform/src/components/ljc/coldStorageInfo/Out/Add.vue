@@ -2,7 +2,7 @@
   <div>
     <!-- 按钮开始 -->
     <el-button
-      type="info"
+      type="warning"
       icon="el-icon-upload2"
       size="mini"
       @click="dialogVisible = true"
