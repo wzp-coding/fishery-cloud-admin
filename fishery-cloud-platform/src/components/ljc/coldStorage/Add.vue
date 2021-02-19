@@ -128,9 +128,6 @@ export default {
       return this.model.formRules;
     },
   },
-  created() {
-    console.log(this.baseId);
-  },
   methods: {
     /* 添加开始 */
     addInfo() {

@@ -4,35 +4,36 @@ module.exports = class {
     }
     /* 标签开始 */
     labels = {
-        germchitId: "种苗编号",
-        gmtCreate: "创建时间",
-        gmtModified: "修改时间",
-        id: "出入库编号id",
+        id: "入库Id",
+        processingBaseId: "加工产品编号",
+        productName: "产品名称",
+        refrigeratoryId: "冷库Id",
+        refrigeratoryInCapacity: "入库容量",
         refrigeratoryInDescription: "入库描述",
         refrigeratoryInTime: "入库时间",
-        refrigeratoryOutDescription: "出库时间",
-        refrigeratoryOutTime: "出库描述",
-        refrigeratory_id: "冷库id",
-        warehousingPersonId: "管理人员id"
+        warehousingPersonId: "管理人员Id"
     }
     /* 标签结束 */
 
     /* 表单验证规则对象开始 */
     formRules = {
-        germchitId: [
-            { required: true, message: `请输入${this.labels.germchitId}`, trigger: "blur" },
+        productName: [
+            { required: true, message: `请输入${this.labels.productName}`, trigger: "blur" },
         ],
-        gmtCreate: [
-            { required: true, message: `请输入${this.labels.gmtCreate}`, trigger: "blur" },
-        ],
-        gmtModified: [
-            { required: true, message: `请输入${this.labels.gmtModified}`, trigger: "blur" },
+        refrigeratoryInCapacity: [
+            { required: true, message: `请输入${this.labels.refrigeratoryInCapacity}`, trigger: "blur" },
         ],
         refrigeratoryInDescription: [
             { required: true, message: `请输入${this.labels.refrigeratoryInDescription}`, trigger: "blur" },
         ],
         refrigeratoryInTime: [
             { required: true, message: `请输入${this.labels.refrigeratoryInTime}`, trigger: "blur" },
+        ],
+        refrigeratoryTemperature: [
+            { required: true, message: `请输入${this.labels.refrigeratoryTemperaturel}`, trigger: "blur" },
+        ],
+        warehousingPersonId: [
+            { required: true, message: `请输入${this.labels.warehousingPersonId}`, trigger: "blur" },
         ],
     }
     /* 表单验证规则对象结束 */
@@ -41,7 +42,7 @@ module.exports = class {
     /* 获取数据开始 */
     getAllInfo(id, page, size) {
         return new Promise((resolve) => {
-            this.vue.$plant.get(`/refrigeratory/refrigeratoryAccessInfo/get/RefrigeratoryAccessInfoByrefrigeratoryId/${id}/${page}/${size}`)
+            this.vue.$storage.get(`/refrigeratoryInInfo/selectPageInfoByRefrigeratoryId/${id}/${page}/${size}`)
                 .then((res) => {
                     resolve(res);
                 })
@@ -52,7 +53,7 @@ module.exports = class {
     /* 添加开始 */
     addInfo(addFrom) {
         return new Promise((resolve) => {
-            this.vue.$plant.post("/refrigeratory/refrigeratoryAccessInfo/in", addFrom)
+            this.vue.$storage.post("/refrigeratoryInInfo/in", addFrom)
                 .then((res) => {
                     resolve(res);
                 })
@@ -63,7 +64,7 @@ module.exports = class {
     /* 根据ID查询信息开始 */
     getInfoById(id) {
         return new Promise((resolve) => {
-            this.vue.$plant.get(`/refrigeratory/refrigeratoryAccessInfo/get/RefrigeratoryAccessInfo/${id}`)
+            this.vue.$storage.get(`/refrigeratoryInInfo/in/${id}`)
                 .then((res) => {
                     resolve(res);
                 })
@@ -74,7 +75,7 @@ module.exports = class {
     /* 修改开始 */
     editInfo(editForm) {
         return new Promise((resolve) => {
-            this.vue.$plant.put(`/refrigeratory/refrigeratoryAccessInfo/in`, editForm)
+            this.vue.$storage.put(`/refrigeratoryInInfo/in`, editForm)
                 .then((res) => {
                     resolve(res);
                 })

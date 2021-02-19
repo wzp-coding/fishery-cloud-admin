@@ -78,11 +78,6 @@
         align="center"
       ></el-table-column>
       <el-table-column
-        prop="refrigeratoryIntroduce"
-        :label="labels.refrigeratoryIntroduce"
-        align="center"
-      ></el-table-column>
-      <el-table-column
         prop="refrigeratoryTemperature"
         :label="labels.refrigeratoryTemperature"
         align="center"
@@ -95,7 +90,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-row :gutter="20">
-            <el-col :span="8">
+            <el-col :span="6">
               <Edit
                 :id="scope.row.id"
                 :labels="labels"
@@ -103,7 +98,17 @@
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
+              <el-tooltip
+                effect="dark"
+                :content="infoIn"
+                placement="top"
+                :enterable="false"
+              >
+                <In :id="scope.row.id" />
+              </el-tooltip>
+            </el-col>
+            <el-col :span="6">
               <el-tooltip
                 effect="dark"
                 :content="buttonInfo"
@@ -121,7 +126,7 @@
               </el-tooltip>
             </el-col>
 
-            <el-col :span="8">
+            <el-col :span="6">
               <Delete
                 :id="scope.row.id"
                 :title="title"
@@ -142,11 +147,13 @@
 import Delete from "../public/delete";
 import Edit from "../coldStorage/Edit";
 import Into from "../public/into";
+import In from "../coldStorageInfo/In/Add";
 export default {
   components: {
     Delete,
     Edit,
     Into,
+    In,
   },
   props: {
     // 表格数据
@@ -157,14 +164,14 @@ export default {
 
     // 主题
     title: {},
-
-    // 加工厂编号
-    processingFactoryId: {},
   },
   data() {
     return {
       // 跳转信息
       buttonInfo: "查看出入库信息",
+
+      // 入库信息
+      infoIn: "入库",
 
       // 跳转路径
       path: "/cold-storageInfo",
