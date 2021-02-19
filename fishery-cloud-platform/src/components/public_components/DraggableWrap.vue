@@ -21,6 +21,7 @@ export default {
     return {
       // 控制是否拖拽
       drag: false,
+
       // 存放被选中的可拖拽组件
       componentCheckedData: [],
     };
@@ -29,31 +30,31 @@ export default {
     componentData: {
       type: Array,
     },
-  },
-  watch: {
-    componentData: {
-      handler(val){
-        this.componentCheckedData = val.filter((item) => item.checked)
-      },
-      deep:true,
-      immediate:true
+    changeLayout: {
+      type: Function,
     },
   },
-  created() {
-    if (!localStorage.getItem("componentData")) {
-      // 第一次载入页面
-      this.componentCheckedData = this.componentData.filter(
-        (item) => item.checked
-      );
-    } else {
-      // 第二次以后载入页面，获取上次保存的自定义视图
-      this.componentData = JSON.parse(localStorage.getItem("componentData"));
-      this.componentCheckedData = JSON.parse(
-        localStorage.getItem("componentCheckedData")
-      );
-    }
+  watch: {
+    // 当第一次传入，选择模块，第二次载入页面时
+    componentData: {
+      handler(val) {
+        const compCheckedData=localStorage.getItem("wzp-DigitalBase-checked");
+        if(compCheckedData){
+          // 第二次载入页面的时候，获取上一次用户保存的布局
+          this.componentCheckedData = JSON.parse(compCheckedData);
+          localStorage.removeItem("wzp-DigitalBase-checked")
+        }else{
+          this.componentCheckedData = val.filter((item) => item.checked);
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+
+    // 当用户拖拽的时候，将最新的拖拽数组的顺序反馈给父组件
+    componentCheckedData(val) {
+      this.changeLayout(val);
+    },
   },
 };
 </script>
-<style lang="less" scoped>
-</style>

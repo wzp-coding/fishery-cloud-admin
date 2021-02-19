@@ -5,7 +5,7 @@
     </span>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item style="width: 70px" command="defLayout"
-        >自定义布局</el-dropdown-item
+        >选择模块</el-dropdown-item
       >
       <el-dropdown-item style="width: 70px" command="saveLayout"
         >保存布局</el-dropdown-item
@@ -19,9 +19,12 @@ export default {
         defLayout:{
             type:Function
         },
-        saveLayout:{
-            type:Function
-        }
+        componentCheckedData:{
+          type:Array
+        },
+        componentData:{
+          type:Array
+        },
     },
   methods: {
     // 处理下拉框指令
@@ -35,6 +38,21 @@ export default {
           this.saveLayout();
           break;
       }
+    },
+
+    // 保存布局
+    saveLayout() {
+      // 保存选中模块的调整顺序
+      localStorage.setItem(
+        "wzp-DigitalBase-checked",
+        JSON.stringify(this.componentCheckedData)
+      );
+      // 保存所有模块
+      localStorage.setItem(
+        "wzp-DigitalBase-modules",
+        JSON.stringify(this.componentData)
+      );
+      this.elMessage.success("保存成功");
     },
   },
 };

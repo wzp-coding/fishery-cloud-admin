@@ -2,6 +2,7 @@
   <div id="digitalbase">
     <!-- 面包屑 -->
     <Breadcrumb :breadcrumbs="['我的基地', '数字基地']"></Breadcrumb>
+    <!-- 内容区 -->
     <div class="cardBody">
       <el-row class="globalHeader" style="margin-bottom: 20px">
         <el-col :span="4">
@@ -15,33 +16,21 @@
             @click="isShowAuthority = true"
             >所持权限</el-button
           >
+          <!-- 下拉框保存 -->
           <More
             :defLayout="() => (this.isShowModule = true)"
-            :saveLayout="saveLayout"
+            :componentData="componentData"
+            :componentCheckedData="componentCheckedData"
           ></More>
         </el-col>
       </el-row>
-      <!-- <el-row
-        ><span>组件模块：</span>
-        <el-checkbox
-          v-for="(item, index) in componentData"
-          :key="index"
-          v-model="item.checked"
-          :label="item.cname"
-          border
-          @change="handleChange(item)"
-        ></el-checkbox>
-        <el-button
-          type="primary"
-          style="float: right"
-          plain
-          @click="saveComponentData"
-          >保存自定义</el-button
-        >
-      </el-row> -->
       <!-- 模块布局 -->
       <DraggableWrap
         :componentData="componentData"
+        :changeLayout="
+          (newComponentCheckedData) =>
+            (this.componentCheckedData = newComponentCheckedData)
+        "
         justify="space-around"
         type="flex"
       >
@@ -54,25 +43,6 @@
           />
         </template>
       </DraggableWrap>
-      <!-- <el-row justify="space-around" type="flex"> -->
-      <!-- 使用draggable组件 v-model绑定数组 -->
-      <!-- <Draggable
-          @start="drag = true"
-          @end="drag = false"
-          animation="1000"
-          style="width: 100%"
-          v-model="componentCheckedData"
-        >
-          <transition-group>
-            <component
-              style="margin: 5px"
-              v-for="item in componentCheckedData"
-              :key="item.id"
-              :is="item.name"
-            />
-          </transition-group>
-        </Draggable>
-      </el-row> -->
     </div>
     <!-- 权限弹框 -->
     <Authority
@@ -83,7 +53,7 @@
     <!-- 模块选择框 -->
     <ChooseModule
       @close="() => (this.isShowModule = false)"
-      @choose="handleChoose"
+      @choose="(newComponentData) => (this.componentData = newComponentData)"
       :isShowModule="isShowModule"
       :componentData="componentData"
     ></ChooseModule>
@@ -92,7 +62,7 @@
 
 <script>
 import Authority from "../../components/wzp/Authority";
-import { DigitalBase as dragComps } from "../../util/draggable";
+import { DigitalBase as dragComps } from "../../util/draggable/wzp";
 
 export default {
   name: "DigitalBase",
@@ -112,20 +82,20 @@ export default {
       componentData: [
         {
           id: 1,
+          name: "DraggableInfoBase",
+          cname: "基地信息",
+          checked: true,
+        },
+        {
+          id: 2,
           name: "DraggableMap",
           cname: "基地地图",
           checked: true,
         },
         {
-          id: 2,
+          id: 3,
           name: "DraggableWeatherCard",
           cname: "天气卡片",
-          checked: false,
-        },
-        {
-          id: 3,
-          name: "DraggableInfoBase",
-          cname: "基地信息",
           checked: true,
         },
       ],
@@ -134,39 +104,22 @@ export default {
       componentCheckedData: [],
     };
   },
-  methods: {
-    saveLayout() {},
-
-    // 选择模块时触发
-    handleChoose(item){
-      // console.log('item: ', item);
-      if (item.checked) {
-        // 选中
-        this.componentCheckedData.push(item);
-      } else {
-        // 取消选中
-        this.componentCheckedData.some((inner, index, origin) => {
-          if (inner.id == item.id) {
-            origin.splice( index, 1);
-            return true;
-          }
-          return false;
-        });
-      }
-    },
-    // 保存自定义  按钮
-    saveComponentData() {
-      // 保存选中模块的调整顺序
-      localStorage.setItem(
-        "componentCheckedData",
-        JSON.stringify(this.componentCheckedData)
+  created() {
+    if (!localStorage.getItem("wzp-DigitalBase-modules")) {
+      // 第一次载入页面
+      this.componentCheckedData = this.componentData.filter(
+        (item) => item.checked
       );
-      // 保存所有模块
-      localStorage.setItem("componentData", JSON.stringify(this.componentData));
-      this.elMessage.success("保存成功");
-    },
+    } else {
+      // 第二次以后载入页面，获取上次保存的自定义视图
+      this.componentData = JSON.parse(
+        localStorage.getItem("wzp-DigitalBase-modules")
+      );
+      this.componentCheckedData = JSON.parse(
+        localStorage.getItem("wzp-DigitalBase-checked")
+      );
+    }
   },
-  created() {},
 };
 </script>
 

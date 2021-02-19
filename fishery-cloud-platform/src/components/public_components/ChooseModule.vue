@@ -16,7 +16,7 @@
         v-model="item.checked"
         :label="item.cname"
         border
-        @change="(checked) => $emit('choose', {checked,index})"
+        @change="() => $emit('choose', componentData)"
       ></el-checkbox>
     </el-row>
   </el-drawer>
