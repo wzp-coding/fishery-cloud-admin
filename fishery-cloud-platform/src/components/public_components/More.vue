@@ -19,10 +19,10 @@ export default {
         defLayout:{
             type:Function
         },
-        componentCheckedData:{
+        moduleChecked:{
           type:Array
         },
-        componentData:{
+        modules:{
           type:Array
         },
     },
@@ -45,15 +45,20 @@ export default {
       // 保存选中模块的调整顺序
       localStorage.setItem(
         "wzp-DigitalBase-checked",
-        JSON.stringify(this.componentCheckedData)
+        JSON.stringify(this.moduleChecked)
       );
       // 保存所有模块
       localStorage.setItem(
         "wzp-DigitalBase-modules",
-        JSON.stringify(this.componentData)
+        JSON.stringify(this.modules)
       );
       this.elMessage.success("保存成功");
     },
   },
 };
 </script>
+<style lang="less" scoped>
+.el-dropdown-link {
+    cursor: pointer;
+  }  
+</style>

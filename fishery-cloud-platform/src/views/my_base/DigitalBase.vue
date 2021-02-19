@@ -19,17 +19,17 @@
           <!-- 下拉框保存 -->
           <More
             :defLayout="() => (this.isShowModule = true)"
-            :componentData="componentData"
-            :componentCheckedData="componentCheckedData"
+            :modules="modules"
+            :moduleChecked="moduleChecked"
           ></More>
         </el-col>
       </el-row>
       <!-- 模块布局 -->
       <DraggableWrap
-        :componentData="componentData"
+        :modules="modules"
         :changeLayout="
           (newComponentCheckedData) =>
-            (this.componentCheckedData = newComponentCheckedData)
+            (this.moduleChecked = newComponentCheckedData)
         "
         justify="space-around"
         type="flex"
@@ -37,7 +37,7 @@
         <template v-slot:default="scope">
           <component
             style="margin: 5px"
-            v-for="item in scope.componentCheckedData"
+            v-for="item in scope.moduleChecked"
             :key="item.id"
             :is="item.name"
           />
@@ -52,10 +52,10 @@
 
     <!-- 模块选择框 -->
     <ChooseModule
+      @choose="(newComponentData) => (this.modules = newComponentData)"
       @close="() => (this.isShowModule = false)"
-      @choose="(newComponentData) => (this.componentData = newComponentData)"
       :isShowModule="isShowModule"
-      :componentData="componentData"
+      :modules="modules"
     ></ChooseModule>
   </div>
 </template>
@@ -78,8 +78,8 @@ export default {
       // 控制展示模块选择框
       isShowModule: false,
 
-      // 存放可拖拽组件
-      componentData: [
+      // 存放可拖拽模块
+      modules: [
         {
           id: 1,
           name: "DraggableInfoBase",
@@ -100,25 +100,12 @@ export default {
         },
       ],
 
-      // 存放被选中的可拖拽组件
-      componentCheckedData: [],
+      // 存放被选中的可拖拽模块
+      moduleChecked: [],
     };
   },
   created() {
-    if (!localStorage.getItem("wzp-DigitalBase-modules")) {
-      // 第一次载入页面
-      this.componentCheckedData = this.componentData.filter(
-        (item) => item.checked
-      );
-    } else {
-      // 第二次以后载入页面，获取上次保存的自定义视图
-      this.componentData = JSON.parse(
-        localStorage.getItem("wzp-DigitalBase-modules")
-      );
-      this.componentCheckedData = JSON.parse(
-        localStorage.getItem("wzp-DigitalBase-checked")
-      );
-    }
+    this.save('DigitalBase','wzp');
   },
 };
 </script>

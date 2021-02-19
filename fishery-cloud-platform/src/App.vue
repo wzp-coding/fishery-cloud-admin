@@ -4,6 +4,7 @@
   </div>
 </template>
 <script>
+
 export default {
   created() {
     // 每次刷新重新渲染Vue时，获取上次vuex中的state
