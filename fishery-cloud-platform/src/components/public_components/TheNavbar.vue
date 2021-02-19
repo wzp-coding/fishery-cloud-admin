@@ -259,6 +259,25 @@
           </template>
         </el-menu-item>
       </el-submenu>
+      <!-- 领导仓 -->
+      <el-submenu index="7">
+        <template slot="title">
+          <!-- 图标 -->
+          <i class="el-icon-view"></i>
+          <!-- 文本 -->
+          <span>领导仓</span>
+        </template>
+        <!-- 二级菜单 -->
+        <el-menu-item index="/leader-warehouse">
+          <template slot="title">
+            <!-- 图标 -->
+            <i class="el-icon-view"></i>
+            <!-- 文本 -->
+            <span>基地信息</span>
+          </template>
+        </el-menu-item>
+        
+      </el-submenu>
     </el-menu>
   </el-aside>
 </template>

@@ -9,6 +9,7 @@ import ManagementStaff from '../views/management_base/ManagementStaff.vue'      
 import ManagementSupplies from '../views/management_fishery/ManagementSupplies.vue'       //
 import ManagementPond from '../views/management_fishery/ManagementPond.vue'    //
 import ManagementAuthority from '../views/management_base/ManagementAuthority.vue'    //权限管理
+import leaderWarehouse from "../views/leader_warehouse/leaderWarehouse.vue"
 export default [
     {
         // 数字基地
@@ -66,5 +67,10 @@ export default [
         // 权限管理
         path: '/management-authority',
         component: ManagementAuthority
+    },
+    {
+        //领导仓
+        path:'/leader-warehouse',
+        component:leaderWarehouse
     }
 ]

@@ -10,7 +10,7 @@
         <el-input v-model="editInfo.supplyName"></el-input>
       </el-form-item>
       <el-form-item label="投入品类型" prop="supplyTypeName">
-        <el-input v-model="editInfo.supplyTypeName"></el-input>
+        <el-input v-model="editInfo.supplyTypeName" :disabled="true"></el-input>
       </el-form-item>
       <el-form-item label="投入品剩余质量" prop="inWeight">
         <el-input v-model="editInfo.inWeight"></el-input>
@@ -49,7 +49,7 @@ export default {
         operatorName: "",
         supplyId: "",
         supplyName: "",
-        supplyTypeName: "",
+        supplyTypeName: "饲料",
         warehouseNumber: "",
       },
       FormRules: {

@@ -23,15 +23,15 @@
     },
     methods: {
       handleSizeChange(val) {
-        console.log(this);
-        console.log(`每页 ${val} 条`);
+        // console.log(this);
+        // console.log(`每页 ${val} 条`);
         this.$emit('fatherMethod',val,this.toPagination.page)
-        console.log(this.$parent);
+        // console.log(this.$parent);
         // this.fatherMethod(val,this.currentPage)
         // this.$parent.getSeedInfoList(val,this.currentPage)
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        // console.log(`当前页: ${val}`);
         this.$emit('fatherMethod',this.toPagination.size,val)
       }
     },
