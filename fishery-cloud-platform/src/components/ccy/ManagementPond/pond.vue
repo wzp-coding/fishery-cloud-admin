@@ -63,7 +63,7 @@
         <p>池塘类型：{{ toPond.type }}</p>
         <p v-show="toPond.inputNum">投放尾数/尾：{{ toPond.inputNum }}</p>
         <p v-show="toPond.seedingTime">投苗时间：{{ toPond.seedingTime }}</p>
-        <p v-show="toPond.catchTime">上次捕捞时间：{{ toPond.catchTime }}</p>
+        <p v-show="toPond.catchTime">捕捞时间：{{ toPond.catchTime }}</p>
         <p>
           捕捞状态：{{
             toPond.catchStatus === 0 || !toPond.catchStatus
@@ -179,7 +179,7 @@
     </TheDialogAll>
     <!-- 基地投苗 -->
     <TheDialogAll :toDialogInfo="toDialogFarmInfo">
-      <el-form-item label="投入品类型">
+      <el-form-item label="投入品类型" label-width="130px">
         <el-select v-model="farmInfo.germchitId" placeholder="请选择投入品类型">
           <el-option
             v-for="item in germchitList"
@@ -190,11 +190,18 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="投放量kg" prop="inputNum">
+      <el-form-item label="投放量" prop="inputNum" label-width="130px">
         <el-input-number
           v-model="farmInfo.inputNum"
           controls-position="right"
-          :min="0.01"
+          :min="1"
+        ></el-input-number>
+      </el-form-item>
+      <el-form-item label="投放质量(kg)" prop="inputWeight" label-width="130px">
+        <el-input-number
+          v-model="farmInfo.inputWeight"
+          controls-position="right"
+          :min="1"
         ></el-input-number>
       </el-form-item>
       <span slot="footer" class="dialog-footer">
@@ -206,26 +213,21 @@
     </TheDialogAll>
     <!-- 基地投料 -->
     <feedPond :toDialogInfo="toFeedInfo"></feedPond>
-    <!-- 基地投苗 -->
-    <!-- <farming :toDialogInfo="toFarmDialogInfo"></farming> -->
     <!-- 池塘捕捞 -->
-    <catching :toDialogInfo="toCatchingInfo"></catching>
+    <catching :toDialogInfo="toCatchingInfo"  @fatherMethod="RefreshPond"></catching>
   </div>
 </template>
 
 <script>
 import TheDialogAll from "../TheDialogAll";
 import feedPond from "../ManagementPond/feedPond";
-import farming from "../ManagementPond/farming";
 import catching from "../ManagementPond/catching";
 
 export default {
   components: {
     TheDialogAll,
-    farming,
     feedPond,
     catching,
-    
   },
   props: {
     toPond: {
@@ -290,6 +292,7 @@ export default {
         germchitId: "",
         inputNum: 1, //投入量
         pondId: this.toPond.pondId,
+        inputWeight:'',
         baseId: "1248910886228332544",
       },
       toDialogFarmInfo: {
@@ -297,9 +300,10 @@ export default {
         dialogVisible: false,
         germchitId: "", //投入品ID
         inputNum: 1, //投入量
+        width:'30%',
         FormRules: {
-          shrimpId: [
-            { required: true, message: "请输入虾苗批次名称", trigger: "blur" },
+          inputWeight: [
+            { required: true, message: "请输入投苗质量", trigger: "blur" },
           ],
           inputNum: [
             { required: true, message: "请输入投放尾数", trigger: "blur" },
@@ -332,7 +336,7 @@ export default {
       );
       if (res.statusCode === 20000) {
         console.log(res);
-        this.$emit("fatherMethod", 3, 1);
+        this.$emit("fatherMethod");
         this.elMessage.success("修改成功");
       } else {
         console.log("修改失败");
@@ -390,6 +394,9 @@ export default {
         console.log(this.germchitDetail);
       }
     },
+    RefreshPond(){
+      this.$emit('fatherMethod')
+    }
   },
 };
 </script>

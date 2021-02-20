@@ -35,7 +35,6 @@
             >
           </el-col>
         </div>
-
         <el-table-column type="expand">
           <template slot-scope="props" class="labelStyle">
             <el-form label-position="left" label-width="170px">
@@ -140,8 +139,6 @@
             </el-row>
           </template>
         </el-table-column>
-
-        <!-- <ThePagination :toPagination="paginationInfo"></ThePagination> -->
       </TheCardAll>
       <ThePagination
         :toPagination="paginationInfo"
@@ -248,19 +245,7 @@
             <i class="el-icon-plus"></i> </el-upload
         ></el-col>
       </el-row>
-      <!-- <el-row>
-        <el-col :span="4">投入品成分</el-col>
-        <el-col :span="5"
-          ><el-upload
-            action="http://106.75.154.40:9011/base/addPic"
-            list-type="picture-card"
-            :auto-upload="true"
-            ref="upload"
-            class="addBox"
-          >
-            <i class="el-icon-plus"></i> </el-upload
-        ></el-col>
-      </el-row> -->
+
       <span slot="footer" class="dialog-footer">
         <el-button @click="toDialogSupply.dialogVisible = false"
           >取 消</el-button
@@ -421,7 +406,7 @@ export default {
         this.addSupplyInfo
       );
       if (res.statusCode === 20000) {
-        this.$message.success("添加投入品成功");
+        this.elMessage.success('添加投入品成功')
         this.toDialogSupply.dialogVisible = false;
         this.getAllSupplInfo();
       }
@@ -442,7 +427,6 @@ export default {
       return y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second;
     },
     async getAllSupplInfo() {
-      // allSupplyList
       console.log(this.paginationInfo);
       const { data: res } = await this.$supplyController.get(
         `${this.paginationInfo.size}/${this.paginationInfo.page}`
@@ -474,7 +458,7 @@ export default {
     },
     //删除事件
     async removeSupply(id){
-      const confirmResult = await this.$confirm(
+      const confirmResult = await this.elConfirm(
         '此操作将永久删除该投入品信息, 是否继续?',
         '提示',
         {
@@ -488,11 +472,11 @@ export default {
       })
       if (confirmResult !== 'confirm') {
         // this.$message.info: 灰色提示框
-        return this.$message.info('已取消删除')
+        return this.elMessage.info('已取消删除')
       }
       const {data : res} = await this.$supplyController.delete(`${id}`)
       if(res.statusCode === 20000){
-        this.$message.success('已成功删除该投入品信息')
+        this.elMessage.success('已成功删除该投入品信息')
         this.getAllSupplInfo()
       }
     }

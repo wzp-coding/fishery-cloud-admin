@@ -1,18 +1,18 @@
 <template>
   <el-dialog
-  @close="closeEvent"
+    @close="closeEvent"
     title="农资出库"
     :visible.sync="toDialogInfo.dialogVisible"
     width="30%"
   >
-    <el-form :model="addInfo" label-width="130px" ref="formRef">
+    <el-form :model="addInfo" label-width="130px" ref="formRef" :rules="rules">
       <el-form-item label="操作者身份" prop="operatorIdentity">
         <el-input v-model="addInfo.operatorIdentity"></el-input>
       </el-form-item>
       <el-form-item label="操作者姓名" prop="operatorName">
         <el-input v-model="addInfo.operatorName"></el-input>
       </el-form-item>
-      <el-form-item label="投入品类别" prop="supplyTypeName" >
+      <el-form-item label="投入品类别" prop="supplyTypeName">
         <el-input v-model="addInfo.supplyTypeName" :disabled="true"></el-input>
       </el-form-item>
       <el-form-item label="请输入仓库号" prop="warehouseNumber">
@@ -53,10 +53,10 @@ export default {
   },
   data() {
     return {
-      supplyList: [],
-      baseId: "1248910886228332544",
+      supplyList: [],  
+      baseId: this.$store.state.userInfo.baseId,
       addInfo: {
-        baseId: "1248910886228332544",
+        baseId: this.$store.state.userInfo.baseId,
         outWeight: 1,
         operatorIdentity: "",
         operatorName: "",
@@ -66,6 +66,23 @@ export default {
         supplyTypeName: "饲料",
         warehouseNumber: "",
       },
+      rules:{
+        supplyName: [
+          { required: true, message: "请输入投入品名称", trigger: "blur" },
+        ],
+        warehouseNumber: [
+          { required: true, message: "请输入仓库号", trigger: "blur" },
+        ],
+        operatorIdentity: [
+          { required: true, message: "请输入操作者身份", trigger: "blur" },
+        ],
+        operatorName: [
+          { required: true, message: "请输入操作者姓名", trigger: "blur" },
+        ],
+        outWeight: [
+          { required: true, message: "请输入出库质量", trigger: "blur" },
+        ],
+      }
     };
   },
   created() {
@@ -79,9 +96,9 @@ export default {
       console.log(res);
       //   toDialogInfo
       if (res.statusCode === 20000) {
-          console.log('出库成功');
-          this.toDialogInfo.dialogVisible = false;
-        //   this.$emit('fatherMehods');
+        this.elMessage.success("出库成功");
+        this.toDialogInfo.dialogVisible = false;
+          this.$emit('faherMethod');
       }
     },
     async getSupplyList() {
@@ -101,10 +118,9 @@ export default {
         console.log(this.addInfo);
       }
     },
-    closeEvent(){
-        this.$refs.formRef.resetFields();
+    closeEvent() {
+      this.$refs.formRef.resetFields();
     },
-    
   },
 };
 </script>

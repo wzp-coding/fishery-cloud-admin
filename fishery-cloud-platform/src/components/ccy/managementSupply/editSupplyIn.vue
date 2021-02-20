@@ -6,7 +6,7 @@
     @close="closeEvent"
   >
     <el-form :model="editInfo" label-width="140px" :rules="FormRules" ref="formRef">
-      <el-form-item label="投入品" prop="supplyName">
+      <el-form-item label="投入品名称" prop="supplyName">
         <el-input v-model="editInfo.supplyName"></el-input>
       </el-form-item>
       <el-form-item label="投入品类型" prop="supplyTypeName">
@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       editInfo: {
-        baseId: 1248910886228332544,
+        baseId: this.$store.state.userInfo.baseId,
         id: "",
         inWeight: "",
         operatorIdentity: "",
@@ -74,7 +74,9 @@ export default {
       const { data: res } = await this.$baseSupply.put("in", this.editInfo);
       this.dialogInfo.dialogVisible = false
       if ((res.statusCode = 20000)) {
+        console.log(res);
         this.$emit("fatherMethod");
+        this.elMessage.success('修改入库信息成功')
       }
     },
     closeEvent(){

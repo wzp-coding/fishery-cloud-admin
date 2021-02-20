@@ -11,7 +11,12 @@
           <span>基地信息</span>
         </div>
       </TheCardHead>
-      <el-form :data="baseInfo" ref="resForm" :rules="formRules" :model="baseInfo" >
+      <el-form
+        :data="baseInfo"
+        ref="resForm"
+        :rules="formRules"
+        :model="baseInfo"
+      >
         <InfoBaseLayout>
           <el-form-item
             slot="pre"
@@ -201,7 +206,7 @@ export default {
         registerNumber: "",
         scope: "",
         picture: "",
-        id: "",
+        id: this.$store.state.baseInfo.id,
         introduction: "",
       },
       formRules: {
@@ -242,25 +247,29 @@ export default {
   },
   methods: {
     async getBaseInfo() {
-      const { data: res } = await this.$base.get();
-      let temp = res.data[0];
-      this.baseInfo.id = temp.id;
-      this.baseInfo.name = temp.name;
-      this.baseInfo.creator = temp.creator;
-      this.baseInfo.gmtCreate = temp.gmtCreate;
-      this.baseInfo.address = temp.address;
-      this.baseInfo.positionLongitude = temp.positionLongitude;
-      this.baseInfo.positionLatitude = temp.positionLatitude;
-      this.baseInfo.funds = temp.funds;
-      this.baseInfo.registerNumber = temp.registerNumber;
-      this.baseInfo.scope = temp.scope;
-      this.baseInfo.picture = temp.picture;
-      this.baseInfo.introduction = temp.introduction;
+      const { data: res } = await this.$base.get(
+        `${this.$store.state.baseInfo.id}`
+      );
+      console.log(res);
+      if (res.statusCode === 20000) {
+        console.log(res);
+        this.baseInfo.name = res.data.name;
+        this.baseInfo.creator = res.data.creator;
+        this.baseInfo.gmtCreate = res.data.gmtCreate;
+        this.baseInfo.address = res.data.address;
+        this.baseInfo.positionLongitude = res.data.positionLongitude;
+        this.baseInfo.positionLatitude = res.data.positionLatitude;
+        this.baseInfo.funds = res.data.funds;
+        this.baseInfo.registerNumber = res.data.registerNumber;
+        this.baseInfo.scope = res.data.scope;
+        this.baseInfo.picture = res.data.picture;
+        this.baseInfo.introduction = res.data.introduction;
+      }
     },
     async saveBaseInfo() {
       const { data: res } = await this.$base.put("update", this.baseInfo);
       if (res.statusCode === 20000) {
-        this.$message.success("修改基地信息成功");
+        this.elMessage.success('修改基地信息成功')
       }
       this.getBaseInfo();
     },

@@ -63,7 +63,12 @@ export default {
     },
     async catchEvent(){
       const {data : res} = await this.$pondController.put("catching",this.catchInfo)
-      console.log(res);
+      if(res.statusCode === 20000){
+        this.elMessage.success('捕捞成功')
+        this.toDialogInfo.dialogVisible = false
+        console.log(res);
+        this.$emit('fatherMethod')
+      }
     },
     closeEvent(){
       this.$refs.fromRef.resetFields()

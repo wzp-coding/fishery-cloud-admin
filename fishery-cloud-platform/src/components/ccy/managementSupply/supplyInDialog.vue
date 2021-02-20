@@ -3,8 +3,9 @@
     title="农资入库"
     :visible.sync="toDialogAddInfo.dialogVisible"
     width="30%"
+    @close="closeEvent"
   >
-    <el-form :model="addInfo" label-width="130px">
+    <el-form :model="addInfo" label-width="135px" ref="formRef" :rules="rules">
       <el-form-item label="操作者身份" prop="operatorIdentity">
         <el-input v-model="addInfo.operatorIdentity"></el-input>
       </el-form-item>
@@ -56,7 +57,7 @@ export default {
     return {
       supplyList: [],
       addInfo: {
-        baseId: '1248910886228332544',
+        baseId: this.$store.state.userInfo.baseId,
         // gmtCreate: "",
         inWeight: 1,
         operatorIdentity: "",
@@ -67,6 +68,13 @@ export default {
         supplyTypeName: "饲料",
         warehouseNumber: "",
       },
+      rules:{
+        operatorIdentity:[{ required: true, message: '请输入操作者身份', trigger: 'blur' }],
+        operatorName:[{ required: true, message: '请输入操作员', trigger: 'blur' }],
+        supplyName:[{ required: true, message: '请输入投入品名称', trigger: 'blur' }],
+        warehouseNumber:[{ required: true, message: '请输入仓库号', trigger: 'blur' }],
+        inWeight:[{ required: true, message: '请输入投入品数量', trigger: 'blur' }],
+      }
     };
   },
   created() {
@@ -106,6 +114,9 @@ export default {
         this.addInfo.supplyName = res.data.name
         this.supplyIn()
       }
+    },
+    closeEvent(){
+      this.$refs.formRef.resetFields()
     }
   },
 };

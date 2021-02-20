@@ -11,7 +11,7 @@ export default {
   props: {},
   data() {
     return {
-      baseId:'1248910886228332544',
+      baseId:this.$store.state.baseInfo.id,
       baseGermchitInfo:[],    //基地已有种苗信息
       nameList: [], //货物名称
       valueList: [], //进货量
