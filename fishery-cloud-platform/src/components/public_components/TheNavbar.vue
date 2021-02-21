@@ -82,6 +82,14 @@
             <span>池塘管理</span>
           </template>
         </el-menu-item>
+        <el-menu-item index="/management-advise">
+          <template slot="title">
+            <!-- 图标 -->
+            <i class="el-icon-s-claim"></i>
+            <!-- 文本 -->
+            <span>养殖建议</span>
+          </template>
+        </el-menu-item>
         <el-menu-item index="/management-supplies">
           <template slot="title">
             <!-- 图标 -->

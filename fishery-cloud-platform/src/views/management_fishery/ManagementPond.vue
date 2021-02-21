@@ -17,7 +17,7 @@
             >
           </el-col>
           <el-col style="width: 120px; float: right">
-            <el-button type="success" >养殖建议卡</el-button>
+            <el-button type="success" @click="adviseInfo.dialogVisible = true">养殖建议卡</el-button>
           </el-col>
         </div>
         <div class="bigBox" slot="bigBox">
@@ -84,6 +84,7 @@
     </TheDialogAll> -->
     <!-- 添加池塘 -->
     <addPond :toDialogInfo="addPondInfo" @fatherMethods="getPondList"></addPond>
+
     <!-- 修改池塘信息对话框 -->
     <!-- <TheDialogAll :toDialogInfo="editPondInfo"></TheDialogAll> -->
     <!-- <TheDialogAll :toDialogInfo="farmInfo"></TheDialogAll>  -->
@@ -99,6 +100,7 @@ import TheDialogAll from "../../components/ccy/TheDialogAll";
 import ThePagination from "../../components/ccy/ThePagination";
 import pond from "../../components/ccy/ManagementPond/pond";
 import addPond from "../../components/ccy/ManagementPond/addPond"
+
 export default {
   components: { TheCardHead, pond, ThePagination, TheDialogAll,addPond },
   data() {
@@ -160,6 +162,9 @@ export default {
           ],
         },
         // rules:
+      },
+      adviseInfo:{
+        dialogVisible: false,
       },
       editPondInfo: {
         title: "修改池塘信息",

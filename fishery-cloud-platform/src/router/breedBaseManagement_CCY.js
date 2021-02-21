@@ -10,6 +10,7 @@ import ManagementSupplies from '../views/management_fishery/ManagementSupplies.v
 import ManagementPond from '../views/management_fishery/ManagementPond.vue'    //
 import ManagementAuthority from '../views/management_base/ManagementAuthority.vue'    //权限管理
 import leaderWarehouse from "../views/leader_warehouse/leaderWarehouse.vue"
+import ManagementAdvise from "../views/management_fishery/ManagementAdvise.vue"   //养殖建议卡
 export default [
     {
         // 数字基地
@@ -62,6 +63,11 @@ export default [
         // 池塘信息
         path: '/info-pond',
         component: InfoPond
+    },
+    // management-advise
+    {
+        path: '/management-advise',
+        component:ManagementAdvise
     },
     {
         // 权限管理

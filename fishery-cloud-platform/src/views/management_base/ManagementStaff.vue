@@ -13,7 +13,11 @@
             <span>员工管理</span>
           </el-col>
           <el-col style="width: 100px; float: right">
-            <el-button type="primary" @click="toAddStaff = true">邀请员工</el-button>
+            <el-button
+              type="primary"
+              @click="toInviteStaff.dialogVisible = true"
+              >邀请员工</el-button
+            >
           </el-col>
         </div>
       </TheCardHead>
@@ -32,12 +36,14 @@
               size="small"
               @click="editAdminInfo(scope.row.id)"
             ></el-button>
+            <!--  -->
             <!-- 删除按钮 -->
             <!-- type="danger": 红色警告按钮 -->
             <el-button
               type="danger"
               icon="el-icon-delete"
               size="small"
+              @click="removeStaff(scope.row.id)"
             ></el-button>
           </template>
         </el-table-column>
@@ -52,7 +58,7 @@
       :toDialogInfo="toEditInfo"
       @fatherMethods="getAllStaffInfo"
     ></editStaffInfo>
-    <inviteStaff :toDialogInfo="toAddStaff"></inviteStaff>
+    <inviteStaff :toDialogInfo="toInviteStaff"></inviteStaff>
   </div>
 </template>
 
@@ -82,7 +88,9 @@ export default {
         dialogVisible: false,
         id: "",
       },
-      toAddStaff: false,
+      toInviteStaff: {
+        dialogVisible: false,
+      },
     };
   },
   created() {
@@ -108,8 +116,29 @@ export default {
       this.toEditInfo.dialogVisible = true;
       this.toEditInfo.id = id;
     },
-    async inviteAdmin() {
-      const { data: res } = await this.$admin.post("");
+    async removeStaff(id) {
+      const confirmResult = await this.elConfirm(
+        "此操作将永久删除该员工数据, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => {
+        return err;
+      });
+      if (confirmResult !== "confirm") {
+        return this.elMessage.info("已取消删除");
+      }
+      const { data: res } = await this.$admin.delete(`${id}`);
+      console.log(res);
+      if (res.statusCode === 20000) {
+        this.elMessage.success("删除成功！");
+        this.getAllStaffInfo()
+      }else{
+        this.elMessage.error("删除失败！");
+      }
     },
   },
 };

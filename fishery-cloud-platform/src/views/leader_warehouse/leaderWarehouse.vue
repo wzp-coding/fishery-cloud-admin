@@ -85,7 +85,18 @@
         </div>
         <div>
           <h3>近期订单</h3>
-          <div></div>
+          <div class="order">
+            <el-row>
+              <el-col :span="12"><span>客户名</span></el-col>
+              <el-col :span="12"><span>金额</span></el-col>
+            </el-row>
+            <div class="orderInfo">
+              <el-row v-for="(item, index) in orderList" :key="index">
+                <el-col :span="12">{{ item.name }}</el-col>
+                <el-col :span="12">{{ item.money }}</el-col>
+              </el-row>
+            </div>
+          </div>
         </div>
       </div>
       <div class="column">
@@ -111,7 +122,7 @@
 
 
 <script>
-var myVue = {};
+// var myVue = {};
 export default {
   data() {
     return {
@@ -125,6 +136,8 @@ export default {
       supplyInInfo: [],
       proInfo: [],
       orderList: [],
+      nowLength: 0,
+      timer: "",
     };
   },
   created() {
@@ -137,8 +150,16 @@ export default {
     this.getSupplyInInfo(); //获取入库信息
     this.getSupplyInfo(); //获取基地投入品信息
     this.getProInfo(); //获取基地加工厂信息
-    this.getRecentlyOrder(); //获取基地订单
+    this.getOrderBySize(10); //获取基地订单
     this.getOrderBytime(); //选择日期获取订单
+  },
+  mounted() {
+    window["putChart2"] = () => {
+      this.putChart2();
+    };
+    console.log(this.$store);
+    window.nowLength = 0;
+    window["myVue"] = this;
   },
   methods: {
     async getBaseAmount() {
@@ -174,7 +195,7 @@ export default {
       );
       if (res.statusCode === 20000) {
         this.pondInfo = res.data;
-        this.Chart2()
+        this.Chart2(this.pondInfo.length, this.pondInfo);
       }
     },
     async getSupplyOutInfo() {
@@ -220,15 +241,16 @@ export default {
         this.proInfo = res.data;
       }
     },
-    async getOrderBytime() {
+    getOrderBytime() {},
+    async getOrderBySize(size) {
       const { data: res } = await this.$leader.get(
-        `customer/${this.$store.state.baseInfo.id}/{5}`
+        `customer/${this.$store.state.baseInfo.id}/${size}`
       );
-      if (res.statusCode === 20000) {
+      if ((res.statusCode = 20000)) {
         this.orderList = res.data;
+        console.log(this.orderList);
       }
     },
-    getRecentlyOrder() {},
     putChart1(data) {
       let myChart = this.$echarts.init(document.querySelector(".chart1"));
       let name = [];
@@ -250,7 +272,7 @@ export default {
           trigger: "item",
           formatter: "{a} <br/>{b} : {c}尾 ({d}%)",
         },
-        width:"250px",
+        width: "250px",
         legend: {
           orient: "vertical",
           left: "left",
@@ -278,12 +300,20 @@ export default {
       };
       myChart.setOption(option);
     },
-    Chart2() {
-      let array = [];
-      // while()
-      array = this.pondInfo.slice(0, 7);
-      console.log(array);
-      this.putChart2(array);
+
+    Chart2(length, pondList) {
+      this.timer = setInterval(function () {
+        let array = [];
+        if (this.nowLength + 5 > length) {
+          array = pondList.slice(this.nowLength, length);
+          this.nowLength = 0;
+          this.myVue.putChart2(array);
+        } else {
+          array = pondList.slice(this.nowLength, this.nowLength + 5);
+          this.nowLength += 5;
+          this.myVue.putChart2(array);
+        }
+      }, 2000);
     },
     putChart2(data) {
       let myChart = this.$echarts.init(document.querySelector(".chart2"));
@@ -291,7 +321,11 @@ export default {
       let inputNum = [];
       data.forEach((e) => {
         name.push(e.name);
-        inputNum.push(e.inputNum);
+        if (!e.inputNum) {
+          inputNum.push(2);
+        } else {
+          inputNum.push(e.inputNum);
+        }
       });
       let option = {
         title: {
@@ -349,7 +383,7 @@ export default {
         ],
         series: [
           {
-            name: "直接访问",
+            name: "池塘投苗量",
             type: "bar",
             barWidth: "40%",
             data: inputNum,
@@ -621,7 +655,6 @@ export default {
   background: url(../../assets/bg.jpg) no-repeat #000;
   background-size: 100% 100%;
   width: 100%;
-  // height: 1000px;
 }
 
 ul {
@@ -773,5 +806,20 @@ header .showTime {
 .chart {
   height: 150px;
   width: 100%;
+}
+.order {
+  text-align: center;
+  .el-row {
+    background: rgba(101, 132, 226, 0.1);
+  }
+  width: 100%;
+  .orderInfo {
+    font-family: electronicFont;
+    font-size: 18px;
+    color: #ffeb7b;
+    .el-row {
+      margin-bottom: 3px;
+    }
+  }
 }
 </style>
