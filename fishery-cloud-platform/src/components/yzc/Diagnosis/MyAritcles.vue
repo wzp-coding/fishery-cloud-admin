@@ -163,10 +163,15 @@ export default {
           this.getmyarticle()
         },
         // 打开文章详情页
-        ArticleDetails(info) {
+        async ArticleDetails(info) {
+            console.log(info);
+            const {data:res} = await this.$diagnose.get(`/${info.id}/${info.userId}`)
+            if(res.statusCode !== 20000) {
+                return this.elMessage.error('获取文章详情失败')
+            }
+            this.ArticleDetailO = res.data
             this.ShowArticleDetail = true
-            this.ArticleDetailO = info
-            this.srcList.push(info.picture)
+            this.srcList.push(res.data.picture)
         },
         // 根据id删除文章 
         async DeleteArticle(id) {

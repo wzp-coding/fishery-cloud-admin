@@ -48,7 +48,7 @@
             </template>
           </el-table-column>
         </div>
-        <ThePagination slot="pagination"></ThePagination>
+        <ThePagination :toPagination="paginationInfo"></ThePagination>
       </TheCardAll>
     </el-card>
   </div>
@@ -64,6 +64,15 @@ export default {
     ThePagination,
     TheDialogAll,
   },
+  data(){
+    return {
+      paginationInfo:{
+        total:3,
+        size:3,
+        page:1
+      }
+    }
+  }
 };
 </script>
 

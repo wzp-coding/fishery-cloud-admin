@@ -135,7 +135,7 @@ export default {
     /* 根据Id查询信息开始 */
     async getInfoById() {
       const { data: res } = await this.model.getInfoById(this.id);
-      this.editForm = res.data[0];
+      this.editForm = res.data;
       this.editDialogVisible = true;
     },
     /* 根据Id查询信息结束 */

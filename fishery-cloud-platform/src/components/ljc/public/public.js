@@ -16,4 +16,17 @@ module.exports = class {
         },
     ]
     /* 管理员数组结束 */
+
+    /* 加工产品数组开始 */
+    productsList = [
+        {
+            label: "小龙虾",
+            value: "2222",
+        },
+        {
+            label: "多宝鱼",
+            value: "1111",
+        }
+    ]
+    /* 加工产品数组结束 */
 }

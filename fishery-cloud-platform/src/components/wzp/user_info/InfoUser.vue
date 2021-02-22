@@ -1,17 +1,18 @@
 <script>
 import Form from "../Form";
+import { mapMutations } from "vuex";
 export default {
   components: {
     Form,
   },
   props: {
-    isShow:{
-      type:Boolean,
-      default:false
+    isShow: {
+      type: Boolean,
+      default: false,
     },
-    closeCallback:{
-      type:Function
-    }
+    closeCallback: {
+      type: Function,
+    },
   },
   data() {
     return {
@@ -20,37 +21,46 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["setUserInfo"]),
+
+    // 修改信息按钮
     async handleSubmit(form) {
       form.id = this.infoForm.id;
+      form.username = form.userName;
       console.log("form: ", form);
-      // const { data: res } = await this.$user.put("/user", form);
-      // console.log('handleSubmit: ', res);
-      // if (res.statusCode === 20000) {
-      //   this.isUpdated = true;
-      //   this.elMessage.success(res.message);
-      //   this.closeCallback();
-      // } else {
-      //   this.elMessage.error(res.message);
-      // }
+      const { data: res } = await this.$user.put("/user", form);
+      console.log("handleSubmit: ", res);
+      if (res.statusCode === 20000) {
+        this.isUpdated = true;
+        this.elMessage.success(res.message);
+        this.closeCallback();
+      } else {
+        this.elMessage.error(res.message);
+      }
     },
+
+    // 获取登录用户的具体信息
     async getSelfInfo() {
       const { data: res } = await this.$user.get("/self");
       console.log("getSelfInfo: ", res);
       this.infoForm = res.data;
+      this.$store.commit("setUserInfo", res.data);
     },
+
+    // 关闭前的回调
     beforeClose(done) {
       if (this.isUpdated) {
         done();
       }
       this.elConfirm("您未保存信息，是否保存修改内容后关闭？")
         .then((_) => {
-          this.$refs.form.cb()
+          this.$refs.form.cb();
           done();
         })
         .catch((_) => {
-          console.log(_)
+          console.log(_);
           this.elMessage.warning("没有任何修改");
-          done()
+          done();
         });
     },
   },
@@ -58,17 +68,17 @@ export default {
     this.getSelfInfo();
   },
   render(h) {
-    const listeners={
-      'update:visible':val=>this.closeCallback(val)
-    }
+    const listeners = {
+      "update:visible": (val) => this.closeCallback(val),
+    };
     return (
       <el-dialog
         title="个人信息"
         visible={this.isShow}
-        {...{on:listeners}}
+        {...{ on: listeners }}
         width="30%"
-        before-close={(done)=>this.beforeClose(done)}
-        close={()=>this.closeCallback()}
+        before-close={(done) => this.beforeClose(done)}
+        close={() => this.closeCallback()}
       >
         <Form
           callback={this.handleSubmit}

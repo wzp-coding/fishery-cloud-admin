@@ -2,83 +2,72 @@
   <div id="digitalbase">
     <!-- 面包屑 -->
     <Breadcrumb :breadcrumbs="['我的基地', '数字基地']"></Breadcrumb>
+    <!-- 内容区 -->
     <div class="cardBody">
       <el-row class="globalHeader" style="margin-bottom: 20px">
         <el-col :span="4">
           <i class="el-icon-s-data"></i><span>数字基地</span></el-col
         >
-        <el-col style="width: 100px; float: right">
+        <el-col style="width: 170px; float: right">
           <el-button
             type="primary"
-            style="float: right"
+            style="float: left"
             plain
             @click="isShowAuthority = true"
             >所持权限</el-button
           >
+          <!-- 下拉框保存 -->
+          <More
+            :defLayout="() => (this.isShowModule = true)"
+            :modules="modules"
+            :moduleChecked="moduleChecked"
+          ></More>
         </el-col>
       </el-row>
-      <!-- 模块选择 -->
-      <el-row
-        ><span>组件模块：</span>
-        <el-checkbox
-          v-for="(item, index) in componentData"
-          :key="index"
-          v-model="item.checked"
-          :label="item.cname"
-          border
-          @change="handleChange(item)"
-        ></el-checkbox>
-        <el-button
-          type="primary"
-          style="float: right"
-          plain
-          @click="saveComponentData"
-          >保存自定义</el-button
-        >
-      </el-row>
       <!-- 模块布局 -->
-      <el-row justify="space-around" type="flex">
-        <!-- 使用draggable组件 v-model绑定数组 -->
-        <Draggable
-          @start="drag = true"
-          @end="drag = false"
-          animation="1000"
-          style="width: 100%"
-          v-model="componentCheckedData"
-        >
-          <transition-group>
-            <component
-              style="margin: 5px"
-              v-for="item in componentCheckedData"
-              :key="item.id"
-              :is="item.name"
-            />
-          </transition-group>
-        </Draggable>
-      </el-row>
+      <DraggableWrap
+        :modules="modules"
+        :changeLayout="
+          (newComponentCheckedData) =>
+            (this.moduleChecked = newComponentCheckedData)
+        "
+        justify="space-around"
+        type="flex"
+      >
+        <template v-slot:default="scope">
+          <component
+            style="margin: 5px"
+            v-for="item in scope.moduleChecked"
+            :key="item.id"
+            :is="item.name"
+          />
+        </template>
+      </DraggableWrap>
     </div>
     <!-- 权限弹框 -->
     <Authority
       :dialog-visible="isShowAuthority"
       @close="() => (this.isShowAuthority = false)"
     ></Authority>
+
+    <!-- 模块选择框 -->
+    <ChooseModule
+      @choose="(newComponentData) => (this.modules = newComponentData)"
+      @close="() => (this.isShowModule = false)"
+      :isShowModule="isShowModule"
+      :modules="modules"
+    ></ChooseModule>
   </div>
 </template>
 
 <script>
 import Authority from "../../components/wzp/Authority";
-import {
-  DraggableMap,
-  DraggableWeatherCard,
-  DraggableInfoBase,
-} from "../../util/draggable";
+import { DigitalBase as dragComps } from "../../util/draggable/wzp";
 
 export default {
   name: "DigitalBase",
   components: {
-    DraggableMap,
-    DraggableWeatherCard,
-    DraggableInfoBase,
+    ...dragComps,
     Authority,
   },
   data() {
@@ -86,79 +75,37 @@ export default {
       // 控制展示权限对话框
       isShowAuthority: false,
 
-      // 控制是否拖拽
-      drag: false,
+      // 控制展示模块选择框
+      isShowModule: false,
 
-      // 存放可拖拽组件
-      componentData: [
+      // 存放可拖拽模块
+      modules: [
         {
           id: 1,
+          name: "DraggableInfoBase",
+          cname: "基地信息",
+          checked: true,
+        },
+        {
+          id: 2,
           name: "DraggableMap",
           cname: "基地地图",
           checked: true,
         },
         {
-          id: 2,
+          id: 3,
           name: "DraggableWeatherCard",
           cname: "天气卡片",
-          checked: false,
-        },
-        {
-          id: 3,
-          name: "DraggableInfoBase",
-          cname: "基地信息",
           checked: true,
         },
       ],
 
-      // 存放被选中的可拖拽组件
-      componentCheckedData: [],
+      // 存放被选中的可拖拽模块
+      moduleChecked: [],
     };
   },
-  methods: {
-    // 保存自定义  按钮
-    saveComponentData() {
-      // 保存选中模块的调整顺序
-      localStorage.setItem(
-        "componentCheckedData",
-        JSON.stringify(this.componentCheckedData)
-      );
-      // 保存所有模块
-      localStorage.setItem("componentData", JSON.stringify(this.componentData));
-      this.$message.success("保存成功");
-    },
-
-    // 多选框触发事件
-    handleChange(item) {
-      // 模块选择的时候，componentData变化了，更新componentCheckedData
-      if (item.checked) {
-        // 选中
-        this.componentCheckedData.push(item);
-      } else {
-        // 取消选中
-        this.componentCheckedData.some((inner, index, origin) => {
-          if (inner.id == item.id) {
-            Array.prototype.splice.call(origin, index, 1);
-            return true;
-          }
-          return false;
-        });
-      }
-    },
-  },
   created() {
-    if (!localStorage.getItem("componentData")) {
-      // 第一次载入页面
-      this.componentCheckedData = this.componentData.filter(
-        (item) => item.checked
-      );
-    } else {
-      // 第二次以后载入页面，获取上次保存的自定义视图
-      this.componentData = JSON.parse(localStorage.getItem("componentData"));
-      this.componentCheckedData = JSON.parse(
-        localStorage.getItem("componentCheckedData")
-      );
-    }
+    this.save('DigitalBase','wzp');
   },
 };
 </script>

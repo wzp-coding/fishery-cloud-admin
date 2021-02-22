@@ -18,6 +18,7 @@ module.exports = class {
         refrigeratoryTemperature: "冷库温度(度)",
         refrigeratoryUsedCapacity:　"冷库已用容量(kg)",
         refrigeratoryCapacity: "冷库总容量(kg)",
+        
     }
     /* 标签结束 */
 

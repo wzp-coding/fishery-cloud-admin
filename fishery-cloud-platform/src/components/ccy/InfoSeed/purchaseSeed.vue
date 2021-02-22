@@ -50,7 +50,7 @@ export default {
         this.purchaseInfo
       );
       if (res.statusCode === 20000) {
-        // this.$message.success("提交订单成功");
+        this.elMessage.success("提交订单成功");
         console.log('下订单成功');
       } else {
         console.log("下订单失败");
