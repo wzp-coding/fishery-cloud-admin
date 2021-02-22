@@ -152,7 +152,7 @@
       </el-pagination>
     </el-card>
 
-    <!-- 修改订单信息的对话框 -->
+    <!-- 创建/修改订单信息的对话框 -->
     <Show-change
     :edit-form-rules="editFormRules"
     :edit-form="editForm"
@@ -189,6 +189,9 @@
     <!--展示创建订单-->
     <Create-order
     :createdialogVisible="createdialogVisible"
+    :orderid="orderid"
+    :ordertitle="ordertitle"
+    :look="look"
     @createnotifyParent="changecreatedialogVisible"
     >
     </Create-order>
@@ -200,7 +203,7 @@ import QRCode from "qrcodejs2";
 import ShowInfo from   "../../components/cgx/ManagementOrder/ShowInfo/ShowInfo1";
 import ShowOrinfo from "../../components/cgx/ManagementOrder/ShowOrcode/ShowOrcode2";
 import ShowChange from "../../components/cgx/ManagementOrder/ModifyInformation/ShowChange";
-import CreateOrder from '../../components/cgx/ManagementOrder/CreateOrder/createOrder.vue';
+import CreateOrder from '../../components/cgx/ManagementOrder/CreateOrder/createOrder';
 
 export default {
   components: {
@@ -211,11 +214,14 @@ export default {
   },
   data() {
     return {
+      //创建或修改订单
+      ordertitle:"",
+      createdialogVisible:false,
+      orderid:"",
+      look:true,
       // 判断
       a : ['个人', '企业', '加工厂', '冷库'],
-      // 传给创建订单组件
-      createdialogVisible:false,
-
+      
       // 传递给子组件
       title: "虾苗信息",
       isLogistics: false,
@@ -333,6 +339,10 @@ export default {
     this.setNode();
   },
   methods: {
+    //创建订单按钮
+    createOrder(){
+      createdialogVisible=true;
+    },
     // 客户类型判断传入
     settargetType(row){
       // console.log("dsfsv",row);
@@ -493,17 +503,10 @@ export default {
 
     // // 展示修改的对话框
     async showEditDialog(id) {
-      // 调用根据ID查询用户信息接口
-      // const { data: res } = await this.$originAxios.get("/logistics/order/" + "{"+id+"}");
-      // if (res.code !== 20000) {
-      //   return this.$message.error("查询该订单信息失败！！");
-      // }
-      // console.log(res);
-      // this.editForm = res.data;
-      // // this.getShrimpRemainById(this.editForm.shrimpId);
-      // this.constWeight = res.data.weight;
-      // console.log(this.editForm)
-      this.aditDialogVisible = true;
+      this.createdialogVisible = true;
+      this.ordertitle="修改订单"
+      this.orderid=id
+      this.look=!this.look
     },
 
     
