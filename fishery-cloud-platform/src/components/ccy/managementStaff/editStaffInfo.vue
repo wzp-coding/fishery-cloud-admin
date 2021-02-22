@@ -3,10 +3,11 @@
     title="修改员工信息"
     :visible.sync="toDialogInfo.dialogVisible"
     width="28%"
+    @close="closeEvent"
   >
-    <el-form :model="editForm" label-width="100px" :rules="rules">
+    <el-form :model="editForm" label-width="100px" :rules="rules" ref="fromRef">
       <el-form-item label="姓名" prop="username">
-        <el-input v-model="editForm.name" ></el-input>
+        <el-input v-model="editForm.username" ></el-input>
       </el-form-item>
       <el-form-item label="身份" prop="baseIdentity">
         <el-input v-model="editForm.baseIdentity" ></el-input>
@@ -97,7 +98,11 @@ export default {
         if(res.statusCode === 20000){
           this.elMessage.success('修改成功')
         }
+        this.$emit('fatherMethods')
         this.toDialogInfo.dialogVisible = false;
+      },
+      closeEvent(){
+        this.$refs.fromRef.resetFields()
       }
   }
 };

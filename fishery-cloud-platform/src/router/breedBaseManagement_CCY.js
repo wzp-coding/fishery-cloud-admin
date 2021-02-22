@@ -4,7 +4,7 @@ import InfoSeed from '../views/management_fishery/InfoSeed.vue'           //
 import InfoCustomer from '../views/management_base/InfoCustomer.vue'   //客户管理
 import InfoSupplies from '../views/management_fishery/InfoSupplies.vue'    //
 import InfoBase from '../views/management_base/InfoBase.vue'
-import InfoPond from '../views/management_fishery/InfoPond.vue'
+// import InfoPond from '../views/management_fishery/InfoPond.vue'
 import ManagementStaff from '../views/management_base/ManagementStaff.vue'      //
 import ManagementSupplies from '../views/management_fishery/ManagementSupplies.vue'       //
 import ManagementPond from '../views/management_fishery/ManagementPond.vue'    //
@@ -59,11 +59,11 @@ export default [
         path: '/management-pond',
         component: ManagementPond
     },
-    {
-        // 池塘信息
-        path: '/info-pond',
-        component: InfoPond
-    },
+    // {
+    //     // 池塘信息
+    //     path: '/info-pond',
+    //     component: InfoPond
+    // },
     // management-advise
     {
         path: '/management-advise',

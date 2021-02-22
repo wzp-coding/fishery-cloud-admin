@@ -73,9 +73,9 @@
         </p>
       </el-col>
     </el-row>
-    <el-row>
+    <el-row class="buttons">
       <el-col :span="24">
-        <div style="width: 60%; margin-left: 46%">
+        <div >
           <!-- 有投放的才有捕捞选项 -->
           <el-tooltip
             effect="dark"
@@ -88,7 +88,7 @@
               type="success"
               icon="el-icon-wind-power"
               size="mini"
-              @click="toCatchingInfo.dialogVisible = true"
+              @click="catchEvent()"
             ></el-button>
           </el-tooltip>
           <!-- 有投放的才有投料选项 -->
@@ -141,6 +141,7 @@
       :toDialogInfo="toDialogEdit"
       ref="addeFormRef"
       :FormInfo="editInfo"
+      
     >
       <el-form-item label="池塘名称" prop="name">
         <el-input v-model="editInfo.name"></el-input>
@@ -178,7 +179,7 @@
       </span>
     </TheDialogAll>
     <!-- 基地投苗 -->
-    <TheDialogAll :toDialogInfo="toDialogFarmInfo">
+    <TheDialogAll :toDialogInfo="toDialogFarmInfo" :FormInfo="farmInfo">
       <el-form-item label="投入品类型" label-width="130px">
         <el-select v-model="farmInfo.germchitId" placeholder="请选择投入品类型">
           <el-option
@@ -214,12 +215,15 @@
     <!-- 基地投料 -->
     <feedPond :toDialogInfo="toFeedInfo"></feedPond>
     <!-- 池塘捕捞 -->
-    <catching :toDialogInfo="toCatchingInfo"  @fatherMethod="RefreshPond"></catching>
+    <catching
+      :toDialogInfo="toCatchingInfo"
+      @fatherMethod="RefreshPond"
+    ></catching>
   </div>
 </template>
 
 <script>
-import TheDialogAll from "../TheDialogAll";
+import TheDialogAll from "../../ccy/public/TheDialogAll";
 import feedPond from "../ManagementPond/feedPond";
 import catching from "../ManagementPond/catching";
 
@@ -292,15 +296,15 @@ export default {
         germchitId: "",
         inputNum: 1, //投入量
         pondId: this.toPond.pondId,
-        inputWeight:'',
-        baseId: "1248910886228332544",
+        inputWeight: "",
+        baseId: this.$store.state.userInfo.baseId,
       },
       toDialogFarmInfo: {
         title: "投苗信息面板",
         dialogVisible: false,
         germchitId: "", //投入品ID
         inputNum: 1, //投入量
-        width:'30%',
+        width: "30%",
         FormRules: {
           inputWeight: [
             { required: true, message: "请输入投苗质量", trigger: "blur" },
@@ -319,6 +323,7 @@ export default {
       toCatchingInfo: {
         pondId: this.toPond.pondId,
         dialogVisible: false,
+        max:0
       },
     };
   },
@@ -326,7 +331,6 @@ export default {
     this.getGermchitList(); //获取池塘信息
   },
   methods: {
-
     async editPondInfo() {
       // this.$refs.addeFormRef.dialogVerification()
       this.toDialogEdit.dialogVisible = false;
@@ -370,8 +374,15 @@ export default {
         this.elMessage.error("删除池塘失败");
       }
     },
-
-    
+    async catchEvent(){
+      this.toCatchingInfo.dialogVisible = true
+      const {data: res} = await this.$pondController.get(`getOneInfo/${this.toCatchingInfo.pondId}`)
+      console.log(res);
+      if(res.statusCode === 20000){
+        this.toCatchingInfo.max = res.data.surplusWeight
+        console.log(this.toCatchingInfo.max);
+      }
+    },
     async farmInfoEvent() {
       console.log(JSON.stringify(this.farmInfo));
       // console.log(this.farmInfo);
@@ -379,6 +390,7 @@ export default {
         `/farming`,
         this.farmInfo
       );
+      console.log(res);
       if (res.statusCode === 20000) {
         this.elMessage.success("投苗成功！！");
         this.$emit("fatherMethod");
@@ -394,9 +406,9 @@ export default {
         console.log(this.germchitDetail);
       }
     },
-    RefreshPond(){
-      this.$emit('fatherMethod')
-    }
+    RefreshPond() {
+      this.$emit("fatherMethod");
+    },
   },
 };
 </script>
@@ -411,6 +423,8 @@ export default {
   padding: 5px;
   margin: 0 0 10px 10px;
   border-radius: 4px;
+  height: 240px;
+  position: relative;
 }
 .el-row {
   margin-bottom: 0;
@@ -442,5 +456,11 @@ el-col {
     width: 100%;
     height: 100%;
   }
+}
+
+.buttons {
+  position: absolute;
+  bottom:3px;
+  right: 5px;
 }
 </style>

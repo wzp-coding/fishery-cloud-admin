@@ -109,9 +109,9 @@ export default {
         email: [
           { required: true, message: "请输入客户邮箱", trigger: "blur" },
           {
-            min: 3,
-            max: 15,
-            message: "长度在 3 到 15 个字符",
+            required: true,
+            pattern: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/,
+            message: "请输入正确的邮箱",
             trigger: "blur",
           },
         ],

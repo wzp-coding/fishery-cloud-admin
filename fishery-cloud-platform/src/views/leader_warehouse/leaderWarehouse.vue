@@ -13,7 +13,7 @@
         </div>
         <div class="panel">
           <h2>各池塘投放种苗尾数</h2>
-          <div class="chart2 chart"></div>
+          <div class="chart2 chart" @mouseover="overEvent" @mouseleave ="outEvent"></div>
           <div class="panel-footer"></div>
         </div>
         <div class="panel">
@@ -84,9 +84,9 @@
           <div class="panel-footer"></div>
         </div>
         <div>
-          <h3>近期订单</h3>
+          <h3>大额订单</h3>
           <div class="order">
-            <el-row>
+            <el-row class="orderTitle">
               <el-col :span="12"><span>客户名</span></el-col>
               <el-col :span="12"><span>金额</span></el-col>
             </el-row>
@@ -97,6 +97,24 @@
               </el-row>
             </div>
           </div>
+        </div>
+        <div v-if="orderTimeList.length">
+          <h3>近期订单</h3>
+          <div class="order">
+            <el-row class="orderTitle">
+              <el-col :span="12"><span>客户名</span></el-col>
+              <el-col :span="12"><span>金额</span></el-col>
+            </el-row>
+            <div class="orderInfo">
+              <el-row v-for="(item, index) in orderTimeList" :key="index">
+                <el-col :span="12">{{ item.name }}</el-col>
+                <el-col :span="12">{{ item.money }}</el-col>
+              </el-row>
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <h3>暂无近期订单</h3>
         </div>
       </div>
       <div class="column">
@@ -136,8 +154,14 @@ export default {
       supplyInInfo: [],
       proInfo: [],
       orderList: [],
+      orderTimeList:[],
       nowLength: 0,
       timer: "",
+      orderTimeInfo:{
+        baseId:this.$store.state.baseInfo.id,
+        end:'',
+        begin:''
+      }
     };
   },
   created() {
@@ -241,7 +265,44 @@ export default {
         this.proInfo = res.data;
       }
     },
-    getOrderBytime() {},
+    async getOrderBytime() {
+      var resultDate, year, month, date, hms;
+      var currDate = new Date();
+      year = currDate.getFullYear();
+      month = currDate.getMonth() + 1;
+      date = currDate.getDate();
+      hms =
+        currDate.getHours() +
+        ":" +
+        currDate.getMinutes() +
+        ":" +
+        (currDate.getSeconds() < 10
+          ? "0" + currDate.getSeconds()
+          : currDate.getSeconds());
+      switch (month) {
+        case 1:
+        case 2:
+        case 3:
+          month += 9;
+          year--;
+          break;
+        default:
+          month -= 3;
+          break;
+      }
+      month = month < 10 ? "0" + month : month;
+      resultDate = year + "-" + month + "-" + date + " " + hms;
+      console.log(resultDate);
+      currDate = this.timeFormat(currDate)
+      this.orderTimeInfo.begin = currDate
+      this.orderTimeInfo.end = resultDate
+      console.log(this.orderTimeInfo);
+      const {data: res} = await this.$leader.post('order',this.orderTimeInfo)
+      console.log(res);
+      if(res.statusCode === 20000){
+        this.orderTimeList = res.data
+      }
+    },
     async getOrderBySize(size) {
       const { data: res } = await this.$leader.get(
         `customer/${this.$store.state.baseInfo.id}/${size}`
@@ -313,7 +374,7 @@ export default {
           this.nowLength += 5;
           this.myVue.putChart2(array);
         }
-      }, 2000);
+      }, 3000);
     },
     putChart2(data) {
       let myChart = this.$echarts.init(document.querySelector(".chart2"));
@@ -642,6 +703,28 @@ export default {
         myChart.resize();
       });
     },
+    overEvent(){
+      console.log('移入');
+      clearInterval(this.timer)
+    },
+    outEvent(){
+      console.log('移出');
+      this.getPondInfo()
+    },
+    timeFormat(date) {
+      var y = date.getFullYear();
+      var m = date.getMonth() + 1;
+      m = m < 10 ? "0" + m : m;
+      var d = date.getDate();
+      d = d < 10 ? "0" + d : d;
+      var h = date.getHours();
+      h = h < 10 ? "0" + h : h;
+      var minute = date.getMinutes();
+      minute = minute < 10 ? "0" + minute : minute;
+      var second = date.getSeconds();
+      second = second < 10 ? "0" + second : second;
+      return y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second;
+    },
   },
 };
 </script>
@@ -811,14 +894,16 @@ header .showTime {
   text-align: center;
   .el-row {
     background: rgba(101, 132, 226, 0.1);
+    margin-bottom: 3px;
   }
   width: 100%;
   .orderInfo {
     font-family: electronicFont;
     font-size: 18px;
     color: #ffeb7b;
+
     .el-row {
-      margin-bottom: 3px;
+      margin: 0 0 3px 0;
     }
   }
 }

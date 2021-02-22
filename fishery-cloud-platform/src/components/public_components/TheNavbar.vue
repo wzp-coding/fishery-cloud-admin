@@ -242,14 +242,14 @@
             <span>员工管理</span>
           </template>
         </el-menu-item>
-        <el-menu-item index="/management-inputs-classification">
+        <!-- <el-menu-item index="/management-inputs-classification">
           <template slot="title">
-            <!-- 图标 -->
+         
             <i class="el-icon-caret-bottom"></i>
-            <!-- 文本 -->
+         
             <span>投入品分类管理</span>
           </template>
-        </el-menu-item>
+        </el-menu-item> -->
         <el-menu-item index="/management-authority">
           <template slot="title">
             <!-- 图标 -->

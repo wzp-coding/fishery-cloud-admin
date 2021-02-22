@@ -133,34 +133,30 @@
             ></el-input>
           </el-form-item>
         </InfoBaseLayout>
-        <el-row class="baseUpLoad" :gutter="20">
-          <el-col :span="2" class="imgSets">基地图片</el-col>
-          <el-col :span="19" class="imgFrame">
-            <div class="test">
-              <img
-                src="baseInfo.picture"
-                alt="基地图片"
-                v-if="!baseInfo.picture"
-              />
-            </div>
-            <!-- <div v-for="(url, index) in picSets" :key="index" class="test">
-              <div class="mask">
-                <i class="el-icon-delete" @click="deleteClick(url)"></i>
+        <InfoBaseLayout>
+          <el-row slot="pre">
+            <el-col :offset="3" :span="4">基地图片</el-col>
+            <el-col :offset="1" :span="15">
+              <div class="upload">
+                <el-upload
+                  action="http://119.23.218.131:9103/base/file/upload"
+                  ref="upload"
+                  class="avatar-uploader"
+                  :on-success="handleAvatarSuccess"
+                  :show-file-list="false"
+                >
+                  <img
+                    v-if="baseInfo.picture"
+                    :src="baseInfo.picture"
+                    class="avatar"
+                  />
+                  <i class="el-icon-plus"></i>
+                </el-upload>
               </div>
-              <img :src="url" />
-            </div> -->
-            <!-- <el-upload
-              action="http://106.75.154.40:9011/base/addPic"
-              list-type="picture-card"
-              :on-success="onSuccess"
-              :auto-upload="true"
-              ref="upload"
-              class="addBox"
-            > -->
-            <!-- <i class="el-icon-plus"></i>
-            </el-upload> -->
-          </el-col>
-        </el-row>
+            </el-col>
+          </el-row>
+        </InfoBaseLayout>
+
         <el-row :gutter="20">
           <el-col>
             <el-form-item
@@ -269,9 +265,13 @@ export default {
     async saveBaseInfo() {
       const { data: res } = await this.$base.put("update", this.baseInfo);
       if (res.statusCode === 20000) {
-        this.elMessage.success('修改基地信息成功')
+        this.elMessage.success("修改基地信息成功");
       }
       this.getBaseInfo();
+    },
+    handleAvatarSuccess(res, file) {
+      this.baseInfo.picture = URL.createObjectURL(file.raw);
+      console.log(this.baseInfo.picture);
     },
   },
 };
@@ -303,5 +303,26 @@ export default {
   border-radius: 4px;
   padding: 5px;
   margin: 8px 8px;
+}
+.upload {
+  width: 178px;
+  height: 178px;
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  i {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    text-align: center;
+    line-height: 178px;
+  }
+  img {
+    width: 178px;
+    height: 178px;
+  }
 }
 </style>

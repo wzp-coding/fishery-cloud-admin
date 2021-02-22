@@ -134,7 +134,12 @@
                 ></el-col
               >
               <el-col :span="11"
-                ><el-button size="mini" type="danger" @click="removeSupply(scope.row.id)">删除</el-button></el-col
+                ><el-button
+                  size="mini"
+                  type="danger"
+                  @click="removeSupply(scope.row.id)"
+                  >删除</el-button
+                ></el-col
               >
             </el-row>
           </template>
@@ -157,7 +162,7 @@
         </el-form-item>
         <el-form-item label="检验人名称" prop="inspector" slot="after">
           <el-input
-            placeholder="请输入投入品名称"
+            placeholder="请输入检验人姓名"
             v-model="addSupplyInfo.inspector"
             clearable
           ></el-input>
@@ -237,15 +242,24 @@
       <el-row>
         <el-col :span="4">供应商生产许可证</el-col>
         <el-col :span="5">
-          <el-upload
-            action="https://www.baidu.com/"
-            ref="upload"
-            class="addBox"
-          >
-            <i class="el-icon-plus"></i> </el-upload
-        ></el-col>
+          <div class="upload">
+            <el-upload
+              action="http://119.23.218.131:9103/base/file/upload"
+              ref="upload"
+              class="avatar-uploader"
+              :on-success="handleAvatarSuccess"
+              :show-file-list="false"
+            >
+              <img
+                v-if="addSupplyInfo.picture"
+                :src="addSupplyInfo.picture"
+                class="avatar"
+              />
+              <i class="el-icon-plus"></i>
+            </el-upload>
+          </div>
+        </el-col>
       </el-row>
-
       <span slot="footer" class="dialog-footer">
         <el-button @click="toDialogSupply.dialogVisible = false"
           >取 消</el-button
@@ -254,7 +268,10 @@
       </span>
     </TheDialogAll>
     <!-- 编辑信息 -->
-    <editSupply :toDialogInfo="toDialogEditInfo" @fatherMethod="getAllSupplInfo"></editSupply>
+    <editSupply
+      :toDialogInfo="toDialogEditInfo"
+      @fatherMethod="getAllSupplInfo"
+    ></editSupply>
     <!-- <TheDialogAll :toDialogInfo="toDialogEditInfo"></TheDialogAll> -->
     <el-dialog :visible.sync="isPreview">
       <img :src="previewImg" alt class="previewImg" />
@@ -269,7 +286,7 @@ import ThePagination from "../../components/ccy/ThePagination";
 import TheDialogAll from "../../components/ccy/TheDialogAll";
 import TheDialogLayout from "../../components/ccy/TheDialogLayout";
 import TheInfoSupplyLayout from "../../components/ccy/TheInfoSupplyLayout";
-import editSupply from "../../components/ccy/InfoSupply/editSupply"
+import editSupply from "../../components/ccy/InfoSupply/editSupply";
 
 export default {
   name: "Suppliesinfo",
@@ -406,7 +423,7 @@ export default {
         this.addSupplyInfo
       );
       if (res.statusCode === 20000) {
-        this.elMessage.success('添加投入品成功')
+        this.elMessage.success("添加投入品成功");
         this.toDialogSupply.dialogVisible = false;
         this.getAllSupplInfo();
       }
@@ -436,8 +453,8 @@ export default {
       console.log(res);
     },
     editSupplyEvent(id) {
-      this.toDialogEditInfo.dialogVisible = true
-      this.toDialogEditInfo.id = id
+      this.toDialogEditInfo.dialogVisible = true;
+      this.toDialogEditInfo.id = id;
     },
     /* 图片相关的方法 */
     // 查看资料放大图片
@@ -457,29 +474,38 @@ export default {
       this.getAllSupplInfo();
     },
     //删除事件
-    async removeSupply(id){
+    async removeSupply(id) {
       const confirmResult = await this.elConfirm(
-        '此操作将永久删除该投入品信息, 是否继续?',
-        '提示',
+        "此操作将永久删除该投入品信息, 是否继续?",
+        "提示",
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
         }
         // .catch 用于捕获错误返回给confirmResult
       ).catch((err) => {
-        return err
-      })
-      if (confirmResult !== 'confirm') {
+        return err;
+      });
+      if (confirmResult !== "confirm") {
         // this.$message.info: 灰色提示框
-        return this.elMessage.info('已取消删除')
+        return this.elMessage.info("已取消删除");
       }
-      const {data : res} = await this.$supplyController.delete(`${id}`)
-      if(res.statusCode === 20000){
-        this.elMessage.success('已成功删除该投入品信息')
-        this.getAllSupplInfo()
+      const { data: res } = await this.$supplyController.delete(`${id}`);
+      if (res.statusCode === 20000) {
+        this.elMessage.success("已成功删除该投入品信息");
+        this.getAllSupplInfo();
       }
-    }
+    },
+    async uploadEvent() {
+      console.log("11");
+      const { data: res } = await this.$fileUpload.post();
+      console.log(res);
+    },
+    handleAvatarSuccess(res, file) {
+      this.addSupplyInfo.picture = URL.createObjectURL(file.raw);
+      console.log(this.addSupplyInfo.picture);
+    },
   },
 };
 </script>
@@ -495,7 +521,29 @@ export default {
   //   height: 100%;
   // }
 }
-.containter{
+.containter {
   height: 1700px;
+}
+
+.upload {
+  width: 178px;
+  height: 178px;
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  i {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    text-align: center;
+    line-height: 178px;
+  }
+  img {
+    width: 178px;
+    height: 178px;
+  }
 }
 </style>

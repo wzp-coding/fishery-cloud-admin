@@ -37,6 +37,9 @@
           v-model="feedInfo.feedingVolume"
         ></el-input-number>
       </el-form-item>
+      <el-form-item label="备注信息" prop="remark">
+        <el-input v-model="feedInfo.remark"></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="toDialogInfo.dialogVisible = false">取 消</el-button>
@@ -55,14 +58,14 @@ export default {
   data() {
     return {
       supplyList: [],
-      baseId: "1248910886228332544",
+      baseId: this.$store.state.userInfo.baseId,
       feedInfo: {
-        baseId: "1248910886228332544",
+        baseId: this.$store.state.userInfo.baseId,
         feedingVolume: 0,
         operatorIdentity: "",
         operatorName: "",
         pondId: this.toDialogInfo.pondId,
-        remark: "暂无", //备注信息
+        remark: "", //备注信息
         supplyId: "",
         supplyName: "",
         supplyType: "饲料",
@@ -91,6 +94,7 @@ export default {
         "feeding",
         this.feedInfo
       );
+      console.log(res);
       if (res.statusCode === 20000) {
         this.elMessage.success('喂养成功');
         this.toDialogInfo.dialogVisible = false

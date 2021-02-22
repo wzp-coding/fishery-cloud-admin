@@ -49,8 +49,8 @@ export default {
       addInfo: {
         // avatar: "",
         baseId: this.$store.state.baseInfo.id,
-        baseIdentity: "",
-        // email: "",
+        // baseIdentity: "",
+        email: "",
         password: "",
         phone: "",
         username: "",
@@ -113,13 +113,14 @@ export default {
       const { data: res } = await this.$admin.post("", this.addInfo);
       if (res.statusCode === 20000) {
         this.toDialogInfo.dialogVisible = false;
-        
+        this.elMessage.success('添加成功')
+        this.$emit('fatherMethods')
       }
       console.log(res);
       console.log(this.addInfo);
     },
     closeEvent() {
-      // this.$refs.formRef.resetFields();
+      this.$refs.formRef.resetFields();
     },
   },
 };

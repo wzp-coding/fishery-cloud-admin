@@ -58,7 +58,7 @@
       :toDialogInfo="toEditInfo"
       @fatherMethods="getAllStaffInfo"
     ></editStaffInfo>
-    <inviteStaff :toDialogInfo="toInviteStaff"></inviteStaff>
+    <inviteStaff :toDialogInfo="toInviteStaff" @fatherMethods="getAllStaffInfo"></inviteStaff>
   </div>
 </template>
 

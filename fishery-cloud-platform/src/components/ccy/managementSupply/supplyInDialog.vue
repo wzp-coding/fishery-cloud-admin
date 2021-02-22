@@ -85,6 +85,9 @@ export default {
       console.log(this.addInfo);
       const { data: res } = await this.$baseSupply.post("in", this.addInfo);
       console.log(res);
+      if(res.statusCode === 20000){
+        this.elMessage.success('农资入库成功')
+      }
       this.toDialogAddInfo.dialogVisible = false;
       this.$emit('fatherMethod')
     },
