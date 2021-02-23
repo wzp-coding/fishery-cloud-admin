@@ -13,7 +13,7 @@
         <el-input v-model="editInfo.supplyTypeName" :disabled="true"></el-input>
       </el-form-item>
       <el-form-item label="投入品剩余质量" prop="inWeight">
-        <el-input v-model="editInfo.inWeight"></el-input>
+        <el-input-number :min="0" controls-position="right" v-model="editInfo.inWeight"></el-input-number>
       </el-form-item>
       <el-form-item label="操作人" prop="operatorName">
         <el-input v-model="editInfo.operatorName"></el-input>

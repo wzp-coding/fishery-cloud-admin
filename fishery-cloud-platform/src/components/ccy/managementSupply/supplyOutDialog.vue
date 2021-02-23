@@ -62,7 +62,7 @@ export default {
         operatorName: "",
         supplyId: "",
         // id: "",
-        supplyName: "",
+        supplyName: "玉米粉",
         supplyTypeName: "饲料",
         warehouseNumber: "",
       },
@@ -92,6 +92,7 @@ export default {
   methods: {
     //创建出库记录
     async createSupplyOut() {
+      console.log(this.addInfo);
       const { data: res } = await this.$baseSupply.post("out", this.addInfo);
       console.log(res);
       //   toDialogInfo
@@ -102,20 +103,23 @@ export default {
       }
     },
     async getSupplyList() {
-      const { data: res } = await this.$supplyController.get();
+      const { data: res } = await this.$baseSupply.get(`all/${this.$store.state.baseInfo.id}`);
       console.log(this.toDialogInfo.id);
       console.log(res);
-      this.supplyList = res.data;
+      if(res.statusCode === 20000){
+        this.supplyList = res.data;
+      }
     },
     async searchSupply() {
       const { data: res } = await this.$supplyController.get(
         `${this.addInfo.supplyId}`
       );
+      console.log(this.addInfo.supplyId);
       console.log(res);
       if (res.statusCode === 20000) {
-        this.addInfo.supplyName = res.data.name;
-        this.createSupplyOut();
+        // this.addInfo.supplyName = res.data.name;
         console.log(this.addInfo);
+        this.createSupplyOut();
       }
     },
     closeEvent() {

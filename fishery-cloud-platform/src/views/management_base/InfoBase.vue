@@ -141,8 +141,11 @@
                 <el-upload
                   action="http://119.23.218.131:9103/base/file/upload"
                   ref="upload"
+                  name="multipartFile"
                   class="avatar-uploader"
                   :on-success="handleAvatarSuccess"
+                  multiple
+                  :on-remove="handleRemove"
                   :show-file-list="false"
                 >
                   <img
@@ -201,7 +204,7 @@ export default {
         funds: "",
         registerNumber: "",
         scope: "",
-        picture: "",
+        picture: null,
         id: this.$store.state.baseInfo.id,
         introduction: "",
       },
@@ -273,6 +276,13 @@ export default {
       this.baseInfo.picture = URL.createObjectURL(file.raw);
       console.log(this.baseInfo.picture);
     },
+    handleRemove(){
+      this.baseInfo.picture = null;
+    },
+    handleAvatarSuccess(res){
+      let picUrl = JSON.parse(res.data);
+      this.baseInfo.picture = picUrl.url;
+    }
   },
 };
 </script>

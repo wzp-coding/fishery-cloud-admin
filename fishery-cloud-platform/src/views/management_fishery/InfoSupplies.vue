@@ -12,21 +12,6 @@
             <i class="el-icon-folder"></i>
             <span>投入品管理</span>
           </el-col>
-          <!-- 类型分类开始 -->
-          <!-- <el-col style="width: 100px; float: right">
-            
-            <el-dropdown>
-              <el-button size="medium">
-                <span>1</span>
-                <i class="el-icon-arrow-down el-icon--right"></i>
-              </el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>1</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            
-          </el-col> -->
-          <!-- 类型分类结束 -->
           <el-col style="width: 100px; float: right; margin-right: 12px">
             <el-button
               type="primary"
@@ -90,31 +75,16 @@
                   <span>{{ props.row.supplierPhone }}</span>
                 </el-form-item>
               </TheInfoSupplyLayout>
-              <!-- <TheInfoSupplyLayout></TheInfoSupplyLayout> -->
               <el-form-item label="供应商生产许可证" class="down-label">
                 <div class="downBox">
-                  <img :src="props.row.supplierLicense" alt />
-                  <span class="mask">
-                    <span
-                      class="mask-icon1"
-                      @click="previewInfo(props.row.supplierLicense)"
-                    >
-                      <i class="el-icon-zoom-in"></i>
-                    </span>
-                  </span>
+                  <el-image v-if="props.row.supplierLicense" :src="props.row.supplierLicense" :preview-src-list="srcListLicense" />
+                  <!-- <i v-if="props.row.supplierLicense" class="el-icon-zoom-in avatar-uploader-icon" ></i> -->
                 </div>
               </el-form-item>
               <el-form-item label="投入品照片" class="down-label">
                 <div class="downBox">
-                  <img :src="props.row.picture" alt />
-                  <span class="mask">
-                    <span
-                      class="mask-icon1"
-                      @click="previewInfo(props.row.picture)"
-                    >
-                      <i class="el-icon-zoom-in"></i>
-                    </span>
-                  </span>
+                  <el-image v-if="props.row.picture" :src="props.row.picture" :preview-src-list="srcList"></el-image>
+                  <!-- <i v-if="props.row.picture" class="el-icon-zoom-in avatar-uploader-icon" ></i> -->
                 </div>
               </el-form-item>
             </el-form>
@@ -242,22 +212,49 @@
       <el-row>
         <el-col :span="4">供应商生产许可证</el-col>
         <el-col :span="5">
-          <div class="upload">
-            <el-upload
-              action="http://119.23.218.131:9103/base/file/upload"
-              ref="upload"
-              class="avatar-uploader"
-              :on-success="handleAvatarSuccess"
-              :show-file-list="false"
-            >
-              <img
-                v-if="addSupplyInfo.picture"
-                :src="addSupplyInfo.picture"
-                class="avatar"
-              />
-              <i class="el-icon-plus"></i>
-            </el-upload>
-          </div>
+          <el-upload
+            action="http://119.23.218.131:9103/base/file/upload"
+            ref="upload"
+            name="multipartFile"
+            class="avatar-uploader"
+            :on-success="handleAvatarSuccessLicense"
+            multiple
+            :show-file-list="false"
+            :file-list="fileList"
+            :on-remove="handleRemove(1)"
+            list-type="picture"
+          >
+            <img
+              v-if="addSupplyInfo.supplierLicense"
+              :src="addSupplyInfo.supplierLicense"
+              class="avatar"
+            />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="4">投入品照片</el-col>
+        <el-col :span="5">
+          <el-upload
+            action="http://119.23.218.131:9103/base/file/upload"
+            ref="upload"
+            name="multipartFile"
+            :on-remove="handleRemove(2)"
+            class="avatar-uploader"
+            :on-success="handleAvatarSuccess"
+            multiple
+            :show-file-list="false"
+            :file-list="fileList"
+            list-type="picture"
+          >
+            <img
+              v-if="addSupplyInfo.picture"
+              :src="addSupplyInfo.picture"
+              class="avatar"
+            />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
@@ -327,6 +324,7 @@ export default {
           ],
         },
       },
+      fileList: [],
       paginationInfo: {
         total: 0,
         size: 3,
@@ -335,29 +333,21 @@ export default {
       },
       // 放大图片路径
       previewImg: "",
-
       // 控制放大面板的显示和隐藏
       isPreview: false,
+      // 图片预览
+      srcList:[],
+      srcListLicense:[],
       addSupplyInfo: {
-        // baseId:'1248910886228332544',
-        // // gmtCreate:'',
-        // // gmtModified:''
-        // inWeight:'',         //剩余重量
-        // operatorIdentity:'', //操作人
-        // operatorName:'',     //操作人姓名
-        // supplyName:'' ,       //投入品名称
-        // supplyTypeName:'',    //投入品类型
-        // warehouseNumber:''    //仓库号
-        // id: "1352228355463303169",
         ingredient: "", //投入品成分
         inspector: "", //检验人
         name: "", //投入品名称
-        picture: "", //投入品照片
+        picture: null, //投入品照片
         produceDate: "", //生产日期
         shelfDate: "", //保质期
         specification: 0, //规格
         supplierAddress: "", //供应商地址
-        supplierLicense: "", //供应商许可证
+        supplierLicense: null, //供应商许可证
         supplierName: "", //供应商姓名
         supplierPhone: "", //供应商电话
         type: "", //投入品编号 1鱼料 2饲料
@@ -448,9 +438,17 @@ export default {
       const { data: res } = await this.$supplyController.get(
         `${this.paginationInfo.size}/${this.paginationInfo.page}`
       );
-      this.allSupplyList = res.data.records;
-      this.paginationInfo.total = res.data.total;
       console.log(res);
+      if (res.statusCode === 20000) {
+        this.allSupplyList = res.data.records;
+        this.paginationInfo.total = res.data.total;
+        for(let i=0;i<this.allSupplyList.length;i++){
+          if(this.allSupplyList[i].picture || this.allSupplyList[i].supplierLicense){
+            this.srcList.push(this.allSupplyList[i].picture)
+            this.srcListLicense.push(this.allSupplyList[i].supplierLicense)
+          }
+        }
+      }
     },
     editSupplyEvent(id) {
       this.toDialogEditInfo.dialogVisible = true;
@@ -502,9 +500,22 @@ export default {
       const { data: res } = await this.$fileUpload.post();
       console.log(res);
     },
-    handleAvatarSuccess(res, file) {
-      this.addSupplyInfo.picture = URL.createObjectURL(file.raw);
+    handleAvatarSuccess(res) {
+      let picUrl = JSON.parse(res.data);
+      this.addSupplyInfo.picture = picUrl.url;
       console.log(this.addSupplyInfo.picture);
+    },
+    handleAvatarSuccessLicense(res) {
+      let picUrl = JSON.parse(res.data);
+      this.addSupplyInfo.supplierLicense = picUrl.url;
+      console.log(this.addSupplyInfo.supplierLicense);
+    },
+    handleRemove(x) {
+      if (x === 1) {
+        this.addSupplise.supplierLicense = "";
+      } else {
+        this.addSupplise.picture = "";
+      }
     },
   },
 };
@@ -524,8 +535,27 @@ export default {
 .containter {
   height: 1700px;
 }
-
-.upload {
+.downBox {
+  width: 178px;
+  height: 178px;
+  display: block;
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  .el-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+  }
+  .el-icon-zoom-in {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+}
+.avatar-uploader .el-upload {
   width: 178px;
   height: 178px;
   border: 1px dashed #d9d9d9;
@@ -533,17 +563,18 @@ export default {
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  i {
+  img {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
     width: 178px;
     height: 178px;
-    text-align: center;
     line-height: 178px;
-  }
-  img {
-    width: 178px;
-    height: 178px;
+    text-align: center;
   }
 }
 </style>
