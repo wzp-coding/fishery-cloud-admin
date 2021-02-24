@@ -48,6 +48,8 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页组件 -->
+      <Pagination :func="getRoleList"></Pagination>
     </el-card>
 
     <!-- 权限弹框 -->
@@ -63,9 +65,6 @@
       @close="() => (this.isShowSetAuth = false)"
       :roleId="roleId"
     ></SetAuth>
-
-    <!-- 分页组件 -->
-    <Pagination :func="getRoleList"></Pagination>
   </div>
 </template>
 <script>
@@ -88,7 +87,7 @@ export default {
   components: {
     Authority,
     Pagination,
-    SetAuth
+    SetAuth,
   },
   methods: {
     // 分页获取角色

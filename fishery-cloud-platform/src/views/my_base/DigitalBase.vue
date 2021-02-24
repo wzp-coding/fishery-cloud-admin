@@ -28,8 +28,8 @@
       <DraggableWrap
         :modules="modules"
         :changeLayout="
-          (newComponentCheckedData) =>
-            (this.moduleChecked = newComponentCheckedData)
+          (newModuleChecked) =>
+            (this.moduleChecked = newModuleChecked)
         "
         justify="space-around"
         type="flex"
@@ -52,7 +52,7 @@
 
     <!-- 模块选择框 -->
     <ChooseModule
-      @choose="(newComponentData) => (this.modules = newComponentData)"
+      @choose="(newModules) => (this.modules = newModules)"
       @close="() => (this.isShowModule = false)"
       :isShowModule="isShowModule"
       :modules="modules"
