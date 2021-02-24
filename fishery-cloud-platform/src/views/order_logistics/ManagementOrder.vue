@@ -18,7 +18,7 @@
           <span>订单管理</span>
         </el-col>
         <div style="width: 75px; float: right;padding:0 25px 0 0">
-          <el-button type="primary" style=" " @click="createdialogVisible=true">创建订单</el-button>
+          <el-button type="primary" style=" " @click="createOrder()">创建订单</el-button>
         </div>
       </el-row>
 
@@ -89,15 +89,26 @@
         </el-table-column>
         <el-table-column label="操作" width="240px">
           <template slot-scope="scope">
-            <!-- 修改按钮 -->
+             <el-row :gutter="10">
+            <el-col :span="6">
+              <!-- 修改按钮 -->
+              <el-tooltip
+              effect="dark"
+              content="修改订单"
+              placement="top"
+              :enterable="false"
+            >
             <el-button
               type="primary"
               icon="el-icon-edit"
               size="mini"
               @click="showEditDialog(scope.row.id)"
             ></el-button>
+              </el-tooltip>
+            </el-col>
             <!-- 查看虾苗信息按钮 -->
-            <el-tooltip
+            <el-col :span="6">
+              <el-tooltip
               effect="dark"
               content="虾苗信息"
               placement="top"
@@ -110,8 +121,10 @@
                 @click="toShowShrimpInfo('1353643502189223938')"
               ></el-button>
             </el-tooltip>
+            </el-col>
 
             <!-- 查看物流信息 -->
+            <el-col :span="6">
             <el-tooltip
               effect="dark"
               content="物流信息"
@@ -127,14 +140,20 @@
                 "
               ></el-button>
             </el-tooltip>
+            </el-col>
 
             <!-- 删除按钮 -->
-            <el-button
-              type="danger"
-              icon="el-icon-delete"
-              size="mini"
-              @click="removeOrderById(scope.row.id)"
-            ></el-button>
+            <el-col :span="6">
+              <Delete
+              :id="scope.row.id"
+              :title="deletetitle"
+              :root="root"
+              :deleteUrl="deleteUrl"
+              @getAllInfo="setNode"
+              >
+              </Delete>
+            </el-col>
+             </el-row>
           </template>
         </el-table-column>
       </el-table>
@@ -151,20 +170,6 @@
       >
       </el-pagination>
     </el-card>
-
-    <!-- 创建/修改订单信息的对话框 -->
-    <Show-change
-    :edit-form-rules="editFormRules"
-    :edit-form="editForm"
-    :adit-dialog-visible="aditDialogVisible"
-    :remain="remain"
-    :personInfoList="personInfoList"
-    :constWeight="constWeight"
-    :options="options"
-    @changenotifyParent="changenotifyParent"
-    @getOrderList="getOrderList"
-    >
-    </Show-change>
 
     <!-- 展示虾苗信息 或者 物流信息-->
     <Show-info
@@ -186,7 +191,7 @@
     >
     </Show-orinfo>
 
-    <!--展示创建订单-->
+    <!-- 创建/修改订单信息的对话框 -->
     <Create-order
     :createdialogVisible="createdialogVisible"
     :orderid="orderid"
@@ -194,8 +199,10 @@
     :look="look"
     @createnotifyParent="changecreatedialogVisible"
     >
-    </Create-order>
+    </Create-order> 
   </div>
+ 
+  
 </template>
 
 <script>
@@ -204,16 +211,23 @@ import ShowInfo from   "../../components/cgx/ManagementOrder/ShowInfo/ShowInfo1"
 import ShowOrinfo from "../../components/cgx/ManagementOrder/ShowOrcode/ShowOrcode2";
 import ShowChange from "../../components/cgx/ManagementOrder/ModifyInformation/ShowChange";
 import CreateOrder from '../../components/cgx/ManagementOrder/CreateOrder/createOrder';
-
+import Delete from '../../components/ljc/public/delete.vue';
 export default {
   components: {
     ShowInfo,
     ShowOrinfo,
     ShowChange,
     CreateOrder,
+    Delete
   },
   data() {
     return {
+      //删除接口标题
+      deletetitle:"该订单",
+      // 删除接口的根路径标签
+      root: "managementOrder",
+      // 删除接口的路径
+      deleteUrl: "",
       //创建或修改订单
       ordertitle:"",
       createdialogVisible:false,
@@ -341,16 +355,18 @@ export default {
   methods: {
     //创建订单按钮
     createOrder(){
-      createdialogVisible=true;
+      this.createdialogVisible = true;
+      this.ordertitle="创建订单"
     },
     // 客户类型判断传入
     settargetType(row){
       // console.log("dsfsv",row);
       return this.a[row.targetType-1]
     },
-  // 关闭创建订单组件
+  // 关闭修改/创建订单组件
   changecreatedialogVisible(){
     this.createdialogVisible=false;
+    this.setNode();
   },
     // 展示虾苗信息时要传递给子组件的信息
     toShowShrimpInfo(id) {
@@ -460,20 +476,6 @@ export default {
       this.getOrderList();
     },
 
-    // 获取人员信息
-    // async getPersonInfoList() {
-    //   const { data: res } = await this.$http.get(
-    //     `${this.$limit}/user/getBaseMember`,
-    //     {
-    //       headers: {
-    //         Authorization: this.token,
-    //       },
-    //     }
-    //   );
-    //   this.personInfoList = res.data;
-    //   console.log(this.personInfoList);
-    // },
-
     // // 获取订单信息
     async getOrderList() {
       const { data: res } = await this.$managementOrder.get(
@@ -490,17 +492,6 @@ export default {
       console.log("total:",this.total)
     },
 
-    // // 获取虾苗剩余量
-    async getShrimpRemainById(id) {
-      // 调用根据ID查询用户信息接口
-      console.log(id);
-      const { data: res } = await this.$originAxios.get("/shrimp/" + id);
-      if (res.code !== 20000) {
-        return this.$message.error("查询该虾苗剩余量失败！！");
-      }
-      this.remain = res.data.remain;
-    },
-
     // // 展示修改的对话框
     async showEditDialog(id) {
       this.createdialogVisible = true;
@@ -508,39 +499,6 @@ export default {
       this.orderid=id
       this.look=!this.look
     },
-
-    
-
-    // // 根据id删除对应的订单信息
-    // async removeOrderById(id) {
-    //   // 前提：在elementUI中挂载confirm
-    //   // （提示消息，标题文本，｛确认按钮的文本，取消按钮的文本，提示的类型｝）
-    //   const confirmResult = await this.$confirm(
-    //     "此操作将永久删除该订单信息, 是否继续?",
-    //     "提示",
-    //     {
-    //       confirmButtonText: "确定",
-    //       cancelButtonText: "取消",
-    //       type: "warning",
-    //     }
-    //     // .catch 用于捕获错误返回给confirmResult
-    //   ).catch((err) => {
-    //     return err;
-    //   });
-    //   // 如果确认删除，则返回值为字符串 confirm
-    //   // 如果取消了删除， 则返回值为字符串 cancel
-    //   if (confirmResult !== "confirm") {
-    //     // this.$message.info: 灰色提示框
-    //     return this.$message.info("已取消删除");
-    //   }
-    //   const { data: res } = await this.$http.delete("/order/" + id);
-    //   if (res.code !== 20000) {
-    //     return this.$message.error("删除订单信息失败");
-    //   }
-    //   this.$message.success("删除订单信息成功！！");
-    //   this.getOrderList();
-    // },
-
     
   },
 };

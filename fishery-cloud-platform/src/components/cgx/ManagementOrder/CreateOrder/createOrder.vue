@@ -35,7 +35,7 @@
   <el-form-item label="基地编号 ">
     <el-input v-model="orderobject.baseId"></el-input>
   </el-form-item>
-  <el-form-item label="数量">
+  <el-form-item label="重量">
     <el-input v-model="orderobject.amount "></el-input>
   </el-form-item>
   <el-form-item label="金额(万元)">
@@ -239,7 +239,7 @@ import Customerfrom from './Customerfrom.vue'
         // 提交创建表单
       async handleSubmit(){
           console.log('即将创建的订单--> ', this.orderobject);
-          const {data:res} = await this.$managementOrder.post("",his.orderobject)
+          const {data:res} = await this.$managementOrder.post("",this.orderobject)
           console.log('res: ', res);
           if (res.statusCode === 20000) {
                 this.isUpdated = true;
