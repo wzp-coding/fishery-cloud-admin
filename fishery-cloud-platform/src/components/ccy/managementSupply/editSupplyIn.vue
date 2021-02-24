@@ -3,7 +3,6 @@
     title="修改入库信息"
     :visible.sync="dialogInfo.dialogVisible"
     width="25%"
-    @close="closeEvent"
   >
     <el-form :model="editInfo" label-width="140px" :rules="FormRules" ref="formRef">
       <el-form-item label="投入品名称" prop="supplyName">
@@ -12,8 +11,8 @@
       <el-form-item label="投入品类型" prop="supplyTypeName">
         <el-input v-model="editInfo.supplyTypeName" :disabled="true"></el-input>
       </el-form-item>
-      <el-form-item label="投入品剩余质量" prop="inWeight">
-        <el-input-number :min="0" controls-position="right" v-model="editInfo.inWeight"></el-input-number>
+      <el-form-item label="入库质量(kg)" prop="inWeight">
+        <el-input v-model="editInfo.inWeight"></el-input>
       </el-form-item>
       <el-form-item label="操作人" prop="operatorName">
         <el-input v-model="editInfo.operatorName"></el-input>
@@ -26,7 +25,7 @@
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogInfo.dialogVisible = false">取 消</el-button>
+      <el-button @click="closeEvent">取 消</el-button>
       <el-button type="primary" @click="editSupply">确 定</el-button>
     </div>
   </el-dialog>
@@ -44,7 +43,7 @@ export default {
       editInfo: {
         baseId: this.$store.state.userInfo.baseId,
         id: "",
-        inWeight: "",
+        inWeight: '',
         operatorIdentity: "",
         operatorName: "",
         supplyId: "",
@@ -70,17 +69,22 @@ export default {
   },
   methods: {
     async editSupply() {
+      console.log(this.editInfo);
       this.editInfo.id = this.dialogInfo.id;
+      
       const { data: res } = await this.$baseSupply.put("in", this.editInfo);
-      this.dialogInfo.dialogVisible = false
+      
       if ((res.statusCode = 20000)) {
         console.log(res);
         this.$emit("fatherMethod");
+        this.closeEvent()
         this.elMessage.success('修改入库信息成功')
       }
     },
     closeEvent(){
+      console.log(this.dialogInfo.dialogVisible);
       this.$refs.formRef.resetFields()
+      this.dialogInfo.dialogVisible = false
     }
   },
 };

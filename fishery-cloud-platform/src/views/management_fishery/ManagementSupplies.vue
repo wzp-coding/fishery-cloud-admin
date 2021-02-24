@@ -22,10 +22,7 @@
       <el-tab-pane label="入库记录">
         <el-row>
           <el-col style="float: right; width: 70px">
-            <downloadExcel
-              :data="baseSupplyList"
-              name="基地入库信息导出.xls"
-            >
+            <downloadExcel :data="baseSupplyList" name="基地入库信息导出.xls">
               <el-tooltip
                 effect="dark"
                 content="导出基地订单信息"
@@ -94,7 +91,10 @@
             prop="supplyTypeName"
             label="投入品类型"
           ></el-table-column>
-          <el-table-column prop="inWeight" label="入库重量(kg)"></el-table-column>
+          <el-table-column
+            prop="inWeight"
+            label="入库重量(kg)"
+          ></el-table-column>
           <el-table-column prop="operatorName" label="操作人"></el-table-column>
           <el-table-column
             prop="warehouseNumber"
@@ -107,7 +107,7 @@
                 type="primary"
                 icon="el-icon-edit"
                 size="mini"
-                @click="editInEvent(scope.row.id)"
+                @click="editInEvent(scope.row.id, scope.row.supplyId)"
               ></el-button>
               <!-- 出库按钮 -->
               <!-- <el-tooltip
@@ -196,14 +196,17 @@
           <el-table-column prop="supplyName" label="农资名称"></el-table-column>
           <el-table-column
             prop="gmtCreate"
-            label="入库日期"
+            label="出库日期"
             width="180px"
           ></el-table-column>
           <el-table-column
             prop="supplyTypeName"
             label="投入品类型"
           ></el-table-column>
-          <el-table-column prop="outWeight" label="出库重量(kg)"></el-table-column>
+          <el-table-column
+            prop="outWeight"
+            label="出库重量(kg)"
+          ></el-table-column>
           <el-table-column prop="operatorName" label="操作人"></el-table-column>
           <el-table-column
             prop="warehouseNumber"
@@ -229,7 +232,10 @@
             </template>
           </el-table-column>
         </el-table>
-        <ThePagination :toPagination="paginationInfoOut" @fatherMethod="paginationChangeEventOut"></ThePagination>
+        <ThePagination
+          :toPagination="paginationInfoOut"
+          @fatherMethod="paginationChangeEventOut"
+        ></ThePagination>
       </el-tab-pane>
     </el-tabs>
     <TheDialogAll :toDialogInfo="toDialogAddInfo">
@@ -251,7 +257,10 @@
       @fatherMethod="getBaseSupplyInfo"
     ></editSupplyIn>
     <!-- 修改出库记录 -->
-    <editSupplyout :toDialogInfo="toEditSuppyOut" @faherMethod="getOutSupplyInfo"></editSupplyOut>
+    <editSupplyout
+      :toDialogInfo="toEditSuppyOut"
+      @faherMethod="getOutSupplyInfo"
+    ></editSupplyout>
   </div>
 </template>
 
@@ -263,7 +272,7 @@ import editSupplyIn from "../../components/ccy/managementSupply/editSupplyIn";
 import supplyInDialog from "../../components/ccy/managementSupply/supplyInDialog";
 import TheSeedPurchaseLayout from "../../components/ccy/TheSeedPurchaseLayout";
 import supplyOutDialog from "../../components/ccy/managementSupply/supplyOutDialog";
-import editSupplyout from "../../components/ccy/managementSupply/editSupplyOut"
+import editSupplyout from "../../components/ccy/managementSupply/editSupplyOut";
 export default {
   components: {
     TheCardAll,
@@ -273,11 +282,11 @@ export default {
     TheSeedPurchaseLayout,
     editSupplyIn,
     supplyOutDialog,
-    editSupplyout
+    editSupplyout,
   },
   data() {
     return {
-      baseId:this.$store.state.userInfo.baseId,
+      baseId: this.$store.state.userInfo.baseId,
       // baseId: "1248910886228332544",
       baseSupplyList: [],
       baseSupplyOutList: [],
@@ -328,14 +337,15 @@ export default {
         id: "",
       },
       //修改出库记录
-      toEditSuppyOut:{
+      toEditSuppyOut: {
         dialogVisible: false,
-        id:''
+        id: "",
       },
       //修改入库记录
       toEditSupplyIn: {
         dialogVisible: false,
         id: "",
+        supplyId: "",
       },
     };
   },
@@ -370,21 +380,38 @@ export default {
     },
     async getOutSupplyInfo() {
       const { data: res } = await this.$baseSupply.get(
-        `out/${this.baseId}/${this.paginationInfoOut.size}/${this.paginationInfoOut.page}`
+        `out/${this.$store.state.userInfo.baseId}/${this.paginationInfoOut.size}/${this.paginationInfoOut.page}`
       );
-      console.log(res);
-      this.baseSupplyOutList = res.data.records;
+      if (res.statusCode === 20000) {
+        this.baseSupplyOutList = res.data.records;
+        this.paginationInfoOut.total = res.data.total;
+      }
     },
-    editInEvent(id) {
+    editInEvent(id, supplyId) {
       this.toEditSupplyIn.dialogVisible = true;
       this.toEditSupplyIn.id = id;
+      this.toEditSupplyIn.supplyId = supplyId;
     },
     // 删除入库记录
     async removeSupplyIn(id) {
+      const confirmResult = await this.elConfirm(
+        "此操作将永久该记录, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => {
+        return err;
+      });
+      if (confirmResult !== "confirm") {
+        return this.elMessage.info("已取消删除");
+      }
       const { data: res } = await this.$baseSupply.delete(`in/${id}`);
       console.log(res);
       if (res.statusCode === 20000) {
-        console.log("删除成功");
+        this.elMessage.success("删除成功");
         this.getBaseSupplyInfo();
       }
     },
@@ -396,7 +423,7 @@ export default {
       console.log(res);
       if (res.statusCode === 20000) {
         this.baseSupplyOutList = res.data.records;
-        this.paginationInfoOut.total = res.data.total
+        this.paginationInfoOut.total = res.data.total;
         console.log(this.baseSupplyOutList);
       }
     },
@@ -426,15 +453,15 @@ export default {
       }
     },
     //修改出库记录
-    editOutEvent(id){
-      this.toEditSuppyOut.dialogVisible = true
-      this.toEditSuppyOut.id = id
+    editOutEvent(id) {
+      this.toEditSuppyOut.dialogVisible = true;
+      this.toEditSuppyOut.id = id;
     },
-    paginationChangeEventOut(size,page){
-      this.paginationInfoOut.size = size
-      this.paginationInfoOut.page = page
-      this.getOutSupplyInfo()
-    }
+    paginationChangeEventOut(size, page) {
+      this.paginationInfoOut.size = size;
+      this.paginationInfoOut.page = page;
+      this.getOutSupplyInfo();
+    },
   },
 };
 </script>

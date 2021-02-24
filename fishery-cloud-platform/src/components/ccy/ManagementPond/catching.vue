@@ -22,13 +22,6 @@
         >
         </el-input-number>
       </el-form-item>
-      <!-- <el-form-item label="产量kg" prop="yield">
-        <el-input-number
-          v-model="catchInfo.yield"
-          controls-position="right"
-          :min="0.01"
-        ></el-input-number>
-      </el-form-item> -->
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="toDialogInfo.dialogVisible = false">取 消</el-button>
@@ -59,12 +52,9 @@ export default {
           { required: true, message: "请输入操作员", trigger: "blur" },
         ],
       },
-      // pondDetail:[]
     };
   },
   created() {
-    // this.getPondInfo()
-    // this.getPondInfoDetail()
   },
   methods: {
 
@@ -74,13 +64,14 @@ export default {
         `getOneInfo/${this.toDialogInfo.pondId}`
       );
       console.log(res);
+      this.catchInfo.totalWeight = res.data.surplusWeight
+      console.log(this.catchInfo.catchAmount);
       if (res.statusCode === 20000) {
-        if (res.data.surplusWeight > this.catchInfo.catchAmount) {
+        if (res.data.surplusWeight >= this.catchInfo.catchAmount) {
           let pondInfo = res.data;
           console.log(pondInfo);
           this.catchInfo.germchitId = pondInfo.germchitId;
           this.catchInfo.germchitBatchName = pondInfo.germchitSpecies;
-          this.catchInfo.totalWeight = pondInfo.inputNum;
           console.log(this.catchInfo);
           this.catchEvent();
         } else {

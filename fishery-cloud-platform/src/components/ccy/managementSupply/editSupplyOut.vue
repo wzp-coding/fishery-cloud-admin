@@ -15,7 +15,7 @@
       <el-form-item label="投入品类别" prop="supplyTypeName">
         <el-input v-model="editInfo.supplyTypeName" disabled></el-input>
       </el-form-item>
-      <el-form-item label="投入品" prop="supplyName">
+      <el-form-item label="投入品名称" prop="supplyName">
         <el-input v-model="editInfo.supplyName"></el-input>
       </el-form-item>
       <el-form-item label="请输入仓库号" prop="warehouseNumber">
@@ -86,6 +86,7 @@ export default {
         console.log(res);
         if(res.statusCode === 20000){
             this.elMessage.success('修改出库记录成功')
+            this.$emit('faherMethod');
             this.toDialogInfo.dialogVisible = false
         }
     },

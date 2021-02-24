@@ -6,23 +6,31 @@
     @close="closeEvent"
   >
     <el-form :model="editForm" label-width="100px" :rules="rules" ref="fromRef">
-      <el-form-item label="姓名" prop="username">
-        <el-input v-model="editForm.username" ></el-input>
-      </el-form-item>
+      <!-- <el-form-item label="姓名" prop="username">
+        <el-input v-model="editForm.username" disabled></el-input>
+      </el-form-item> -->
       <el-form-item label="身份" prop="baseIdentity">
-        <el-input v-model="editForm.baseIdentity" ></el-input>
+        <el-select v-model="editForm.baseIdentity" placeholder="请选择身份">
+          <el-option
+            v-for="item in options"
+            :key="item.id"
+            :label="item.value"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
         <el-input v-model="editForm.email"></el-input>
       </el-form-item>
       <el-form-item label="联系电话" prop="phone">
-        <el-input v-model="editForm.phone" ></el-input>
+        <el-input v-model="editForm.phone"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="passwork">
-        <el-input v-model="editForm.passwork" ></el-input>
+        <el-input v-model="editForm.passwork"></el-input>
       </el-form-item>
     </el-form>
-      <div slot="footer" class="dialog-footer">
+    <div slot="footer" class="dialog-footer">
       <el-button @click="toDialogInfo.dialogVisible = false">取 消</el-button>
       <el-button type="primary" @click="editEvent">确 定</el-button>
     </div>
@@ -39,22 +47,33 @@ export default {
   data() {
     return {
       editForm: {
-        avatar:"",
-        baseId:this.$store.state.baseInfo.id,
-        baseIdentity:'',
+        avatar: "",
+        baseId: this.$store.state.baseInfo.id,
+        baseIdentity: null,
         email: "",
         id: "",
-        username: "",
+        // username:this.toDialogInfo.username ,
         passwork: "",
+        // username:"",
         phone: "",
       },
+      options: [
+        {
+          id: "1",
+          value: "员工",
+        },
+        {
+          id: "2",
+          value: "老板",
+        },
+      ],
       rules: {
         email: [
           { required: true, message: "请输入邮箱", trigger: "blur" },
           {
-            min: 3,
-            max: 15,
-            message: "长度在 3 到 11 个字符",
+            required: true,
+            pattern: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/,
+            message: "请输入正确的邮箱",
             trigger: "blur",
           },
         ],
@@ -88,23 +107,28 @@ export default {
       },
     };
   },
-  methods:{
-      async editEvent(){
-        console.log(this.toDialogInfo);
-        this.editForm.id = this.toDialogInfo.id
-        console.log(this.editForm);
-        const {data : res} = await this.$admin.put('admin/update',this.editForm)
-        console.log(res);
-        if(res.statusCode === 20000){
-          this.elMessage.success('修改成功')
-        }
-        this.$emit('fatherMethods')
+  methods: {
+    async editEvent() {
+      console.log(this.toDialogInfo);
+      this.editForm.id = this.toDialogInfo.id;
+
+      this.editForm.baseIdentity = parseInt(this.editForm.baseIdentity);
+      console.log(this.editForm);
+      const { data: res } = await this.$admin.put(
+        "admin/update",
+        this.editForm
+      );
+      console.log(res);
+      if (res.statusCode === 20000) {
+        this.elMessage.success("修改成功");
+        this.$emit("fatherMethods");
         this.toDialogInfo.dialogVisible = false;
-      },
-      closeEvent(){
-        this.$refs.fromRef.resetFields()
       }
-  }
+    },
+    closeEvent() {
+      this.$refs.fromRef.resetFields();
+    },
+  },
 };
 </script>
 

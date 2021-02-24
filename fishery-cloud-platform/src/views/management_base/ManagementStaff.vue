@@ -34,7 +34,7 @@
               type="primary"
               icon="el-icon-edit"
               size="small"
-              @click="editAdminInfo(scope.row.id)"
+              @click="editAdminInfo(scope.row.id, scope.row.username)"
             ></el-button>
             <!--  -->
             <!-- 删除按钮 -->
@@ -87,6 +87,7 @@ export default {
       toEditInfo: {
         dialogVisible: false,
         id: "",
+        username:''
       },
       toInviteStaff: {
         dialogVisible: false,
@@ -104,6 +105,13 @@ export default {
       console.log(res);
       if (res.statusCode === 20000) {
         this.staffInfoList = res.data.records;
+        for(let i=0;i<this.staffInfoList.length;i++){
+          if(this.staffInfoList[i].baseIdentity ===2){
+            this.staffInfoList[i].baseIdentity = '老板'
+          }else{
+            this.staffInfoList[i].baseIdentity = '员工'
+          }
+        }
         this.paginationInfo.total = res.data.total;
       }
     },
@@ -112,9 +120,11 @@ export default {
       this.paginationInfo.page = page;
       this.getAllStaffInfo();
     },
-    editAdminInfo(id) {
-      this.toEditInfo.dialogVisible = true;
+    editAdminInfo(id, name) {
       this.toEditInfo.id = id;
+      this.toEditInfo.username = name;
+      this.toEditInfo.dialogVisible = true;
+      
     },
     async removeStaff(id) {
       const confirmResult = await this.elConfirm(

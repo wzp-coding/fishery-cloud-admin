@@ -93,6 +93,8 @@
         <el-table-column label="#" type="index" width="140"></el-table-column>
         <el-table-column label="投入品名称" prop="name"></el-table-column>
         <el-table-column label="投入品类型" prop="type"></el-table-column>
+        <el-table-column label="供应商电话" prop="supplierPhone"></el-table-column>
+        
         <el-table-column label="生产日期" prop="produceDate"></el-table-column>
         <el-table-column label="到期时间" prop="shelfDate"></el-table-column>
         <el-table-column label="操作" width="143">

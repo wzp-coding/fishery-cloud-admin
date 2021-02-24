@@ -9,17 +9,17 @@
       <el-form-item label="姓名" prop="username">
         <el-input v-model="addInfo.username"></el-input>
       </el-form-item>
-      <!-- <el-form-item label="职位" prop="baseIdentity">
+      <el-form-item label="职位" prop="baseIdentity">
         <el-select v-model="addInfo.baseIdentity" placeholder="请选择身份">
           <el-option
             v-for="item in options"
             :key="item.id"
             :label="item.value"
-            :value="item.value"
+            :value="item.id"
           >
           </el-option>
         </el-select>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item label="邮箱" prop="email">
         <el-input v-model="addInfo.email"></el-input>
       </el-form-item>
@@ -49,13 +49,11 @@ export default {
       addInfo: {
         // avatar: "",
         baseId: this.$store.state.baseInfo.id,
-        // baseIdentity: "",
+        baseIdentity: null,
         email: "",
         password: "",
         phone: "",
         username: "",
-        // isAdmin:1,
-        // usernameStatus:true
       },
       options: [
         {
@@ -64,16 +62,16 @@ export default {
         },
         {
           id: "2",
-          value: "经理",
+          value: "老板",
         },
       ],
       rules: {
         email: [
           { required: true, message: "请输入邮箱", trigger: "blur" },
           {
-            min: 3,
-            max: 15,
-            message: "长度在 3 到 11 个字符",
+            required: true,
+            pattern: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/,
+            message: "请输入正确的邮箱",
             trigger: "blur",
           },
         ],
