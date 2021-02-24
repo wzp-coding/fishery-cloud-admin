@@ -1,21 +1,18 @@
 <template>
-  <el-aside :width="isCollapse ? '64px' : '200px'" :style="`transition: 0.5s;background:${curTheme.navbar.backgroundColor}`">
-    <div class="toggle-button" :style="`background:${curTheme.navbar.backgroundColor};color:${curTheme.navbar.textColor};`" @click="isCollapse = !isCollapse">|||</div>
+  <!-- <el-aside :width="isCollapse ? '64px' : '200px'" :style="`transition: 0.5s;background:${curTheme.navbar.backgroundColor}`"> -->
+  <el-aside :width="isCollapse ? '64px' : '200px'" style="transition: 0.5s;">
+    <div class="toggle-button" @click="isCollapse = !isCollapse">|||</div>
     <!-- 侧边栏菜单区域 -->
-    <el-menu
-      :background-color="curTheme.navbar.backgroundColor"
+      <!-- :background-color="curTheme.navbar.backgroundColor"
       :text-color="curTheme.navbar.textColor"
-      :active-text-color="curTheme.navbar.activeTextColor"
+      :active-text-color="curTheme.navbar.activeTextColor" -->
+    <el-menu
+      class="el-menu-vertical-demo"
       unique-opened
       :collapse-transition="false"
       :collapse="isCollapse"
       router
-      :default-active="activePath"
-      @select="
-        (activePath) => {
-          this.activePath = activePath;
-        }
-      "
+      :default-active="$route.path"
     >
       <!-- unique-opened:是否只保持一个子菜单的展开 -->
       <!-- collapse：是否水平折叠收起菜单 -->
@@ -294,21 +291,6 @@ export default {
   },
   computed:{
     ...mapState(['curTheme'])
-  },
-  created() {
-    // 每次刷新重新渲染Vue时，获取上次preActivePath
-    const preActivePath = sessionStorage.getItem("preActivePath");
-    // console.log("preActivePath: ", preActivePath);
-    if (preActivePath) {
-      this.activePath = preActivePath;
-      // 移除session
-      sessionStorage.removeItem("preActivePath");
-    }
-
-    // 在页面刷新之前将activePath存在sessionStorage(监听刷新触发的事件)
-    window.addEventListener("beforeunload", () => {
-      sessionStorage.setItem("preActivePath", this.activePath);
-    });
   },
 };
 </script>

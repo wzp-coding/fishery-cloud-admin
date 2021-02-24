@@ -1,0 +1,8 @@
+@import './mixin.scss';
+@for $i from 1 to 3{
+    .custom-#{
+        nth($colorsValue,$i)
+    }{
+        color: nth($colors,$i)
+    }
+}
