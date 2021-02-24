@@ -41,7 +41,7 @@
         ></el-table-column>
         <el-table-column
           prop="targetType"
-          :formatter="settargetType"
+          :formatter="customerType"
           label="客户类型"
           width="50"
         ></el-table-column>
@@ -56,9 +56,10 @@
           width="70"
         ></el-table-column>
         <el-table-column
-          prop="weight"
-          label="重量/kg"
-          width="70"
+          prop="status"
+          :formatter="statusType"
+          label="订单状态"
+          width="80"
         ></el-table-column>
         <el-table-column
           prop="gmtCreate"
@@ -106,19 +107,19 @@
             ></el-button>
               </el-tooltip>
             </el-col>
-            <!-- 查看虾苗信息按钮 -->
+            <!-- 发货按钮 -->
             <el-col :span="6">
               <el-tooltip
               effect="dark"
-              content="虾苗信息"
+              content="发货操作"
               placement="top"
               :enterable="false"
             >
               <el-button
                 type="warning"
-                icon="el-icon-tickets"
+                icon="el-icon-box"
                 size="mini"
-                @click="toShowShrimpInfo('1353643502189223938')"
+                @click="delivery(scope.row.id)"
               ></el-button>
             </el-tooltip>
             </el-col>
@@ -135,9 +136,7 @@
                 type="success"
                 icon="el-icon-truck"
                 size="mini"
-                @click="
-                  toShowLogisticsInfo(adultShrimpId)
-                "
+                @click="toShowLogisticsInfo(scope.row.id)"
               ></el-button>
             </el-tooltip>
             </el-col>
@@ -172,13 +171,14 @@
     </el-card>
 
     <!-- 展示虾苗信息 或者 物流信息-->
+     <!-- 暂时取消虾苗信息查询部分 -->
     <Show-info
       :title="title"
       :is-logistics="isLogistics"
       :dialog-visible="dialogVisible"
       :id="showInfoId"
       @notifyParent="ChangeDialogVisible"
-    ></Show-info>
+    ></Show-info> 
 
 <!-- 展示物流 或者 溯源二维码 -->
     <Show-orinfo
@@ -212,13 +212,15 @@ import ShowOrinfo from "../../components/cgx/ManagementOrder/ShowOrcode/ShowOrco
 import ShowChange from "../../components/cgx/ManagementOrder/ModifyInformation/ShowChange";
 import CreateOrder from '../../components/cgx/ManagementOrder/CreateOrder/createOrder';
 import Delete from '../../components/ljc/public/delete.vue';
+import Map from '../../components/public_components/MyLocationPicker';
 export default {
   components: {
     ShowInfo,
     ShowOrinfo,
     ShowChange,
     CreateOrder,
-    Delete
+    Delete,
+    Map
   },
   data() {
     return {
@@ -234,8 +236,8 @@ export default {
       orderid:"",
       look:true,
       // 判断
-      a : ['个人', '企业', '加工厂', '冷库'],
-      
+      customerjudge : ['个人', '企业', '加工厂', '冷库'],
+      // orderstatus:['未发货','已发货'],
       // 传递给子组件
       title: "虾苗信息",
       isLogistics: false,
@@ -265,103 +267,57 @@ export default {
 
       // 总条数
       total: "",
-
-      // 控制修改订单信息对话框的显示和隐藏
-      aditDialogVisible: false,
-
-      //   保存重量，用于修改
-      constWeight: 0,
-
-      // 保存虾苗剩余量
-      remain: 400,
-
-      // 修改表单的验证规则对象
-      editFormRules: {
-        shrimpBatchName: [
-          { required: true, message: "请输入批次名称", trigger: "blur" },
-          {
-            min: 2,
-            max: 10,
-            message: "虾苗批次名称的长度在2~10个字符之间",
-            trigger: "blur",
-          },
-        ],
-        customerName: [
-          { required: true, message: "请输入客户名", trigger: "blur" },
-          {
-            min: 2,
-            max: 10,
-            message: "客户名的长度在2~10个字符之间",
-            trigger: "blur",
-          },
-        ],
-        money: [{ required: true, message: "请输入金额", trigger: "blur" }],
-        weight: [{ required: true, message: "请输入重量", trigger: "blur" }],
-        createDate: [
-          { required: true, message: "请输入创建日期", trigger: "blur" },
-        ],
-        receiptAddress: [
-          { required: true, message: "请输入收货地址", trigger: "blur" },
-        ],
-      },
-
-      // 保存客户类型选项·
-      options: [
-        {
-          value: "个人",
-          label: "个人",
-        },
-        {
-          value: "企业",
-          label: "企业",
-        },
-      ],
-
-      // 用于存放人员信息
-      personInfoList: [
-       
-      ],
-
       // 订单列表
-      OrderList: [
-      ],
-
-      // 修改：查询到的订单信息
-      editForm: {
-        addressLatitude: "22.27534",
-        addressLongitude: "114.16546",
-        adultShrimpId: "1304076777332805632",
-        baseId: "1316658083052785664",
-        createBy: "张三",
-        createDate: "2020-09-10 23:18:25",
-        customerName: "长江水产",
-        customerType: "企业",
-        id: "1304076779169910784",
-        logisticsId: "1304076778272329728",
-        money: 1000,
-        receiptAddress: "中国香港特别行政区香港特别行政区中西区花旗銀行大廈",
-        shrimpBatchName: "斑节A1",
-        shrimpId: "1304057615399129088",
-        weight: 100,
-      },
-
-      
-
+      OrderList: [],
     };
   },
   created() {
     this.setNode();
   },
   methods: {
+   
+    //执行发货操作
+    async delivery(id){
+      const confirmResult = await this.elConfirm(
+        `是否确认将该订单发货?`,
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => {
+        return err;
+      });
+      if (confirmResult !== "confirm") {
+        return this.elMessage.info("已取消发货");
+      }
+      const { data: res } = await this.$managementOrder.put("deliver/", id);
+      if (res.statusCode == 20000) { 
+        this.elMessage.success(res.message);
+        this.setNode();
+      }
+       else {
+            this.elMessage.error(res.message);
+          }
+    },
     //创建订单按钮
     createOrder(){
       this.createdialogVisible = true;
       this.ordertitle="创建订单"
     },
     // 客户类型判断传入
-    settargetType(row){
-      // console.log("dsfsv",row);
-      return this.a[row.targetType-1]
+   customerType (row){
+      return this.customerjudge[row.targetType-1]
+    },
+    // 订单状态判断传入
+   statusType(row){
+      if(row.logisticsId==null){
+        return "未发货"
+      }
+      else{
+        return "已发货"
+      }
     },
   // 关闭修改/创建订单组件
   changecreatedialogVisible(){
@@ -369,12 +325,12 @@ export default {
     this.setNode();
   },
     // 展示虾苗信息时要传递给子组件的信息
-    toShowShrimpInfo(id) {
-    this.title = "虾苗信息";
-      this.isLogistics = false;
-      this.showInfoId = id;
-      this.dialogVisible = true;
-    },
+    // toShowShrimpInfo(id) {
+    // this.title = "虾苗信息";
+    //   this.isLogistics = false;
+    //   this.showInfoId = id;
+    //   this.dialogVisible = true;
+    // },
     // 展示物流信息时要传递给子组件的信息
     toShowLogisticsInfo(id) {
       this.title = "物流信息";
@@ -465,10 +421,6 @@ export default {
     handleSizeChange(newSize) {
       this.pageInfo.pagesize = newSize;
       this.getOrderList();
-    },
-    // 改变修改信息对话框触发时改变aditDialogVisible
-    changenotifyParent(){
-      this.aditDialogVisible = false;
     },
     // 监听页码值改变的事件
     handleCurrentChange(newPage) {
