@@ -16,7 +16,8 @@ $--color-transition-base: color .2s cubic-bezier(.645,.045,.355,1) !default;
 /* Color
 -------------------------- */
 /// color|1|Brand Color|0
-$--color-primary: red !default;
+// $--color-primary: #3366ff !default;//light
+$--color-primary: #3366ff !default;//cosmic
 // $--color-primary: blue !default;
 /// color|1|Background Color|4
 $--color-white: #FFFFFF !default;
@@ -60,7 +61,8 @@ $--color-text-secondary: #909399 !default;
 /// color|1|Font Color|2
 $--color-text-placeholder: #C0C4CC !default;
 /// color|1|Border Color|3
-$--border-color-base: #DCDFE6 !default;
+// $--border-color-base: #DCDFE6 !default;
+$--border-color-base: #151a30 !default;
 /// color|1|Border Color|3
 $--border-color-light: #E4E7ED !default;
 /// color|1|Border Color|3
@@ -71,7 +73,7 @@ $--border-color-extra-light: #F2F6FC !default;
 // Background
 /// color|1|Background Color|4
 // $--background-color-base: #F5F7FA !default;
-$--background-color-base: black !default;
+$--background-color-base: #222b45 !default;
 
 /* Link
 -------------------------- */
@@ -618,7 +620,19 @@ $--switch-button-size: 16px !default;
 
 /* Dialog
 -------------------------- */
-$--dialog-background-color: $--color-white !default;
+// $--dialog-background-color: $--color-white !default;
+// $--dialog-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !default;
+// /// fontSize||Font|1
+// $--dialog-title-font-size: $--font-size-large !default;
+// /// fontSize||Font|1
+// $--dialog-content-font-size: 14px !default;
+// /// fontLineHeight||LineHeight|2
+// $--dialog-font-line-height: $--font-line-height-primary !default;
+// /// padding||Spacing|3
+// $--dialog-padding-primary: 20px !default;
+
+// dark-dialog
+$--dialog-background-color: #222b45 !default;
 $--dialog-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !default;
 /// fontSize||Font|1
 $--dialog-title-font-size: $--font-size-large !default;
@@ -632,40 +646,62 @@ $--dialog-padding-primary: 20px !default;
 /* Table
 -------------------------- */
 /// color||Color|0
-$--table-border-color: $--border-color-lighter !default;
-$--table-border: 1px solid $--table-border-color !default;
+// $--table-border-color: $--border-color-lighter !default;
+// $--table-border: 1px solid $--table-border-color !default;
 /// color||Color|0
-$--table-font-color: $--color-text-regular !default;
+// $--table-font-color: $--color-text-regular !default;
 /// color||Color|0
-$--table-header-font-color: $--color-text-secondary !default;
+// $--table-header-font-color: $--color-text-secondary !default;
 /// color||Color|0
-$--table-row-hover-background-color: $--background-color-base !default;
-$--table-current-row-background-color: $--color-primary-light-9 !default;
+// $--table-row-hover-background-color: $--background-color-base !default;
+// $--table-current-row-background-color: $--color-primary-light-9 !default;
 /// color||Color|0
-$--table-header-background-color: $--color-white !default;
+// $--table-header-background-color: $--color-white !default;
+// $--table-fixed-box-shadow: 0 0 10px rgba(0, 0, 0, .12) !default;
+
+// dark-table
+$--table-border-color: #151a30 !default;
+$--table-border: 1px solid #151a30 !default;
+$--table-font-color:#151a30 !default;
+$--table-header-font-color: #fff !default;
+$--table-header-background-color: #222b45 !default;
+$--table-current-row-background-color: #151a30 !default;
+$--table-row-hover-background-color: #151a30;
 $--table-fixed-box-shadow: 0 0 10px rgba(0, 0, 0, .12) !default;
 
 /* Pagination
 -------------------------- */
-/// fontSize||Font|1
+// /// fontSize||Font|1
+// $--pagination-font-size: 13px !default;
+// /// color||Color|0
+// $--pagination-background-color: $--color-white !default;
+// /// color||Color|0
+// $--pagination-font-color: $--color-text-primary !default;
+// $--pagination-border-radius: 3px !default;
+// /// color||Color|0
+// $--pagination-button-color: $--color-text-primary !default;
+// /// height||Other|4
+// $--pagination-button-width: 35.5px !default;
+// /// height||Other|4
+// $--pagination-button-height: 28px !default;
+// /// color||Color|0
+// $--pagination-button-disabled-color: $--color-text-placeholder !default;
+// /// color||Color|0
+// $--pagination-button-disabled-background-color: $--color-white !default;
+// /// color||Color|0
+// $--pagination-hover-color: $--color-primary !default;
+
+// dark-pagination
+$--pagination-font-color: #3366ff !default;
 $--pagination-font-size: 13px !default;
-/// color||Color|0
-$--pagination-background-color: $--color-white !default;
-/// color||Color|0
-$--pagination-font-color: $--color-text-primary !default;
+$--pagination-background-color: #222b45 !default;
 $--pagination-border-radius: 3px !default;
-/// color||Color|0
-$--pagination-button-color: $--color-text-primary !default;
-/// height||Other|4
+$--pagination-button-color: #305de3 !default;
 $--pagination-button-width: 35.5px !default;
-/// height||Other|4
 $--pagination-button-height: 28px !default;
-/// color||Color|0
-$--pagination-button-disabled-color: $--color-text-placeholder !default;
-/// color||Color|0
-$--pagination-button-disabled-background-color: $--color-white !default;
-/// color||Color|0
-$--pagination-hover-color: $--color-primary !default;
+$--pagination-button-disabled-color: #525d76 !default;
+$--pagination-button-disabled-background-color: #222b45 !default;
+$--pagination-hover-color: #fafbff !default;
 
 /* Popup
 -------------------------- */

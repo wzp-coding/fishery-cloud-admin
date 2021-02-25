@@ -4,9 +4,6 @@
   </div>
 </template>
 <script>
-import "./assets/theme/3fd653/index.css";
-import "./assets/theme/7559fe/index.css";
-import "./assets/theme/common.scss"
 export default {
   created() {
     // 每次刷新重新渲染Vue时，获取上次vuex中的state

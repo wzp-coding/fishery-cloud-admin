@@ -41,7 +41,7 @@ export default {
 
 <style lang="less" scoped>
 .body {
-  background: url(../../assets/bg.jpg) no-repeat #000;
+  background: url(../../assets/images/bg.jpg) no-repeat #000;
   background-size: 100% 100%;
   width:100%;
   height: 100%;

@@ -249,15 +249,15 @@
 /* Break-point
 --------------------------*/
 .el-tag {
-  background-color: #ffe6e6;
-  border-color: #ffcccc;
-  color: red;
+  background-color: #ebf0ff;
+  border-color: #d6e0ff;
+  color: #3366ff;
   display: inline-block;
   height: 32px;
   padding: 0 10px;
   line-height: 30px;
   font-size: 12px;
-  color: red;
+  color: #3366ff;
   border-width: 1px;
   border-style: solid;
   border-radius: 4px;
@@ -265,12 +265,12 @@
   box-sizing: border-box;
   white-space: nowrap; }
   .el-tag.is-hit {
-    border-color: red; }
+    border-color: #3366ff; }
   .el-tag .el-tag__close {
-    color: red; }
+    color: #3366ff; }
     .el-tag .el-tag__close:hover {
       color: #FFFFFF;
-      background-color: red; }
+      background-color: #3366ff; }
   .el-tag.el-tag--info {
     background-color: #f4f4f5;
     border-color: #e9e9eb;
@@ -330,16 +330,16 @@
     .el-tag .el-icon-close::before {
       display: block; }
   .el-tag--dark {
-    background-color: red;
-    border-color: red;
+    background-color: #3366ff;
+    border-color: #3366ff;
     color: white; }
     .el-tag--dark.is-hit {
-      border-color: red; }
+      border-color: #3366ff; }
     .el-tag--dark .el-tag__close {
       color: white; }
       .el-tag--dark .el-tag__close:hover {
         color: #FFFFFF;
-        background-color: #ff3333; }
+        background-color: #5c85ff; }
     .el-tag--dark.el-tag--info {
       background-color: #909399;
       border-color: #909399;
@@ -386,15 +386,15 @@
           background-color: #f78989; }
   .el-tag--plain {
     background-color: white;
-    border-color: #ff9999;
-    color: red; }
+    border-color: #adc2ff;
+    color: #3366ff; }
     .el-tag--plain.is-hit {
-      border-color: red; }
+      border-color: #3366ff; }
     .el-tag--plain .el-tag__close {
-      color: red; }
+      color: #3366ff; }
       .el-tag--plain .el-tag__close:hover {
         color: #FFFFFF;
-        background-color: red; }
+        background-color: #3366ff; }
     .el-tag--plain.el-tag--info {
       background-color: white;
       border-color: #d3d4d6;

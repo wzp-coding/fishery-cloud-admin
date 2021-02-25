@@ -7,7 +7,8 @@
       <!-- 侧边栏(导航栏)区域 -->
       <TheNavbar></TheNavbar>
       <!-- 右侧主体区域 -->
-      <el-main :style="curTheme.main.body">
+      <!-- <el-main :style="curTheme.main.body"> -->
+      <el-main>
         <!-- 路由占位符 -->
         <router-view></router-view>
       </el-main>

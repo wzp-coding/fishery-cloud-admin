@@ -114,9 +114,6 @@ export default {
 .cardBody {
   width: 100%;
 }
-.globalHeader {
-  background-color: #eaedf1;
-}
 .el-carousel {
   .el-carousel__container {
     border: none;

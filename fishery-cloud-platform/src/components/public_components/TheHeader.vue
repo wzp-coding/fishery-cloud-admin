@@ -2,14 +2,14 @@
   <div>
     <!-- 头部区域 -->
     <!-- <el-header :style="curTheme.header"> -->
-    <el-header>
+    <el-header id="custom-wzp-header">
       <div>
         <span>智慧渔业云服务平台</span>
       </div>
       <div>
-        <el-select v-model="value" placeholder="请选择" @change="changeTheme">
+        <el-select v-model="theme" placeholder="请选择" @change="changeTheme" size="medium" style="width:100px">
           <el-option
-            v-for="item in options"
+            v-for="item in themes"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -57,15 +57,15 @@ export default {
       isShowIU: false,
       isShowMPD: false,
       curThemeName: "deepBlue",
-      value: "3fd653",
-      options: [
+      theme: "cosmic",
+      themes: [
         {
-          value: "3fd653",
-          label: "暗黑",
+          value: "cosmic",
+          label: "cosmic",
         },
         {
-          value: "7559fe",
-          label: "浅白",
+          value: "light",
+          label: "light",
         },
       ],
     };
@@ -109,14 +109,11 @@ export default {
 
     // 换主题皮肤
     changeTheme(color) {
-      // document.body.className = 'custom-'+color;
+      document.body.className = 'custom-'+color;
     },
   },
   created() {
-    // const curThemeName = localStorage.getItem("curTheme");
-    // if (curThemeName) {
-    //   this.setTheme(curThemeName);
-    // }
+    this.changeTheme(this.theme)
   },
 };
 </script>

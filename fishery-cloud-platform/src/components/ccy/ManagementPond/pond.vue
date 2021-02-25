@@ -53,7 +53,7 @@
     <el-row>
       <el-col :span="8">
         <div class="imgBox">
-          <img src="../../../assets/pond.jpg" alt="" />
+          <img src="../../../assets/images/pond.jpg" alt="" />
         </div>
       </el-col>
       <el-col :span="15">

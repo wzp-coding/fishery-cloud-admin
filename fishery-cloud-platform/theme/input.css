@@ -266,7 +266,7 @@
     color: #606266;
     background-color: #FFFFFF;
     background-image: none;
-    border: 1px solid #DCDFE6;
+    border: 1px solid #151a30;
     border-radius: 4px;
     -webkit-transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1); }
@@ -282,7 +282,7 @@
       border-color: #C0C4CC; }
     .el-textarea__inner:focus {
       outline: none;
-      border-color: red; }
+      border-color: #3366ff; }
   .el-textarea .el-input__count {
     color: #909399;
     background: #FFFFFF;
@@ -291,7 +291,7 @@
     bottom: 5px;
     right: 10px; }
   .el-textarea.is-disabled .el-textarea__inner {
-    background-color: black;
+    background-color: #222b45;
     border-color: #E4E7ED;
     color: #C0C4CC;
     cursor: not-allowed; }
@@ -357,7 +357,7 @@
     background-color: #FFFFFF;
     background-image: none;
     border-radius: 4px;
-    border: 1px solid #DCDFE6;
+    border: 1px solid #151a30;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     color: #606266;
@@ -382,7 +382,7 @@
       border-color: #C0C4CC; }
     .el-input__inner:focus {
       outline: none;
-      border-color: red; }
+      border-color: #3366ff; }
   .el-input__suffix {
     position: absolute;
     height: 100%;
@@ -421,9 +421,9 @@
     pointer-events: none; }
   .el-input.is-active .el-input__inner {
     outline: none;
-    border-color: red; }
+    border-color: #3366ff; }
   .el-input.is-disabled .el-input__inner {
-    background-color: black;
+    background-color: #222b45;
     border-color: #E4E7ED;
     color: #C0C4CC;
     cursor: not-allowed; }
@@ -477,12 +477,12 @@
     vertical-align: middle;
     display: table-cell; }
   .el-input-group__append, .el-input-group__prepend {
-    background-color: black;
+    background-color: #222b45;
     color: #909399;
     vertical-align: middle;
     display: table-cell;
     position: relative;
-    border: 1px solid #DCDFE6;
+    border: 1px solid #151a30;
     border-radius: 4px;
     padding: 0 20px;
     width: 1px;
