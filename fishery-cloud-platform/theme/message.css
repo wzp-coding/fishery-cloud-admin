@@ -255,7 +255,7 @@
   border-radius: 4px;
   border-width: 1px;
   border-style: solid;
-  border-color: #EBEEF5;
+  border-color: #151A30;
   position: fixed;
   left: 50%;
   top: 20px;
@@ -285,18 +285,18 @@
   .el-message--info .el-message__content {
     color: #909399; }
   .el-message--success {
-    background-color: #f0f9eb;
-    border-color: #e1f3d8; }
+    background-color: #293a44;
+    border-color: #304943; }
     .el-message--success .el-message__content {
       color: #67C23A; }
   .el-message--warning {
-    background-color: #fdf6ec;
-    border-color: #faecd8; }
+    background-color: #363744;
+    border-color: #494343; }
     .el-message--warning .el-message__content {
       color: #E6A23C; }
   .el-message--error {
-    background-color: #fef0f0;
-    border-color: #fde2e2; }
+    background-color: #373249;
+    border-color: #4c384d; }
     .el-message--error .el-message__content {
       color: #F56C6C; }
   .el-message__icon {
@@ -319,7 +319,7 @@
     .el-message__closeBtn:focus {
       outline-width: 0; }
     .el-message__closeBtn:hover {
-      color: #909399; }
+      color: #AEB3BE; }
   .el-message .el-icon-success {
     color: #67C23A; }
   .el-message .el-icon-error {

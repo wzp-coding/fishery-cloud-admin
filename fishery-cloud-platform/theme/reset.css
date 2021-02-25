@@ -123,19 +123,19 @@ body {
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
   font-weight: 400;
   font-size: 14px;
-  color: #000000;
+  color: #5C5454;
   -webkit-font-smoothing: antialiased; }
 
 a {
-  color: #3366ff;
+  color: #409EFF;
   text-decoration: none; }
   a:hover, a:focus {
-    color: #5c85ff; }
+    color: #3a87da; }
   a:active {
-    color: #2e5ce6; }
+    color: #4397ee; }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #606266;
+  color: #DCE3F5;
   font-weight: inherit; }
   h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child, h6:first-child {
     margin-top: 0; }

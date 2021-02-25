@@ -265,10 +265,10 @@
     position: relative; }
   .el-divider__text {
     position: absolute;
-    background-color: #FFFFFF;
+    background-color: #222B45;
     padding: 0 20px;
     font-weight: 500;
-    color: #303133;
+    color: #F1F3FE;
     font-size: 14px; }
     .el-divider__text.is-left {
       left: 20px;

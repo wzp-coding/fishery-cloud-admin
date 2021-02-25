@@ -5,17 +5,17 @@
 }
 
 .custom-light .baseInformation p {
-    color: #fefeff !important;
+    color: #000 !important;
 }
 
 /* 渔业管理-池塘管理 */
 
 .custom-light .bigBox p {
-    color: #b4b4bc;
+    color: rgb(29, 18, 18);
 }
 
 .custom-light .infoTitle .pondName {
-    color: #fff !important;
+    color: rgb(29, 22, 22) !important;
 }
 
 .custom-light .main {

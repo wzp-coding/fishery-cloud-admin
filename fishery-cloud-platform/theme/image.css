@@ -266,7 +266,7 @@
       transform: translate(-50%, -50%);
       display: block; }
   .el-image__placeholder {
-    background: #222b45; }
+    background: #151A30; }
   .el-image__error {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -278,7 +278,7 @@
     -ms-flex-align: center;
     align-items: center;
     font-size: 14px;
-    background: #222b45;
+    background: #151A30;
     color: #C0C4CC;
     vertical-align: middle; }
   .el-image__preview {

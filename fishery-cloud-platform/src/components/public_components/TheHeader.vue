@@ -65,6 +65,10 @@ export default {
           value: "light",
           label: "light",
         },
+        {
+          value: "dark",
+          label: "dark",
+        },
       ],
     };
   },

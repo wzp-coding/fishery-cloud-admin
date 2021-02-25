@@ -255,7 +255,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #606266;
+  color: #DCE3F5;
   height: 34px;
   line-height: 34px;
   -webkit-box-sizing: border-box;
@@ -265,9 +265,9 @@
     color: #C0C4CC;
     cursor: not-allowed; }
     .el-select-dropdown__item.is-disabled:hover {
-      background-color: #FFFFFF; }
+      background-color: #222B45; }
   .el-select-dropdown__item.hover, .el-select-dropdown__item:hover {
-    background-color: #222b45; }
+    background-color: #151A30; }
   .el-select-dropdown__item.selected {
-    color: #3366ff;
+    color: #409EFF;
     font-weight: bold; }
