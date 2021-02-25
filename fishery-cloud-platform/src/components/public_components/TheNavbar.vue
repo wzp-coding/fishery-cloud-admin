@@ -1,11 +1,7 @@
 <template>
-  <!-- <el-aside :width="isCollapse ? '64px' : '200px'" :style="`transition: 0.5s;background:${curTheme.navbar.backgroundColor}`"> -->
   <el-aside :width="isCollapse ? '64px' : '200px'" style="transition: 0.5s;">
     <div class="toggle-button" @click="isCollapse = !isCollapse">|||</div>
     <!-- 侧边栏菜单区域 -->
-      <!-- :background-color="curTheme.navbar.backgroundColor"
-      :text-color="curTheme.navbar.textColor"
-      :active-text-color="curTheme.navbar.activeTextColor" -->
     <el-menu
       class="el-menu-vertical-demo"
       unique-opened
@@ -279,7 +275,6 @@
   </el-aside>
 </template>
 <script>
-import {mapState} from "vuex"
 export default {
   data() {
     return {
@@ -289,9 +284,6 @@ export default {
       activePath: "/digital-base",
     };
   },
-  computed:{
-    ...mapState(['curTheme'])
-  },
 };
 </script>
 <style lang="less" scoped>
@@ -299,11 +291,6 @@ export default {
   .el-menu {
     border-right: none;
   }
-}
-
-.el-main {
-  background-color: #eaedf1;
-  // background: url(../assets/bgc.jpg) no-repeat;
 }
 
 .toggle-button {

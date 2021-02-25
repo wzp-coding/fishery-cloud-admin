@@ -1,7 +1,6 @@
 <template>
   <div>
     <!-- 头部区域 -->
-    <!-- <el-header :style="curTheme.header"> -->
     <el-header id="custom-wzp-header">
       <div>
         <span>智慧渔业云服务平台</span>
@@ -50,7 +49,6 @@
 <script>
 import InfoUser from "../wzp/user_info/InfoUser";
 import ModifyPassword from "../wzp/user_info/ModifyPassword";
-import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -71,14 +69,12 @@ export default {
     };
   },
   computed: {
-    ...mapState(["curTheme"]),
   },
   components: {
     InfoUser,
     ModifyPassword,
   },
   methods: {
-    ...mapMutations(["setTheme"]),
 
     // 处理下拉框指令
     handleCommand(command) {
