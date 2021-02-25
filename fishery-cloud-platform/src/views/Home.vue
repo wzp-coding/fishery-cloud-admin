@@ -9,7 +9,9 @@
       <!-- 右侧主体区域 -->
       <el-main>
         <!-- 路由占位符 -->
-        <router-view></router-view>
+        <transition name="slide-fade">
+          <router-view></router-view>
+        </transition>
       </el-main>
     </el-container>
   </div>
@@ -34,5 +36,21 @@ export default {
 .home-container {
   // 撑满全屏
   height: 100%;
+}
+// 路由过渡动画
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateX(10px);
+  height: 150%;
+  opacity: 0;
+}
+::-webkit-scrollbar {
+  display: none;
 }
 </style>
