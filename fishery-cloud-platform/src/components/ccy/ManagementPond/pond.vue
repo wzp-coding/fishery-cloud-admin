@@ -241,8 +241,6 @@
       :toDialogInfo="toCatchingInfo"
       @fatherMethod="RefreshPond"
     ></catching>
-    <!-- 池塘投苗 -->
-    <!-- <farming :toDialog="toFarmInfo"></farming> -->
   </div>
 </template>
 
@@ -250,7 +248,6 @@
 import TheDialogAll from "../../ccy/public/TheDialogAll";
 import feedPond from "../ManagementPond/feedPond";
 import catching from "../ManagementPond/catching";
-// import farming from "../ManagementPond/farming"
 export default {
   components: {
     TheDialogAll,
