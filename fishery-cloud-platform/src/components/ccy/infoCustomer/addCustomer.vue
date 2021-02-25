@@ -30,7 +30,20 @@
         <el-input v-model="addInfo.phoneNumber"></el-input>
       </el-form-item>
       <el-form-item label="收货地址" prop="receiveAddress">
-        <el-input v-model="addInfo.receiveAddress"></el-input>
+        <el-select
+          style="width: 100%"
+          v-model="addInfo.receiveAddress"
+          placeholder="请通过拖拽地图选择收货地址"
+        >
+          <el-option
+            v-for="(item, index) in addressArray"
+            :key="item + index"
+            :label="item.address + item.title"
+            :value="item.address + item.title"
+            @click.native="setcoordinates(item.location)"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <Map
         :selectedLocation="location"
@@ -68,12 +81,15 @@ export default {
         email: "",
         phoneNumber: "",
         receiveAddress: "",
-        Map,
       },
       // 地图传来的地址数组
-            addressArray:[],
+      addressArray: [],
       // 传入地图的中心坐标
       location: {
+        lat: "",
+        lng: "",
+      },
+      initPoint: {
         lat: "",
         lng: "",
       },
@@ -152,12 +168,19 @@ export default {
     // 设置地图返回的定点位置
     setAddress(address) {
       console.log("address-->", address);
-      this.orderobject.receiveAddress = address;
+      this.addInfo.receiveAddress = address;
     },
     // 设置地图返回的位置数组
     setpoi(poi) {
       console.log("pio-->", poi);
-      this.addInfo.receiveAddress = poi;
+      this.addressArray = poi;
+    },
+    // 设置坐标
+    setcoordinates(location) {
+      this.location = location;
+      this.addInfo.addressLatitude =this.location.lat
+      this.addInfo.addressLongitude = this.location.lng
+      console.log("location-->", this.location);
     },
   },
 };

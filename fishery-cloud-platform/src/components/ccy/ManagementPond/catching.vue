@@ -14,10 +14,21 @@
       <el-form-item label="操作人" prop="operatorName">
         <el-input v-model="catchInfo.operatorName"></el-input>
       </el-form-item>
-      <el-form-item label="捕捞量（尾/kg）" prop="catchAmount">
+      <el-form-item label="剩余质量(kg)" prop="max">
+        <el-input v-model="toDialogInfo.max" disabled></el-input>
+      </el-form-item>
+      <el-form-item label="捕捞量(尾)" prop="catchAmount">
         <el-input-number
           v-model="catchInfo.catchAmount"
-          :min="0" :max="toDialogInfo.max"
+          :min="0" 
+          controls-position="right"
+        >
+        </el-input-number>
+      </el-form-item>
+      <el-form-item label="捕捞质量(kg)" prop="totalWeight">
+        <el-input-number
+          v-model="catchInfo.totalWeight"
+          :min="0" 
           controls-position="right"
         >
         </el-input-number>
@@ -47,6 +58,7 @@ export default {
         pondId: this.toDialogInfo.pondId,
         totalWeight: "",
       },
+      max:"",
       rules: {
         operatorName: [
           { required: true, message: "请输入操作员", trigger: "blur" },
@@ -55,19 +67,20 @@ export default {
     };
   },
   created() {
+    this.test()
   },
   methods: {
-
+test(){
+  console.log(this.catchInfo.pondId);
+},
     async getPondInfo() {
       console.log(this.toDialogInfo.max);
       const { data: res } = await this.$pondController.get(
         `getOneInfo/${this.toDialogInfo.pondId}`
       );
       console.log(res);
-      this.catchInfo.totalWeight = res.data.surplusWeight
-      console.log(this.catchInfo.catchAmount);
       if (res.statusCode === 20000) {
-        if (res.data.surplusWeight >= this.catchInfo.catchAmount) {
+        if (this.catchInfo.totalWeight<=res.data.surplusWeight) {
           let pondInfo = res.data;
           console.log(pondInfo);
           this.catchInfo.germchitId = pondInfo.germchitId;
@@ -75,7 +88,7 @@ export default {
           console.log(this.catchInfo);
           this.catchEvent();
         } else {
-          this.elMessage.info("捕捞量大于池塘剩余量");
+          this.elMessage.info("捕捞质量大于池塘剩余质量");
         }
       }
     },

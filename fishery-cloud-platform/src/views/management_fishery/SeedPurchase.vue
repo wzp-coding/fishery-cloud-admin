@@ -164,24 +164,27 @@
     </el-card>
     <el-dialog
       :visible.sync="dialogVisible"
-      width="27%"
+      width="30%"
       title="种苗进货"
       @close="puchaseClose"
     >
       <el-form
         :model="addPurchaseInfo"
-        label-width="80px"
+        label-width="120px"
         ref="purchaseFormRef"
       >
         <el-form-item label="种苗品种" prop="germchitSpecies">
-          <el-select v-model="addPurchaseInfo.germchitId" placeholder="请选择">
+          <el-select v-model="addPurchaseInfo.germchitId" placeholder="请选择" @change="selectEvent">
             <el-option
-              v-for="item in allSeedInfo"
+              v-for="(item, index) in allSeedInfo"
               :key="item.id"
               :label="item.germchitSpecies"
-              :value="item.id"
+              :value="index"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="商家剩余种苗量" prop="max">
+          <el-input v-model="max" disabled></el-input>
         </el-form-item>
         <el-form-item label="进货量" prop="purchaseAmount">
           <el-input-number
@@ -190,7 +193,7 @@
             v-model="addPurchaseInfo.purchaseAmount"
           ></el-input-number>
         </el-form-item>
-        <el-form-item label="操作者" prop="creatorName">
+        <el-form-item label="操作者" prop="creatorName" >
           <el-input v-model="addPurchaseInfo.creatorName"></el-input>
         </el-form-item>
       </el-form>
@@ -275,6 +278,7 @@ export default {
         title: "种苗进货",
         dialogVisible: false,
       },
+      max:null,
       //获取所有种苗信息
       allSeedInfo: [],
       //种苗进货请求对象
@@ -365,6 +369,7 @@ export default {
         "purchase",
         this.addPurchaseInfo
       );
+      console.log(res);
       if (res.statusCode === 20000) {
         this.dialogVisible = false;
         this.getGermchitPurchaseInfo()
@@ -433,6 +438,10 @@ export default {
         this.elMessage.success("种苗入库成功");
       }
     },
+    selectEvent(res){
+      this.addPurchaseInfo.germchitId = this.allSeedInfo[res].id;
+      this.max = this.allSeedInfo[res].germchitAmount;
+    }
   },
 };
 </script>

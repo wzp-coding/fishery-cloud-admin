@@ -85,7 +85,7 @@ export default {
       paginationInfo: {
         total: 0,
         page: 1,
-        size: 3,
+        size: 6,
       },
       toDialogAdd: {
         dialogVisible: false,

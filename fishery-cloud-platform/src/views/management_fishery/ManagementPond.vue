@@ -49,15 +49,14 @@ export default {
   components: { TheCardHead, pond, ThePagination, TheDialogAll,addPond },
   data() {
     return {
-     
       //全部池塘信息
       pondList: [],
       paginationInfo:{
-        size:3,
+        size:6,
         page:1,
         total:0
       },
-      baseId: "1248910886228332544", //基地ID
+      baseId: this.$store.state.userInfo.baseId, //基地ID
       // 添加池塘的表单数据
       addeForm: {
         //与对话框的输入数据绑定
@@ -67,7 +66,6 @@ export default {
         depth: "", //池塘深度
         name: "", //池塘名称
         type: "", //池塘类型
-        // version:0
       },
       addPondInfo: {
         
@@ -154,26 +152,20 @@ export default {
     },
     async getPondList() {
       console.log("获取池塘信息");
-      // this.reRender= false;
       const { data: res } = await this.$pondController.get(
         `getInfo/${this.baseId}/${this.paginationInfo.size}/${this.paginationInfo.page}`
       );
-      if (res.statusCode !== 2000) {
+      console.log(res);
+      if (res.statusCode === 20000) {
         console.log(res);
         this.pondList = res.data.records;
-        // for (let i = 0; i < this.pondList.length; i++) {
-        //   this.pondList[i].pondType = this.pondList[i].type;
-        // }
         this.addPondInfo.total = res.data.total;
         this.paginationInfo.total = res.data.total
-      
       } else {
         console.log("查询池塘信息失败");
       }
     },
-    
     eventRefresh() {
-     
       this.getPondList(this.addPondInfo.size, 1);
     },
     //创建池塘

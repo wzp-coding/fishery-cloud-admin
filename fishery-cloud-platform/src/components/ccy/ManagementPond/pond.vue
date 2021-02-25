@@ -12,6 +12,7 @@
             @show="searchGermchitInfo(toPond.germchitId)"
           >
             <el-form
+              v-if="toPond.germchitId"
               label-width="100px"
               v-model="germchitDetail"
               font-size="14px"
@@ -45,7 +46,12 @@
                 ></el-input>
               </el-form-item>
             </el-form>
-            <el-button size="mini" slot="reference">更多</el-button>
+            <el-button
+              size="mini"
+              slot="reference"
+              v-if="toPond.germchitId != null"
+              >更多</el-button
+            >
           </el-popover>
         </div>
       </el-col>
@@ -61,10 +67,17 @@
         <p>池塘面积/m²：{{ toPond.area }}</p>
         <p>池塘深度/m：{{ toPond.depth }}</p>
         <p>池塘类型：{{ toPond.type }}</p>
-        <p v-show="toPond.inputNum">投放尾数/尾：{{ toPond.inputNum }}</p>
-        <p v-show="toPond.seedingTime">投苗时间：{{ toPond.seedingTime }}</p>
-        <p v-show="toPond.catchTime">捕捞时间：{{ toPond.catchTime }}</p>
-        <p>
+        <p v-show="toPond.inputNum && toPond.germchitId">
+          投放尾数/尾：{{ toPond.inputNum }}
+        </p>
+        <p v-show="toPond.seedingTime && toPond.germchitId">
+          投苗时间：{{ toPond.seedingTime }}
+        </p>
+        <p v-show="toPond.catchTime && toPond.germchitId">
+          捕捞时间：{{ toPond.catchTime }}
+        </p>
+        <p v-show="!toPond.germchitId">养殖信息：未投放种苗</p>
+        <p v-if="toPond.germchitId">
           捕捞状态：{{
             toPond.catchStatus === 0 || !toPond.catchStatus
               ? "未捕捞"
@@ -75,7 +88,7 @@
     </el-row>
     <el-row class="buttons">
       <el-col :span="24">
-        <div >
+        <div>
           <!-- 有投放的才有捕捞选项 -->
           <el-tooltip
             effect="dark"
@@ -107,13 +120,13 @@
             ></el-button>
           </el-tooltip>
           <!-- 投苗过的不可以再投 -->
-           <!--  -->
+          <!--  -->
           <el-tooltip
             effect="dark"
             content="投苗"
             placement="top"
             :enterable="false"
-           v-if="!toPond.seedingTime" 
+            v-if="!toPond.seedingTime"
           >
             <el-button
               type="success"
@@ -142,7 +155,6 @@
       :toDialogInfo="toDialogEdit"
       ref="addeFormRef"
       :FormInfo="editInfo"
-      
     >
       <el-form-item label="池塘名称" prop="name">
         <el-input v-model="editInfo.name"></el-input>
@@ -181,16 +193,23 @@
     </TheDialogAll>
     <!-- 基地投苗 -->
     <TheDialogAll :toDialogInfo="toDialogFarmInfo" :FormInfo="farmInfo">
-      <el-form-item label="投入品类型" label-width="130px">
-        <el-select v-model="tempname" placeholder="请选择投入品类型" @change="selectEvent">
+      <el-form-item label="投放种苗" label-width="130px">
+        <el-select
+          v-model="germchitName"
+          placeholder="请选择投放种苗"
+          @change="selectEvent"
+        >
           <el-option
-            v-for="(item,index) in germchitList"
+            v-for="(item, index) in germchitList"
             :key="index"
             :value="index"
             :label="item.germchitSpecies"
           >
           </el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item label="种苗库存量" prop="max" label-width="130px">
+        <el-input v-model="max" style="60%" disabled></el-input>
       </el-form-item>
       <el-form-item label="投放量" prop="inputNum" label-width="130px">
         <el-input-number
@@ -245,7 +264,7 @@ export default {
   },
   data() {
     return {
-      baseId: "1248910886228332544", //基地ID
+      baseId: this.$store.state.userInfo.baseId, //基地ID
       toDialogEdit: {
         //传入修改池塘信息对话框
         title: "修改池塘信息",
@@ -283,15 +302,15 @@ export default {
           ],
         },
       },
-      max:null,
-      toFarmInfo:{
+      max: null,
+      germchitName: "",
+      toFarmInfo: {
         dialogVisible: false,
       },
-      tempname:'',
       germchitDetail: [],
       editInfo: {
         id: this.toPond.pondId,
-        baseId: "1248910886228332544",
+        baseId: this.$store.state.userInfo.baseId,
         name: "",
         area: "",
         depth: 0,
@@ -333,7 +352,7 @@ export default {
       toCatchingInfo: {
         pondId: this.toPond.pondId,
         dialogVisible: false,
-        max:0
+        max: 0,
       },
     };
   },
@@ -368,13 +387,27 @@ export default {
       const { data: res } = await this.$germchitManagerController.get(
         `${this.baseId}`
       );
+      // console.log(res);
       if (res.statusCode === 20000) {
         this.germchitList = res.data;
       }
-      // console.log(res);
     },
     //删除池塘
     async deletePond(pondId) {
+      const confirmResult = await this.elConfirm(
+        "此操作将删除该池塘，是否继续？",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => {
+        return err;
+      });
+      if (confirmResult !== "confirm") {
+        return this.elMessage.info("已取消删除");
+      }
       const { data: res } = await this.$pondController.delete(`${pondId}`);
       if (res.statusCode === 20000) {
         console.log(res);
@@ -384,23 +417,24 @@ export default {
         this.elMessage.error("删除池塘失败");
       }
     },
-    async catchEvent(){
-      this.toCatchingInfo.dialogVisible = true
-      const {data: res} = await this.$pondController.get(`getOneInfo/${this.toCatchingInfo.pondId}`)
+    async catchEvent() {
+      this.toCatchingInfo.dialogVisible = true;
+      const { data: res } = await this.$pondController.get(
+        `getOneInfo/${this.toCatchingInfo.pondId}`
+      );
       console.log(res);
-      if(res.statusCode === 20000){
-        this.toCatchingInfo.max = res.data.surplusWeight
+      if (res.statusCode === 20000) {
+        this.toCatchingInfo.max = res.data.surplusWeight;
         console.log(this.toCatchingInfo.max);
       }
     },
     async farmInfoEvent() {
       console.log(this.germchitList);
-      // console.log(JSON.stringify(this.farmInfo));
       console.log(this.farmInfo);
       console.log(this.max);
-      if(this.max<this.farmInfo.inputNum){
-        this.elMessage.info('该种苗剩余量为'+this.max);
-        return
+      if (this.max < this.farmInfo.inputNum) {
+        this.elMessage.info("该种苗剩余量为" + this.max);
+        return;
       }
       const { data: res } = await this.$pondController.post(
         `/farming`,
@@ -415,6 +449,7 @@ export default {
       console.log(res);
     },
     async searchGermchitInfo(germchitId) {
+      console.log(germchitId);
       const { data: res } = await this.$germchit.get(`${germchitId}`);
       console.log(res);
       if (res.statusCode === 20000) {
@@ -425,11 +460,12 @@ export default {
     RefreshPond() {
       this.$emit("fatherMethod");
     },
-    selectEvent(res){
+    selectEvent(res) {
       console.log(res);
-      this.max = this.germchitList[res].germchitSurplusNumber
-      this.farmInfo.germchitId = this.germchitList[res].id
-    }
+      this.max = this.germchitList[res].germchitSurplusNumber;
+      this.farmInfo.germchitId = this.germchitList[res].id;
+      this.germchitName = this.germchitList[res].germchitSpecies;
+    },
   },
 };
 </script>
@@ -481,7 +517,7 @@ el-col {
 
 .buttons {
   position: absolute;
-  bottom:3px;
+  bottom: 3px;
   right: 5px;
 }
 </style>

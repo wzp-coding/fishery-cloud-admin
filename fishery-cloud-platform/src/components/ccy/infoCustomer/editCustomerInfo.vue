@@ -2,7 +2,7 @@
   <el-dialog
     title="修改客户信息"
     :visible.sync="toDialogInfo.dialogVisible"
-    width="29%"
+    width="35%"
     @close="closeEvent"
   >
     <el-form :model="editInfo" label-width="120px" :rules="rules" ref="formRef">
@@ -30,8 +30,24 @@
         <el-input v-model="editInfo.phoneNumber"></el-input>
       </el-form-item>
       <el-form-item label="收货地址" prop="receiveAddress">
-        <el-input v-model="editInfo.receiveAddress"></el-input>
+        <el-select
+          style="width: 100%"
+          v-model="editInfo.receiveAddress"
+          placeholder="请通过拖拽地图选择收货地址"
+        >
+          <el-option
+            v-for="(item, index) in addressArray"
+            :key="item + index"
+            :label="item.address + item.title"
+            :value="item.address + item.title"
+            @click.native="setcoordinates(item.location)"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
+      <Map :selectedLocation="location"
+        @getCenterAddress="setAddress"
+        @getAroundPoi="setpoi"></Map>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="toDialogInfo.dialogVisible = false">取 消</el-button>
@@ -41,8 +57,11 @@
 </template>
 
 <script>
-import { checkEmail, checkPhone } from "../../ccy/public/formCheck";
+import Map from "../../public_components/MyLocationPicker";
 export default {
+  components: {
+    Map,
+  },
   props: {
     toDialogInfo: {
       type: Object,
@@ -119,10 +138,20 @@ export default {
           },
         ],
       },
+      // 地图传来的地址数组
+      addressArray: [],
+      // 传入地图的中心坐标
+      location: {
+        lat: "",
+        lng: "",
+      },
+      initPoint: {
+        lat: "",
+        lng: "",
+      },
     };
   },
   created() {
-    this.temp();
   },
   methods: {
     async editEvent() {
@@ -139,18 +168,22 @@ export default {
     closeEvent() {
       this.$refs.formRef.resetFields();
     },
-    // validateEmail(rule, value, callback) {
-    //   if (!isEmail(value)) {
-    //     callback(new Error("邮箱格式错误"));
-    //   } else {
-    //     callback();
-    //   }
-    // },
-    temp() {
-      console.log(this);
+    // 设置地图返回的定点位置
+    setAddress(address) {
+      console.log("address-->", address);
+      this.editInfo.receiveAddress = address;
     },
-    checkEmail: function () {
-      checkEmail();
+    // 设置地图返回的位置数组
+    setpoi(poi) {
+      console.log("pio-->", poi);
+      this.addressArray = poi;
+    },
+    // 设置坐标
+    setcoordinates(location) {
+      this.location = location;
+      this.editInfo.addressLatitude =this.location.lat
+      this.editInfo.addressLongitude = this.location.lng
+      console.log("location-->", this.location);
     },
   },
 };
