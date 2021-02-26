@@ -4,11 +4,12 @@
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item>订单物流</el-breadcrumb-item>
-      <el-breadcrumb-item>订单管理</el-breadcrumb-item>
+      <el-breadcrumb-item v-if="card">订单管理</el-breadcrumb-item>
+      <el-breadcrumb-item v-if="!card">顾客管理</el-breadcrumb-item>
     </el-breadcrumb>
 
-    <!-- 卡片视图区域 -->
-    <el-card>
+    <!-- 订单管理卡片视图区域 -->
+    <el-card v-if="card">
       <el-row
         class="globalHeader"
         style="margin-bottom: 20px; padding-bottom: 45px"
@@ -20,6 +21,9 @@
         <div style="width: 75px; float: right;padding:0 25px 0 0">
           <el-button type="primary" style=" " @click="createOrder()">创建订单</el-button>
         </div>
+        <div style="width: 75px; float: right;padding:0 28px 0 0">
+          <el-button type="success" style=" " plain @click="card=!card">顾客管理</el-button>
+        </div>
       </el-row>
 
       <!-- 订单信息列表区域 -->
@@ -28,11 +32,6 @@
         <!-- type="index"： 索引列 -->
         >
         <el-table-column type="index"> </el-table-column>
-        <!-- <el-table-column
-          prop="logisticsId"
-          label="物流编号"
-          width="180"
-        ></el-table-column> -->
 
         <el-table-column
           prop="targetName"
@@ -170,6 +169,105 @@
       </el-pagination>
     </el-card>
 
+    <!-- 顾客管理卡片视图区域 -->
+    <el-card v-if="!card">
+      <el-row
+        class="globalHeader"
+        style="margin-bottom: 20px; padding-bottom: 45px"
+      >
+        <el-col :span="4">
+          <i class="el-icon-document"></i>
+          <span>顾客管理</span>
+        </el-col>
+        <div style="width: 75px; float: right;padding:0 25px 0 0">
+          <el-button type="success" style=" "  @click="createCustomer()">添加顾客</el-button>
+        </div>
+        <div style="width: 75px; float: right;padding:0 28px 0 0">
+          <el-button type="primary" style=" " plain @click="card=!card">订单管理</el-button>
+        </div>
+      </el-row>
+
+      <!-- 订单信息列表区域 -->
+      <el-table :data="CustomerList" border stripe>
+        <!-- border： 加入边框线 -->
+        <!-- type="index"： 索引列 -->
+        >
+        <el-table-column type="index"> </el-table-column>
+
+        <el-table-column
+          prop="customerName"
+          label="客户名"
+          width="100"
+        ></el-table-column>
+        <el-table-column
+          prop="customerType"
+          :formatter="customerType"
+          label="客户类型"
+          width="80"
+        ></el-table-column>
+        <el-table-column
+          prop="phoneNumber"
+          label="电话"
+          width="120"
+        ></el-table-column>
+        <el-table-column
+          prop="email"
+          label="邮箱"
+          width="120"
+        ></el-table-column>
+        <el-table-column
+          prop="receiveAddress"
+          label="地址"
+          width="150"
+        ></el-table-column>
+        <el-table-column label="操作" width="140px">
+          <template slot-scope="scope">
+             <el-row :gutter="10">
+             <!-- 修改按钮 -->
+            <el-col :span="6">
+              <el-tooltip
+              effect="dark"
+              content="修改订单"
+              placement="top"
+              :enterable="false"
+            >
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              size="mini"
+              @click="showEditDialog(scope.row.id)"
+            ></el-button>
+              </el-tooltip>
+            </el-col>
+            <!-- 删除按钮 -->
+            <el-col :span="6">
+              <Delete
+              :id="scope.row.id"
+              :title="deletetitle"
+              :root="root"
+              :deleteUrl="deleteUrl"
+              @getAllInfo="setNode"
+              >
+              </Delete>
+            </el-col>
+             </el-row>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <!-- 分页区域 -->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pageInfo.pagenum"
+        :page-sizes="[4, 6, 8, 10]"
+        :page-size="pageInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      >
+      </el-pagination>
+    </el-card>
+
     <!-- 展示虾苗信息 或者 物流信息-->
      <!-- 暂时取消虾苗信息查询部分 -->
     <Show-info
@@ -224,6 +322,8 @@ export default {
   },
   data() {
     return {
+      //控制订单和顾客管理卡片
+      card:true,
       //删除接口标题
       deletetitle:"该订单",
       // 删除接口的根路径标签
@@ -292,7 +392,7 @@ export default {
       if (confirmResult !== "confirm") {
         return this.elMessage.info("已取消发货");
       }
-      const { data: res } = await this.$managementOrder.put("deliver/", id);
+      const { data: res } = await this.$managementOrder.put( `${"deliver"}/${id}`);
       if (res.statusCode == 20000) { 
         this.elMessage.success(res.message);
         this.setNode();

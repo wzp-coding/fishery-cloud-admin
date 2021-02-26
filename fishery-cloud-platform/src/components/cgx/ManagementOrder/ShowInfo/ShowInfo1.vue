@@ -70,6 +70,7 @@
     <!-- 内容主题区 物流信息 -->
     <Map
     v-if="isLogistics"
+    :options="options"
     :selectedLocation="pio"
     ></Map>
      <!-- 页脚 -->
@@ -166,8 +167,13 @@ export default {
       console.log(res)
       this.form = res.data || {};
       console.log("物流信息的form: ", this.form);
-      this.pio.lat=res.data.addressLatitude
-      this.pio.lng=res.data.addressLongitude
+      let a={
+        lat:"",
+        lng:"",
+      }
+      a.lat=res.data.addressLatitude
+      a.lng=res.data.addressLongitude
+      this.pio=a
       console.log("111111: ", this.pio);
     },
     
