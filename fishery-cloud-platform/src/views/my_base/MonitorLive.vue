@@ -7,7 +7,7 @@
                 实况监控
             </el-col>
         </el-row>
-        <div style="margin-bottom:20px">共有{{total}}台设备正在运行</div>
+        <div style="margin-bottom:20px" class="wzp_style_countRunningDevice">共有{{total}}台设备正在运行</div>
         <el-row :gutter="10">
             <el-col :span="8" v-for="item in baseList" :key="item.id"  style="margin-bottom:20px">
                 <el-card>

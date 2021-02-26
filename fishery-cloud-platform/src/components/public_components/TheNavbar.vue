@@ -1,5 +1,5 @@
 <template>
-  <el-aside :width="isCollapse ? '64px' : '200px'" style="transition: 0.5s;">
+  <el-aside :width="isCollapse ? '64px' : '200px'" style="transition: 0.5s">
     <div class="toggle-button" @click="isCollapse = !isCollapse">|||</div>
     <!-- 侧边栏菜单区域 -->
     <el-menu
@@ -269,7 +269,6 @@
             <span>基地信息</span>
           </template>
         </el-menu-item>
-        
       </el-submenu>
     </el-menu>
   </el-aside>
@@ -304,7 +303,5 @@ export default {
   letter-spacing: 0.2em;
   // 进过鼠标为小手
   cursor: pointer;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
 }
 </style>

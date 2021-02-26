@@ -12,7 +12,6 @@
           <el-button
             type="primary"
             style="float: left"
-            plain
             @click="isShowAuthority = true"
             >所持权限</el-button
           >

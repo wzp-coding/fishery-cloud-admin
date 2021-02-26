@@ -1,6 +1,6 @@
 <template>
     <div class="search">
-        <input placeholder="查询疾病" v-model="input" style="border:0;outline:none"><i class="el-icon-search searchicon"></i>
+        <input class="wzp_style_input" placeholder="查询疾病" v-model="input" style="border:0;outline:none"><i class="el-icon-search searchicon"></i>
     </div>
 </template>
 

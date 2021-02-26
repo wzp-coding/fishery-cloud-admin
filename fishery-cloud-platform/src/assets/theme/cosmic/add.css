@@ -14,6 +14,10 @@
 .custom-cosmic .baseInformation p {
     color: #fefeff !important;
 }
+/* 我的基地-实况监控 */
+.custom-cosmic .wzp_style_countRunningDevice{
+    color: #fff;
+}
 
 /* 渔业管理-池塘管理 */
 
@@ -27,4 +31,14 @@
 
 .custom-cosmic .main {
     border: 1px solid #1b1b38 !important;
+}
+
+/* 设备管理-监控设备 */
+
+/* 设备管理-气象设备 */
+
+/* 设备管理-水质设备 */
+
+.custom-cosmic .search .wzp_style_input {
+    background-color: #323259;
 }
