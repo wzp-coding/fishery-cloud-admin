@@ -11,7 +11,7 @@
     label-width="80px">
    
      <el-form-item label="客户类型">
-    <el-select v-model="orderobject.targetType" placeholder="请选择客户类型">
+    <el-select v-model="orderobject.targetType" placeholder="请选择客户类型" >
       <el-option label="1.个人" value=1></el-option>
       <el-option label="2.企业" value=2></el-option>
       <el-option label="3.加工厂" value=3></el-option>
@@ -19,7 +19,7 @@
     </el-select>
    </el-form-item>
    <el-form-item label="客户名" v-if="orderobject.targetType<=2">
-    <el-input clearable v-model="orderobject.targetName " style="width:35ex"></el-input>
+    <el-input clearable v-model="orderobject.targetName " placeholder="请输入用户名" style="width:35ex"></el-input>
     <el-button type="primary" plain @click.prevent="CustomerVisible=true" style="margin:0 10px;">从已有客户表中选择</el-button>
   </el-form-item>
   <el-form-item label="加工厂/冷库编号" v-if="orderobject.type>2||orderobject.type=='加工厂'||orderobject.targetType=='冷库'">
@@ -30,22 +30,22 @@
   </el-form-item>
   
   <el-form-item label="联系电话 ">
-    <el-input v-model="orderobject.phoneNumber "></el-input>
+    <el-input v-model="orderobject.phoneNumber " placeholder="请输入内容"></el-input>
   </el-form-item>
   <el-form-item label="基地编号 ">
-    <el-input v-model="orderobject.baseId"></el-input>
+    <el-input v-model="orderobject.baseId" placeholder="请输入内容"></el-input>
   </el-form-item>
   <el-form-item label="重量">
-    <el-input v-model="orderobject.amount "></el-input>
+    <el-input v-model="orderobject.amount" placeholder="请输入内容" ></el-input>
   </el-form-item>
   <el-form-item label="金额(万元)">
-    <el-input v-model="orderobject.money "></el-input>
+    <el-input v-model="orderobject.money" placeholder="请输入内容"></el-input>
   </el-form-item>
   <el-form-item label="产品名">
-    <el-input v-model="orderobject.productName "></el-input>
+    <el-input v-model="orderobject.productName " placeholder="请输入内容"></el-input>
   </el-form-item>
   <el-form-item label="产品编号">
-    <el-input v-model="orderobject.productId "></el-input>
+    <el-input v-model="orderobject.productId " placeholder="请输入内容"></el-input>
   </el-form-item>
   <el-form-item label="收货地址">
     <el-select v-model="orderobject.receiveAddress" placeholder="请选择收货地址" style="width:50ex"  >
@@ -119,10 +119,10 @@ import Customerfrom from './Customerfrom.vue'
           // 接收地址
           receiveAddress:"",
           //   产品数量
-          amount:0,
+          amount:null,
           baseId :"",
-          money:0,
-          weight:0,
+          money:null,
+          weight:null,
           phoneNumber :"",
           productId:"",
           productName:"",
@@ -131,7 +131,7 @@ import Customerfrom from './Customerfrom.vue'
         //   用户名字
           targetName:"",
         //   类型
-          targetType:{},
+          targetType:null,
         },
         // 控制顾客表单
         CustomerVisible:false,
@@ -230,7 +230,6 @@ import Customerfrom from './Customerfrom.vue'
           const {data:res} = await this.$managementOrder.post("",this.orderobject)
           console.log('res: ', res);
           if (res.statusCode === 20000) {
-                this.isUpdated = true;
                 this.elMessage.success(res.message);
               } else {
                 this.elMessage.error(res.message);
@@ -243,7 +242,6 @@ import Customerfrom from './Customerfrom.vue'
           const { data: res } = await this.$managementOrder.put("", this.orderobject);
           console.log("handleSubmit: ", res);
           if (res.statusCode === 20000) {
-            this.isUpdated = true;
             this.elMessage.success(res.message);
           } else {
             this.elMessage.error(res.message);

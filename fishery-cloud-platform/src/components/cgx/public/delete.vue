@@ -49,7 +49,6 @@ export default {
       if (res.statusCode == 20000) { 
         this.$emit("getAllInfo");
         this.elMessage.success(res.message);
-        
       }
     },
     /* 删除结束 */

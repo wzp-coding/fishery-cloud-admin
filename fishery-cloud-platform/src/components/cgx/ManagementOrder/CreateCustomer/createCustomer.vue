@@ -1,43 +1,40 @@
 <template>
 <el-dialog
-      :title="ordertitle"
-      :visible.sync="createdialogVisible"
+      :title="customertitle"
+      :visible.sync="customercard"
       width="45%"
       @close="close"
     >
     <el-form 
     ref="form" 
-    :model="orderobject" 
+    :model="customerobject" 
     label-width="80px">
    
      <el-form-item label="客户类型">
-    <el-select v-model="orderobject.targetType" placeholder="请选择客户类型">
+    <el-select v-model="customerobject.customerType" placeholder="请选择客户类型">
       <el-option label="1.个人" value=1></el-option>
       <el-option label="2.企业" value=2></el-option>
       <el-option label="3.加工厂" value=3></el-option>
       <el-option label="4.冷库" value=4></el-option>
     </el-select>
    </el-form-item>
-   <el-form-item label="客户名" v-if="orderobject.targetType<=2">
-    <el-input clearable v-model="orderobject.targetName " style="width:35ex"></el-input>
-  </el-form-item>
-  <el-form-item label="加工厂/冷库编号" v-if="orderobject.type>2||orderobject.type=='加工厂'||orderobject.targetType=='冷库'">
-    <el-input v-model="orderobject.targetId "></el-input>
-  </el-form-item>
-    <el-form-item label="加工厂/冷库名字" v-if="orderobject.type>2||orderobject.type=='加工厂'||orderobject.targetType=='冷库'">
-    <el-input v-model="orderobject.targetName "></el-input>
+   <el-form-item label="客户名">
+    <el-input clearable v-model="customerobject.customerName " style="width:35ex"></el-input>
   </el-form-item>
   <el-form-item label="联系电话 ">
-    <el-input v-model="orderobject.phoneNumber "></el-input>
+    <el-input v-model="customerobject.phoneNumber "></el-input>
   </el-form-item>
-  <el-form-item label="联系人">
-    <el-input v-model="orderobject.baseId"></el-input>
+  <el-form-item label="操作人">
+    <el-input v-model="customerobject.contactPerson"></el-input>
+  </el-form-item>
+  <el-form-item label="基地id">
+    <el-input v-model="customerobject.baseId"></el-input>
   </el-form-item>
   <el-form-item label="邮箱">
-    <el-input v-model="orderobject.amount "></el-input>
+    <el-input v-model="customerobject.email "></el-input>
   </el-form-item>
   <el-form-item label="收货地址">
-    <el-select v-model="orderobject.receiveAddress" placeholder="请选择收货地址" style="width:50ex"  >
+    <el-select v-model="customerobject.receiveAddress" placeholder="请选择收货地址" style="width:50ex"  >
       <el-option v-for="(item,index) in addressArray" 
                       :key="item+index" :label="item.address+item.title"
                       :value="item.address+item.title "
@@ -68,13 +65,13 @@ import Map from "../../../public_components/MyLocationPicker"
           Map,
       },
       props:{
-          createdialogVisible:{
+          customercard:{
               type:Boolean
           },
-          ordertitle:{
+          customertitle:{
             type:String
           },
-          orderid:{
+          customerid:{
             type:String
           },
           look:{
@@ -93,74 +90,74 @@ import Map from "../../../public_components/MyLocationPicker"
               lng:"",
             },
       // --------列表数据-------
-        orderobject: {
+        customerobject: {
           // 接受坐标
           addressLatitude:"",
           addressLongitude:"",
           // 接收地址
           receiveAddress:"",
-          //   产品数量
-          amount:0,
           baseId :"",
-          money:0,
-          weight:0,
           phoneNumber :"",
-          productId:"",
-          productName:"",
-        //   用户id
-          targetId :"",
         //   用户名字
-          targetName:"",
+          customerName:"",
         //   类型
-          targetType:{},
+          customerType:null,
+          //操作人
+          contactPerson:"",
+          email:"",
         },
-        // 控制顾客表单
-        CustomerVisible:false,
-
       }
     },
     methods: {
       
       // 关闭时设置为空
-      setcloseorderobject(){
-        this.orderobject.targetName="";
-        this.orderobject.baseId="";
-        this.orderobject.phoneNumber="";
-        this.orderobject.targetId="";
-        this.orderobject.targetType="";
-        this.orderobject.receiveAddress="";
-        this.orderobject.addressLatitude="";
-        this.orderobject.amount="";
-        this.orderobject.money="";
-        this.orderobject.productId="";
-        this.orderobject.productName="";
-        this.orderobject.addressLongitude="";
+      setclose(){
+        this.customerobject.addressLatitude="";
+        this.customerobject.addressLongitude="";
+        this.customerobject.receiveAddress="";
+        this.customerobject.baseId="";
+        this.customerobject.phoneNumber="";
+        this.customerobject.customerName="";
+        this.customerobject.customerType=null;
+        this.customerobject.contactPerson="";
+        this.customerobject.email="";
         },
        // 设置坐标
         setcoordinates(location){
             this.location=location;
-            this.orderobject.addressLatitude=location.lat
-            this.orderobject.addressLongitude=location.lng
-            console.log("location-->",this.location)
+            this.customerobject.addressLatitude=location.lat
+            this.customerobject.addressLongitude=location.lng
+            console.log("customerlocation-->",this.location)
         },
         // 关闭表单
         close(){
             this.$emit("createnotifyParent");
-            this.setcloseorderobject();
+            this.setclose();
         },
         // 设置地图返回的定点位置
         setAddress(address){
-            console.log("address-->",address)
-                this.orderobject.receiveAddress=address
+            console.log("address2-->",address)
+                this.customerobject.receiveAddress=address
         },
-        // 设置地图返回的位置数组
+        // 设置地图返回的位置数组并把坐标设置好
         setpoi(poi){
             console.log("pio-->",poi)
             this.addressArray=poi;
-            this.orderobject.addressLatitude=poi[0].location.lat
-            this.orderobject.addressLongitude=poi[0].location.lng
+            this.customerobject.addressLatitude=poi[0].location.lat
+            this.customerobject.addressLongitude=poi[0].location.lng
         },
-
+        //提交顾客信息
+        async customerinfo(){
+        console.log('即将提交的顾客--> ', this.customerobject);
+          const {data:res} = await this.$Customer.post(`${this.customerobject}`)
+          console.log('res: ', res);
+          if (res.statusCode === 20000) {
+                this.elMessage.success(res.message);
+              } else {
+                this.elMessage.error(res.message);
+              }
+              this.close();
+        },
     },
   }
 </script>

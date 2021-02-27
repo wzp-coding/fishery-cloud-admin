@@ -4,25 +4,28 @@
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item>订单物流</el-breadcrumb-item>
-      <el-breadcrumb-item v-if="card">订单管理</el-breadcrumb-item>
+      <el-breadcrumb-item>订单管理</el-breadcrumb-item>
       <el-breadcrumb-item v-if="!card">顾客管理</el-breadcrumb-item>
     </el-breadcrumb>
-
-    <!-- 订单管理卡片视图区域 -->
-    <el-card v-if="card">
-      <el-row
+    <el-row
         class="globalHeader"
         style="margin-bottom: 20px; padding-bottom: 45px"
       >
         <el-col :span="4">
           <i class="el-icon-document"></i>
-          <span>订单管理</span>
+          <span v-if="card">订单管理</span>
+          <span v-if="!card">顾客管理</span>
         </el-col>
-        <div style="width: 75px; float: right;padding:0 25px 0 0">
-          <el-button type="primary" style=" " @click="createOrder()">创建订单</el-button>
-        </div>
-        <div style="width: 75px; float: right;padding:0 28px 0 0">
+        <!-- <div style="width: 75px; float: right;padding:0 28px 0 0">
           <el-button type="success" style=" " plain @click="card=!card">顾客管理</el-button>
+        </div> -->
+      </el-row>
+    <!-- 卡片视图区域 -->
+    <el-tabs type="border-card" @tab-click="changes()">
+      <el-tab-pane label="订单管理">
+        <el-row>
+      <div style="width: 75px; float: right;padding:0 30px 0 0">
+          <el-button type="primary" style=" " @click="createOrder()">创建订单</el-button>
         </div>
       </el-row>
 
@@ -42,7 +45,7 @@
           prop="targetType"
           :formatter="customerType"
           label="客户类型"
-          width="50"
+          width="80"
         ></el-table-column>
         <el-table-column
           prop="productName"
@@ -52,7 +55,7 @@
         <el-table-column
           prop="money"
           label="金额/元"
-          width="70"
+          width="80"
         ></el-table-column>
         <el-table-column
           prop="status"
@@ -167,27 +170,16 @@
         :total="total"
       >
       </el-pagination>
-    </el-card>
+      </el-tab-pane>
+      
+      <el-tab-pane label="顾客管理" >
 
-    <!-- 顾客管理卡片视图区域 -->
-    <el-card v-if="!card">
-      <el-row
-        class="globalHeader"
-        style="margin-bottom: 20px; padding-bottom: 45px"
-      >
-        <el-col :span="4">
-          <i class="el-icon-document"></i>
-          <span>顾客管理</span>
-        </el-col>
+      <!-- 订单信息列表区域 -->
+      <el-row>
         <div style="width: 75px; float: right;padding:0 25px 0 0">
           <el-button type="success" style=" "  @click="createCustomer()">添加顾客</el-button>
         </div>
-        <div style="width: 75px; float: right;padding:0 28px 0 0">
-          <el-button type="primary" style=" " plain @click="card=!card">订单管理</el-button>
-        </div>
       </el-row>
-
-      <!-- 订单信息列表区域 -->
       <el-table :data="CustomerList" border stripe>
         <!-- border： 加入边框线 -->
         <!-- type="index"： 索引列 -->
@@ -197,37 +189,35 @@
         <el-table-column
           prop="customerName"
           label="客户名"
-          width="100"
+          width="130"
         ></el-table-column>
         <el-table-column
           prop="customerType"
-          :formatter="customerType"
+          :formatter="customerType2"
           label="客户类型"
-          width="80"
+          width="100"
         ></el-table-column>
         <el-table-column
           prop="phoneNumber"
           label="电话"
-          width="120"
+          width="200"
         ></el-table-column>
         <el-table-column
           prop="email"
           label="邮箱"
-          width="120"
+          width="250"
         ></el-table-column>
         <el-table-column
           prop="receiveAddress"
           label="地址"
-          width="150"
+          width="400"
         ></el-table-column>
-        <el-table-column label="操作" width="140px">
+        <el-table-column label="操作" width="190px">
           <template slot-scope="scope">
-             <el-row :gutter="10">
-             <!-- 修改按钮 -->
-            <el-col :span="6">
+
               <el-tooltip
               effect="dark"
-              content="修改订单"
+              content="修改信息"
               placement="top"
               :enterable="false"
             >
@@ -238,19 +228,24 @@
               @click="showEditDialog(scope.row.id)"
             ></el-button>
               </el-tooltip>
-            </el-col>
+           
             <!-- 删除按钮 -->
-            <el-col :span="6">
-              <Delete
-              :id="scope.row.id"
-              :title="deletetitle"
-              :root="root"
-              :deleteUrl="deleteUrl"
-              @getAllInfo="setNode"
-              >
-              </Delete>
-            </el-col>
-             </el-row>
+         
+              <el-tooltip
+              effect="dark"
+              content="删除顾客"
+              placement="top"
+              :enterable="false"
+            >
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              size="mini"
+              @click="deleteCustomer(scope.row.id)"
+            ></el-button>
+              </el-tooltip>
+         
+             
           </template>
         </el-table-column>
       </el-table>
@@ -266,7 +261,8 @@
         :total="total"
       >
       </el-pagination>
-    </el-card>
+      </el-tab-pane>
+    </el-tabs>
 
     <!-- 展示虾苗信息 或者 物流信息-->
      <!-- 暂时取消虾苗信息查询部分 -->
@@ -322,6 +318,7 @@ export default {
   },
   data() {
     return {
+
       //控制订单和顾客管理卡片
       card:true,
       //删除接口标题
@@ -369,13 +366,46 @@ export default {
       total: "",
       // 订单列表
       OrderList: [],
+      //顾客列表
+      CustomerList:[],
     };
   },
   created() {
+    this.baseId=this.$store.state.userInfo.baseId;
     this.setNode();
   },
   methods: {
-   
+    //删除顾客
+    async deleteCustomer(id){
+      const confirmResult = await this.elConfirm(
+        `此操作将永久删除顾客信息, 是否继续?`,
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => {
+        return err;
+      });
+      if (confirmResult !== "confirm") {
+        return this.elMessage.info("已取消删除");
+      }
+      const { data: res } = await this.$Customer.delete(
+        `${id}`
+      );
+      if (res.statusCode == 20000) { 
+        this.elMessage.success(res.message);
+        this.getCustomerList();
+      }
+    },
+    //改变卡片页面
+    changes(){
+      this.setNode();
+      this.card=!this.card
+      this.pageInfo.pagenum=1
+      this.pageInfo.pagesize=10
+    },
     //执行发货操作
     async delivery(id){
       const confirmResult = await this.elConfirm(
@@ -409,6 +439,9 @@ export default {
     // 客户类型判断传入
    customerType (row){
       return this.customerjudge[row.targetType-1]
+    },
+    customerType2 (row){
+      return this.customerjudge[row.customerType-1]
     },
     // 订单状态判断传入
    statusType(row){
@@ -447,7 +480,7 @@ export default {
     setNode() {
       if (this.baseId !== "") {
         this.getOrderList();
-        // this.getPersonInfoList();
+        this.getCustomerList();
       } else {
         const loading = this.$loading({
           lock: true,
@@ -528,7 +561,7 @@ export default {
       this.getOrderList();
     },
 
-    // // 获取订单信息
+    // 获取订单信息
     async getOrderList() {
       const { data: res } = await this.$managementOrder.get(
         `baseOrder/${this.baseId}/${this.pageInfo.pagenum}/${this.pageInfo.pagesize}`
@@ -541,6 +574,20 @@ export default {
       this.total = res.data.total;
       console.log("uersinfo-->",this.$store.state.userInfo.baseId)
       console.log("OrderList:",this.OrderList)
+      console.log("total:",this.total)
+    },
+    // 获取顾客信息
+    async getCustomerList() {
+      const { data: res } = await this.$Customer.get(
+        `${this.baseId}/${this.pageInfo.pagenum}/${this.pageInfo.pagesize}`
+      );
+      console.log("结果:",res);
+      if (res.statusCode !== 20000) {
+        return this.$message.error("获取顾客信息失败！！");
+      }
+      this.CustomerList = res.data.records;
+      this.total = res.data.total;
+      console.log("getCustomerList:",this.CustomerList)
       console.log("total:",this.total)
     },
 
