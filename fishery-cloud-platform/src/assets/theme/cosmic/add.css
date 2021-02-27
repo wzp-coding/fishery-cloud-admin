@@ -1,0 +1,44 @@
+/*  */
+
+.custom-cosmic .globalHeader {
+    color: #7474b0 !important;
+    background-color: transparent !important;
+}
+
+/* 我的基地-数字基地 */
+
+.custom-cosmic .baseInformation i {
+    color: #8d8f97 !important;
+}
+
+.custom-cosmic .baseInformation p {
+    color: #fefeff !important;
+}
+/* 我的基地-实况监控 */
+.custom-cosmic .wzp_style_countRunningDevice{
+    color: #fff;
+}
+
+/* 渔业管理-池塘管理 */
+
+.custom-cosmic .bigBox p {
+    color: #b4b4bc;
+}
+
+.custom-cosmic .infoTitle .pondName {
+    color: #fff !important;
+}
+
+.custom-cosmic .main {
+    border: 1px solid #1b1b38 !important;
+}
+
+/* 设备管理-监控设备 */
+
+/* 设备管理-气象设备 */
+
+/* 设备管理-水质设备 */
+
+.custom-cosmic .search .wzp_style_input {
+    background-color: #323259;
+}

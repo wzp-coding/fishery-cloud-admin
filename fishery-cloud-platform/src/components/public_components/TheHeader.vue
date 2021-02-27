@@ -1,15 +1,21 @@
 <template>
   <div>
     <!-- 头部区域 -->
-    <el-header :style="curTheme.header">
+    <el-header id="custom-wzp-header">
       <div>
         <span>智慧渔业云服务平台</span>
       </div>
       <div>
-        <el-avatar
-          size="large"
-          :src="$store.state.userInfo.avatar"
-        ></el-avatar>
+        <el-select v-model="theme" placeholder="请选择" @change="changeTheme" size="medium" style="width:100px">
+          <el-option
+            v-for="item in themes"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+        <el-avatar size="large" :src="$store.state.userInfo.avatar"></el-avatar>
         <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link" @click="isShowIU = true">
             个人中心<i class="el-icon-arrow-down el-icon--right"></i>
@@ -22,47 +28,71 @@
               >退出登录</el-dropdown-item
             >
             <el-dropdown-item style="width: 60px" command="changeTheme"
-              >换肤</el-dropdown-item
-            >
+              >更换主题
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </el-header>
     <!-- 修改用户信息 -->
-    <InfoUser :isShow="isShowIU" :close-callback="()=>this.isShowIU=false"></InfoUser>
+    <InfoUser
+      :isShow="isShowIU"
+      :close-callback="() => (this.isShowIU = false)"
+    ></InfoUser>
     <!-- 修改密码 -->
-    <ModifyPassword :isShow="isShowMPD" :close-callback="()=>this.isShowMPD=false"></ModifyPassword>
+    <ModifyPassword
+      :isShow="isShowMPD"
+      :close-callback="() => (this.isShowMPD = false)"
+    ></ModifyPassword>
   </div>
 </template>
 <script>
 import InfoUser from "../wzp/user_info/InfoUser";
 import ModifyPassword from "../wzp/user_info/ModifyPassword";
-import {mapState,mapMutations} from "vuex"
 export default {
   data() {
     return {
-      isShowIU:false,
-      isShowMPD:false,
-      curThemeName:'deepBlue'
+      isShowIU: false,
+      isShowMPD: false,
+      curThemeName: "deepBlue",
+      theme: "cosmic",
+      themes: [
+        {
+          value: "cosmic",
+          label: "cosmic",
+        },
+        {
+          value: "light",
+          label: "light",
+        },
+        {
+          value: "dark",
+          label: "dark",
+        },
+      ],
     };
   },
-  computed:{
-    ...mapState(['curTheme'])
+  computed: {
   },
   components: {
     InfoUser,
-    ModifyPassword
+    ModifyPassword,
   },
   methods: {
-    ...mapMutations(['setTheme']),
 
     // 处理下拉框指令
-    handleCommand(command){
+    handleCommand(command) {
       // console.log(command);
-      switch(command){
-        case 'loginOut':this.loginOut();break;
-        case 'modifyPassword':this.modifyPassword();break;
-        case 'changeTheme':this.changeTheme();break;
+      switch (command) {
+        case "loginOut":
+          this.loginOut();
+          break;
+        case "modifyPassword":
+          this.modifyPassword();
+          break;
+        case "changeTheme":
+          this.changeTheme();
+          break;
       }
     },
 
@@ -73,26 +103,17 @@ export default {
     },
 
     // 修改密码操作
-    modifyPassword(){
-      this.isShowMPD=true
+    modifyPassword() {
+      this.isShowMPD = true;
     },
 
     // 换主题皮肤
-    changeTheme(){
-      if(this.curThemeName==='deepBlue'){
-        this.setTheme('lightWhite');
-        this.curThemeName = 'lightWhite'
-      }else{
-        this.setTheme('deepBlue');
-        this.curThemeName = 'deepBlue'
-      }
-    }
+    changeTheme(color) {
+      document.body.className = 'custom-'+color;
+    },
   },
   created() {
-    const curThemeName = localStorage.getItem('curTheme');
-    if(curThemeName){
-      this.setTheme(curThemeName);
-    }
+    this.changeTheme(this.theme)
   },
 };
 </script>

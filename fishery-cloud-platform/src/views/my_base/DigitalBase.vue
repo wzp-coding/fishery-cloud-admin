@@ -12,7 +12,6 @@
           <el-button
             type="primary"
             style="float: left"
-            plain
             @click="isShowAuthority = true"
             >所持权限</el-button
           >
@@ -113,9 +112,6 @@ export default {
 <style lang="less" scoped>
 .cardBody {
   width: 100%;
-}
-.globalHeader {
-  background-color: #eaedf1;
 }
 .el-carousel {
   .el-carousel__container {

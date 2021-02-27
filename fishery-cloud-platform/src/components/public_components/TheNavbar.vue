@@ -1,21 +1,14 @@
 <template>
-  <el-aside :width="isCollapse ? '64px' : '200px'" :style="`transition: 0.5s;background:${curTheme.navbar.backgroundColor}`">
-    <div class="toggle-button" :style="`background:${curTheme.navbar.backgroundColor};color:${curTheme.navbar.textColor};`" @click="isCollapse = !isCollapse">|||</div>
+  <el-aside :width="isCollapse ? '64px' : '200px'" style="transition: 0.5s">
+    <div class="toggle-button" @click="isCollapse = !isCollapse">|||</div>
     <!-- 侧边栏菜单区域 -->
     <el-menu
-      :background-color="curTheme.navbar.backgroundColor"
-      :text-color="curTheme.navbar.textColor"
-      :active-text-color="curTheme.navbar.activeTextColor"
+      class="el-menu-vertical-demo"
       unique-opened
       :collapse-transition="false"
       :collapse="isCollapse"
       router
-      :default-active="activePath"
-      @select="
-        (activePath) => {
-          this.activePath = activePath;
-        }
-      "
+      :default-active="$route.path"
     >
       <!-- unique-opened:是否只保持一个子菜单的展开 -->
       <!-- collapse：是否水平折叠收起菜单 -->
@@ -276,13 +269,11 @@
             <span>基地信息</span>
           </template>
         </el-menu-item>
-        
       </el-submenu>
     </el-menu>
   </el-aside>
 </template>
 <script>
-import {mapState} from "vuex"
 export default {
   data() {
     return {
@@ -292,24 +283,6 @@ export default {
       activePath: "/digital-base",
     };
   },
-  computed:{
-    ...mapState(['curTheme'])
-  },
-  created() {
-    // 每次刷新重新渲染Vue时，获取上次preActivePath
-    const preActivePath = sessionStorage.getItem("preActivePath");
-    // console.log("preActivePath: ", preActivePath);
-    if (preActivePath) {
-      this.activePath = preActivePath;
-      // 移除session
-      sessionStorage.removeItem("preActivePath");
-    }
-
-    // 在页面刷新之前将activePath存在sessionStorage(监听刷新触发的事件)
-    window.addEventListener("beforeunload", () => {
-      sessionStorage.setItem("preActivePath", this.activePath);
-    });
-  },
 };
 </script>
 <style lang="less" scoped>
@@ -317,11 +290,6 @@ export default {
   .el-menu {
     border-right: none;
   }
-}
-
-.el-main {
-  background-color: #eaedf1;
-  // background: url(../assets/bgc.jpg) no-repeat;
 }
 
 .toggle-button {
@@ -335,7 +303,5 @@ export default {
   letter-spacing: 0.2em;
   // 进过鼠标为小手
   cursor: pointer;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
 }
 </style>

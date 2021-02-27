@@ -1,0 +1,23 @@
+/* 我的基地-数字基地 */
+
+.custom-light .baseInformation i {
+    color: #8d8f97 !important;
+}
+
+.custom-light .baseInformation p {
+    color: #000 !important;
+}
+
+/* 渔业管理-池塘管理 */
+
+.custom-light .bigBox p {
+    color: rgb(29, 18, 18);
+}
+
+.custom-light .infoTitle .pondName {
+    color: rgb(29, 22, 22) !important;
+}
+
+.custom-light .main {
+    border: 1px solid #1b1b38 !important;
+}

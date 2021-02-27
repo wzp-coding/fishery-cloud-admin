@@ -111,7 +111,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  background: url("../../assets/131.jpg");
+  background: url("../../assets/images/131.jpg");
   background-size: cover;
   /deep/.box {
     position: absolute;

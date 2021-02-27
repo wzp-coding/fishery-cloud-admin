@@ -13,32 +13,6 @@ const state = {
   // 该用户的基地信息
   baseInfo: {},
 
-  // 主题颜色
-  themes: {
-    deepBlue: {
-      header: "background:#062f4f;color:#fff",
-      navbar: { backgroundColor: "#0d3b53", textColor: "#fff", activeTextColor: "#3e95ee" },
-      main: {
-        body: "background:rgb(234, 237, 241);",
-      }
-    },
-    lightWhite: {
-      header: "background:#fff;color:#000",
-      navbar: { backgroundColor: "#fff", textColor: "#000", activeTextColor: "rgb(81,209,129)" },
-      main: {
-        body: "background:rgb(234, 236, 245);",
-      }
-    },
-  },
-
-  // 当前主题
-  curTheme: {
-    header: "background:#062f4f;color:#fff",
-    navbar: { backgroundColor: "#0d3b53", textColor: "#fff", activeTextColor: "#3e95ee" },
-    main: {
-      body: "background:rgb(234, 237, 241);",
-    }
-  },
 }
 
 const mutations = {

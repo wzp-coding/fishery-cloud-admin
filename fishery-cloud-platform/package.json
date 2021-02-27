@@ -27,8 +27,15 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.0",
     "@vue/cli-service": "^4.5.0",
+    "element-theme": "^2.0.1",
+    "element-theme-chalk": "^2.15.1",
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-css-wrap": "^0.1.2",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
+    "node-sass": "^5.0.0",
+    "sass-loader": "^10.1.1",
     "vue-template-compiler": "^2.6.11"
   },
   "browserslist": [
