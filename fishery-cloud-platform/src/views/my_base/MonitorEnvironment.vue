@@ -390,11 +390,9 @@ export default {
     line-height: 20px;
     font-weight: bold;
     font-size: 14px;
-    color: #555555;
 }
 .fs {
     font-weight: bold;
     font-size: 14px;
-    color: #555555;
 }
 </style>

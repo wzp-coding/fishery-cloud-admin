@@ -83,7 +83,7 @@ export default {
     // 根据loginId得到roleId
     async getRoleIdByLoginId(loginId) {
       const { data: res } = await this.$role.get(`/getByUserId/${loginId}`);
-      // console.log("getRoleIdByLoginId: ", res);
+      console.log("getRoleIdByLoginId: ", res);
       return res.data[0];
     },
 

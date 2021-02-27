@@ -274,7 +274,6 @@ export default {
 <style scoped>
 .exp label {
   width: 90px;
-  color: #99a9bf;
 }
 .exp .el-form-item {
   margin-right: 0;

@@ -503,7 +503,6 @@ export default {
 <style lang="less">
 .down-label {
   .el-form-item__label {
-    color: #99a9bf;
     font-weight: bold;
   }
   // img {
