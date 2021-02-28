@@ -158,6 +158,32 @@ import Map from "../../../public_components/MyLocationPicker"
               }
               this.close();
         },
+        //提交顾客信息
+        async customerinfo(){
+        console.log('即将提交的顾客--> ', this.customerobject);
+          const {data:res} = await this.$Customer.post(`${this.customerobject}`)
+          console.log('res: ', res);
+          if (res.statusCode === 20000) {
+                this.elMessage.success(res.message);
+              } else {
+                this.elMessage.error(res.message);
+              }
+              this.close();
+        },
+        //提交订单（修改或创建）
+        submitorder(){
+          if(this.customertitle=="修改信息"){
+              this.SubmitModify();
+          }
+          if(this.customertitle=="添加顾客"){
+              this.handleSubmit();
+          }
+        },
+        watch:{
+          look:function(){
+            this.judge();
+          }
+        },
     },
   }
 </script>

@@ -250,10 +250,10 @@ import Customerfrom from './Customerfrom.vue'
         },
         //提交订单（修改或创建）
         submitorder(){
-          if(this.ordertitle=="修改订单"){
+          if(this.customertitle=="修改订单"){
               this.SubmitModify();
           }
-          if(this.ordertitle=="创建订单"){
+          if(this.customertitle=="创建订单"){
               this.handleSubmit();
           }
         },

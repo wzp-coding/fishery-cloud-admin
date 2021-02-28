@@ -177,7 +177,7 @@
       <!-- 订单信息列表区域 -->
       <el-row>
         <div style="width: 75px; float: right;padding:0 25px 0 0">
-          <el-button type="success" style=" "  @click="createCustomer()">添加顾客</el-button>
+          <el-button type="success" style=" "  @click="createCustomera()">添加顾客</el-button>
         </div>
       </el-row>
       <el-table :data="CustomerList" border stripe>
@@ -214,7 +214,7 @@
         ></el-table-column>
         <el-table-column label="操作" width="190px">
           <template slot-scope="scope">
-
+          <!-- 修改按钮 -->
               <el-tooltip
               effect="dark"
               content="修改信息"
@@ -225,7 +225,7 @@
               type="primary"
               icon="el-icon-edit"
               size="mini"
-              @click="showEditDialog(scope.row.id)"
+              @click="EditcustomerDialog(scope.row.id)"
             ></el-button>
               </el-tooltip>
            
@@ -294,6 +294,15 @@
     @createnotifyParent="changecreatedialogVisible"
     >
     </Create-order> 
+    <!-- 创建/修改顾客 -->
+    <CreateCustomer
+    :customercard="createCustomers"
+    :ordertitle="customertitle"
+    :customerid="Customerid"
+    :look="look2"
+    @createnotifyParent="changecustomerdialogVisible"
+    >
+    </CreateCustomer>
   </div>
  
   
@@ -307,6 +316,7 @@ import ShowChange from "../../components/cgx/ManagementOrder/ModifyInformation/S
 import CreateOrder from '../../components/cgx/ManagementOrder/CreateOrder/createOrder';
 import Delete from '../../components/ljc/public/delete.vue';
 import Map from '../../components/public_components/MyLocationPicker';
+import CreateCustomer from '../../components/cgx/ManagementOrder/CreateCustomer/createCustomer'
 export default {
   components: {
     ShowInfo,
@@ -314,11 +324,16 @@ export default {
     ShowChange,
     CreateOrder,
     Delete,
-    Map
+    Map,
+    CreateCustomer
   },
   data() {
     return {
-
+      //添加/修改顾客开关
+      createCustomers:false,
+      customertitle:"",
+      Customerid:"",
+      look2:true,
       //控制订单和顾客管理卡片
       card:true,
       //删除接口标题
@@ -375,6 +390,23 @@ export default {
     this.setNode();
   },
   methods: {
+    //关闭添加/修改顾客
+    changecustomerdialogVisible(){
+       this.createCustomers=false;
+       this.getPersonInfoList();
+    },
+    //添加顾客
+    createCustomera(){
+      this.createCustomers=true;
+      this.customertitle="添加顾客"
+    },
+    //修改顾客
+    EditcustomerDialog(id){
+      this.createCustomers=true;
+      this.customertitle="修改信息"
+      this.look2=!this.look2
+      this.customerid=id
+    },
     //删除顾客
     async deleteCustomer(id){
       const confirmResult = await this.elConfirm(
@@ -591,7 +623,7 @@ export default {
       console.log("total:",this.total)
     },
 
-    // // 展示修改的对话框
+     // 展示修改的对话框
     async showEditDialog(id) {
       this.createdialogVisible = true;
       this.ordertitle="修改订单"
