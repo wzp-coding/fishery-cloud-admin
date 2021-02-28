@@ -225,7 +225,7 @@
               type="primary"
               icon="el-icon-edit"
               size="mini"
-              @click="EditcustomerDialog(scope.row.id)"
+              @click="EditcustomerDialog(scope.row)"
             ></el-button>
               </el-tooltip>
            
@@ -297,9 +297,9 @@
     <!-- 创建/修改顾客 -->
     <CreateCustomer
     :customercard="createCustomers"
-    :ordertitle="customertitle"
-    :customerid="Customerid"
-    :look="look2"
+    :customertitle="customertitle"
+    :customerData="customerData"
+    :look2="look2"
     @createnotifyParent="changecustomerdialogVisible"
     >
     </CreateCustomer>
@@ -332,7 +332,7 @@ export default {
       //添加/修改顾客开关
       createCustomers:false,
       customertitle:"",
-      Customerid:"",
+      customerData:null,
       look2:true,
       //控制订单和顾客管理卡片
       card:true,
@@ -393,7 +393,7 @@ export default {
     //关闭添加/修改顾客
     changecustomerdialogVisible(){
        this.createCustomers=false;
-       this.getPersonInfoList();
+       this.getCustomerList();
     },
     //添加顾客
     createCustomera(){
@@ -401,11 +401,12 @@ export default {
       this.customertitle="添加顾客"
     },
     //修改顾客
-    EditcustomerDialog(id){
+    EditcustomerDialog(data){
       this.createCustomers=true;
       this.customertitle="修改信息"
       this.look2=!this.look2
-      this.customerid=id
+      this.customerData=data
+      console.log("customerData--->",data)
     },
     //删除顾客
     async deleteCustomer(id){
@@ -522,7 +523,7 @@ export default {
         });
         setTimeout(() => {
           this.getOrderList();
-          this.getPersonInfoList();
+          this.getCustomerList();
           loading.close();
         }, 1000);
       }

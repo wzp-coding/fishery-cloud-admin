@@ -50,7 +50,8 @@
     </Map>
     
   <el-form-item style="right">
-    <el-button type="primary" @click="submitorder" style="margin:20px 0 0 0">立即创建</el-button>
+    <el-button type="primary" @click="submitorder" style="margin:20px 0 0 0" v-if="this.customertitle=='添加顾客'">立即创建</el-button>
+    <el-button type="primary" @click="submitorder" style="margin:20px 0 0 0" v-if="this.customertitle=='修改信息'">确认修改</el-button>
     <el-button @click="close">取消</el-button>
    </el-form-item>
     
@@ -71,10 +72,10 @@ import Map from "../../../public_components/MyLocationPicker"
           customertitle:{
             type:String
           },
-          customerid:{
-            type:String
+          customerData:{
+            type:Object
           },
-          look:{
+          look2:{
             type:Boolean
           }
           
@@ -149,7 +150,7 @@ import Map from "../../../public_components/MyLocationPicker"
         //提交顾客信息
         async customerinfo(){
         console.log('即将提交的顾客--> ', this.customerobject);
-          const {data:res} = await this.$Customer.post(`${this.customerobject}`)
+          const {data:res} = await this.$Customer.post("",this.customerobject)
           console.log('res: ', res);
           if (res.statusCode === 20000) {
                 this.elMessage.success(res.message);
@@ -158,10 +159,10 @@ import Map from "../../../public_components/MyLocationPicker"
               }
               this.close();
         },
-        //提交顾客信息
-        async customerinfo(){
-        console.log('即将提交的顾客--> ', this.customerobject);
-          const {data:res} = await this.$Customer.post(`${this.customerobject}`)
+        //提交修改的顾客信息
+        async Editcustomerinfo(){
+        console.log('即将提交的修改--> ', this.customerobject);
+          const {data:res} = await this.$Customer.put("",this.customerobject)
           console.log('res: ', res);
           if (res.statusCode === 20000) {
                 this.elMessage.success(res.message);
@@ -173,17 +174,36 @@ import Map from "../../../public_components/MyLocationPicker"
         //提交订单（修改或创建）
         submitorder(){
           if(this.customertitle=="修改信息"){
-              this.SubmitModify();
+              this.Editcustomerinfo();
           }
           if(this.customertitle=="添加顾客"){
-              this.handleSubmit();
+              this.customerinfo();
           }
         },
-        watch:{
-          look:function(){
+        //修改表单
+        Modifyorder(){
+          this.customerobject=this.customerData;
+          let a={
+          lat:"",
+          lng:"",
+        };
+        a.lat=this.customerData.addressLatitude;
+        a.lng=this.customerData.addressLongitude;
+        this.location=a;
+        },
+        //判断为创建表单还是修改
+        judge(){
+        if(this.customertitle=="修改信息"){
+            console.log(111111111)
+          this.Modifyorder();
+          
+        }
+        },
+    },
+    watch:{
+          look2:function(){
             this.judge();
           }
         },
-    },
   }
 </script>
