@@ -70,7 +70,7 @@
               placeholder="请输入基地地址"
               style="width: 100%"
               v-model="baseInfo.address"
-              clearable
+              disabled
             ></el-input>
           </el-form-item>
           <el-form-item label="经度" prop="positionLongitude" slot="posLpng">
@@ -89,7 +89,12 @@
               disabled
             ></el-input>
           </el-form-item>
-          <el-button type="primary" icon="el-icon-location">定位</el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-location"
+            @click="dialogVisible = true"
+            >定位</el-button
+          >
         </InfoBaseLayout>
         <InfoBaseLayout>
           <el-form-item
@@ -185,13 +190,64 @@
         </el-row>
       </el-form>
     </el-card>
+    <el-dialog title="基地定位" :visible.sync="dialogVisible" width="33%">
+      <el-form :model="baseInfo">
+        <!-- <el-form-item label="基地地址" label-width="110px">
+          <el-input v-model="baseInfo.address"></el-input>
+        </el-form-item> -->
+        <el-form-item
+          label="基地地址"
+          prop="receiveAddress"
+          label-width="110px"
+        >
+          <el-select
+            style="width: 85%"
+            v-model="baseInfo.address"
+            placeholder="请通过拖拽地图选择收货地址"
+          >
+            <el-option
+              v-for="(item, index) in addressArray"
+              :key="item + index"
+              :label="item.address + item.title"
+              :value="item.address + item.title"
+              @click.native="setcoordinates(item.location)"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="基地经度" label-width="110px">
+          <el-input v-model="baseInfo.positionLongitude"></el-input>
+        </el-form-item>
+        <el-form-item label="基地维度" label-width="110px">
+          <el-input v-model="baseInfo.positionLatitude"></el-input>
+        </el-form-item>
+        <Map
+          :selectedLocation="location"
+          @getCenterAddress="setAddress"
+          @getAroundPoi="setpoi"
+        ></Map>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import TheCardHead from "../../components/ccy/TheCardHead";
 import InfoBaseLayout from "../../components/ccy/InfoBaseLayout";
+import Map from "../../components/public_components/MyLocationPicker";
+
 export default {
+  components: {
+    TheCardHead,
+    InfoBaseLayout,
+    Map,
+  },
   data() {
     return {
       baseInfo: {
@@ -222,9 +278,9 @@ export default {
           { required: true, message: "请输入创建者名称", trigger: "blur" },
           { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
         ],
-        address: [
-          { required: true, message: "请输入基地地址", trigger: "blur" },
-        ],
+        // address: [
+        //   { required: true, message: "请输入基地地址", trigger: "blur" },
+        // ],
         registerNumber: [
           { required: true, message: "请输入营业执照注册号", trigger: "blur" },
         ],
@@ -234,12 +290,15 @@ export default {
           { required: true, message: "请输入基地简介", trigger: "blur" },
         ],
       },
-      // 1350657222372835330
+      // 地图传来的地址数组
+      addressArray: [],
+      // 传入地图的中心坐标
+      location: {
+        lat: "",
+        lng: "",
+      },
+      dialogVisible: false,
     };
-  },
-  components: {
-    TheCardHead,
-    InfoBaseLayout,
   },
   created() {
     this.getBaseInfo();
@@ -276,13 +335,30 @@ export default {
       this.baseInfo.picture = URL.createObjectURL(file.raw);
       console.log(this.baseInfo.picture);
     },
-    handleRemove(){
+    handleRemove() {
       this.baseInfo.picture = null;
     },
-    handleAvatarSuccess(res){
+    handleAvatarSuccess(res) {
       let picUrl = JSON.parse(res.data);
       this.baseInfo.picture = picUrl.url;
-    }
+    },
+    // 设置地图返回的定点位置
+    setAddress(address) {
+      console.log("address-->", address);
+      this.baseInfo.address = address;
+    },
+    // 设置地图返回的位置数组
+    setpoi(poi) {
+      console.log("pio-->", poi);
+      this.addressArray = poi;
+    },
+    // 设置坐标
+    setcoordinates(location) {
+      this.location = location;
+      this.baseInfo.positionLongitude = this.location.lat;
+      this.baseInfo.positionLatitude = this.location.lng;
+      console.log("location-->", this.location);
+    },
   },
 };
 </script>

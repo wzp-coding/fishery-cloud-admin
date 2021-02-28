@@ -79,7 +79,7 @@
         <p v-show="!toPond.germchitId">养殖信息：未投放种苗</p>
         <p v-if="toPond.germchitId">
           捕捞状态：{{
-            toPond.catchStatus === 0 || !toPond.catchStatus
+            toPond.catchStatus === 0 
               ? "未捕捞"
               : "已捕捞"
           }}
@@ -95,7 +95,7 @@
             content="捕捞"
             placement="left"
             :enterable="false"
-            v-if="toPond.seedingTime"
+            v-if="toPond.germchitId"
           >
             <el-button
               type="success"
@@ -109,7 +109,7 @@
             effect="dark"
             content="投料"
             placement="top"
-            v-if="toPond.seedingTime"
+            v-if="toPond.germchitId"
             :enterable="false"
           >
             <el-button
@@ -126,7 +126,7 @@
             content="投苗"
             placement="top"
             :enterable="false"
-            v-if="!toPond.seedingTime"
+            v-if="!toPond.germchitId"
           >
             <el-button
               type="success"

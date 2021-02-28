@@ -80,7 +80,7 @@ export default {
     return {
       paginationInfo: {
         total: 0,
-        size: 3,
+        size: 6,
         page: 1,
       },
       staffInfoList: [],
