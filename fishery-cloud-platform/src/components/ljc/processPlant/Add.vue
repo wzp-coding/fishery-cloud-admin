@@ -102,9 +102,9 @@ export default {
         console.log(this.addFrom);
         await this.model.addInfo(this.addFrom).then((val) => {
           if (val.status !== 200) {
-            this.$message.error(this.addErrorInfo);
+            this.elMessage.error(this.addErrorInfo);
           }
-          this.$message.success(this.addSuccessInfo);
+          this.elMessage.success(this.addSuccessInfo);
           this.$emit("getAllInfo");
           this.addDialogVisible = false;
         });

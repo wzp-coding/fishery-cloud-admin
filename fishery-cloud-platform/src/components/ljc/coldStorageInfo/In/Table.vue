@@ -51,7 +51,7 @@
             <el-col :span="8">
               <el-tooltip
                 effect="dark"
-                content="出库"
+                content="创建订单"
                 placement="top"
                 :enterable="false"
               >

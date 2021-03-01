@@ -51,14 +51,10 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item
-          :label="labels.refrigeratoryInCapacity"
-          prop="refrigeratoryInCapacity"
-        >
+        <el-form-item :label="labels.surplusCapacity">
           <el-input-number
-            v-model="form.refrigeratoryInCapacity"
+            v-model="surplusCapacity"
             controls-position="right"
-            :min="0"
             disabled
           ></el-input-number>
         </el-form-item>
@@ -71,7 +67,7 @@
             v-model="form.refrigeratoryOutCapacity"
             controls-position="right"
             :min="0"
-            :max="form.refrigeratoryInCapacity"
+            :max="surplusCapacity"
           ></el-input-number>
         </el-form-item>
 
@@ -130,6 +126,9 @@ export default {
 
       // 产品信息
       productInfo: {},
+
+      // 入库剩余容量
+      surplusCapacity: 0,
     };
   },
   computed: {
@@ -158,12 +157,16 @@ export default {
     /* 根据Id查询信息开始 */
     async getInfoById() {
       const { data: res } = await this.model.getInfoById(this.id);
-      console.log(res);
       this.form.refrigeratoryInId = res.data.id;
       this.form.productName = res.data.productName;
       this.form.refrigeratoryId = res.data.refrigeratoryId;
-      this.form.refrigeratoryInCapacity = res.data.refrigeratoryInCapacity
-      console.log(this.form);
+      this.form.refrigeratoryInCapacity = res.data.refrigeratoryInCapacity;
+      this.form.refrigeratoryInUsedCapacity =
+        res.data.refrigeratoryInUsedCapacity;
+      this.surplusCapacity =
+        0 +
+        this.form.refrigeratoryInCapacity -
+        this.form.refrigeratoryInUsedCapacity;
       this.dialogVisible = true;
     },
     /* 根据Id查询信息结束 */
