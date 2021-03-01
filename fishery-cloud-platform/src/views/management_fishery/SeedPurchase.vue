@@ -14,7 +14,6 @@
           </el-col>
           <el-col style="width: 75px; float: right">
             <downloadExcel
-              :fields="json_fields"
               :data="germchitInfoList"
               name="基地种苗订单信息导出.xls"
             >
@@ -22,9 +21,7 @@
                 effect="dark"
                 content="导出基地订单信息"
                 placement="top-start"
-                ><el-button @click="downLoadExcel" type="success"
-                  >导出</el-button
-                ></el-tooltip
+                ><el-button type="success">导出</el-button></el-tooltip
               >
             </downloadExcel>
           </el-col>
@@ -167,24 +164,27 @@
     </el-card>
     <el-dialog
       :visible.sync="dialogVisible"
-      width="27%"
+      width="30%"
       title="种苗进货"
       @close="puchaseClose"
     >
       <el-form
         :model="addPurchaseInfo"
-        label-width="80px"
+        label-width="120px"
         ref="purchaseFormRef"
       >
         <el-form-item label="种苗品种" prop="germchitSpecies">
-          <el-select v-model="addPurchaseInfo.germchitId" placeholder="请选择">
+          <el-select v-model="addPurchaseInfo.germchitId" placeholder="请选择" @change="selectEvent">
             <el-option
-              v-for="item in allSeedInfo"
+              v-for="(item, index) in allSeedInfo"
               :key="item.id"
               :label="item.germchitSpecies"
-              :value="item.id"
+              :value="index"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="商家剩余种苗量" prop="max">
+          <el-input v-model="max" disabled></el-input>
         </el-form-item>
         <el-form-item label="进货量" prop="purchaseAmount">
           <el-input-number
@@ -193,7 +193,7 @@
             v-model="addPurchaseInfo.purchaseAmount"
           ></el-input-number>
         </el-form-item>
-        <el-form-item label="操作者" prop="creatorName">
+        <el-form-item label="操作者" prop="creatorName" >
           <el-input v-model="addPurchaseInfo.creatorName"></el-input>
         </el-form-item>
       </el-form>
@@ -239,38 +239,6 @@
         >
       </span>
     </el-dialog>
-    <!-- <TheDialogAll :toDialogInfo="toDialogPurchase" :FormInfo="addPurchaseInfo">
-    
-      <el-form-item label="虾苗品种" prop="shrimpSpecies">
-        <el-select
-          v-model="allPurchaseInfo.germchitSpecies"
-          placeholder="请选择"
-        >
-          <el-option
-            v-for="item in allPurchaseInfo"
-            :key="item.id"
-            :value="item.germchitBatchName"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="进货量">
-        <el-input-number
-          controls-position="right"
-          :min="1"
-          v-model="allPurchaseInfo.purchaseAmount"
-        ></el-input-number>
-      </el-form-item>
-      <el-form-item label="操作者">
-        <el-input v-model="allPurchaseInfo.creatorName"></el-input>
-      </el-form-item>
-      <span slot="footer" class="dialog-footer">
-        <el-button>取 消</el-button>
-        <el-button type="primary" @click="addPurchaseInfoEvent"
-          >确 定</el-button
-        >
-      </span>
-    </TheDialogAll> -->
-    <!-- echarts视图 -->
   </div>
 </template>
 
@@ -286,10 +254,10 @@ export default {
     return {
       dialogVisible: false,
       editDialogVisible: false,
-      baseId: "1248910886228332544",
+      baseId: this.$store.state.baseInfo.id,
       supplyInfo: {
         // id:'',                //入库信息ID
-        baseId: "1248910886228332544",
+        baseId: this.$store.state.baseInfo.id,
         gmtCreate: "", //创建时间
         gmtModified: "", //修改时间
         inWeight: "",
@@ -310,6 +278,7 @@ export default {
         title: "种苗进货",
         dialogVisible: false,
       },
+      max:null,
       //获取所有种苗信息
       allSeedInfo: [],
       //种苗进货请求对象
@@ -317,7 +286,7 @@ export default {
       addPurchaseInfo: {
         germchitId: "",
         creatorName: "",
-        baseId: "1248910886228332544",
+        baseId: this.$store.state.baseInfo.id,
         purchaseAmount: 1,
       },
       paginationInfo: {
@@ -331,7 +300,7 @@ export default {
         gmtCreate: "",
         gmtModified: "",
         id: "",
-        baseId: "1248910886228332544",
+        baseId: this.$store.state.baseInfo.id,
       },
     };
   },
@@ -344,12 +313,9 @@ export default {
     chartView,
   },
   created() {
-    // this.getSupplyInfo();
     this.getGermchitInfo();
     this.getGermchitPurchaseInfo();
     this.getAllPurchaseInfo();
-
-    // germchitManagerController
   },
   methods: {
     //获取投入品信息
@@ -404,37 +370,40 @@ export default {
         this.addPurchaseInfo
       );
       console.log(res);
-      this.$message.success("进货成功");
-      this.dialogVisible = false;
+      if (res.statusCode === 20000) {
+        this.dialogVisible = false;
+        this.getGermchitPurchaseInfo()
+        this.elMessage.success("进货成功");
+      }
     },
     // 删除订单
     async removePurchaseInfo(id) {
       console.log(id);
-      // const confirmResult = await this.$confirm(
-      //   "此操作将永久删除该订单信息, 是否继续?",
-      //   "提示",
-      //   {
-      //     confirmButtonText: "确定",
-      //     cancelButtonText: "取消",
-      //     type: "warning",
-      //   }
-      //   // .catch 用于捕获错误返回给confirmResult
-      // ).catch((err) => {
-      //   return err;
-      // });
-      // // 如果用户确认删除，则返回值为字符串 confirm
-      // // 如果用户取消了删除， 则返回值为字符串 cancel
-      // if (confirmResult !== "confirm") {
-      //   // this.$message.info: 灰色提示框
-      //   return this.$message.info("已取消删除");
-      // }
+      const confirmResult = await this.elConfirm(
+        "此操作将永久删除该订单信息, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+        // .catch 用于捕获错误返回给confirmResult
+      ).catch((err) => {
+        return err;
+      });
+      // 如果用户确认删除，则返回值为字符串 confirm
+      // 如果用户取消了删除， 则返回值为字符串 cancel
+      if (confirmResult !== "confirm") {
+        return this.elMessage.info("已取消删除");
+      }
       const { data: res } = await this.$germchitManagerController.delete(
         `/order/${id}`
       );
-      alert("删除虾苗信息成功！！");
-      console.log(res);
-      // this.$message.success("删除虾苗信息成功！！");
-      this.getGermchitPurchaseInfo();
+      if (res.statusCode === 20000) {
+        console.log(res);
+        this.elMessage.success("删除虾苗信息成功！！");
+        this.getGermchitPurchaseInfo();
+      }
     },
     //修改订单信息
     editEvent(id) {
@@ -465,8 +434,14 @@ export default {
       console.log(id);
       const { data: res } = await this.$germchitManagerController.put(`${id}`);
       console.log(res);
-      alert("种苗入库成功");
+      if (res.statusCode === 20000) {
+        this.elMessage.success("种苗入库成功");
+      }
     },
+    selectEvent(res){
+      this.addPurchaseInfo.germchitId = this.allSeedInfo[res].id;
+      this.max = this.allSeedInfo[res].germchitAmount;
+    }
   },
 };
 </script>

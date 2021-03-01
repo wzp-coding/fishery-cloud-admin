@@ -13,7 +13,11 @@
             <span>员工管理</span>
           </el-col>
           <el-col style="width: 100px; float: right">
-            <el-button type="primary" @click="toAddStaff = true">邀请员工</el-button>
+            <el-button
+              type="primary"
+              @click="toInviteStaff.dialogVisible = true"
+              >邀请员工</el-button
+            >
           </el-col>
         </div>
       </TheCardHead>
@@ -30,14 +34,16 @@
               type="primary"
               icon="el-icon-edit"
               size="small"
-              @click="editAdminInfo(scope.row.id)"
+              @click="editAdminInfo(scope.row.id, scope.row.username)"
             ></el-button>
+            <!--  -->
             <!-- 删除按钮 -->
             <!-- type="danger": 红色警告按钮 -->
             <el-button
               type="danger"
               icon="el-icon-delete"
               size="small"
+              @click="removeStaff(scope.row.id)"
             ></el-button>
           </template>
         </el-table-column>
@@ -52,7 +58,7 @@
       :toDialogInfo="toEditInfo"
       @fatherMethods="getAllStaffInfo"
     ></editStaffInfo>
-    <inviteStaff :toDialogInfo="toAddStaff"></inviteStaff>
+    <inviteStaff :toDialogInfo="toInviteStaff" @fatherMethods="getAllStaffInfo"></inviteStaff>
   </div>
 </template>
 
@@ -74,15 +80,18 @@ export default {
     return {
       paginationInfo: {
         total: 0,
-        size: 3,
+        size: 6,
         page: 1,
       },
       staffInfoList: [],
       toEditInfo: {
         dialogVisible: false,
         id: "",
+        username:''
       },
-      toAddStaff: false,
+      toInviteStaff: {
+        dialogVisible: false,
+      },
     };
   },
   created() {
@@ -96,6 +105,13 @@ export default {
       console.log(res);
       if (res.statusCode === 20000) {
         this.staffInfoList = res.data.records;
+        for(let i=0;i<this.staffInfoList.length;i++){
+          if(this.staffInfoList[i].baseIdentity ===2){
+            this.staffInfoList[i].baseIdentity = '老板'
+          }else{
+            this.staffInfoList[i].baseIdentity = '员工'
+          }
+        }
         this.paginationInfo.total = res.data.total;
       }
     },
@@ -104,12 +120,35 @@ export default {
       this.paginationInfo.page = page;
       this.getAllStaffInfo();
     },
-    editAdminInfo(id) {
-      this.toEditInfo.dialogVisible = true;
+    editAdminInfo(id, name) {
       this.toEditInfo.id = id;
+      this.toEditInfo.username = name;
+      this.toEditInfo.dialogVisible = true;
+      
     },
-    async inviteAdmin() {
-      const { data: res } = await this.$admin.post("");
+    async removeStaff(id) {
+      const confirmResult = await this.elConfirm(
+        "此操作将永久删除该员工数据, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => {
+        return err;
+      });
+      if (confirmResult !== "confirm") {
+        return this.elMessage.info("已取消删除");
+      }
+      const { data: res } = await this.$admin.delete(`${id}`);
+      console.log(res);
+      if (res.statusCode === 20000) {
+        this.elMessage.success("删除成功！");
+        this.getAllStaffInfo()
+      }else{
+        this.elMessage.error("删除失败！");
+      }
     },
   },
 };

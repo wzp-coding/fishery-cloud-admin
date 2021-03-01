@@ -3,8 +3,9 @@
     title="农资入库"
     :visible.sync="toDialogAddInfo.dialogVisible"
     width="30%"
+    @close="closeEvent"
   >
-    <el-form :model="addInfo" label-width="130px">
+    <el-form :model="addInfo" label-width="135px" ref="formRef" :rules="rules">
       <el-form-item label="操作者身份" prop="operatorIdentity">
         <el-input v-model="addInfo.operatorIdentity"></el-input>
       </el-form-item>
@@ -12,35 +13,40 @@
         <el-input v-model="addInfo.operatorName"></el-input>
       </el-form-item>
       <!-- <el-form-item label="投入品类别" prop="supplyTypeName" >
-        <el-input v-model="addInfo.supplyTypeName"></el-input>
+        <el-input v-model="addInfo.supplyTypeName" disabled></el-input>
       </el-form-item> -->
       <el-form-item label="请输入仓库号" prop="warehouseNumber">
         <el-input v-model="addInfo.warehouseNumber"></el-input>
       </el-form-item>
       <el-form-item label="请选择投入品" prop="supplyName">
         <el-select
-          v-model="addInfo.supplyId"
+          @change="selectEvent"
+          v-model="addInfo.supplyName"
           placeholder="请选择"
         >
           <el-option
-            v-for="item in supplyList"
-            :key="item.id"
+            v-for="(item,index) in supplyList"
+            :key="index"
             :label="item.name"
-            :value="item.id"
+            :value="index"
           >
           </el-option>
         </el-select>
         <!-- <el-input v-model="addInfo.supplyName"></el-input> -->
       </el-form-item>
       <el-form-item label="请输入投入品数量" prop="inWeight">
-        <el-input-number controls-position="right" :min="1" v-model="addInfo.inWeight"></el-input-number>
+        <el-input-number
+          controls-position="right"
+          :min="1"
+          v-model="addInfo.inWeight"
+        ></el-input-number>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="toDialogAddInfo.dialogVisible = false"
         >取 消</el-button
       >
-      <el-button type="primary" @click="searchSupply()">确 定</el-button>
+      <el-button type="primary" @click="supplyIn">确 定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -56,16 +62,31 @@ export default {
     return {
       supplyList: [],
       addInfo: {
-        baseId: '1248910886228332544',
-        // gmtCreate: "",
-        inWeight: 1,
+        baseId: this.$store.state.userInfo.baseId,
+        inWeight: null,
         operatorIdentity: "",
         operatorName: "",
         supplyId: "",
-        // id: "",
-        supplyName: '',
+        supplyName: "",
         supplyTypeName: "饲料",
         warehouseNumber: "",
+      },
+      rules: {
+        operatorIdentity: [
+          { required: true, message: "请输入操作者身份", trigger: "blur" },
+        ],
+        operatorName: [
+          { required: true, message: "请输入操作员", trigger: "blur" },
+        ],
+        supplyName: [
+          { required: true, message: "请输入投入品名称", trigger: "blur" },
+        ],
+        warehouseNumber: [
+          { required: true, message: "请输入仓库号", trigger: "blur" },
+        ],
+        inWeight: [
+          { required: true, message: "请输入投入品数量", trigger: "blur" },
+        ],
       },
     };
   },
@@ -77,8 +98,11 @@ export default {
       console.log(this.addInfo);
       const { data: res } = await this.$baseSupply.post("in", this.addInfo);
       console.log(res);
+      if (res.statusCode === 20000) {
+        this.elMessage.success("农资入库成功");
+      }
       this.toDialogAddInfo.dialogVisible = false;
-      this.$emit('fatherMethod')
+      this.$emit("fatherMethod");
     },
     async getSupplyList() {
       const { data: res } = await this.$supplyController.get();
@@ -99,14 +123,24 @@ export default {
       second = second < 10 ? "0" + second : second;
       return y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second;
     },
-    async searchSupply(){
-      const {data : res} = await this.$supplyController.get(`${this.addInfo.supplyId}`)
+    async searchSupply() {
+      const { data: res } = await this.$supplyController.get(
+        `${this.addInfo.supplyId}`
+      );
       console.log(res);
-      if(res.statusCode === 20000){
-        this.addInfo.supplyName = res.data.name
-        this.supplyIn()
+      if (res.statusCode === 20000) {
+        this.addInfo.supplyName = res.data.name;
+        this.supplyIn();
       }
-    }
+    },
+    closeEvent() {
+      this.$refs.formRef.resetFields();
+    },
+    selectEvent(res) {
+      console.log(res);
+      this.addInfo.supplyId = this.supplyList[res].id
+      this.addInfo.supplyName = this.supplyList[res].name
+    },
   },
 };
 </script>

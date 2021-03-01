@@ -9,9 +9,21 @@
         <div slot="CardTitle">
           <i class="el-icon-document-copy"></i>
           <span>基地信息</span>
+          <el-col style="float: right; width: 100px; margin-right: 10px">
+            <el-button type="primary" 
+            v-if="!baseId"
+            @click="createBase.dialogVisible = true"
+              >创建基地</el-button
+            >
+          </el-col>
         </div>
       </TheCardHead>
-      <el-form :data="baseInfo" ref="resForm" :rules="formRules" :model="baseInfo" >
+      <el-form
+        :data="baseInfo"
+        ref="resForm"
+        :rules="formRules"
+        :model="baseInfo"
+      >
         <InfoBaseLayout>
           <el-form-item
             slot="pre"
@@ -65,7 +77,7 @@
               placeholder="请输入基地地址"
               style="width: 100%"
               v-model="baseInfo.address"
-              clearable
+              disabled
             ></el-input>
           </el-form-item>
           <el-form-item label="经度" prop="positionLongitude" slot="posLpng">
@@ -84,7 +96,12 @@
               disabled
             ></el-input>
           </el-form-item>
-          <el-button type="primary" icon="el-icon-location">定位</el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-location"
+            @click="dialogVisible = true"
+            >定位</el-button
+          >
         </InfoBaseLayout>
         <InfoBaseLayout>
           <el-form-item
@@ -128,34 +145,32 @@
             ></el-input>
           </el-form-item>
         </InfoBaseLayout>
-        <el-row class="baseUpLoad" :gutter="20">
-          <el-col :span="2" class="imgSets">基地图片</el-col>
-          <el-col :span="19" class="imgFrame">
-            <div class="test">
-              <img
-                src="baseInfo.picture"
-                alt="基地图片"
-                v-if="!baseInfo.picture"
-              />
-            </div>
-            <!-- <div v-for="(url, index) in picSets" :key="index" class="test">
-              <div class="mask">
-                <i class="el-icon-delete" @click="deleteClick(url)"></i>
+        <InfoBaseLayout>
+          <el-row slot="pre">
+            <el-col :offset="3" :span="4">基地图片</el-col>
+            <el-col :offset="1" :span="15">
+              <div class="upload">
+                <el-upload
+                  action="http://119.23.218.131:9103/base/file/upload"
+                  ref="upload"
+                  name="multipartFile"
+                  class="avatar-uploader"
+                  :on-success="handleAvatarSuccess"
+                  multiple
+                  :on-remove="handleRemove"
+                  :show-file-list="false"
+                >
+                  <img
+                    v-if="baseInfo.picture"
+                    :src="baseInfo.picture"
+                    class="avatar"
+                  />
+                  <i class="el-icon-plus"></i>
+                </el-upload>
               </div>
-              <img :src="url" />
-            </div> -->
-            <!-- <el-upload
-              action="http://106.75.154.40:9011/base/addPic"
-              list-type="picture-card"
-              :on-success="onSuccess"
-              :auto-upload="true"
-              ref="upload"
-              class="addBox"
-            > -->
-            <!-- <i class="el-icon-plus"></i>
-            </el-upload> -->
-          </el-col>
-        </el-row>
+            </el-col>
+          </el-row>
+        </InfoBaseLayout>
         <el-row :gutter="20">
           <el-col>
             <el-form-item
@@ -181,15 +196,69 @@
         </el-row>
       </el-form>
     </el-card>
+    <el-dialog title="基地定位" :visible.sync="dialogVisible" width="33%">
+      <el-form :model="baseInfo">
+        <el-form-item
+          label="基地地址"
+          prop="receiveAddress"
+          label-width="110px"
+        >
+          <el-select
+            style="width: 85%"
+            v-model="baseInfo.address"
+            placeholder="请通过拖拽地图选择收货地址"
+          >
+            <el-option
+              v-for="(item, index) in addressArray"
+              :key="item + index"
+              :label="item.address + item.title"
+              :value="item.address + item.title"
+              @click.native="setcoordinates(item.location)"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="基地经度" label-width="110px">
+          <el-input v-model="baseInfo.positionLongitude"></el-input>
+        </el-form-item>
+        <el-form-item label="基地维度" label-width="110px">
+          <el-input v-model="baseInfo.positionLatitude"></el-input>
+        </el-form-item>
+        <Map
+          :selectedLocation="location"
+          @getCenterAddress="setAddress"
+          @getAroundPoi="setpoi"
+        ></Map>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
+    <createBaseDialog :toDialogInfo="createBase"></createBaseDialog>
   </div>
 </template>
 
 <script>
 import TheCardHead from "../../components/ccy/TheCardHead";
 import InfoBaseLayout from "../../components/ccy/InfoBaseLayout";
+import Map from "../../components/public_components/MyLocationPicker";
+import createBaseDialog from "../../components/ccy/infoBase/createBaseDialog"
 export default {
+  components: {
+    TheCardHead,
+    InfoBaseLayout,
+    Map,
+    createBaseDialog
+  },
   data() {
     return {
+      baseId:this.$store.state.baseInfo.id,
+      createBase:{
+        dialogVisible:false
+      },
       baseInfo: {
         name: "",
         creator: "",
@@ -200,8 +269,8 @@ export default {
         funds: "",
         registerNumber: "",
         scope: "",
-        picture: "",
-        id: "",
+        picture: null,
+        id: this.$store.state.baseInfo.id,
         introduction: "",
       },
       formRules: {
@@ -218,9 +287,9 @@ export default {
           { required: true, message: "请输入创建者名称", trigger: "blur" },
           { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
         ],
-        address: [
-          { required: true, message: "请输入基地地址", trigger: "blur" },
-        ],
+        // address: [
+        //   { required: true, message: "请输入基地地址", trigger: "blur" },
+        // ],
         registerNumber: [
           { required: true, message: "请输入营业执照注册号", trigger: "blur" },
         ],
@@ -230,39 +299,74 @@ export default {
           { required: true, message: "请输入基地简介", trigger: "blur" },
         ],
       },
-      // 1350657222372835330
+      // 地图传来的地址数组
+      addressArray: [],
+      // 传入地图的中心坐标
+      location: {
+        lat: "",
+        lng: "",
+      },
+      dialogVisible: false,
     };
-  },
-  components: {
-    TheCardHead,
-    InfoBaseLayout,
   },
   created() {
     this.getBaseInfo();
   },
   methods: {
     async getBaseInfo() {
-      const { data: res } = await this.$base.get();
-      let temp = res.data[0];
-      this.baseInfo.id = temp.id;
-      this.baseInfo.name = temp.name;
-      this.baseInfo.creator = temp.creator;
-      this.baseInfo.gmtCreate = temp.gmtCreate;
-      this.baseInfo.address = temp.address;
-      this.baseInfo.positionLongitude = temp.positionLongitude;
-      this.baseInfo.positionLatitude = temp.positionLatitude;
-      this.baseInfo.funds = temp.funds;
-      this.baseInfo.registerNumber = temp.registerNumber;
-      this.baseInfo.scope = temp.scope;
-      this.baseInfo.picture = temp.picture;
-      this.baseInfo.introduction = temp.introduction;
+      const { data: res } = await this.$base.get(
+        `${this.$store.state.baseInfo.id}`
+      );
+      console.log(res);
+      if (res.statusCode === 20000) {
+        console.log(res);
+        this.baseInfo.name = res.data.name;
+        this.baseInfo.creator = res.data.creator;
+        this.baseInfo.gmtCreate = res.data.gmtCreate;
+        this.baseInfo.address = res.data.address;
+        this.baseInfo.positionLongitude = res.data.positionLongitude;
+        this.baseInfo.positionLatitude = res.data.positionLatitude;
+        this.baseInfo.funds = res.data.funds;
+        this.baseInfo.registerNumber = res.data.registerNumber;
+        this.baseInfo.scope = res.data.scope;
+        this.baseInfo.picture = res.data.picture;
+        this.baseInfo.introduction = res.data.introduction;
+      }
     },
     async saveBaseInfo() {
       const { data: res } = await this.$base.put("update", this.baseInfo);
       if (res.statusCode === 20000) {
-        this.$message.success("修改基地信息成功");
+        this.elMessage.success("修改基地信息成功");
       }
       this.getBaseInfo();
+    },
+    handleAvatarSuccess(res, file) {
+      this.baseInfo.picture = URL.createObjectURL(file.raw);
+      console.log(this.baseInfo.picture);
+    },
+    handleRemove() {
+      this.baseInfo.picture = null;
+    },
+    handleAvatarSuccess(res) {
+      let picUrl = JSON.parse(res.data);
+      this.baseInfo.picture = picUrl.url;
+    },
+    // 设置地图返回的定点位置
+    setAddress(address) {
+      console.log("address-->", address);
+      this.baseInfo.address = address;
+    },
+    // 设置地图返回的位置数组
+    setpoi(poi) {
+      console.log("pio-->", poi);
+      this.addressArray = poi;
+    },
+    // 设置坐标
+    setcoordinates(location) {
+      this.location = location;
+      this.baseInfo.positionLongitude = this.location.lat;
+      this.baseInfo.positionLatitude = this.location.lng;
+      console.log("location-->", this.location);
     },
   },
 };
@@ -294,5 +398,26 @@ export default {
   border-radius: 4px;
   padding: 5px;
   margin: 8px 8px;
+}
+.upload {
+  width: 178px;
+  height: 178px;
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  i {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    text-align: center;
+    line-height: 178px;
+  }
+  img {
+    width: 178px;
+    height: 178px;
+  }
 }
 </style>

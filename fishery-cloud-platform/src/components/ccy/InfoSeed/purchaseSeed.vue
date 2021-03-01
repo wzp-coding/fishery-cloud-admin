@@ -2,9 +2,10 @@
   <el-dialog
     :visible.sync="toPurchaseInfo.dialogVisible"
     title="订单信息"
-    width="20%"
+    width="24%"
+    @close="closeEvent"
   >
-    <el-form>
+    <el-form :model="purchaseInfo" label-width="100px" ref="formRef" :rules="rules">
       <el-form-item label="购买数量" prop="purchaseAmount">
         <el-input-number
           v-model="purchaseInfo.purchaseAmount"
@@ -35,11 +36,17 @@ export default {
       purchaseInfo: {
         creatorName: "", //操作者
         baseId: "1248910886228332544",
-        purchaseAmount: 0, //购买数量
+        purchaseAmount: 1, //购买数量
         germchitId: "", //购买商品ID
+      },
+      rules: {
+        creatorName: [
+          { required: true, message: "请输入操作员", trigger: "blur" },
+        ],
       },
     };
   },
+  created() {},
   methods: {
     //下订单
     async purchaseEvent() {
@@ -51,11 +58,13 @@ export default {
       );
       if (res.statusCode === 20000) {
         this.elMessage.success("提交订单成功");
-        console.log('下订单成功');
       } else {
         console.log("下订单失败");
       }
       this.toPurchaseInfo.dialogVisible = false;
+    },
+    closeEvent() {
+      this.$refs.formRef.resetFields();
     },
   },
 };

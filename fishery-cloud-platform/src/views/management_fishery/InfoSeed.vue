@@ -233,27 +233,25 @@ export default {
     },
 
     async removeGermchit(id) {
-      // const confirmResult = await this.$confirm(
-      //   "此操作将永久删除该种苗信息, 是否继续?",
-      //   "提示",
-      //   {
-      //     confirmButtonText: "确定",
-      //     cancelButtonText: "取消",
-      //     type: "warning",
-      //   }
-      //   // .catch 用于捕获错误返回给confirmResult
-      // ).catch((err) => {
-      //   return err;
-      // });
-      // 如果用户确认删除，则返回值为字符串 confirm
-      // 如果用户取消了删除， 则返回值为字符串 cancel
-      // if (confirmResult !== "confirm") {
-      //   // this.$message.info: 灰色提示框
-      //   return this.$message.info("已取消删除");
-      // }
+      const confirmResult = await this.elConfirm(
+        "此操作将永久删除该种苗信息, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+        // .catch 用于捕获错误返回给confirmResult
+      ).catch((err) => {
+        return err;
+      });
+
+      if (confirmResult !== "confirm") {
+        return this.elMessage.info("已取消删除");
+      }
       const { data: res } = await this.$germchit.delete(`${id}`);
       console.log(res);
-      this.$message.success("删种苗信息成功！！");
+      this.elMessage.success('删种苗信息成功！！')
       this.getSeedInfoList();
     },
     purchaseView(id) {

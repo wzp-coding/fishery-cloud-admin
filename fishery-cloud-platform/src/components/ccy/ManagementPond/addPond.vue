@@ -92,6 +92,7 @@ export default {
       if(res.statusCode === 20000){
           this.elMessage.success("添加池塘成功!!");
           this.$emit('fatherMethods')
+          this.$refs.formRef.resetFields();
           this.toDialogInfo.dialogVisible = false
       }
     },
