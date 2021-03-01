@@ -13,7 +13,9 @@ module.exports = class {
         refrigeratoryOutDescription: "出库描述",
         refrigeratoryOutTime: "出库时间",
         refrigeratory_product_id: "冷库产品编号",
-        warehousingPersonId: "管理人员Id"
+        warehousingPersonId: "管理人员Id",
+        refrigeratoryInUsedCapacity: "已用容量",
+        surplusCapacity: "剩余容量"
     }
     /* 标签结束 */
 

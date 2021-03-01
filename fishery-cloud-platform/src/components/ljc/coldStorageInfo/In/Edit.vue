@@ -141,7 +141,6 @@ export default {
       this.form = res.data;
       this.productInfo.value = this.form.processingBaseId;
       this.productInfo.label = this.form.productName;
-      console.log(this.form);
       this.dialogVisible = true;
     },
     /* 根据Id查询信息结束 */
@@ -152,7 +151,6 @@ export default {
         if (!val) return false;
         this.form.processingBaseId = this.productInfo.value;
         this.form.productName = this.productInfo.label;
-        console.log(this.form);
         const { data: res } = await this.model.editInfo(this.form);
         console.log(res);
         if (res.statusCode == 20000) {

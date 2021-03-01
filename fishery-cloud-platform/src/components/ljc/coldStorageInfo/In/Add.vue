@@ -143,8 +143,8 @@ export default {
         this.form.refrigeratoryId = this.id;
         this.form.productName = this.form.productInfo.label;
         this.form.processingBaseId = this.form.productInfo.value;
+        this.form.refrigeratoryInUsedCapacity = 0;
         const { data: res } = await this.model.addInfo(this.form);
-        console.log(res);
         if (res.statusCode == 20000) {
           this.elMessage.success(res.message);
         }
@@ -160,7 +160,6 @@ export default {
       this.$refs.formRef.resetFields();
     },
     /* 监听窗口关闭事件关闭 */
-
   },
 };
 </script>
