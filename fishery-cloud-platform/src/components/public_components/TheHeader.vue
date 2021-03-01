@@ -24,12 +24,12 @@
             <el-dropdown-item style="width: 60px" command="modifyPassword"
               >修改密码</el-dropdown-item
             >
+            <el-dropdown-item style="width: 60px" command="showInvitation"
+              >查看邀请
+            </el-dropdown-item>
             <el-dropdown-item style="width: 60px" command="loginOut"
               >退出登录</el-dropdown-item
             >
-            <el-dropdown-item style="width: 60px" command="changeTheme"
-              >更换主题
-            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -44,17 +44,23 @@
       :isShow="isShowMPD"
       :close-callback="() => (this.isShowMPD = false)"
     ></ModifyPassword>
+    <!-- 查看邀请 -->
+    <ShowInvitation
+      :isShow="isShowSI"
+      :close-callback="() => (this.isShowSI = false)"
+    ></ShowInvitation>
   </div>
 </template>
 <script>
 import InfoUser from "../wzp/user_info/InfoUser";
 import ModifyPassword from "../wzp/user_info/ModifyPassword";
+import ShowInvitation from "../wzp/user_info/ShowInvitation";
 export default {
   data() {
     return {
-      isShowIU: false,
-      isShowMPD: false,
-      curThemeName: "deepBlue",
+      isShowIU: false,//个人中心
+      isShowMPD: false,//修改密码
+      isShowSI:false,//查看邀请
       theme: "cosmic",
       themes: [
         {
@@ -72,11 +78,10 @@ export default {
       ],
     };
   },
-  computed: {
-  },
   components: {
     InfoUser,
     ModifyPassword,
+    ShowInvitation
   },
   methods: {
 
@@ -90,8 +95,8 @@ export default {
         case "modifyPassword":
           this.modifyPassword();
           break;
-        case "changeTheme":
-          this.changeTheme();
+        case "showInvitation":
+          this.showInvitation();
           break;
       }
     },
@@ -105,6 +110,11 @@ export default {
     // 修改密码操作
     modifyPassword() {
       this.isShowMPD = true;
+    },
+
+    // 查看用户邀请
+    showInvitation(){
+      this.isShowSI = true;
     },
 
     // 换主题皮肤
