@@ -71,6 +71,7 @@ export default {
         localStorage.setItem("token", headers.token);
         this.$store.commit("setUserInfo", res.data);
         const { id: roleId } = await this.getRoleIdByLoginId(res.data.id);
+        // console.log('roleId: ', roleId);
         await this.getFunctionByRoleId(roleId);
         this.elMessage.success(res.message);
         this.$router.push("/digital-base");
