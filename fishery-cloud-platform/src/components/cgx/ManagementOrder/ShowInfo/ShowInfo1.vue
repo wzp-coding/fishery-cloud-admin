@@ -70,8 +70,8 @@
     <!-- 内容主题区 物流信息 -->
     <Map
     v-if="isLogistics"
-    @getCenterAddress="setAddress"
-    @getAroundPoi="setpoi"
+    :options="options"
+    :selectedLocation="pio"
     ></Map>
      <!-- 页脚 -->
       <span slot="footer" class="dialog-footer">
@@ -95,6 +95,11 @@ export default {
   data() { 
     return {
       form: {},
+      //传入地图坐标
+      pio:{
+        lat:"",
+        lng:"",
+      },
       label1:"虾苗批次名称",
       prop1:"shrimpBatchName",
       label2:"虾苗品种",
@@ -135,16 +140,11 @@ export default {
     },
   },
   methods: {
-    setpoi(poi){
-      console.log("pio-->",poi)
-    },
-    setAddress(address){
-      console.log("address--->",address)
-    },
     // 监听修改对话框的关闭事件，关闭时重置
     DialogClosed() {
       // 通知父组件的dialogVisible变为false
       this.$emit("notifyParent");
+      // this.pio={}
     },
     // 获取虾苗信息
     async getShrimpById(id) {
@@ -152,7 +152,7 @@ export default {
       const { data: res } = await this.$managementOrder.get('order/'+id);
       console.log("this.$managementOrder--->",this.$managementOrder)
       if (res.statusCode !== 20000) {
-        return this.$message.error("查询该虾苗信息失败！！");
+        return this.elMessage.info("查询该虾苗信息失败！！");
       }
       this.form = res.data;
       console.log("this.form->> ", this.form);
@@ -160,21 +160,27 @@ export default {
     // 展示物流信息的对话框
     async getLogisticsById(id) {
       // 调用根据ID查询
-      const { data: res } = await this.$managementOrder.get(id);
-      if (res.code !== 20000) {
-        return this.$message.error("查询该物流信息失败！！");
+     const { data: res } = await this.$managementOrder.get(`${this.id}`);
+      if (res.statusCode !== 20000) {
+        return this.elMessage.info("查询该物流信息失败！！");
       }
-      // console.log(res)
+      console.log(res)
       this.form = res.data || {};
-      console.log("this.form: ", this.form);
-   
+      console.log("物流信息的form: ", this.form);
+      let a={
+        lat:"",
+        lng:"",
+      }
+      a.lat=res.data.addressLatitude
+      a.lng=res.data.addressLongitude
+      this.pio=a
+      console.log("111111: ", this.pio);
     },
     
   },
   watch: {
     //   这里是id变化的时候重新获取信息
-    id(id) {
-      console.log("id: ", id);
+    id() {
       // 对话框出现才请求数据
       if (this.isLogistics) {
         //   如果是物流信息
