@@ -283,7 +283,7 @@ import TheCardAll from "../../components/ccy/TheCardAll";
 import TheCardHead from "../../components/ccy/TheCardHead";
 import ThePagination from "../../components/ccy/ThePagination";
 import TheDialogAll from "../../components/ccy/TheDialogAll";
-import TheDialogLayout from "../../components/ccy/TheDialogLayout";
+import TheDialogLayout from "../../components/ccy/public/TheDialogLayout";
 import TheInfoSupplyLayout from "../../components/ccy/TheInfoSupplyLayout";
 import editSupply from "../../components/ccy/InfoSupply/editSupply";
 

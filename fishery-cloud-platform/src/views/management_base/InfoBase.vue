@@ -9,6 +9,13 @@
         <div slot="CardTitle">
           <i class="el-icon-document-copy"></i>
           <span>基地信息</span>
+          <el-col style="float: right; width: 100px; margin-right: 10px">
+            <el-button type="primary" 
+            v-if="!baseId"
+            @click="createBase.dialogVisible = true"
+              >创建基地</el-button
+            >
+          </el-col>
         </div>
       </TheCardHead>
       <el-form
@@ -164,7 +171,6 @@
             </el-col>
           </el-row>
         </InfoBaseLayout>
-
         <el-row :gutter="20">
           <el-col>
             <el-form-item
@@ -192,9 +198,6 @@
     </el-card>
     <el-dialog title="基地定位" :visible.sync="dialogVisible" width="33%">
       <el-form :model="baseInfo">
-        <!-- <el-form-item label="基地地址" label-width="110px">
-          <el-input v-model="baseInfo.address"></el-input>
-        </el-form-item> -->
         <el-form-item
           label="基地地址"
           prop="receiveAddress"
@@ -234,6 +237,7 @@
         >
       </span>
     </el-dialog>
+    <createBaseDialog :toDialogInfo="createBase"></createBaseDialog>
   </div>
 </template>
 
@@ -241,15 +245,20 @@
 import TheCardHead from "../../components/ccy/TheCardHead";
 import InfoBaseLayout from "../../components/ccy/InfoBaseLayout";
 import Map from "../../components/public_components/MyLocationPicker";
-
+import createBaseDialog from "../../components/ccy/infoBase/createBaseDialog"
 export default {
   components: {
     TheCardHead,
     InfoBaseLayout,
     Map,
+    createBaseDialog
   },
   data() {
     return {
+      baseId:this.$store.state.baseInfo.id,
+      createBase:{
+        dialogVisible:false
+      },
       baseInfo: {
         name: "",
         creator: "",

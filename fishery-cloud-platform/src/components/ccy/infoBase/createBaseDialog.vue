@@ -1,0 +1,213 @@
+<template>
+  <el-dialog
+    title="创建基地"
+    :visible.sync="toDialogInfo.dialogVisible"
+    width="50%"
+  >
+    <el-form :model="createInfo">
+      <TheDialogLayout>
+        <el-form-item slot="pre" label="基地老板" label-width="115px">
+          <el-input v-model="createInfo.creator"></el-input>
+        </el-form-item>
+        <el-form-item slot="after" label="基地名称" label-width="115px">
+          <el-input v-model="createInfo.name"></el-input>
+        </el-form-item>
+      </TheDialogLayout>
+      <TheDialogLayout>
+        <el-form-item slot="pre" label="成立基金" label-width="115px">
+          <el-input v-model="createInfo.funds"></el-input>
+        </el-form-item>
+        <el-form-item slot="after" label="基地类型" label-width="115px">
+          <el-input v-model="createInfo.types"></el-input>
+        </el-form-item>
+      </TheDialogLayout>
+      <TheDialogLayout>
+        <el-form-item slot="pre" label="营业执照注册号" label-width="115px">
+          <el-input v-model="createInfo.registerNumber"></el-input>
+        </el-form-item>
+        <el-form-item slot="after" label="养殖类型" label-width="115px">
+          <el-input v-model="createInfo.scope"></el-input>
+        </el-form-item>
+      </TheDialogLayout>
+      <TheDialogLayout></TheDialogLayout>
+      <TheDialogLayout>
+        <el-row slot="pre">
+          <el-col :offset="3" :span="5">基地图片</el-col>
+          <el-col :offset="1" :span="15">
+            <div class="upload">
+              <el-upload
+                action="http://119.23.218.131:9103/base/file/upload"
+                ref="upload"
+                name="multipartFile"
+                class="avatar-uploader"
+                :on-success="handleAvatarSuccess"
+                multiple
+                :on-remove="handleRemove"
+                :show-file-list="false"
+              >
+                <img
+                  v-if="createInfo.picture"
+                  :src="createInfo.picture"
+                  class="avatar"
+                />
+                <i class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </div>
+          </el-col>
+        </el-row>
+      </TheDialogLayout>
+      <el-row :gutter="20">
+        <el-col>
+          <el-form-item
+            label="基地简介"
+            label-width="115px"
+            prop="introduction"
+          >
+            <el-input
+              placeholder="请输入基地简介"
+              type="textarea"
+              :rows="7"
+              v-model="createInfo.introduction"
+              maxlength="500"
+              show-word-limit
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <!-- <TheDialogLayout> -->
+      <el-row :gutter="20">
+        <el-col :span="19">
+          <el-form-item label="基地地址" label-width="115px">
+            <el-select
+              placeholder="请通过拖拽地图选择基地地址"
+              v-model="createInfo.address"
+              style="width: 95%"
+            >
+              <el-option
+                v-for="(item, index) in addressArray"
+                :key="item + index"
+                :label="item.address + item.title"
+                :value="item.address + item.title"
+                @click.native="setcoordinates(item.location)"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4"
+          ><el-button type="primary" round>定位</el-button></el-col
+        >
+        <!-- <el-col :span="7">3</el-col> -->
+      </el-row>
+      <Map
+        :selectedLocation="location"
+        @getCenterAddress="setAddress"
+        @getAroundPoi="setpoi"
+      ></Map>
+      <!-- </TheDialogLayout> -->
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="toDialogInfo.dialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="createEvent">确 定</el-button>
+    </span>
+  </el-dialog>
+</template>
+
+<script>
+import TheDialogLayout from "../public/TheDialogLayout";
+import Map from "../../public_components/MyLocationPicker";
+export default {
+  components: {
+    TheDialogLayout,
+    Map,
+  },
+  props: {
+    toDialogInfo: {
+      type: Object,
+    },
+  },
+  data() {
+    return {
+      createInfo: {
+        address: "",
+        creator: "",
+        funds: 0,
+        // id: "string",
+        introduction: "",
+        name: "",
+        picture: "",
+        positionLatitude: "",
+        positionLongitude: "",
+        registerNumber: "",
+        scope: "",
+        types: ["string"],
+      },
+      // 地图传来的地址数组
+      addressArray: [],
+      // 传入地图的中心坐标
+      location: {
+        lat: "",
+        lng: "",
+      },
+    };
+  },
+  methods: {
+    async createEvent() {
+      console.log(this.createInfo);
+      const { data: res } = await this.$base.post("create", this.createInfo);
+      console.log(res);
+      if(res.statusCode === 20000){
+        this.elMessage.success('创建基地成功')
+        this.toDialogInfo.dialogVisible = false;
+      }
+    },
+    handleAvatarSuccess(res, file) {
+      this.createInfo.picture = URL.createObjectURL(file.raw);
+      console.log(this.createInfo.picture);
+    },
+    handleRemove() {
+      this.createInfo.picture = null;
+    },
+    // 设置地图返回的定点位置
+    setAddress(address) {
+      console.log("address-->", address);
+      this.createInfo.address = address;
+    },
+    // 设置地图返回的位置数组
+    setpoi(poi) {
+      console.log("pio-->", poi);
+      this.addressArray = poi;
+    },
+    // 设置坐标
+    setcoordinates(location) {
+      this.location = location;
+      this.createInfo.positionLongitude = this.location.lat;
+      this.createInfo.positionLatitude = this.location.lng;
+      console.log("location-->", this.location);
+    },
+  },
+};
+</script>
+
+<style lang="less" scoped>
+.upload .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+</style>

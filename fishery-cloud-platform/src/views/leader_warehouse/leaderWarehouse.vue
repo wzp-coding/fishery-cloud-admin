@@ -217,6 +217,7 @@ export default {
       const { data: res } = await this.$leader.get(
         `pondInfo/${this.$store.state.baseInfo.id}`
       );
+      console.log(res);
       if (res.statusCode === 20000) {
         this.pondInfo = res.data;
         this.Chart2(this.pondInfo.length, this.pondInfo);
