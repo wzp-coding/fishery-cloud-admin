@@ -21,7 +21,7 @@ const mutations = {
   setUserInfo(state, data) {
     state.userInfo = data;
   },
-
+  
   // 设置权限
   setPermissionList(state, data) {
     state.permissionList = data;
@@ -32,11 +32,6 @@ const mutations = {
     state.baseInfo = data;
   },
 
-  // 设置当前主题
-  setTheme(state, themeName) {
-    state.curTheme = state.themes[themeName];
-    localStorage.setItem('curThemeName', themeName);
-  }
 }
 export default new Vuex.Store({
   state,
