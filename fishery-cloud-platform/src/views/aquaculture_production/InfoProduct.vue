@@ -1,9 +1,16 @@
 <template>
-<div>
-</div>
+  <div class="ljc">ljc</div>
 </template>
 <script>
-export default {}
+export default {
+  name: "ljc",
+  data() {
+    return {};
+  },
+  created() {},
+  methods: {},
+};
 </script>
-<style lang="less" scoped>
+
+<style scoped>
 </style>
