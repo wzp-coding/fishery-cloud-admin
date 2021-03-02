@@ -69,9 +69,14 @@ export default {
       console.log("user: ", res);
       if (res.statusCode === 20000) {
         localStorage.setItem("token", headers.token);
-        this.$store.commit("setUserInfo", res.data);
-        const { id: roleId } = await this.getRoleIdByLoginId(res.data.id);
-        // console.log('roleId: ', roleId);
+        const { id: roleId, name: role } = await this.getRoleInfoByLoginId(
+          res.data.id
+        );
+        const detailUserInfo = await this.getSelfInfo();
+        this.$store.commit(
+          "setUserInfo",
+          Object.assign(detailUserInfo, { roleId, role })
+        );
         await this.getFunctionByRoleId(roleId);
         this.elMessage.success(res.message);
         this.$router.push("/digital-base");
@@ -81,20 +86,35 @@ export default {
       }
     },
 
+    // 获取登录用户的详情信息（比登录之后返回的信息多了个邮箱）
+    async getSelfInfo() {
+      const { data: res } = await this.$user.get("/self");
+      // console.log("getSelfInfo: ", res);
+      if (res.statusCode === 20000) {
+        return res.data;
+      } else {
+        this.elMessage.error(res.message);
+      }
+    },
+
     // 根据loginId得到roleId
-    async getRoleIdByLoginId(loginId) {
+    async getRoleInfoByLoginId(loginId) {
       const { data: res } = await this.$role.get(`/getByUserId/${loginId}`);
-      console.log("getRoleIdByLoginId: ", res);
-      return res.data[0];
+      console.log("getRoleInfoByLoginId: ", res);
+      if (res.statusCode === 20000) {
+        return res.data[0];
+      } else {
+        this.elMessage.error(res.message);
+      }
     },
 
     // 根据loginId得到的roleId查询登录用户的权限，并存到vuex中
     async getFunctionByRoleId(roleId) {
       const { data: res } = await this.$function.get(`/findFunction/${roleId}`);
       // console.log("getFunctionByRoleId: ", res);
-      if(res.statusCode === 20000){
+      if (res.statusCode === 20000) {
         this.$store.commit("setPermissionList", res.data);
-      }else{
+      } else {
         this.elMessage.error(res.message);
       }
     },

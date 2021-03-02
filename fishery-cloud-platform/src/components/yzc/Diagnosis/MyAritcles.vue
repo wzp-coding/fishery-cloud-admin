@@ -30,15 +30,22 @@
         <!--分页区域——end-->
         <!-- 文章详情——start -->
         <div class="detail" v-show="ShowArticleDetail">
-        <el-card class="box-card" style="height:100%">
+        <el-card class="box-card" style="height:100%"> 
             <div slot="header" class="clearfix">
                 <span style="font-weight:900">{{this.ArticleDetailO.diseaseName}} <span style="font-size:10px;color:#a1a1a1">最近修改于{{this.ArticleDetailO.gmtModified}}</span></span>
-                <el-button style="float: right; padding: 3px 0" type="text" @click="ShowArticleDetail=false">关闭</el-button>
+                <el-button style="float: right; padding: 3px 0" type="text" @click="closeDetail">关闭</el-button>
+            </div>
+            <div style="margin-left:15%;margin-bottom:10px">
+            <el-image v-if="showimage" style="width: 500px; height: 200px" error :src="this.ArticleDetailO.picture" :preview-src-list="srcList">
+                <div slot="error" class="image-slot"><i class="el-icon-picture-outline"></i></div>
+            </el-image>
             </div>
             <el-card style="margin-bottom:30px">
-                <div style="padding-bottom:10px;">症状 <span style="float: right; padding: 3px 0;color:#a1a1a1;font-size:10px">查看图片<el-image style="width: 17px; height: 17px" error :src="this.ArticleDetailO.picture" :preview-src-list="srcList">
-                    <div slot="error" class="image-slot"><i class="el-icon-picture-outline"></i></div>
-                    </el-image></span></div>
+                <div style="padding-bottom:10px;">症状 
+                    <span class="viewimg" style="float: right; padding: 3px 0;color:#a1a1a1;font-size:10px" @click="showimage = !showimage" v-show="!showimage">查看图片</span>
+                    <span class="viewimg" style="float: right; padding: 3px 0;color:#a1a1a1;font-size:10px" @click="showimage = !showimage" v-show="showimage">关闭图片</span>
+                </div>
+                
                 <div>{{this.ArticleDetailO.symptom}}</div>
             </el-card>
             <el-card>
@@ -107,6 +114,7 @@ export default {
     },
     data() {
         return {
+            showimage:false,
             srcList:[],
             // 对话框显示隐藏
             dialogVisible:false,
@@ -164,7 +172,6 @@ export default {
         },
         // 打开文章详情页
         async ArticleDetails(info) {
-            console.log(info);
             const {data:res} = await this.$diagnose.get(`/${info.id}/${info.userId}`)
             if(res.statusCode !== 20000) {
                 return this.elMessage.error('获取文章详情失败')
@@ -172,6 +179,11 @@ export default {
             this.ArticleDetailO = res.data
             this.ShowArticleDetail = true
             this.srcList.push(res.data.picture)
+        },
+        //关闭详情卡片
+        closeDetail() {
+            this.showimage = false
+            this.ShowArticleDetail = false
         },
         // 根据id删除文章 
         async DeleteArticle(id) {
@@ -277,9 +289,13 @@ export default {
 
 <style lang="less" scoped>
 .detail {
-    width: 800px;
+    width:50%;
     position: absolute;
-    top: 20%;
     left: 25%;
+    top: 25%;
+    z-index: 1500;
+}
+.viewimg:hover {
+    cursor: pointer;
 }
 </style>

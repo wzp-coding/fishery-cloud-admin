@@ -397,12 +397,12 @@
   .el-button.is-round {
     padding: 12px 20px; }
   .el-button:hover, .el-button:focus {
-    color: #409EFF;
-    border-color: #2b4e7d;
-    background-color: #253758; }
+    color: red;
+    border-color: #641e30;
+    background-color: #38273e; }
   .el-button:active {
-    color: #4397ee;
-    border-color: #4397ee;
+    color: #ef0808;
+    border-color: #ef0808;
     outline: none; }
   .el-button::-moz-focus-inner {
     border: 0; }
@@ -410,16 +410,16 @@
     margin-left: 5px; }
   .el-button.is-plain:hover, .el-button.is-plain:focus {
     background: #222B45;
-    border-color: #409EFF;
-    color: #409EFF; }
+    border-color: red;
+    color: red; }
   .el-button.is-plain:active {
     background: #222B45;
-    border-color: #4397ee;
-    color: #4397ee;
+    border-color: #ef0808;
+    color: #ef0808;
     outline: none; }
   .el-button.is-active {
-    color: #4397ee;
-    border-color: #4397ee; }
+    color: #ef0808;
+    border-color: #ef0808; }
   .el-button.is-disabled, .el-button.is-disabled:hover, .el-button.is-disabled:focus {
     color: #C0C4CC;
     cursor: not-allowed;
@@ -453,42 +453,42 @@
     padding: 12px; }
   .el-button--primary {
     color: #222B45;
-    background-color: #409EFF;
-    border-color: #409EFF; }
+    background-color: red;
+    border-color: red; }
     .el-button--primary:hover, .el-button--primary:focus {
-      background: #3a87da;
-      border-color: #3a87da;
+      background: #d3090e;
+      border-color: #d3090e;
       color: #222B45; }
     .el-button--primary:active {
-      background: #4397ee;
-      border-color: #4397ee;
+      background: #ef0808;
+      border-color: #ef0808;
       color: #222B45;
       outline: none; }
     .el-button--primary.is-active {
-      background: #4397ee;
-      border-color: #4397ee;
+      background: #ef0808;
+      border-color: #ef0808;
       color: #222B45; }
     .el-button--primary.is-disabled, .el-button--primary.is-disabled:hover, .el-button--primary.is-disabled:focus, .el-button--primary.is-disabled:active {
       color: #222B45;
-      background-color: #3165a2;
-      border-color: #3165a2; }
+      background-color: #911623;
+      border-color: #911623; }
     .el-button--primary.is-plain {
-      color: #409EFF;
-      background: #253758;
-      border-color: #2e598f; }
+      color: red;
+      background: #38273e;
+      border-color: #7a1a29; }
       .el-button--primary.is-plain:hover, .el-button--primary.is-plain:focus {
-        background: #409EFF;
-        border-color: #409EFF;
+        background: red;
+        border-color: red;
         color: #222B45; }
       .el-button--primary.is-plain:active {
-        background: #4397ee;
-        border-color: #4397ee;
+        background: #ef0808;
+        border-color: #ef0808;
         color: #222B45;
         outline: none; }
       .el-button--primary.is-plain.is-disabled, .el-button--primary.is-plain.is-disabled:hover, .el-button--primary.is-plain.is-disabled:focus, .el-button--primary.is-plain.is-disabled:active {
-        color: #3470b5;
-        background-color: #253758;
-        border-color: #28426a; }
+        color: #a7111c;
+        background-color: #38273e;
+        border-color: #4e2237; }
   .el-button--success {
     color: #222B45;
     background-color: #67C23A;
@@ -667,16 +667,16 @@
       padding: 7px; }
   .el-button--text {
     border-color: transparent;
-    color: #409EFF;
+    color: red;
     background: transparent;
     padding-left: 0;
     padding-right: 0; }
     .el-button--text:hover, .el-button--text:focus {
-      color: #3a87da;
+      color: #d3090e;
       border-color: transparent;
       background-color: transparent; }
     .el-button--text:active {
-      color: #4397ee;
+      color: #ef0808;
       border-color: transparent;
       background-color: transparent; }
     .el-button--text.is-disabled, .el-button--text.is-disabled:hover, .el-button--text.is-disabled:focus {

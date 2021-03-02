@@ -124,7 +124,7 @@ export default {
     },
     // 获取监控设备信息列表
     async getequipmentList() {
-      const {data:res} = await this.$base.post(`search/${this.page_index}/${this.page_size}`,{
+      const {data:res} = await this.$baseid.post(`search/${this.page_index}/${this.page_size}`,{
         baseId: this.baseId
       })
       if(res.statusCode!==20000) {
@@ -148,7 +148,7 @@ export default {
       if (confirmResult !== 'confirm') {
         return this.elMessage.info('已取消删除')
       }
-      const {data:res} = await this.$base.delete(`/${id}`)
+      const {data:res} = await this.$baseid.delete(`/${id}`)
       if(res.statusCode!==20000) {
         return this.elMessage.error('删除设备失败！')
       }

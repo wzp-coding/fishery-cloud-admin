@@ -35,7 +35,7 @@ export default {
                 })
             }
             if(this.SearchType === '监控设备') {
-                await this.$base.post('/search/1/5',{
+                await this.$baseid.post('/search/1/5',{
                     deviceSerial:this.searchinput,
                     baseId:this.baseId
                 }).then(res => {

@@ -839,7 +839,7 @@
   box-sizing: border-box;
   margin: 5px 0; }
   .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
-    color: #409EFF;
+    color: red;
     background-color: #222B45; }
     .el-select-dropdown.is-multiple .el-select-dropdown__item.selected.hover {
       background-color: #151A30; }
@@ -1156,7 +1156,7 @@
       border-color: #C0C4CC; }
     .el-textarea__inner:focus {
       outline: none;
-      border-color: #409EFF; }
+      border-color: red; }
   .el-textarea .el-input__count {
     color: #909399;
     background: #222B45;
@@ -1256,7 +1256,7 @@
       border-color: #C0C4CC; }
     .el-input__inner:focus {
       outline: none;
-      border-color: #409EFF; }
+      border-color: red; }
   .el-input__suffix {
     position: absolute;
     height: 100%;
@@ -1295,7 +1295,7 @@
     pointer-events: none; }
   .el-input.is-active .el-input__inner {
     outline: none;
-    border-color: #409EFF; }
+    border-color: red; }
   .el-input.is-disabled .el-input__inner {
     background-color: #151A30;
     border-color: #151A30;
@@ -1658,15 +1658,15 @@
 /* Break-point
 --------------------------*/
 .el-tag {
-  background-color: #253758;
-  border-color: #28426a;
-  color: #409eff;
+  background-color: #38273e;
+  border-color: #4e2237;
+  color: red;
   display: inline-block;
   height: 32px;
   padding: 0 10px;
   line-height: 30px;
   font-size: 12px;
-  color: #409EFF;
+  color: red;
   border-width: 1px;
   border-style: solid;
   border-radius: 4px;
@@ -1674,12 +1674,12 @@
   box-sizing: border-box;
   white-space: nowrap; }
   .el-tag.is-hit {
-    border-color: #409EFF; }
+    border-color: red; }
   .el-tag .el-tag__close {
-    color: #409eff; }
+    color: red; }
     .el-tag .el-tag__close:hover {
       color: #222B45;
-      background-color: #409eff; }
+      background-color: red; }
   .el-tag.el-tag--info {
     background-color: #2d354d;
     border-color: #384056;
@@ -1739,16 +1739,16 @@
     .el-tag .el-icon-close::before {
       display: block; }
   .el-tag--dark {
-    background-color: #409eff;
-    border-color: #409eff;
+    background-color: red;
+    border-color: red;
     color: #222b45; }
     .el-tag--dark.is-hit {
-      border-color: #409EFF; }
+      border-color: red; }
     .el-tag--dark .el-tag__close {
       color: #222b45; }
       .el-tag--dark .el-tag__close:hover {
         color: #222B45;
-        background-color: #3a87da; }
+        background-color: #d3090e; }
     .el-tag--dark.el-tag--info {
       background-color: #909399;
       border-color: #909399;
@@ -1795,15 +1795,15 @@
           background-color: #cb5f64; }
   .el-tag--plain {
     background-color: #222b45;
-    border-color: #2e598f;
-    color: #409eff; }
+    border-color: #7a1a29;
+    color: red; }
     .el-tag--plain.is-hit {
-      border-color: #409EFF; }
+      border-color: red; }
     .el-tag--plain .el-tag__close {
-      color: #409eff; }
+      color: red; }
       .el-tag--plain .el-tag__close:hover {
         color: #222B45;
-        background-color: #409eff; }
+        background-color: red; }
     .el-tag--plain.el-tag--info {
       background-color: #222b45;
       border-color: #4e5567;
@@ -2141,7 +2141,7 @@
   .el-select-dropdown__item.hover, .el-select-dropdown__item:hover {
     background-color: #151A30; }
   .el-select-dropdown__item.selected {
-    color: #409EFF;
+    color: red;
     font-weight: bold; }
 
 /* BEM support Func
@@ -2730,7 +2730,7 @@
     cursor: pointer;
     padding-right: 35px; }
     .el-select .el-input__inner:focus {
-      border-color: #409EFF; }
+      border-color: red; }
   .el-select .el-input .el-select__caret {
     color: #C0C4CC;
     font-size: 14px;
@@ -2760,7 +2760,7 @@
     .el-select .el-input.is-disabled .el-input__inner:hover {
       border-color: #151A30; }
   .el-select .el-input.is-focus .el-input__inner {
-    border-color: #409EFF; }
+    border-color: red; }
   .el-select > .el-input {
     display: block; }
   .el-select__input {
