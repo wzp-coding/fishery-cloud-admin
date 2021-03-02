@@ -27,9 +27,9 @@
         <el-form-item :label="labels.productName">
           <el-select v-model="form.productInfo" value-key="value">
             <el-option
-              v-for="item in productsList"
-              :key="item.value"
-              :label="item.label"
+              v-for="item in seedInfo"
+              :key="item.id"
+              :label="item.germchitSpecies"
               :value="item"
             >
             </el-option>
@@ -44,7 +44,7 @@
             <el-option
               v-for="item in createPersonList"
               :key="item.id"
-              :label="item.personName"
+              :label="item.username"
               :value="item.id"
             >
             </el-option>
@@ -94,15 +94,15 @@
 </template>
 <script>
 import ljc from "./In";
-import ljcPublic from "../../public/public";
 export default {
   props: {
     id: {},
+    createPersonList: {},
+    seedInfo: {},
   },
   data() {
     return {
       model: new ljc(this),
-      public: new ljcPublic(this),
       // 表单名称
       formTitle: "入库",
 
@@ -114,16 +114,6 @@ export default {
     };
   },
   computed: {
-    // 管理员数组
-    createPersonList() {
-      return this.public.createPersonList;
-    },
-
-    // 产品
-    productsList() {
-      return this.public.productsList;
-    },
-
     // 验证规则
     formRules() {
       return this.model.formRules;
@@ -141,8 +131,8 @@ export default {
       this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
         this.form.refrigeratoryId = this.id;
-        this.form.productName = this.form.productInfo.label;
-        this.form.processingBaseId = this.form.productInfo.value;
+        this.form.productName = this.form.productInfo.germchitSpecies;
+        this.form.processingBaseId = this.form.productInfo.id;
         this.form.refrigeratoryInUsedCapacity = 0;
         const { data: res } = await this.model.addInfo(this.form);
         if (res.statusCode == 20000) {
