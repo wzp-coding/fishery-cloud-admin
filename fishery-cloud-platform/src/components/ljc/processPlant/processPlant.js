@@ -5,8 +5,13 @@ module.exports = class {
     /* 标签开始 */
     labels = {
         id: "加工厂编号",
+        baseId: "基地ID",
         processingFactoryName: "加工厂名称",
         processingFactoryAddress: "加工厂地址",
+        processingFactoryArea: "加工厂占地面积(平方米)",
+        processingFactoryPositionLatitude: "厂家地址纬度",
+        processingFactoryPositionLongitude: "厂家地址经度",
+        processingType: "主营加工品类",
         createPersonId: "创建者编号",
         createPerson: "创建者"
     }
@@ -33,6 +38,12 @@ module.exports = class {
         ],
         createPersonId: [
             { required: true, message: `请输入创建者`, trigger: "blur" },
+        ],
+        processingFactoryArea: [
+            { required: true, message: `请输入${this.labels.processingFactoryArea}`, trigger: "blur" },
+        ],
+        processingType: [
+            { required: true, message: `请输入${this.labels.processingType}`, trigger: "blur" },
         ],
     }
     /* 表单验证规则对象结束 */

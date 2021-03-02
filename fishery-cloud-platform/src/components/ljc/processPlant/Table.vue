@@ -37,6 +37,7 @@
                 :id="scope.row.id"
                 :labels="labels"
                 :title="title"
+                :createPersonList="createPersonList"
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
@@ -92,6 +93,8 @@ export default {
 
     // 主题
     title: {},
+
+    createPersonList: {},
   },
   data() {
     return {
