@@ -12,10 +12,10 @@
    
      <el-form-item label="客户类型">
     <el-select v-model="customerobject.customerType" placeholder="请选择客户类型">
-      <el-option label="1.个人" value=1></el-option>
-      <el-option label="2.企业" value=2></el-option>
-      <el-option label="3.加工厂" value=3></el-option>
-      <el-option label="4.冷库" value=4></el-option>
+      <el-option label="1.个人" :value="1"></el-option>
+      <el-option label="2.企业" :value="2"></el-option>
+      <el-option label="3.加工厂" :value="3"></el-option>
+      <el-option label=4.冷库 :value="4"></el-option>
     </el-select>
    </el-form-item>
    <el-form-item label="客户名">
@@ -102,7 +102,7 @@ import Map from "../../../public_components/MyLocationPicker"
         //   用户名字
           customerName:"",
         //   类型
-          customerType:null,
+          customerType:1,
           //操作人
           contactPerson:"",
           email:"",
@@ -116,7 +116,7 @@ import Map from "../../../public_components/MyLocationPicker"
         this.customerobject.addressLatitude="";
         this.customerobject.addressLongitude="";
         this.customerobject.receiveAddress="";
-        this.customerobject.baseId="";
+        this.customerobject.baseId=this.$store.state.userInfo.baseId;
         this.customerobject.phoneNumber="";
         this.customerobject.customerName="";
         this.customerobject.customerType=null;
@@ -196,6 +196,7 @@ import Map from "../../../public_components/MyLocationPicker"
         if(this.customertitle=="修改信息"){
             console.log(111111111)
           this.Modifyorder();
+          console.log("customerdata2222-->",this.customerData)
           
         }
         },
@@ -204,6 +205,10 @@ import Map from "../../../public_components/MyLocationPicker"
           look2:function(){
             this.judge();
           }
+          
         },
+        created(){
+              this.customerobject.baseId=this.$store.state.userInfo.baseId
+          }
   }
 </script>
