@@ -108,6 +108,7 @@ import MonitorEnvironmentDeviceQuery from '../../components/yzc/MonitorEnvironme
 import MonitorEnvironmentForecastForm from '../../components/yzc/MonitorEnvironment/MonitorEnvironmentForecastForm'
 import MonitorEnvironmentForecastFormrevise from '../../components/yzc/MonitorEnvironment/MonitorEnvironmentForecastFormrevise'
 import Breadcrumb from '../../components/public_components/Breadcrumb'
+import { mapState } from 'vuex'
 export default {
     components: {
         MonitorEnvironmentDeviceQuery,
@@ -181,8 +182,20 @@ export default {
             showother: false,
             // showDeviceQuery showEnvironmentalPrediction通过它们来决定显示那个功能模块 环境预测or设备查询
             showDeviceQuery: false, // 控制设备查询模块
-            showEnvironmentalPrediction: true // 控制环境预测功能模块
+            showEnvironmentalPrediction: true, // 控制环境预测功能模块
+            chartVM: undefined
         }
+    },
+    watch:{
+        "userInfo.theme":{
+            handler(val){
+                this.chartVM.dispose();
+                this.getForecastData(this.forecaseForm);
+            }
+        }
+    },
+    computed:{
+        ...mapState(['userInfo'])
     },
     methods: {
         // 获取设备信息
@@ -282,7 +295,8 @@ export default {
         ChartInit(xData, orgindata, predictdata, unit) {
             const chart = this.$refs.chart
             if (chart) {
-                const myChart = this.$echarts.init(chart)
+                const myChart = this.$echarts.init(chart,this.userInfo.theme)
+                this.chartVM = myChart
                 const option = {
                     tooltip: {
                       trigger: 'axis'

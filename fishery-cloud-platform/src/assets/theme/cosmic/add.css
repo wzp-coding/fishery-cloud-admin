@@ -14,8 +14,10 @@
 .custom-cosmic .baseInformation p {
     color: #fefeff !important;
 }
+
 /* 我的基地-实况监控 */
-.custom-cosmic .wzp_style_countRunningDevice{
+
+.custom-cosmic .wzp_style_countRunningDevice {
     color: #fff;
 }
 
@@ -42,4 +44,19 @@
 .custom-cosmic .search .wzp_style_input {
     background-color: #323259;
     color: #fff;
+}
+
+/* 领导仓-基地数据 */
+
+.custom-cosmic .mainbox {
+    background-color: #323259;
+    color: #ccc;
+}
+
+.custom-cosmic .panel {
+    background-color: #323259;
+}
+
+.custom-cosmic .wzp_style_leaderTitle {
+    color: #ccc;
 }

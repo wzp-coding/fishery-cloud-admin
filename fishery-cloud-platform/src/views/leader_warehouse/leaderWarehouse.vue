@@ -1,7 +1,7 @@
 <template>
   <div class="body">
     <header>
-      <h1>基地信息概览</h1>
+      <h1 class="wzp_style_leaderTitle">基地信息概览</h1>
       <div class="showTime">当前时间：</div>
     </header>
     <section class="mainbox">
@@ -13,7 +13,11 @@
         </div>
         <div class="panel">
           <h2>各池塘投放种苗尾数</h2>
-          <div class="chart2 chart" @mouseover="overEvent" @mouseleave ="outEvent"></div>
+          <div
+            class="chart2 chart"
+            @mouseover="overEvent"
+            @mouseleave="outEvent"
+          ></div>
           <div class="panel-footer"></div>
         </div>
         <div class="panel">
@@ -140,6 +144,7 @@
 
 
 <script>
+import { mapState } from 'vuex';
 // var myVue = {};
 export default {
   data() {
@@ -154,15 +159,42 @@ export default {
       supplyInInfo: [],
       proInfo: [],
       orderList: [],
-      orderTimeList:[],
+      orderTimeList: [],
       nowLength: 0,
       timer: "",
-      orderTimeInfo:{
-        baseId:this.$store.state.baseInfo.id,
-        end:'',
-        begin:''
-      }
+      orderTimeInfo: {
+        baseId: this.$store.state.baseInfo.id,
+        end: "",
+        begin: "",
+      },
+      chart1VM: undefined,
+      chart2VM: undefined,
+      chart3VM: undefined,
+      chart4VM: undefined,
+      chart5VM: undefined,
+      chart6VM: undefined,
     };
+  },
+  watch: {
+    "userInfo.theme": {
+      handler(val) {
+        this.chart1VM.dispose();
+        this.chart2VM.dispose();
+        this.chart3VM.dispose();
+        this.chart4VM.dispose();
+        this.chart5VM.dispose();
+        this.chart6VM.dispose();
+        this.putChart1();
+        this.putChart3();
+        this.getSupplyInInfo();
+        this.getPondInfo();
+        this.getSupplyInfo();
+        this.putChart6()
+      },
+    },
+  },
+  computed:{
+    ...mapState(['userInfo'])
   },
   created() {
     this.getBaseAmount(); //获取基地总人数
@@ -294,14 +326,17 @@ export default {
       month = month < 10 ? "0" + month : month;
       resultDate = year + "-" + month + "-" + date + " " + hms;
       console.log(resultDate);
-      currDate = this.timeFormat(currDate)
-      this.orderTimeInfo.begin = currDate
-      this.orderTimeInfo.end = resultDate
+      currDate = this.timeFormat(currDate);
+      this.orderTimeInfo.begin = currDate;
+      this.orderTimeInfo.end = resultDate;
       console.log(this.orderTimeInfo);
-      const {data: res} = await this.$leader.post('order',this.orderTimeInfo)
+      const { data: res } = await this.$leader.post(
+        "order",
+        this.orderTimeInfo
+      );
       console.log(res);
-      if(res.statusCode === 20000){
-        this.orderTimeList = res.data
+      if (res.statusCode === 20000) {
+        this.orderTimeList = res.data;
       }
     },
     async getOrderBySize(size) {
@@ -313,8 +348,9 @@ export default {
         console.log(this.orderList);
       }
     },
-    putChart1(data) {
-      let myChart = this.$echarts.init(document.querySelector(".chart1"));
+    putChart1(data=this.baseGermchitInfo) {
+      let myChart = this.$echarts.init(document.querySelector(".chart1"),this.userInfo.theme);
+      this.chart1VM = myChart;
       let name = [];
       let obj = [];
       data.forEach((e) => {
@@ -339,9 +375,6 @@ export default {
           orient: "vertical",
           left: "left",
           data: name,
-          textStyle: {
-            color: "white",
-          },
         },
         series: [
           {
@@ -378,7 +411,8 @@ export default {
       }, 3000);
     },
     putChart2(data) {
-      let myChart = this.$echarts.init(document.querySelector(".chart2"));
+      let myChart = this.$echarts.init(document.querySelector(".chart2"),this.userInfo.theme);
+      this.chart2VM = myChart;
       let name = [];
       let inputNum = [];
       data.forEach((e) => {
@@ -396,7 +430,6 @@ export default {
             color: "#c1c2c5",
           },
         },
-        color: ["white"],
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -415,9 +448,6 @@ export default {
           {
             type: "category",
             data: name,
-            axisLabel: {
-              color: "white",
-            },
             axisTick: {
               alignWithLabel: true,
             },
@@ -432,9 +462,6 @@ export default {
         yAxis: [
           {
             type: "value",
-            axisLabel: {
-              color: "white",
-            },
             axisLine: {
               show: true,
               lineStyle: {
@@ -473,8 +500,9 @@ export default {
 
       myChart.setOption(option);
     },
-    putChart3(data) {
-      let myChart = this.$echarts.init(document.querySelector(".chart3"));
+    putChart3(data=this.baseGermchitInfo) {
+      let myChart = this.$echarts.init(document.querySelector(".chart3"),this.userInfo.theme);
+      this.chart3VM = myChart;
       let name = [];
       let obj = [];
       data.forEach((e) => {
@@ -502,9 +530,6 @@ export default {
           orient: "vertical",
           left: "left",
           data: name,
-          textStyle: {
-            color: "white",
-          },
         },
         series: [
           {
@@ -527,7 +552,8 @@ export default {
       myChart.setOption(option);
     },
     putChart4(data) {
-      let myChart = this.$echarts.init(document.querySelector(".chart4"));
+      let myChart = this.$echarts.init(document.querySelector(".chart4"),this.userInfo.theme);
+      this.chart4VM = myChart;
       let name = [];
       let obj = [];
       data.forEach((e) => {
@@ -547,9 +573,6 @@ export default {
           orient: "vertical",
           left: "left",
           data: name,
-          textStyle: {
-            color: "white",
-          },
         },
         series: [
           {
@@ -574,8 +597,9 @@ export default {
         myChart.resize();
       });
     },
-    putChart6(data) {
-      let myChart = this.$echarts.init(document.querySelector(".chart6"));
+    putChart6(data=this.supplyOutInfo) {
+      let myChart = this.$echarts.init(document.querySelector(".chart6"),this.userInfo.theme);
+      this.chart6VM = myChart;
       let name = [];
       let obj = [];
       data.forEach((e) => {
@@ -595,9 +619,6 @@ export default {
           orient: "vertical",
           left: "left",
           data: name,
-          textStyle: {
-            color: "white",
-          },
         },
         series: [
           {
@@ -636,7 +657,8 @@ export default {
           name.push(e.name);
         }
       });
-      let myChart = this.$echarts.init(document.querySelector(".chart5"));
+      let myChart = this.$echarts.init(document.querySelector(".chart5"),this.userInfo.theme);
+      this.chart5VM = myChart;
       let option = {
         color: ["#FF9F7F", "grey"],
         tooltip: {
@@ -648,9 +670,6 @@ export default {
         },
         legend: {
           data: ["剩余量", "使用量"],
-          textStyle: {
-            color: "white",
-          },
         },
         grid: {
           left: "3%",
@@ -660,19 +679,10 @@ export default {
         },
         xAxis: {
           name: "kg",
-          nameTextStyle: {
-            color: "white",
-          },
           type: "value",
-          axisLabel: {
-            color: "white",
-          },
         },
         yAxis: {
           type: "category",
-          axisLabel: {
-            color: "white",
-          },
           data: name,
         },
         series: [
@@ -704,13 +714,13 @@ export default {
         myChart.resize();
       });
     },
-    overEvent(){
-      console.log('移入');
-      clearInterval(this.timer)
+    overEvent() {
+      console.log("移入");
+      clearInterval(this.timer);
     },
-    outEvent(){
-      console.log('移出');
-      this.getPondInfo()
+    outEvent() {
+      console.log("移出");
+      this.getPondInfo();
     },
     timeFormat(date) {
       var y = date.getFullYear();
@@ -736,7 +746,7 @@ export default {
   src: url(../../assets/fonts/DS-DIGIT.TTF);
 }
 .body {
-  background: url(../../assets/images/bg.jpg) no-repeat #000;
+  // background: url(../../assets/images/bg.jpg) no-repeat transparent;
   background-size: 100% 100%;
   width: 100%;
 }
@@ -747,16 +757,14 @@ ul {
 }
 header h1 {
   font-size: 2rem;
-  color: #fff;
   text-align: center;
 }
 header {
-  background-color: aqua;
-  background: url(../../assets/head_bg.png) no-repeat top center;
+  // background-color: aqua;
+  // background: url(../../assets/head_bg.png) no-repeat top center;
 }
 .mainbox {
   display: flex;
-  color: #fff;
   padding: 5px;
   justify-content: space-between;
 }
@@ -780,7 +788,7 @@ header {
 .columnSt {
   margin: 0 0 5px 0;
   border: 1px solid rgba(25, 186, 139, 0.17);
-  background: rgba(255, 255, 255, 0.04) url(../../assets/line.png);
+  // background: rgba(255, 255, 255, 0.04) url(../../assets/line.png);
   ul::before {
     content: "";
     position: absolute;
@@ -830,7 +838,7 @@ header .showTime {
   height: 17rem;
   width: 100%;
   border: 1px solid rgba(25, 186, 139, 0.17);
-  background: rgba(255, 255, 255, 0.04) url(../../assets/line.png);
+  // background: rgba(255, 255, 255, 0.04) url(../../assets/line.png);
   padding: 0 0.1875rem 0.5rem;
   margin-bottom: 0.1875rem;
   .el-row {

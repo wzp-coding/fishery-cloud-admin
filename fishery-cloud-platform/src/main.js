@@ -8,7 +8,7 @@ import './assets/less/global.less'
 // 导入字体图标
 import './assets/fonts/iconfont.css'
 // 导入主题
-import './assets/theme/index.css'
+import './assets/theme/index.js'
 
 // 封装axios并且把包挂载到原型对象上
 import axiosObject from './util/request/index'

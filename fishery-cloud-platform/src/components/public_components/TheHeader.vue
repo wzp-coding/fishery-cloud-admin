@@ -30,9 +30,9 @@
             <el-dropdown-item style="width: 60px" command="modifyPassword"
               >修改密码</el-dropdown-item
             >
-            <el-dropdown-item style="width: 60px" command="showInvitation"
+            <!-- <el-dropdown-item style="width: 60px" command="showInvitation"
               >查看邀请
-            </el-dropdown-item>
+            </el-dropdown-item> -->
             <el-dropdown-item style="width: 60px" command="loginOut"
               >退出登录</el-dropdown-item
             >
@@ -134,7 +134,7 @@ export default {
     // 换主题皮肤
     async changeTheme(color) {
       const form = Object.assign(this.userInfo, { theme: color });
-      console.log('form: ', form);
+      // console.log('form: ', form);
       const { data: res } = await this.$user.put("/user", form);
       if (res.statusCode === 20000) {
         document.body.className = "custom-" + color;

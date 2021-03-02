@@ -43,3 +43,18 @@
     background-color: #222b45;
     color: #fff
 }
+
+/* 领导仓-基地数据 */
+
+.custom-dark .mainbox {
+    background-color: #222b45;
+    color: #ccc;
+}
+
+.custom-dark .panel {
+    background-color: #222b45;
+}
+
+.custom-dark .wzp_style_leaderTitle {
+    color: #ccc;
+}

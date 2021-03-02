@@ -259,13 +259,13 @@
     position: absolute;
     left: 4px;
     height: 100%;
-    border-left: 2px solid #151A30; }
+    border-left: 2px solid #1F1F1F; }
   .el-timeline-item__icon {
-    color: #222B45;
+    color: #353535;
     font-size: 13px; }
   .el-timeline-item__node {
     position: absolute;
-    background-color: #151A30;
+    background-color: #1F1F1F;
     border-radius: 50%;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -285,15 +285,15 @@
       width: 14px;
       height: 14px; }
     .el-timeline-item__node--primary {
-      background-color: red; }
+      background-color: #F24681; }
     .el-timeline-item__node--success {
-      background-color: #67C23A; }
+      background-color: #63B124; }
     .el-timeline-item__node--warning {
-      background-color: #E6A23C; }
+      background-color: #FFA40E; }
     .el-timeline-item__node--danger {
-      background-color: #F56C6C; }
+      background-color: #B50926; }
     .el-timeline-item__node--info {
-      background-color: #909399; }
+      background-color: #45BEF5; }
   .el-timeline-item__dot {
     position: absolute;
     display: -webkit-box;
@@ -306,7 +306,7 @@
     -ms-flex-align: center;
     align-items: center; }
   .el-timeline-item__content {
-    color: #F1F3FE; }
+    color: #FFFFFF; }
   .el-timeline-item__timestamp {
     color: #AEB3BE;
     line-height: 1;

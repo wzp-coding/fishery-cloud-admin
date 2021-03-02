@@ -6,22 +6,35 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 var myVue = {};
 export default {
   props: {},
   data() {
     return {
       baseId:this.$store.state.baseInfo.id,
-      baseGermchitInfo:[],    //基地已有种苗信息
+      baseGermchitInfo:[], //基地已有种苗信息
       nameList: [], //货物名称
       valueList: [], //进货量
+      echartVM:undefined
     };
+  },
+  computed:{
+    ...mapState(['userInfo'])
+  },
+  watch:{
+    "userInfo.theme":{
+      handler(val){
+        this.echartVM.dispose();
+        this.chartEvent1();
+      }
+    }
   },
   beforeCreate() {
     myVue = this;
   },
   created() {
-    this.getChartInfo();      //查询基地已有的种苗信息   
+    this.getChartInfo(); //查询基地已有的种苗信息
   },
   methods: {
     async getChartInfo() {
@@ -61,8 +74,8 @@ export default {
       this.chartEvent1();
     },
     chartEvent1() {
-      let chart1 = this.$echarts.init(document.querySelector(".chart1"));
-      console.log(chart1);
+      let chart1 = this.$echarts.init(document.querySelector(".chart1"),this.userInfo.theme);
+      this.echartVM = chart1;
       let option = {
         title: {
           text: "种苗进货量",

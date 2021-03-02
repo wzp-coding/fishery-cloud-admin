@@ -253,9 +253,9 @@
   vertical-align: middle;
   display: inline-block; }
   .el-badge__content {
-    background-color: #F56C6C;
+    background-color: #B50926;
     border-radius: 10px;
-    color: #222B45;
+    color: #353535;
     display: inline-block;
     font-size: 12px;
     height: 18px;
@@ -263,7 +263,7 @@
     padding: 0 6px;
     text-align: center;
     white-space: nowrap;
-    border: 1px solid #222B45; }
+    border: 1px solid #353535; }
     .el-badge__content.is-fixed {
       position: absolute;
       top: 0;
@@ -279,12 +279,12 @@
       right: 0;
       border-radius: 50%; }
     .el-badge__content--primary {
-      background-color: red; }
+      background-color: #F24681; }
     .el-badge__content--success {
-      background-color: #67C23A; }
+      background-color: #63B124; }
     .el-badge__content--warning {
-      background-color: #E6A23C; }
+      background-color: #FFA40E; }
     .el-badge__content--info {
-      background-color: #909399; }
+      background-color: #45BEF5; }
     .el-badge__content--danger {
-      background-color: #F56C6C; }
+      background-color: #B50926; }

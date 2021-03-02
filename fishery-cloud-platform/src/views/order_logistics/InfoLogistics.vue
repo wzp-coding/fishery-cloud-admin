@@ -265,7 +265,7 @@ export default {
       isShowMap1: true,
       isShowMap2: false,
       // 基地编号
-      baseId: this.defines.baseId,
+      baseId: "1350657222372835330",
 
       // 用于控制分页的当前页码和条数
       pageInfo: {
@@ -410,13 +410,13 @@ export default {
 
     // 获取人员信息
     async getPersonInfoList() {
-      const { data: res } = await this.$http.get(`${this.$limit}/user/getBaseMember`, {
-        headers: {
-          Authorization: this.token
-        }
-      })
-      this.personInfoList = res.data
-      console.log(this.personInfoList)
+      // const { data: res } = await this.$http.get(`${this.$limit}/user/getBaseMember`, {
+      //   headers: {
+      //     Authorization: this.token
+      //   }
+      // })
+      // this.personInfoList = res.data
+      // console.log(this.personInfoList)
     },
 
     // 获取订单信息
@@ -432,19 +432,19 @@ export default {
 
     // 获取物流列表
     async getlogisticsList() {
-      const { data: res } = await this.$http.post(
-        `/logistics/search/${this.pageInfo.pagenum}/${this.pageInfo.pagesize}`,
-        {
-          baseId: this.baseId,
-        }
-      )
-      console.log(res)
-      if (res.code !== 20000) {
-        return this.$message.error('获取物流信息列表失败！！')
-      }
-      this.logisticsList = res.data.rows
-      this.total = res.data.total
-      console.log(this.logisticsList)
+      // const { data: res } = await this.$http.post(
+      //   `/logistics/search/${this.pageInfo.pagenum}/${this.pageInfo.pagesize}`,
+      //   {
+      //     baseId: this.baseId,
+      //   }
+      // )
+      // console.log(res)
+      // if (res.code !== 20000) {
+      //   return this.$message.error('获取物流信息列表失败！！')
+      // }
+      // this.logisticsList = res.data.rows
+      // this.total = res.data.total
+      // console.log(this.logisticsList)
     },
 
     // 定位的对话框

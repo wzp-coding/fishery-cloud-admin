@@ -1,0 +1,56 @@
+.custom-metarial-dark .globalHeader {
+    color: #fff !important;
+    background-color: transparent !important;
+}
+
+/* 我的基地-数字基地 */
+
+.custom-metarial-dark .baseInformation i {
+    color: #fff !important;
+}
+
+.custom-metarial-dark .baseInformation p {
+    color: #fff !important;
+}
+
+/* 我的基地-实况监控 */
+
+.custom-metarial-dark .wzp_style_countRunningDevice {
+    color: #fff;
+}
+
+/* 渔业管理-池塘管理 */
+
+.custom-metarial-dark .bigBox p {
+    color: #fff;
+}
+
+.custom-metarial-dark .infoTitle .pondName {
+    color: #fff !important;
+}
+
+.custom-metarial-dark .main {
+    border: 1px solid #1f1f1f !important;
+}
+
+/* 设备管理-监控设备 */
+
+/* 设备管理-气象设备 */
+
+/* 设备管理-水质设备 */
+
+.custom-metarial-dark .search .wzp_style_input {
+    background-color: #353535;
+    color: #fff
+}
+
+/* 领导仓-基地数据 */
+
+.custom-metarial-dark .mainbox {
+    background-color: #353535;
+    color: #ccc;
+}
+
+.custom-metarial-dark .wzp_style_leaderTitle {
+    color: #ccc;
+}

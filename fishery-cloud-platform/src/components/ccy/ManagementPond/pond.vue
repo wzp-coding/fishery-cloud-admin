@@ -473,11 +473,11 @@ export default {
 }
 .main {
   border: 1px solid rgb(179, 179, 179);
-  width: 31.5%;
+  width: 31%;
   padding: 5px;
   margin: 0 0 10px 10px;
   border-radius: 4px;
-  height: 240px;
+  height: 270px;
   position: relative;
 }
 .el-row {
@@ -501,8 +501,8 @@ el-col {
   }
 }
 .imgBox {
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   .imgBox {
     border: 1px solid rgb(175, 172, 172);
     padding: 5px;
