@@ -2,6 +2,7 @@
 module.exports = class {
     constructor(vue) {
         this.vue = vue;
+        this.staffList = this.getStaff();
     }
 
     /* 管理员数组开始 */

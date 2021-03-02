@@ -44,12 +44,14 @@ export default {
 
       myTitle: "冷库出入信息管理",
 
-      staffs: [],
+      createPersonList: [],
     };
   },
   computed: {},
   created() {
-    this.staff();
+    console.log(this.model);
+    console.log(this.createPersonList);
+    this.getStaff();
   },
   methods: {
     /* 返回开始 */
@@ -60,10 +62,11 @@ export default {
     },
     /* 返回结束 */
 
-    async staff() {
-      const { data: res } = await this.model.getStaff();
-      console.log(res);
-    },
+    // 获取员工
+    // async getStaff() {
+    //   const { data: res } = await this.model.getStaff();
+    //   this.createPersonList = res.data.records;
+    // },
   },
 };
 </script>
