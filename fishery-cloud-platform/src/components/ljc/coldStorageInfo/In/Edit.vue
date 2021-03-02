@@ -25,11 +25,11 @@
         :hide-required-asterisk="true"
       >
         <el-form-item :label="labels.productName">
-          <el-select v-model="productInfo" value-key="value">
+          <el-select v-model="productInfo" value-key="germchitSpecies">
             <el-option
-              v-for="item in productsList"
-              :key="item.value"
-              :label="item.label"
+              v-for="item in seedInfo"
+              :key="item.id"
+              :label="item.germchitSpecies"
               :value="item"
             >
             </el-option>
@@ -44,7 +44,7 @@
             <el-option
               v-for="item in createPersonList"
               :key="item.id"
-              :label="item.personName"
+              :label="item.username"
               :value="item.id"
             >
             </el-option>
@@ -94,16 +94,16 @@
 </template>
 <script>
 import ljc from "./In";
-import ljcPublic from "../../public/public";
 export default {
   props: {
     id: {},
     labels: {},
+    createPersonList: {},
+    seedInfo: {},
   },
   data() {
     return {
       model: new ljc(this),
-      public: new ljcPublic(this),
       // 表单名称
       formTitle: "修改冷库信息",
 
@@ -118,19 +118,9 @@ export default {
     };
   },
   computed: {
-    // 管理员数组
-    createPersonList() {
-      return this.public.createPersonList;
-    },
-
     // 验证规则
     formRules() {
       return this.model.formRules;
-    },
-
-    // 产品
-    productsList() {
-      return this.public.productsList;
     },
   },
   created() {},
@@ -139,8 +129,8 @@ export default {
     async getInfoById() {
       const { data: res } = await this.model.getInfoById(this.id);
       this.form = res.data;
-      this.productInfo.value = this.form.processingBaseId;
-      this.productInfo.label = this.form.productName;
+      this.productInfo.id = this.form.processingBaseId;
+      this.productInfo.germchitSpecies = this.form.productName;
       this.dialogVisible = true;
     },
     /* 根据Id查询信息结束 */
@@ -149,8 +139,8 @@ export default {
     editInfo() {
       this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
-        this.form.processingBaseId = this.productInfo.value;
-        this.form.productName = this.productInfo.label;
+        this.form.processingBaseId = this.productInfo.id;
+        this.form.productName = this.productInfo.germchitSpecies;
         const { data: res } = await this.model.editInfo(this.form);
         console.log(res);
         if (res.statusCode == 20000) {

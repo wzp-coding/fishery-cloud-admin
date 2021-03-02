@@ -27,10 +27,10 @@
         <el-form-item :label="labels.productName">
           <el-select v-model="form.productName" value-key="value" disabled>
             <el-option
-              v-for="item in productsList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.label"
+              v-for="item in seedInfo"
+              :key="item.id"
+              :label="item.germchitSpecies"
+              :value="item.germchitSpecies"
             >
             </el-option>
           </el-select>
@@ -44,7 +44,7 @@
             <el-option
               v-for="item in createPersonList"
               :key="item.id"
-              :label="item.personName"
+              :label="item.username"
               :value="item.id"
             >
             </el-option>
@@ -106,15 +106,15 @@
 </template>
 <script>
 import ljc from "./Out";
-import ljcPublic from "../../public/public";
 export default {
   props: {
     id: {},
+    createPersonList: {},
+    seedInfo: {},
   },
   data() {
     return {
       model: new ljc(this),
-      public: new ljcPublic(this),
       // 表单名称
       formTitle: "出库",
 
@@ -132,19 +132,9 @@ export default {
     };
   },
   computed: {
-    // 管理员数组
-    createPersonList() {
-      return this.public.createPersonList;
-    },
-
     // 验证规则
     formRules() {
       return this.model.formRules;
-    },
-
-    // 产品
-    productsList() {
-      return this.public.productsList;
     },
 
     // 标题

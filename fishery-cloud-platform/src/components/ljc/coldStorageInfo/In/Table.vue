@@ -45,6 +45,8 @@
               <Edit
                 :id="scope.row.id"
                 :labels="labels"
+                :createPersonList="createPersonList"
+                :seedInfo="seedInfo"
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
@@ -55,7 +57,12 @@
                 placement="top"
                 :enterable="false"
               >
-                <Out :id="scope.row.id" :labels="labels" />
+                <Out
+                  :id="scope.row.id"
+                  :labels="labels"
+                  :createPersonList="createPersonList"
+                  :seedInfo="seedInfo"
+                />
               </el-tooltip>
             </el-col>
             <el-col :span="8">
@@ -91,6 +98,10 @@ export default {
 
     // 数据标签
     labels: {},
+
+    createPersonList: {},
+
+    seedInfo: {},
   },
   data() {
     return {

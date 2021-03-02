@@ -2,21 +2,7 @@
 module.exports = class {
     constructor(vue) {
         this.vue = vue;
-        this.staffList = this.getStaff();
     }
-
-    /* 管理员数组开始 */
-    createPersonList = [
-        {
-            personName: "张三",
-            id: "1111",
-        },
-        {
-            personName: "李四",
-            id: "2222",
-        },
-    ]
-    /* 管理员数组结束 */
 
     /* 加工产品数组开始 */
     productsList = [
@@ -42,5 +28,13 @@ module.exports = class {
     }
     /* 获取基地人员结束 */
 
-
+    // 获取所有种苗信息
+    getSeedInfo() {
+        return new Promise((resolve) => {
+            this.vue.$germchit.get()
+                .then((res) => {
+                    resolve(res);
+                })
+        })
+    }
 }

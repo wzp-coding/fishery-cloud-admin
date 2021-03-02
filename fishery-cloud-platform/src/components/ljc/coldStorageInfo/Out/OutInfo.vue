@@ -1,7 +1,13 @@
 <template>
   <div>
     <!-- 列表区域开始 -->
-    <Table :allList="allList" :labels="labels" @getAllInfo="getAllInfo()" />
+    <Table
+      :allList="allList"
+      :createPersonList="createPersonList"
+      :seedInfo="seedInfo"
+      :labels="labels"
+      @getAllInfo="getAllInfo()"
+    />
     <!-- 列表区域结束 -->
 
     <!-- 换页开始 -->
@@ -24,6 +30,11 @@ export default {
     Pagination,
     Table,
   },
+  props: {
+    createPersonList: {},
+    seedInfo: {},
+  },
+  created() {},
   data() {
     return {
       // js
