@@ -18,7 +18,15 @@
           <el-input v-model="createInfo.funds"></el-input>
         </el-form-item>
         <el-form-item slot="after" label="基地类型" label-width="115px">
-          <el-input v-model="createInfo.types"></el-input>
+          <el-select v-model="createInfo.types" multiple   placeholder="请选择">
+            <el-option
+              v-for="item in baseTypeList"
+              :key="item._id"
+              :label="item.name"
+              :value="item._id"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
       </TheDialogLayout>
       <TheDialogLayout>
@@ -29,7 +37,6 @@
           <el-input v-model="createInfo.scope"></el-input>
         </el-form-item>
       </TheDialogLayout>
-      <TheDialogLayout></TheDialogLayout>
       <TheDialogLayout>
         <el-row slot="pre">
           <el-col :offset="3" :span="5">基地图片</el-col>
@@ -75,8 +82,8 @@
         </el-col>
       </el-row>
       <!-- <TheDialogLayout> -->
-      <el-row :gutter="20">
-        <el-col :span="19">
+      <el-row >
+        <el-col :span="24">
           <el-form-item label="基地地址" label-width="115px">
             <el-select
               placeholder="请通过拖拽地图选择基地地址"
@@ -94,10 +101,6 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="4"
-          ><el-button type="primary" round>定位</el-button></el-col
-        >
-        <!-- <el-col :span="7">3</el-col> -->
       </el-row>
       <Map
         :selectedLocation="location"
@@ -131,8 +134,7 @@ export default {
       createInfo: {
         address: "",
         creator: "",
-        funds: 0,
-        // id: "string",
+        funds: null,
         introduction: "",
         name: "",
         picture: "",
@@ -140,7 +142,7 @@ export default {
         positionLongitude: "",
         registerNumber: "",
         scope: "",
-        types: ["string"],
+        types: [],
       },
       // 地图传来的地址数组
       addressArray: [],
@@ -149,15 +151,29 @@ export default {
         lat: "",
         lng: "",
       },
+      baseTypeList: [],
     };
   },
+  created() {
+    this.getBaseType();
+  },
   methods: {
+    async getBaseType() {
+      const { data: res } = await this.$baseType.get();
+      console.log(res);
+      if (res.statusCode === 20000) {
+        this.baseTypeList = res.data;
+        for(let i=0;i<this.baseTypeList.length;i++){
+          this.baseTypeList[i] = JSON.parse(this.baseTypeList[i])
+        }
+      }
+    },
     async createEvent() {
       console.log(this.createInfo);
       const { data: res } = await this.$base.post("create", this.createInfo);
       console.log(res);
-      if(res.statusCode === 20000){
-        this.elMessage.success('创建基地成功')
+      if (res.statusCode === 20000) {
+        this.elMessage.success("创建基地成功");
         this.toDialogInfo.dialogVisible = false;
       }
     },

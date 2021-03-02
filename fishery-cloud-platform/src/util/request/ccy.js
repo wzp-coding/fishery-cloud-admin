@@ -8,5 +8,6 @@ export default {
     admin:"http://119.23.218.131:9102/admin"    ,        //管理员接口
     leader:'http://119.23.218.131:9106/leader' ,             //领导仓接口
     advise:"http://119.23.218.131:9103/base/germchit/type",      //养殖建议
-    fileUpload:"http://119.23.218.131:9103/base/file/upload"    //文件上传
+    fileUpload:"http://119.23.218.131:9103/base/file/upload",    //文件上传
+    baseType:"http://119.23.218.131:9104/customization/label/type/all "  //基地类型 
 }
