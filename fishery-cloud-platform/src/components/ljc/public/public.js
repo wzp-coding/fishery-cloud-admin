@@ -4,20 +4,7 @@ module.exports = class {
         this.vue = vue;
     }
 
-    /* 加工产品数组开始 */
-    productsList = [
-        {
-            label: "小龙虾",
-            value: "2222",
-        },
-        {
-            label: "多宝鱼",
-            value: "1111",
-        }
-    ]
-    /* 加工产品数组结束 */
-
-    /* 获取基地人员开始 */
+    // 获取人员信息
     getStaff() {
         return new Promise((resolve) => {
             this.vue.$admin.post(`search/1/1000`)
@@ -26,7 +13,6 @@ module.exports = class {
                 })
         })
     }
-    /* 获取基地人员结束 */
 
     // 获取所有种苗信息
     getSeedInfo() {
