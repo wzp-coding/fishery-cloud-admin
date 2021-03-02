@@ -82,8 +82,8 @@
             <el-option
               v-for="item in createPersonList"
               :key="item.id"
-              :label="item.personName"
-              :value="item.personName"
+              :label="item.username"
+              :value="item.username"
             >
             </el-option>
           </el-select>
@@ -99,16 +99,15 @@
 </template>
 <script>
 import ljc from "../coldStorage/coldStorage";
-import ljcPublic from "../public/public";
 export default {
   props: {
     id: {},
     labels: {},
+    createPersonList: {},
   },
   data() {
     return {
       model: new ljc(this),
-      public: new ljcPublic(this),
       // 表单名称
       formTitle: "修改冷库信息",
 
@@ -120,11 +119,6 @@ export default {
     };
   },
   computed: {
-    // 管理员数组
-    createPersonList() {
-      return this.public.createPersonList;
-    },
-
     // 验证规则
     formRules() {
       return this.model.formRules;
