@@ -67,7 +67,7 @@
           <el-input v-model="editForm.supplierPhone"></el-input>
         </el-form-item>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item :label="labels.inputPicture">
               <TheUploadPic
                 :picLimit="picLimitInput"
@@ -78,7 +78,9 @@
               />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+        </el-row>
+        <el-row>
+          <el-col :span="24">
             <el-form-item :label="labels.supplierLicense">
               <TheUploadPic
                 :picLimit="picLimitLicense"
@@ -143,7 +145,6 @@ export default {
     };
   },
   computed: {
-
     // 验证规则
     formRules() {
       return this.model.formRules;

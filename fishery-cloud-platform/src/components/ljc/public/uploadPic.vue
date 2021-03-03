@@ -7,9 +7,9 @@
       :on-remove="handleRemove"
       :on-success="handleAvatarSuccess"
       :on-change="handleChange"
+      :on-exceed="handleExceed"
       name="multipartFile"
       :limit="picLimit"
-      :class="{ hide: hideUploadCard }"
       :file-list="imageUrlArray"
     >
       <i class="el-icon-plus"></i>
@@ -35,8 +35,6 @@ export default {
     return {
       dialogImageUrl: "",
       dialogVisible: false,
-      // 控制上传按钮的显示与隐藏
-      hideUploadCard: false,
     };
   },
   created() {
@@ -45,7 +43,6 @@ export default {
   methods: {
     // 删除图片的处理
     handleRemove(file, fileList) {
-      this.hideUploadCard = false;
       this.$emit("getPic", this.tag, "");
     },
 
@@ -61,24 +58,15 @@ export default {
     },
 
     // 控制上传按钮的隐藏
-    handleChange(file, fileList) {
-      if (fileList.length >= this.picLimit) {
-        this.hideUploadCard = true;
-      }
-    },
+    handleChange(file, fileList) {},
 
-    // 修改时如果时没有图片的就显示，有图片就隐藏
-    editHideImage() {
-      if (this.imageUrlArray.length >= this.picLimit) {
-        this.hideUploadCard = true;
-      }
+    // 修改
+    editHideImage() {},
+
+    // 超过限制
+    handleExceed(file, fileList) {
+      this.elMessage.warning(`请最多上传 ${this.picLimit} 个文件。`);
     },
   },
 };
 </script>
-
-<style lang="less">
-.hide .el-upload--picture-card {
-  display: none;
-}
-</style>
