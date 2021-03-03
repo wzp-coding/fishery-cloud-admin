@@ -36,6 +36,7 @@
                 :id="scope.row.id"
                 :labels="labels"
                 :title="title"
+                :commoditIds="commoditIds"
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
@@ -95,6 +96,8 @@ export default {
 
     // 加工厂编号
     processingFactoryId: {},
+
+    commoditIds: {},
   },
   data() {
     return {
@@ -111,8 +114,7 @@ export default {
       deleteUrl: "/processingFactory/product",
     };
   },
-  created() {
-  },
+  created() {},
   computed: {
     // 跳转的其他参数对象
     otherQuery() {

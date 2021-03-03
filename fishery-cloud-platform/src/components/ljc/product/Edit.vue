@@ -27,16 +27,23 @@
         <el-form-item :label="labels.productName" prop="productName">
           <el-input v-model="editForm.productName"></el-input>
         </el-form-item>
-        <el-form-item :label="labels.germchitId" prop="germchitId">
-          <el-select v-model="editForm.germchitId">
+        <el-form-item :label="labels.commoditId" prop="germchitId">
+          <el-select v-model="editForm.commoditId">
             <el-option
-              v-for="item in germchitIds"
+              v-for="item in commoditIds"
               :key="item.id"
               :label="item.name"
               :value="item.id"
             >
             </el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item :label="labels.inventory" prop="inventory">
+          <el-input-number
+            v-model="editForm.inventory"
+            controls-position="right"
+            :min="0"
+          ></el-input-number>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -53,6 +60,7 @@ export default {
   props: {
     id: {},
     labels: {},
+    commoditIds: {},
   },
   data() {
     return {
@@ -68,10 +76,6 @@ export default {
     };
   },
   computed: {
-    // 种苗信息
-    germchitIds() {
-      return this.model.germchitIds;
-    },
 
     // 验证规则
     formRules() {
@@ -84,6 +88,7 @@ export default {
     async getInfoById() {
       const { data: res } = await this.model.getInfoById(this.id);
       this.editForm = res.data;
+      console.log(this.editForm);
       this.editDialogVisible = true;
     },
     /* 根据Id查询信息结束 */
@@ -96,7 +101,7 @@ export default {
         if (res.statusCode == 20000) {
           this.$emit("getAllInfo");
           this.editDialogVisible = false;
-          this.$message.success(res.message);
+          this.elMessage.success(res.message);
         }
       });
     },
