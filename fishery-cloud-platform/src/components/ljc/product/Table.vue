@@ -19,13 +19,13 @@
         align="center"
       ></el-table-column>
       <el-table-column
-        prop="germchitId"
-        :label="labels.germchitId"
+        prop="commoditId"
+        :label="labels.commoditId"
         align="center"
       ></el-table-column>
       <el-table-column
-        prop="processingFactoryId"
-        :label="labels.processingFactoryId"
+        prop="inventory"
+        :label="labels.inventory"
         align="center"
       ></el-table-column>
       <el-table-column label="操作">
@@ -110,6 +110,8 @@ export default {
       // 删除接口的路径
       deleteUrl: "/processingFactory/product",
     };
+  },
+  created() {
   },
   computed: {
     // 跳转的其他参数对象

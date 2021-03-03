@@ -14,26 +14,33 @@
       width="40%"
     >
       <el-form
-        :model="addFrom"
-        ref="addFromRef"
+        :model="form"
+        ref="formRef"
         :rules="formRules"
         label-width="100px"
         label-position="left"
         :hide-required-asterisk="true"
       >
         <el-form-item :label="labels.productName" prop="productName">
-          <el-input v-model="addFrom.productName"></el-input>
+          <el-input v-model="form.productName"></el-input>
         </el-form-item>
-        <el-form-item :label="labels.germchitId" prop="germchitId">
-          <el-select v-model="addFrom.germchitId">
+        <el-form-item :label="labels.commoditId" prop="germchitId">
+          <el-select v-model="form.commoditId">
             <el-option
-              v-for="item in germchitIds"
+              v-for="item in commoditIds"
               :key="item.id"
               :label="item.name"
               :value="item.id"
             >
             </el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item :label="labels.inventory" prop="inventory">
+          <el-input-number
+            v-model="form.inventory"
+            controls-position="right"
+            :min="0"
+          ></el-input-number>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -50,6 +57,7 @@ export default {
   props: {
     processingFactoryId: {},
     labels: {},
+    commoditIds: {},
   },
   data() {
     return {
@@ -62,7 +70,7 @@ export default {
       addDialogVisible: false,
 
       // 添加信息
-      addFrom: {},
+      form: {},
     };
   },
   computed: {
@@ -80,12 +88,13 @@ export default {
   methods: {
     /* 添加开始 */
     addInfo() {
-      this.$refs.addFromRef.validate(async (val) => {
+      this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
-        this.addFrom.processingFactoryId = this.processingFactoryId;
-        const { data: res } = await this.model.addInfo(this.addFrom);
+        this.form.processingFactoryId = this.processingFactoryId;
+        console.log(this.form);
+        const { data: res } = await this.model.addInfo(this.form);
         if (res.statusCode == 20000) {
-          this.$message.success(res.message);
+          this.elMessage.success(res.message);
         }
         this.$emit("getAllInfo");
         this.addDialogVisible = false;
@@ -95,8 +104,8 @@ export default {
 
     /* 监听窗口关闭事件开始 */
     addDialogClosed() {
-      this.addFrom = {};
-      this.$refs.addFromRef.resetFields();
+      this.form = {};
+      this.$refs.formRef.resetFields();
     },
     /* 监听窗口关闭事件关闭 */
   },

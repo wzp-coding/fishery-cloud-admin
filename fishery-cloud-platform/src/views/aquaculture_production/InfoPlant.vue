@@ -13,13 +13,15 @@
       <!-- tab栏开始 -->
       <el-tabs class="tabs" type="card">
         <el-tab-pane label="加工产品管理"
-          ><Product :createPersonList="createPersonList" :seedInfo="seedInfo"
+          ><Product
+            :createPersonList="createPersonList"
+            :commoditIds="commoditIds"
         /></el-tab-pane>
         <el-tab-pane label="工艺管理"
-          ><Craft :createPersonList="createPersonList" :seedInfo="seedInfo"
+          ><Craft :createPersonList="createPersonList" :commoditIds="commoditIds"
         /></el-tab-pane>
         <el-tab-pane label="投入品管理"
-          ><Input :createPersonList="createPersonList" :seedInfo="seedInfo"
+          ><Input :createPersonList="createPersonList" :commoditIds="commoditIds"
         /></el-tab-pane>
       </el-tabs>
       <!-- tab栏结束 -->
@@ -58,6 +60,18 @@ export default {
 
       // 种苗信息
       seedInfo: [],
+
+      // 水产品/冷库产品编号
+      commoditIds: [
+        {
+          name: "蔬菜",
+          id: "1111",
+        },
+        {
+          name: "水果",
+          id: "2222",
+        },
+      ],
     };
   },
   created() {

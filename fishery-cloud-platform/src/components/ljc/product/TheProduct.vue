@@ -4,6 +4,7 @@
     <Add
       :labels="labels"
       :processingFactoryId="processingFactoryId"
+      :commoditIds="commoditIds"
       @getAllInfo="getAllInfo"
     />
     <!-- 添加区域结束 -->
@@ -13,6 +14,7 @@
       :allList="allList"
       :labels="labels"
       :title="myTitle"
+      :commoditIds="commoditIds"
       :processingFactoryId="processingFactoryId"
       @getAllInfo="getAllInfo()"
     />
@@ -41,7 +43,7 @@ export default {
   },
   props: {
     createPersonList: {},
-    seedInfo: {},
+    commoditIds: {},
   },
   data() {
     return {
@@ -97,6 +99,7 @@ export default {
       }
       this.allList = res.data.records;
       this.total = res.data.total;
+      console.log(this.allList);
     },
   },
 };
