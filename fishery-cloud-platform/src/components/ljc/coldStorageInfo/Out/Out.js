@@ -10,12 +10,26 @@ module.exports = class {
         refrigeratoryInCapacity: "入库容量/kg",
         refrigeratoryInId: "入库编号",
         refrigeratoryOutCapacity: "出库容量/kg",
-        refrigeratoryOutDescription: "出库描述",
         refrigeratoryOutTime: "出库时间",
         refrigeratory_product_id: "冷库产品编号",
-        warehousingPersonId: "管理人员Id",
         refrigeratoryInUsedCapacity: "已用容量",
-        surplusCapacity: "剩余容量"
+        surplusCapacity: "剩余容量",
+
+        refrigeratoryInId: "1366654626102779906",
+        targetId: "目标id",
+        targetName: "目标名称",
+        baseId: "基地编号",
+        weight: "产品名称",
+        warehousingPersonId: "管理人员Id",
+        sourceType: "目标类型",
+        receiveAddress: "收货地址",
+        addressLongitude: "收货地址经度",
+        addressLatitude: "收货地址经度",
+        phoneNumber: "收货联系电话",
+        money: "金额(万元)",
+        amount: "数量",
+        targetType: "目标类型",
+        refrigeratoryOutDescription: "留言",
     }
     /* 标签结束 */
 

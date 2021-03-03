@@ -130,6 +130,7 @@ export default {
         this.addFrom.baseId = this.baseId;
         this.addFrom.refrigeratoryPositionLatitude = "111";
         this.addFrom.refrigeratoryPositionLongitude = "20";
+        this.addFrom.refrigeratoryUsedCapacity = "0";
         const { data: res } = await this.model.addInfo(this.addFrom);
         if (res.statusCode == 20000) {
           this.elMessage.success(res.message);
