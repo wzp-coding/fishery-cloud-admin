@@ -162,7 +162,7 @@ export default {
         /* 传入表单逻辑处理结束 */
         const { data: res } = await this.model.addInfo(this.addFrom);
         if (res.statusCode == 20000) {
-          this.$message.success(res.message);
+          this.elMessage.success(res.message);
         }
         this.$emit("getAllInfo");
         this.addDialogVisible = false;

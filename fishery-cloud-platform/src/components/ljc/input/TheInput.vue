@@ -90,7 +90,7 @@ export default {
         pageSize
       );
       if (res.statusCode !== 20000) {
-        this.$message.error(res.message);
+        this.elMessage.error(res.message);
       }
       this.allList = res.data.records;
       this.total = res.data.total;

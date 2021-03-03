@@ -102,7 +102,7 @@ export default {
         this.addFrom.processingFactoryId = this.processingFactoryId;
         const { data: res } = await this.model.addInfo(this.addFrom);
         if (res.statusCode == 20000) {
-          this.$message.success(res.message);
+          this.elMessage.success(res.message);
         }
         this.$emit("getAllInfo");
         this.addDialogVisible = false;
