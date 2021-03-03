@@ -76,7 +76,6 @@ export default {
   },
   created() {
     this.getStaff();
-    this.getSeedInfo();
   },
   methods: {
     /* 返回开始 */
@@ -91,12 +90,6 @@ export default {
     async getStaff() {
       const { data: res } = await this.public.getStaff();
       this.createPersonList = res.data.records;
-    },
-
-    // 获取种苗信息
-    async getSeedInfo() {
-      const { data: res } = await this.public.getSeedInfo();
-      this.seedInfo = res.data;
     },
   },
 };
