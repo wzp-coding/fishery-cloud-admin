@@ -41,8 +41,8 @@
             <el-option
               v-for="item in createPersonList"
               :key="item.id"
-              :label="item.personName"
-              :value="item.personName"
+              :label="item.username"
+              :value="item.username"
             >
             </el-option>
           </el-select>
@@ -99,7 +99,6 @@
 <script>
 /* 导入路径(改) */
 import ljc from "../input/input";
-import ljcPublic from "../public/public";
 import TheUploadPic from "../public/uploadPic";
 export default {
   components: {
@@ -108,6 +107,7 @@ export default {
   props: {
     processingFactoryId: {},
     labels: {},
+    createPersonList: {},
   },
   data() {
     return {
@@ -134,11 +134,6 @@ export default {
     };
   },
   computed: {
-    // 管理员数组(按需改)
-    createPersonList() {
-      return this.public.createPersonList;
-    },
-
     // 验证规则
     formRules() {
       return this.model.formRules;

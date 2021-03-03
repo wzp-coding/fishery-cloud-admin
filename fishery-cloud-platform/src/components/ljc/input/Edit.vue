@@ -44,8 +44,8 @@
             <el-option
               v-for="item in createPersonList"
               :key="item.id"
-              :label="item.personName"
-              :value="item.personName"
+              :label="item.username"
+              :value="item.username"
             >
             </el-option>
           </el-select>
@@ -113,6 +113,7 @@ export default {
     /* 传入参数按需改 */
     processingFactoryId: {},
     labels: {},
+    createPersonList: {},
   },
   data() {
     return {

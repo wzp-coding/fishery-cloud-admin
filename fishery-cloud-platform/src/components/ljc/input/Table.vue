@@ -114,6 +114,7 @@
                 :processingFactoryId="processingFactoryId"
                 :labels="labels"
                 :title="title"
+                :createPersonList="createPersonList"
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
@@ -154,6 +155,8 @@ export default {
 
     // 加工厂编号
     processingFactoryId: {},
+
+    createPersonList: {},
   },
   data() {
     return {

@@ -5,6 +5,7 @@
       :labels="labels"
       :processingFactoryId="processingFactoryId"
       @getAllInfo="getAllInfo"
+      :createPersonList="createPersonList"
     />
     <!-- 添加区域结束 -->
 
@@ -13,6 +14,7 @@
       :allList="allList"
       :labels="labels"
       :title="myTitle"
+      :createPersonList="createPersonList"
       :processingFactoryId="processingFactoryId"
       @getAllInfo="getAllInfo()"
     />
@@ -39,7 +41,9 @@ export default {
     Table,
     Pagination,
   },
-  props: {},
+  props: {
+    createPersonList: {},
+  },
   data() {
     return {
       // js导入vue
