@@ -280,7 +280,6 @@
     :ortitle="orTitle"
     :is-show-code="isShowCode"
     :adult-shrimp-id="adultShrimpId"
-    :options="options"
     @notifyParent2="closeCode"
     
     >
@@ -352,7 +351,7 @@ export default {
       customerjudge : ['个人', '企业', '加工厂', '冷库'],
       // orderstatus:['未发货','已发货'],
       // 传递给子组件
-      title: "虾苗信息",
+      title: "",
       isLogistics: false,
       showInfoId: "",
       dialogVisible: false,
@@ -446,6 +445,8 @@ export default {
       this.card=!this.card
       this.pageInfo.pagenum=1
       this.pageInfo.pagesize=10
+      this.pageInfo2.pagenum=1
+      this.pageInfo2.pagesize=10
     },
     //执行发货操作
     async delivery(id){
@@ -498,13 +499,7 @@ export default {
     this.createdialogVisible=false;
     this.setNode();
   },
-    // 展示虾苗信息时要传递给子组件的信息
-    // toShowShrimpInfo(id) {
-    // this.title = "虾苗信息";
-    //   this.isLogistics = false;
-    //   this.showInfoId = id;
-    //   this.dialogVisible = true;
-    // },
+
     // 展示物流信息时要传递给子组件的信息
     toShowLogisticsInfo(id) {
       this.title = "物流信息";
@@ -607,7 +602,7 @@ export default {
     },
     handleCurrentChange2(newPage) {
       this.pageInfo2.pagenum = newPage;
-      // this.getCustomerList();
+      this.getCustomerList();
       console.log("111222")
     },
 
@@ -629,7 +624,7 @@ export default {
     // 获取顾客信息
     async getCustomerList() {
       const { data: res } = await this.$Customer.get(
-        `${this.baseId}/${this.pageInfo.pagenum}/${this.pageInfo.pagesize}`
+        `${this.baseId}/${this.pageInfo2.pagenum}/${this.pageInfo2.pagesize}`
       );
       console.log("结果2:",res);
       if (res.statusCode !== 20000) {

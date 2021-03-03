@@ -70,7 +70,6 @@
     <!-- 内容主题区 物流信息 -->
     <Map
     v-if="isLogistics"
-    :options="options"
     :selectedLocation="pio"
     ></Map>
      <!-- 页脚 -->
@@ -176,18 +175,41 @@ export default {
       this.pio=a
       console.log("111111: ", this.pio);
     },
+
+    // 展示物流信息的对话框
+    async getLogisticsById2(id) {
+      // 调用根据ID查询
+     const {data : res} = await this.$logistics.get(`path/${id}`);
+      console.log("获取到的物流位置信息-->",res.data)
+      if(res.statusCode != 20000){
+        return this.$message.error("获取物流位置列表失败！");
+      }
+      let a={
+        lat:"",
+        lng:"",
+      }
+       a.lat = res.data[res.data.length-1].logisticsPathStation.logisticsStationLatitude
+       a.lng = res.data[res.data.length-1].logisticsPathStation.logisticsStationLongitude
+      this.pio=a
+    },
+    
     
   },
   watch: {
     //   这里是id变化的时候重新获取信息
-    id() {
+    id(id) {
       // 对话框出现才请求数据
-      if (this.isLogistics) {
+      if (this.title=="物流信息") {
         //   如果是物流信息
         this.getLogisticsById(this.id);
-      } else {
+      }
+      if (this.title=="虾苗信息")
+      {
         // 否则是对虾信息
         this.getShrimpById(this.id);
+      }
+      if(this.title=="物流位置"){
+          this.getLogisticsById2(this.id)
       }
     },
   },
