@@ -19,8 +19,8 @@
         align="center"
       ></el-table-column>
       <el-table-column
-        prop="commoditId"
-        :label="labels.commoditId"
+        prop="commodityId"
+        :label="labels.commodityId"
         align="center"
       ></el-table-column>
       <el-table-column
@@ -40,6 +40,17 @@
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
+            <el-col :span="6">
+              <el-tooltip
+                effect="dark"
+                content="产品资质"
+                placement="top"
+                :enterable="false"
+              >
+                <Form :id="scope.row.id" />
+              </el-tooltip>
+            </el-col>
+
             <el-col :span="6">
               <el-tooltip
                 effect="dark"
@@ -78,11 +89,14 @@
 import Delete from "../public/delete";
 import Into from "../public/into";
 import Edit from "../product/Edit";
+import Form from "../qualification/Form";
+
 export default {
   components: {
     Delete,
     Edit,
     Into,
+    Form,
   },
   props: {
     // 表格数据

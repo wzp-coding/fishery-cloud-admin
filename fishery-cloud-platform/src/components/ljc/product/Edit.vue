@@ -27,8 +27,8 @@
         <el-form-item :label="labels.productName" prop="productName">
           <el-input v-model="editForm.productName"></el-input>
         </el-form-item>
-        <el-form-item :label="labels.commoditId" prop="germchitId">
-          <el-select v-model="editForm.commoditId">
+        <el-form-item :label="labels.commodityId" prop="germchitId">
+          <el-select v-model="editForm.commodityId">
             <el-option
               v-for="item in commoditIds"
               :key="item.id"

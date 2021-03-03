@@ -7,7 +7,7 @@ module.exports = class {
     labels = {
         id: "产品编号",
         productName: "产品名称",
-        commoditId: "水产品/冷库产品编号 ",
+        commodityId: "水产品/冷库产品编号 ",
         inventory: "库存/件",
         processingFactoryId: "加工厂编号",
     }
@@ -24,8 +24,8 @@ module.exports = class {
                 trigger: "blur",
             },
         ],
-        commoditId: [
-            { required: true, message: `请输入${this.labels.commoditId}`, trigger: "blur" },
+        commodityId: [
+            { required: true, message: `请输入${this.labels.commodityId}`, trigger: "blur" },
         ],
         inventory: [
             { required: true, message: `请输入${this.labels.inventory}`, trigger: "blur" },
