@@ -102,7 +102,6 @@
 <script>
 /* 路径（按需改） */
 import ljc from "../input/input";
-import ljcPublic from "../public/public";
 import TheUploadPic from "../public/uploadPic";
 export default {
   components: {
@@ -118,7 +117,6 @@ export default {
   data() {
     return {
       model: new ljc(this),
-      public: new ljcPublic(this),
       // 表单名称(改)
       formTitle: "修改加工投入品",
 
@@ -145,10 +143,6 @@ export default {
     };
   },
   computed: {
-    // 管理员数组（按需改）
-    createPersonList() {
-      return this.public.createPersonList;
-    },
 
     // 验证规则
     formRules() {

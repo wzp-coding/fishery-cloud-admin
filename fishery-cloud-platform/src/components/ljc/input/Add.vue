@@ -112,7 +112,6 @@ export default {
   data() {
     return {
       model: new ljc(this),
-      public: new ljcPublic(this),
 
       // 表单名称(改)
       formTitle: "添加加工投入品",
