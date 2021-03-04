@@ -6,7 +6,6 @@
       border
       stripe
       :header-cell-style="{ 'text-align': 'center' }"
-      height="600"
     >
       <el-table-column type="expand">
         <template slot-scope="props">

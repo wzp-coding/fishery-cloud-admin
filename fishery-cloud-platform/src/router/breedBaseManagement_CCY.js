@@ -11,6 +11,7 @@ import ManagementPond from '../views/management_fishery/ManagementPond.vue'    /
 import ManagementAuthority from '../views/management_base/ManagementAuthority.vue'    //权限管理
 import leaderWarehouse from "../views/leader_warehouse/leaderWarehouse.vue"
 import ManagementAdvise from "../views/management_fishery/ManagementAdvise.vue"   //养殖建议卡
+import NodePad from "../views/management_base/NodePad.vue"
 export default [
     {
         // 数字基地
@@ -64,10 +65,15 @@ export default [
     //     path: '/info-pond',
     //     component: InfoPond
     // },
-    // management-advise
     {
+        // 养殖建议
         path: '/management-advise',
         component:ManagementAdvise
+    },
+    {
+        // 备忘录
+        path: '/node-pad',
+        component:NodePad
     },
     {
         // 权限管理
