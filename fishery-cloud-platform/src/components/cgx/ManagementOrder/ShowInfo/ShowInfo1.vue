@@ -209,7 +209,7 @@ export default {
         this.getShrimpById(this.id);
       }
       if(this.title=="物流位置"){
-          this.getLogisticsById2(this.id)
+          this.getLogisticsById2(id)
       }
     },
   },

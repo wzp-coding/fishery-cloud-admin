@@ -1,5 +1,6 @@
 <template>
-<el-dialog
+<div>
+    <el-dialog
       :title="stationtitle"
       :visible.sync="stationcard"
       width="45%"
@@ -22,7 +23,7 @@
    <el-form-item label="基地编号">
     <el-input clearable v-model="stationobject.baseId  " style="width:35ex"></el-input>
   </el-form-item>
-  <el-form-item label="联系电话 ">
+  <el-form-item label="联系电话">
     <el-input v-model="stationobject.phoneNumber"></el-input>
   </el-form-item>
   <el-form-item label="站点地址">
@@ -42,14 +43,15 @@
     </Map>
     
   <el-form-item style="right">
-    <el-button type="primary" @click="submitorder" style="margin:20px 0 0 0" v-if="this.stationtitle=='添加站点'">立即创建</el-button>
-    <el-button type="primary" @click="submitorder" style="margin:20px 0 0 0" v-if="this.stationtitle=='修改站点信息'">确认修改</el-button>
+    <el-button type="primary" @click="submitorder" style="margin:20px 0 0 0" v-if="this.stationtitle==='添加站点'">立即创建</el-button>
+    <el-button type="primary" @click="submitorder" style="margin:20px 0 0 0" v-if="this.stationtitle==='修改站点信息'">确认修改</el-button>
     <el-button @click="close">取消</el-button>
    </el-form-item>
     
   </el-form>
 
 </el-dialog>
+</div>
 </template>
 <script>
 import Map from "../../public_components/MyLocationPicker"
@@ -60,25 +62,21 @@ import Map from "../../public_components/MyLocationPicker"
       props:{
           stationcard:{
               type:Boolean,
-              default:"",
+              
           },
           stationtitle:{
             type:String,
-            default:false
           },
           stationData:{
             type:Object,
-            default:{}
           },
           look2:{
             type:Boolean,
-            default:false
           }
           
       },
     data() {
       return {
-        
         // 地图传来的地址数组
             addressArray:[],
         // 传入地图的中心坐标
@@ -107,7 +105,7 @@ import Map from "../../public_components/MyLocationPicker"
         this.stationobject.logisticsStationAddress="";
         this.stationobject.logisticsStationLatitude="";
         this.stationobject.logisticsStationLongitude="";
-        this.stationobject.baseId="";
+        this.stationobject.baseId=this.$store.state.userInfo.baseId
         this.stationobject.phoneNumber="";
         this.stationobject.logisticsStationType=null;
        
@@ -192,10 +190,13 @@ import Map from "../../public_components/MyLocationPicker"
     },
     watch:{
           look2:function(){
+              console.log("77777")
             this.judge();
+            
           }
         },
         created(){
               this.stationobject.baseId=this.$store.state.userInfo.baseId
           }
   }
+  </script>

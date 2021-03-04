@@ -8,7 +8,7 @@
     <el-form 
     ref="form" 
     :model="orderobject" 
-    label-width="80px">
+    label-width="85px">
    
      <el-form-item label="客户类型">
     <el-select v-model="orderobject.targetType" placeholder="请选择客户类型" >
@@ -16,6 +16,13 @@
       <el-option label="2.企业" :value="2"></el-option>
       <el-option label="3.加工厂" :value="3"></el-option>
       <el-option label="4.冷库" :value="4"></el-option>
+    </el-select>
+   </el-form-item>
+   <el-form-item label="发货方类型">
+    <el-select v-model="orderobject.sourceType" placeholder="请选择发货方类型" >
+      <el-option label="1.养殖基地" :value="1"></el-option>
+      <el-option label="2.加工厂" :value="2"></el-option>
+      <el-option label="3.冷库" :value="3"></el-option>
     </el-select>
    </el-form-item>
    <el-form-item label="客户名" v-if="orderobject.targetType<=2">
@@ -113,6 +120,7 @@ import Customerfrom from './Customerfrom.vue'
             },
       // --------列表数据-------
         orderobject: {
+          sourceType:null,
           // 接受坐标
           addressLatitude:"",
           addressLongitude:"",
@@ -142,16 +150,17 @@ import Customerfrom from './Customerfrom.vue'
       
       // 关闭时设置为空
       setcloseorderobject(){
+        this.orderobject.sourceType=null;
         this.orderobject.targetName="";
         this.orderobject.baseId=this.$store.state.userInfo.baseId;
         this.orderobject.phoneNumber="";
         this.orderobject.targetId="";
-        this.orderobject.targetType="";
+        this.orderobject.targetType=null;
         this.orderobject.receiveAddress="";
         this.orderobject.addressLatitude="";
         this.orderobject.amount="";
         this.orderobject.money="";
-        this.orderobject.productId="";
+        this.orderobject.productId="1364935085419737090";
         this.orderobject.productName="";
         this.orderobject.addressLongitude="";
         },
@@ -227,7 +236,7 @@ import Customerfrom from './Customerfrom.vue'
         // 提交创建表单
       async handleSubmit(){
           console.log('即将创建的订单--> ', this.orderobject);
-          const {data:res} = await this.$managementOrder.post(`${this.orderobject}`)
+          const {data:res} = await this.$managementOrder.post("",this.orderobject)
           console.log('res: ', res);
           if (res.statusCode === 20000) {
                 this.elMessage.success(res.message);
@@ -271,6 +280,7 @@ import Customerfrom from './Customerfrom.vue'
         },
         created(){
           this.orderobject.baseId=this.$store.state.userInfo.baseId
+          this.orderobject.productId="1364935085419737090";
         }
   }
 </script>

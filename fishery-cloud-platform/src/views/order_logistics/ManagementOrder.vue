@@ -34,7 +34,54 @@
         <!-- border： 加入边框线 -->
         <!-- type="index"： 索引列 -->
         >
-        <el-table-column type="index"> </el-table-column>
+        <el-table-column type="expand">
+      <template slot-scope="props">
+        <el-form label-position="left" inline class="demo-table-expand">
+          <el-row :gutter="24">
+             <el-col :span="6">
+              <el-form-item label="电话：">
+                <span>{{props.row.phoneNumber}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="数量">
+                <span>{{props.row.phoneNumber}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="重量/kg">
+                <span>{{props.row.weight}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col  :span="6">
+              <el-form-item label="创建时间">
+                <span>{{props.row.gmtCreate}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="修改时间">
+                <span>{{props.row.gmtModified}}</span>
+              </el-form-item>
+            </el-col>
+              <el-col :span="6">
+              <el-form-item label="基地id">
+                <span>{{props.row.baseId}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="产品编号">
+                <span>{{props.row.productId}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="物流编号">
+                <span>{{props.row.logisticsId}}</span>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </template>
+    </el-table-column>
 
         <el-table-column
           prop="targetName"
@@ -295,14 +342,14 @@
     >
     </Create-order> 
     <!-- 创建/修改顾客 -->
-    <CreateCustomer
+    <Create-customer
     :customercard="createCustomers"
     :customertitle="customertitle"
     :customerData="customerData"
     :look2="look2"
     @createnotifyParent="changecustomerdialogVisible"
     >
-    </CreateCustomer>
+    </Create-customer>
   </div>
  
   

@@ -20,10 +20,10 @@
     <el-input clearable v-model="logisticsobject.logisticsOrderCreateBy "  placeholder="请输入产品编号" style="width:35ex"></el-input>
    </el-form-item>
    <el-form-item label="起点站" >
-    <el-input clearable v-model="logisticsobject.logisticsStartStation.logisticsStationAddress " disabled  placeholder="起点站" style="width:35ex"></el-input>
+    <el-input clearable v-model="logisticsobject.logisticsStartStation.logisticsStationAddress " disabled  placeholder="起点站不可修改" style="width:35ex"></el-input>
    </el-form-item>
    <el-form-item label="终点站" >
-    <el-input clearable v-model="logisticsobject.logisticsArrivalStation.logisticsStationAddress " disabled placeholder="终点站" style="width:35ex"></el-input>
+    <el-input clearable v-model="logisticsobject.logisticsArrivalStation.logisticsStationAddress " disabled placeholder="终点站不可修改" style="width:35ex"></el-input>
    </el-form-item>
 
   <el-form-item style="right">
@@ -50,6 +50,9 @@ import StationForm from "./StationForm"
           look:{
             type:Boolean
           },
+          stationdata:{
+            type:Object
+          }
       },
     data() {
       return {
@@ -125,7 +128,8 @@ import StationForm from "./StationForm"
         },
         watch:{
             look(){
-                this.getlogisticsList();
+                // this.getlogisticsList();
+                this.logisticsobject= this.stationdata
             }
         }
   }

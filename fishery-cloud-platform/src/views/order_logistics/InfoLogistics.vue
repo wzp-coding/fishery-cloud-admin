@@ -104,7 +104,7 @@
               type="primary"
               icon="el-icon-edit"
               size="mini"
-              @click="showEditDialog(scope.row.id)"
+              @click="showEditDialog(scope.row)"
             ></el-button>
               </el-tooltip>
             </el-col>
@@ -304,17 +304,17 @@
       </el-pagination>
       </el-tab-pane>
     </el-tabs>
-     <CreatedLogisrics
-      :stationcard='stationcard'
+     <Created-logisrics
+      :stationcard="stationcard"
       :stationtitle="stationtitle"
       :stationData="stationData"
       :look2="look2"
       @createnotifyParent2="createnotifyParent2"
       >
-      </CreatedLogisrics>
+      </Created-logisrics>
       <ModifyLogistics
       :createdialogVisible="createdialogVisible"
-      :id="logisticsId"
+      :stationdata="logisticsId"
       :look="look"
      @createnotifyParent="changeModifyLogistics"
       >
@@ -342,7 +342,7 @@
 import ModifyLogistics from "../../components/cgx/LogisticsOrder/ModifyLogistics"
 import ShowInfo from   "../../components/cgx/ManagementOrder/ShowInfo/ShowInfo1";
 import StationForm from "../../components/cgx/LogisticsOrder/StationForm"
-import CreatedLogisrics from "../../components/cgx/LogisticsOrder/createdLogisrics"
+import CreatedLogisrics from "../../components/cgx/LogisticsOrder/createdLogisrics.vue"
 export default {
   components:{
     ModifyLogistics,
@@ -376,7 +376,7 @@ export default {
       
       look:true,
       createdialogVisible:false,
-      logisticsId:"",
+      logisticsId:{},
       //物流状态
       logisticsJudge:["运输中","已送达"],
       crad:true,
@@ -430,7 +430,7 @@ export default {
     //修改站点
     Modifystation(data){
       console.log("55555555")
-      this.stationcard = true
+      this.stationcard=true
       this.stationtitle = "修改站点信息"
       this.stationData = data
       this.look2 = !this.look2
@@ -548,8 +548,8 @@ export default {
     },
 
     //打开物流信息修改
-    showEditDialog(id){
-      this.logisticsId = id
+    showEditDialog(data){
+      this.logisticsId = data
       this.createdialogVisible = true
       this.look = !this.look
       
