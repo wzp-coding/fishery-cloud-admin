@@ -44,8 +44,8 @@
             <el-option
               v-for="item in createPersonList"
               :key="item.id"
-              :label="item.personName"
-              :value="item.personName"
+              :label="item.username"
+              :value="item.username"
             >
             </el-option>
           </el-select>
@@ -67,7 +67,7 @@
           <el-input v-model="editForm.supplierPhone"></el-input>
         </el-form-item>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item :label="labels.inputPicture">
               <TheUploadPic
                 :picLimit="picLimitInput"
@@ -78,7 +78,9 @@
               />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+        </el-row>
+        <el-row>
+          <el-col :span="24">
             <el-form-item :label="labels.supplierLicense">
               <TheUploadPic
                 :picLimit="picLimitLicense"
@@ -102,7 +104,6 @@
 <script>
 /* 路径（按需改） */
 import ljc from "../input/input";
-import ljcPublic from "../public/public";
 import TheUploadPic from "../public/uploadPic";
 export default {
   components: {
@@ -113,11 +114,11 @@ export default {
     /* 传入参数按需改 */
     processingFactoryId: {},
     labels: {},
+    createPersonList: {},
   },
   data() {
     return {
       model: new ljc(this),
-      public: new ljcPublic(this),
       // 表单名称(改)
       formTitle: "修改加工投入品",
 
@@ -144,11 +145,6 @@ export default {
     };
   },
   computed: {
-    // 管理员数组（按需改）
-    createPersonList() {
-      return this.public.createPersonList;
-    },
-
     // 验证规则
     formRules() {
       return this.model.formRules;
@@ -186,7 +182,7 @@ export default {
         if (res.statusCode == 20000) {
           this.$emit("getAllInfo");
           this.editDialogVisible = false;
-          this.$message.success(res.message);
+          this.elMessage.success(res.message);
         }
       });
     },

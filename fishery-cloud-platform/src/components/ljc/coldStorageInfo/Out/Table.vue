@@ -41,6 +41,8 @@
                 :id="scope.row.id"
                 :labels="labels"
                 :title="title"
+                :createPersonList="createPersonList"
+                :seedInfo="seedInfo"
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
@@ -67,7 +69,7 @@ import Edit from "./Edit";
 export default {
   components: {
     Delete,
-    Edit
+    Edit,
   },
   props: {
     // 表格数据
@@ -75,6 +77,12 @@ export default {
 
     // 数据标签
     labels: {},
+
+    // 管理员数组
+    createPersonList: {},
+
+    // 种苗
+    seedInfo: {},
   },
   data() {
     return {

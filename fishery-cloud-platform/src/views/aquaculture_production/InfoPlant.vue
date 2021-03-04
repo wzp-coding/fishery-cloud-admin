@@ -12,9 +12,17 @@
 
       <!-- tab栏开始 -->
       <el-tabs class="tabs" type="card">
-        <el-tab-pane label="加工产品管理"><Product /></el-tab-pane>
-        <el-tab-pane label="工艺管理"><Craft /></el-tab-pane>
-        <el-tab-pane label="投入品管理"><Input /></el-tab-pane>
+        <el-tab-pane label="加工产品管理"
+          ><Product
+            :createPersonList="createPersonList"
+            :commoditIds="commoditIds"
+        /></el-tab-pane>
+        <el-tab-pane label="工艺管理"
+          ><Craft :createPersonList="createPersonList" :commoditIds="commoditIds"
+        /></el-tab-pane>
+        <el-tab-pane label="投入品管理"
+          ><Input :createPersonList="createPersonList" :commoditIds="commoditIds"
+        /></el-tab-pane>
       </el-tabs>
       <!-- tab栏结束 -->
     </el-card>
@@ -27,6 +35,8 @@ import Title from "../../components/ljc/public/title";
 import Product from "../../components/ljc/product/TheProduct";
 import Craft from "../../components/ljc/craft/TheCraft";
 import Input from "../../components/ljc/input/TheInput";
+import Public from "../../components/ljc/public/public";
+
 export default {
   components: {
     Breadcrumb,
@@ -37,14 +47,36 @@ export default {
   },
   data() {
     return {
+      public: new Public(this),
+
       /* 面包屑导航区信息开始 */
       breadcrumbInfo: ["养殖生产", "加工厂", "加工信息管理"],
       /* 面包屑导航区信息结束 */
 
       myTitle: "加工信息管理",
+
+      // 管理员信息
+      createPersonList: [],
+
+      // 种苗信息
+      seedInfo: [],
+
+      // 水产品/冷库产品编号
+      commoditIds: [
+        {
+          name: "蔬菜",
+          id: "1111",
+        },
+        {
+          name: "水果",
+          id: "2222",
+        },
+      ],
     };
   },
-  created() {},
+  created() {
+    this.getStaff();
+  },
   methods: {
     /* 返回开始 */
     goBack() {
@@ -53,6 +85,12 @@ export default {
       });
     },
     /* 返回结束 */
+
+    // 获取员工
+    async getStaff() {
+      const { data: res } = await this.public.getStaff();
+      this.createPersonList = res.data.records;
+    },
   },
 };
 </script>

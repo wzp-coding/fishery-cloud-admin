@@ -19,13 +19,13 @@
         align="center"
       ></el-table-column>
       <el-table-column
-        prop="germchitId"
-        :label="labels.germchitId"
+        prop="commodityId"
+        :label="labels.commodityId"
         align="center"
       ></el-table-column>
       <el-table-column
-        prop="processingFactoryId"
-        :label="labels.processingFactoryId"
+        prop="inventory"
+        :label="labels.inventory"
         align="center"
       ></el-table-column>
       <el-table-column label="操作">
@@ -36,9 +36,35 @@
                 :id="scope.row.id"
                 :labels="labels"
                 :title="title"
+                :commoditIds="commoditIds"
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
+            <el-col :span="6">
+              <el-tooltip
+                effect="dark"
+                content="产品资质"
+                placement="top"
+                :enterable="false"
+              >
+                <Form :id="scope.row.id" />
+              </el-tooltip>
+            </el-col>
+
+            <el-col :span="8">
+              <el-tooltip
+                effect="dark"
+                content="创建订单"
+                placement="top"
+                :enterable="false"
+              >
+                <Order
+                  :id="scope.row.id"
+                  :createPersonList="createPersonList"
+                />
+              </el-tooltip>
+            </el-col>
+
             <el-col :span="6">
               <el-tooltip
                 effect="dark"
@@ -77,11 +103,16 @@
 import Delete from "../public/delete";
 import Into from "../public/into";
 import Edit from "../product/Edit";
+import Form from "../qualification/Form";
+import Order from "../order/form";
+
 export default {
   components: {
     Delete,
     Edit,
     Into,
+    Form,
+    Order,
   },
   props: {
     // 表格数据
@@ -95,6 +126,10 @@ export default {
 
     // 加工厂编号
     processingFactoryId: {},
+
+    commoditIds: {},
+
+    createPersonList: {},
   },
   data() {
     return {
@@ -111,6 +146,7 @@ export default {
       deleteUrl: "/processingFactory/product",
     };
   },
+  created() {},
   computed: {
     // 跳转的其他参数对象
     otherQuery() {

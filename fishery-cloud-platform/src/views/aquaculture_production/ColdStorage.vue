@@ -11,17 +11,22 @@
       <!-- 标题区域结束 -->
 
       <!-- 添加区域开始 -->
-      <Add @getAllInfo="getAllInfo()" :labels="labels" :baseId="baseId" />
+      <Add
+        @getAllInfo="getAllInfo()"
+        :labels="labels"
+        :baseId="baseId"
+        :createPersonList="createPersonList"
+        :seedInfo="seedInfo"
+      />
       <!-- 添加区域结束 -->
-
-      <!-- 查看全部信息区域开始 -->
-      <!-- 查看全部信息区域结束 -->
 
       <!-- 列表区域开始 -->
       <Table
         :allList="allList"
         :labels="labels"
         :title="myTitle"
+        :createPersonList="createPersonList"
+        :seedInfo="seedInfo"
         @getAllInfo="getAllInfo()"
       />
       <!-- 列表区域结束 -->
@@ -40,6 +45,7 @@
 </template>
 <script>
 import ljc from "../../components/ljc/coldStorage/coldStorage";
+import Public from "../../components/ljc/public/public";
 import Breadcrumb from "../../components/ljc/public/breadcrumb";
 import Title from "../../components/ljc/public/title";
 import Pagination from "../../components/ljc/public/pagination";
@@ -58,6 +64,8 @@ export default {
     return {
       // js
       model: new ljc(this),
+      public: new Public(this),
+
       // 标题图标
       icon: "el-icon-mobile",
       // 面包屑导航信息
@@ -74,6 +82,12 @@ export default {
       allList: [],
       // 基地ID
       baseId: "1350657222372835330",
+
+      // 管理员信息
+      createPersonList: [],
+
+      // 种苗信息
+      seedInfo: [],
     };
   },
   computed: {
@@ -84,7 +98,8 @@ export default {
   },
   created() {
     this.getAllInfo();
-    console.log(this.baseId);
+    this.getStaff();
+    this.getSeedInfo();
   },
   methods: {
     // 获取表格信息
@@ -106,6 +121,18 @@ export default {
       this.allList = [];
       this.allList.push(res.data.records);
       this.total = res.data.total;
+    },
+
+    // 获取员工
+    async getStaff() {
+      const { data: res } = await this.public.getStaff();
+      this.createPersonList = res.data.records;
+    },
+
+    // 获取种苗信息
+    async getSeedInfo() {
+      const { data: res } = await this.public.getSeedInfo();
+      this.seedInfo = res.data;
     },
   },
 };

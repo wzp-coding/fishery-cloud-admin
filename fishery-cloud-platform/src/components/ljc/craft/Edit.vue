@@ -40,8 +40,8 @@
             <el-option
               v-for="item in createPersonList"
               :key="item.id"
-              :label="item.personName"
-              :value="item.personName"
+              :label="item.username"
+              :value="item.id"
             >
             </el-option>
           </el-select>
@@ -64,17 +64,16 @@
 </template>
 <script>
 import ljc from "../craft/craft";
-import ljcPublic from "../public/public";
 export default {
   props: {
     id: {},
     processingFactoryId: {},
     labels: {},
+    createPersonList: {},
   },
   data() {
     return {
       model: new ljc(this),
-      public: new ljcPublic(this),
       // 表单名称
       formTitle: "修改加工产品信息",
 
@@ -86,10 +85,6 @@ export default {
     };
   },
   computed: {
-    // 管理员数组
-    createPersonList() {
-      return this.public.createPersonList;
-    },
 
     // 验证规则
     formRules() {
@@ -115,7 +110,7 @@ export default {
         if (res.statusCode == 20000) {
           this.$emit("getAllInfo");
           this.editDialogVisible = false;
-          this.$message.success(res.message);
+          this.elMessage.success(res.message);
         }
       });
     },

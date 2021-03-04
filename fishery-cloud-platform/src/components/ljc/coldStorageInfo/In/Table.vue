@@ -45,6 +45,8 @@
               <Edit
                 :id="scope.row.id"
                 :labels="labels"
+                :createPersonList="createPersonList"
+                :seedInfo="seedInfo"
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
@@ -55,7 +57,14 @@
                 placement="top"
                 :enterable="false"
               >
-                <Out :id="scope.row.id" :labels="labels" />
+                <Out
+                  :id="scope.row.id"
+                  :productName="scope.row.productName"
+                  :createPersonList="createPersonList"
+                  tag="storage"
+                />
+
+
               </el-tooltip>
             </el-col>
             <el-col :span="8">
@@ -77,7 +86,7 @@
 
 <script>
 import Delete from "../../public/delete";
-import Out from "../Out/Add";
+import Out from "../../order/form";
 import Edit from "./Edit";
 export default {
   components: {
@@ -91,6 +100,10 @@ export default {
 
     // 数据标签
     labels: {},
+
+    createPersonList: {},
+
+    seedInfo: {},
   },
   data() {
     return {

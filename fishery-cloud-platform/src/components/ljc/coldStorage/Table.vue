@@ -95,6 +95,7 @@
                 :id="scope.row.id"
                 :labels="labels"
                 :title="title"
+                :createPersonList="createPersonList"
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
@@ -105,7 +106,11 @@
                 placement="top"
                 :enterable="false"
               >
-                <In :id="scope.row.id" />
+                <In
+                  :id="scope.row.id"
+                  :createPersonList="createPersonList"
+                  :seedInfo="seedInfo"
+                />
               </el-tooltip>
             </el-col>
             <el-col :span="6">
@@ -164,6 +169,10 @@ export default {
 
     // 主题
     title: {},
+
+    createPersonList: {},
+
+    seedInfo: {},
   },
   data() {
     return {

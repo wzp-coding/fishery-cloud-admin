@@ -7,25 +7,13 @@ module.exports = class {
     labels = {
         id: "产品编号",
         productName: "产品名称",
-        germchitId: "种苗编号",
+        commodityId: "水产品/冷库产品编号 ",
+        inventory: "库存/件",
         processingFactoryId: "加工厂编号",
     }
     /* 标签结束 */
 
-    /* 种苗编号初始值(有接口后删除)开始 */
-    germchitIds = [
-        {
-            name: "蔬菜",
-            id: "1111"
-        },
-        {
-            name: "水果",
-            id: "2222"
-        }
-    ]
-    /* 种苗编号初始值(有接口后删除)结束 */
-
-    /* 表单验证规则对象开始 */
+    /* 表单验证规则对象 */
     formRules = {
         productName: [
             { required: true, message: `请输入${this.labels.productName}`, trigger: "blur" },
@@ -36,11 +24,13 @@ module.exports = class {
                 trigger: "blur",
             },
         ],
-        germchitId: [
-            { required: true, message: "请输入原料", trigger: "blur" },
+        commodityId: [
+            { required: true, message: `请输入${this.labels.commodityId}`, trigger: "blur" },
+        ],
+        inventory: [
+            { required: true, message: `请输入${this.labels.inventory}`, trigger: "blur" },
         ],
     }
-    /* 表单验证规则对象结束 */
 
 
     /* 获取数据开始 */

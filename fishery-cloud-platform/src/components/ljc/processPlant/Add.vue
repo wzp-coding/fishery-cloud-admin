@@ -27,18 +27,33 @@
         >
           <el-input v-model="addFrom.processingFactoryName"></el-input>
         </el-form-item>
+        <el-form-item :label="labels.processingType" prop="processingType">
+          <el-input v-model="addFrom.processingType"></el-input>
+        </el-form-item>
         <el-form-item
           :label="labels.processingFactoryAddress"
           prop="processingFactoryAddress"
         >
           <el-input v-model="addFrom.processingFactoryAddress"></el-input>
         </el-form-item>
+
+        <el-form-item
+          :label="labels.processingFactoryArea"
+          prop="processingFactoryArea"
+        >
+          <el-input-number
+            v-model="addFrom.processingFactoryArea"
+            controls-position="right"
+            :min="1"
+          ></el-input-number>
+        </el-form-item>
+
         <el-form-item :label="labels.createPersonId" prop="createPersonId">
           <el-select v-model="addFrom.createPersonId">
             <el-option
               v-for="item in createPersonList"
               :key="item.id"
-              :label="item.personName"
+              :label="item.username"
               :value="item.id"
             >
             </el-option>
@@ -55,16 +70,15 @@
 </template>
 <script>
 import ljc from "../processPlant/processPlant";
-import ljcPublic from "../public/public";
 export default {
   props: {
     baseId: {},
     labels: {},
+    createPersonList: {},
   },
   data() {
     return {
       model: new ljc(this),
-      public: new ljcPublic(this),
 
       // 表单名称
       formTitle: "添加加工厂",
@@ -74,19 +88,9 @@ export default {
 
       // 添加信息
       addFrom: {},
-
-      /* 提示信息开始 */
-      addSuccessInfo: "添加加工厂成功！！",
-      addErrorInfo: "加工厂已存在，请重新输入",
-      /* 提示信息结束 */
     };
   },
   computed: {
-    // 管理员数组
-    createPersonList() {
-      return this.public.createPersonList;
-    },
-
     // 表单验证规则对象
     formRules() {
       return this.model.formRules;
@@ -100,14 +104,14 @@ export default {
         if (!val) return false;
         this.addFrom.baseId = this.baseId;
         console.log(this.addFrom);
-        await this.model.addInfo(this.addFrom).then((val) => {
-          if (val.status !== 200) {
-            this.elMessage.error(this.addErrorInfo);
-          }
-          this.elMessage.success(this.addSuccessInfo);
+        const { data: res } = await this.model.addInfo(this.addFrom);
+        if (res.statusCode !== 20000) {
+          this.elMessage.error(res.message);
+        } else {
+          this.elMessage.success(res.message);
           this.$emit("getAllInfo");
           this.addDialogVisible = false;
-        });
+        }
       });
     },
     /* 添加结束 */

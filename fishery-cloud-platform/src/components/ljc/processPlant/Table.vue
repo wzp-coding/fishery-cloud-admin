@@ -20,6 +20,16 @@
         align="center"
       ></el-table-column>
       <el-table-column
+        prop="processingType"
+        :label="labels.processingType"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="processingFactoryArea"
+        :label="labels.processingFactoryArea"
+        align="center"
+      ></el-table-column>
+      <el-table-column
         prop="processingFactoryAddress"
         :label="labels.processingFactoryAddress"
         align="center"
@@ -37,6 +47,7 @@
                 :id="scope.row.id"
                 :labels="labels"
                 :title="title"
+                :createPersonList="createPersonList"
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
@@ -92,6 +103,8 @@ export default {
 
     // 主题
     title: {},
+
+    createPersonList: {},
   },
   data() {
     return {

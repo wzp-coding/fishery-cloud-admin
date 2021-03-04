@@ -11,7 +11,12 @@
       <!-- 标题区域结束 -->
 
       <!-- 添加区域开始 -->
-      <Add @getAllInfo="getAllInfo()" :labels="labels" :baseId="baseId" />
+      <Add
+        @getAllInfo="getAllInfo()"
+        :labels="labels"
+        :baseId="baseId"
+        :createPersonList="createPersonList"
+      />
       <!-- 添加区域结束 -->
 
       <!-- 列表区域开始 -->
@@ -19,6 +24,8 @@
         :allList="allList"
         :labels="labels"
         :title="myTitle"
+        :baseId="baseId"
+        :createPersonList="createPersonList"
         @getAllInfo="getAllInfo()"
       />
       <!-- 列表区域结束 -->
@@ -42,6 +49,7 @@ import Title from "../../components/ljc/public/title";
 import Add from "../../components/ljc/processPlant/Add";
 import Table from "../../components/ljc/processPlant/Table";
 import Pagination from "../../components/ljc/public/pagination";
+import Public from "../../components/ljc/public/public";
 
 export default {
   components: {
@@ -55,6 +63,8 @@ export default {
     return {
       // js
       model: new ljc(this),
+      public: new Public(this),
+
       // 标题图标
       icon: "el-icon-house",
       // 面包屑导航信息
@@ -69,7 +79,10 @@ export default {
       pageSize: 4,
       // 总数据
       allList: [],
+
       baseId: "1350657222372835330",
+
+      createPersonList: [],
     };
   },
   computed: {
@@ -80,7 +93,7 @@ export default {
   },
   created() {
     this.getAllInfo();
-    console.log(this.$store.userInfo);
+    this.getStaff();
   },
   methods: {
     // 获取表格信息
@@ -102,6 +115,12 @@ export default {
       this.allList = [];
       this.allList.push(res.data.records);
       this.total = res.data.total;
+    },
+
+    // 获取员工
+    async getStaff() {
+      const { data: res } = await this.public.getStaff();
+      this.createPersonList = res.data.records;
     },
   },
 };

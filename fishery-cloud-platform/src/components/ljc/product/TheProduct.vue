@@ -4,6 +4,7 @@
     <Add
       :labels="labels"
       :processingFactoryId="processingFactoryId"
+      :commoditIds="commoditIds"
       @getAllInfo="getAllInfo"
     />
     <!-- 添加区域结束 -->
@@ -13,6 +14,8 @@
       :allList="allList"
       :labels="labels"
       :title="myTitle"
+      :createPersonList="createPersonList"
+      :commoditIds="commoditIds"
       :processingFactoryId="processingFactoryId"
       @getAllInfo="getAllInfo()"
     />
@@ -39,7 +42,10 @@ export default {
     Table,
     Pagination,
   },
-  props: {},
+  props: {
+    createPersonList: {},
+    commoditIds: {},
+  },
   data() {
     return {
       // js导入vue
@@ -90,10 +96,11 @@ export default {
         pageSize
       );
       if (res.statusCode !== 20000) {
-        this.$message.error(res.message);
+        this.elMessage.error(res.message);
       }
       this.allList = res.data.records;
       this.total = res.data.total;
+      console.log(this.allList);
     },
   },
 };

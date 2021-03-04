@@ -3,6 +3,8 @@
     <!-- 列表区域开始 -->
     <Table
       :allList="allList"
+      :seedInfo="seedInfo"
+      :createPersonList="createPersonList"
       :labels="labels"
       @getAllInfo="getAllInfo()"
     />
@@ -27,6 +29,10 @@ export default {
   components: {
     Pagination,
     Table,
+  },
+  props: {
+    seedInfo: {},
+    createPersonList: {},
   },
   data() {
     return {
@@ -61,7 +67,6 @@ export default {
     this.getAllInfo();
   },
   methods: {
-
     // 获取表格信息
     async getAllInfo(pageSize, pageNum) {
       if (pageNum == null || pageSize == null) {

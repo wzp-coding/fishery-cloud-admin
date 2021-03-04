@@ -12,8 +12,12 @@
 
       <!-- tab栏开始 -->
       <el-tabs class="tabs" type="card">
-        <el-tab-pane label="入库信息管理"><In /></el-tab-pane>
-        <el-tab-pane label="出库信息管理"><Out /></el-tab-pane>
+        <el-tab-pane label="入库信息管理"
+          ><In :createPersonList="createPersonList" :seedInfo="seedInfo"
+        /></el-tab-pane>
+        <el-tab-pane label="出库信息管理"
+          ><Out :createPersonList="createPersonList" :seedInfo="seedInfo"
+        /></el-tab-pane>
       </el-tabs>
       <!-- tab栏结束 -->
     </el-card>
@@ -44,12 +48,17 @@ export default {
 
       myTitle: "冷库出入信息管理",
 
-      staffs: [],
+      // 管理员信息
+      createPersonList: [],
+
+      // 种苗信息
+      seedInfo: [],
     };
   },
   computed: {},
   created() {
-    this.staff();
+    this.getStaff();
+    this.getSeedInfo();
   },
   methods: {
     /* 返回开始 */
@@ -60,9 +69,17 @@ export default {
     },
     /* 返回结束 */
 
-    async staff() {
+    // 获取员工
+    async getStaff() {
       const { data: res } = await this.model.getStaff();
-      console.log(res);
+      this.createPersonList = res.data.records;
+      console.log(this.createPersonList);
+    },
+
+    // 获取种苗信息
+    async getSeedInfo() {
+      const { data: res } = await this.model.getSeedInfo();
+      this.seedInfo = res.data;
     },
   },
 };

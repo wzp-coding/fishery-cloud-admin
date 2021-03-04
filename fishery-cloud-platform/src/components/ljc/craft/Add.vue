@@ -37,8 +37,8 @@
             <el-option
               v-for="item in createPersonList"
               :key="item.id"
-              :label="item.personName"
-              :value="item.personName"
+              :label="item.username"
+              :value="item.id"
             >
             </el-option>
           </el-select>
@@ -61,16 +61,15 @@
 </template>
 <script>
 import ljc from "../craft/craft";
-import ljcPublic from "../public/public";
 export default {
   props: {
     processingFactoryId: {},
     labels: {},
+    createPersonList: {},
   },
   data() {
     return {
       model: new ljc(this),
-      public: new ljcPublic(this),
 
       // 表单名称
       formTitle: "添加加工工艺",
@@ -83,10 +82,6 @@ export default {
     };
   },
   computed: {
-    // 管理员数组
-    createPersonList() {
-      return this.public.createPersonList;
-    },
 
     // 验证规则
     formRules() {
@@ -102,7 +97,7 @@ export default {
         this.addFrom.processingFactoryId = this.processingFactoryId;
         const { data: res } = await this.model.addInfo(this.addFrom);
         if (res.statusCode == 20000) {
-          this.$message.success(res.message);
+          this.elMessage.success(res.message);
         }
         this.$emit("getAllInfo");
         this.addDialogVisible = false;

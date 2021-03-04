@@ -107,7 +107,7 @@ export default {
         if (res.statusCode == 20000) {
           this.$emit("getAllInfo");
           this.editDialogVisible = false;
-          this.$message.success(res.message);
+          this.elMessage.success(res.message);
         }
       });
     },
