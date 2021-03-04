@@ -170,7 +170,7 @@ export default {
 
             备忘录: {
               icon: "date",
-              route: "/",
+              route: "/node-pad",
             },
           },
         },
