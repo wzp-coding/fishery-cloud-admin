@@ -25,8 +25,8 @@
         label-position="left"
         :hide-required-asterisk="true"
       >
-        <el-form-item :label="labels.targetId">
-          <el-select v-model="form.targetId" value-key="customerName">
+        <el-form-item :label="labels.target">
+          <el-select v-model="form.target" value-key="customerName">
             <el-option
               v-for="item in customerList"
               :key="item.id"
@@ -164,24 +164,26 @@ export default {
     createOrder() {
       this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
-
-        // 入库id
         this.form.refrigeratoryInId = this.id;
         this.form.productId = this.id;
-        this.form.type = this.form.targetId.customerType;
+        this.form.type = this.form.target.customerType;
         this.form.productName = this.productName;
-        this.form.receiveAddress = this.form.targetId.receiveAddress;
-        this.form.addressLatitude = this.form.targetId.addressLatitude;
-        this.form.addressLongitude = this.form.targetId.addressLongitude;
-        this.form.phoneNumber = this.form.targetId.phoneNumber;
-        this.form.baseId = this.form.targetId.baseId;
-        this.form.targetName = this.form.targetId.customerName;
-        this.form.targetType = this.form.targetId.customerType;
+        this.form.receiveAddress = this.form.target.receiveAddress;
+        this.form.addressLatitude = this.form.target.addressLatitude;
+        this.form.addressLongitude = this.form.target.addressLongitude;
+        this.form.phoneNumber = this.form.target.phoneNumber;
+        this.form.baseId = this.form.target.baseId;
+        this.form.targetName = this.form.target.customerName;
+        this.form.targetType = this.form.target.customerType;
         this.form.status = 0;
-        this.form.targetId = this.form.targetId.id;
+        this.form.targetId = this.form.target.id;
 
-        console.log(this.form);
-        const { data: res } = await this.model.createOrder(this.form, this.tag);
+        console.log(JSON.parse(JSON.stringify(this.form)));
+
+        const { data: res } = await this.model.createOrder(
+          JSON.parse(JSON.stringify(this.form)),
+          this.tag
+        );
         console.log(res);
         if (res.statusCode == 20000) {
           this.elMessage.success(res.message);

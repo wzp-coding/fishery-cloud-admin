@@ -16,6 +16,7 @@ module.exports = class {
         phoneNumber: " 收货联系电话",
         receiveAddress: "收货地址",
         targetId: "客户",
+        target: "客户",
         targetName: "客户名称 ",
         targetType: "客户类型",
         type: "客户类型",
@@ -31,38 +32,23 @@ module.exports = class {
 
     /* 表单验证规则对象开始 */
     formRules = {
-        inputName: [
-            { required: true, message: `请输入${this.labels.inputName}`, trigger: "blur" },
-            {
-                min: 2,
-                max: 10,
-                message: `${this.labels.inputName}的长度在2~10个字符之间`,
-                trigger: "blur",
-            },
+        targetId: [
+            { required: true, message: `请输入${this.labels.targetId}`, trigger: "blur" },
         ],
-        validity: [
-            { required: true, message: `请输入${this.labels.validity}`, trigger: "blur" },
+        weight: [
+            { required: true, message: `请输入${this.labels.weight}`, trigger: "blur" },
         ],
-        inputPicture: [
-            { required: true, message: `请输入${this.labels.inputPicture}`, trigger: "blur" },
+        warehousingPersonId: [
+            { required: true, message: `请输入${this.labels.warehousingPersonId}`, trigger: "blur" },
         ],
-        inspector: [
-            { required: true, message: `请输入${this.labels.inspector}`, trigger: "blur" },
+        refrigeratoryOutDescription: [
+            { required: true, message: `请输入${this.labels.refrigeratoryOutDescription}`, trigger: "blur" },
         ],
-        specification: [
-            { required: true, message: `请输入${this.labels.specification}`, trigger: "blur" },
+        money: [
+            { required: true, message: `请输入${this.labels.money}`, trigger: "blur" },
         ],
-        supplierAddr: [
-            { required: true, message: `请输入${this.labels.supplierAddr}`, trigger: "blur" },
-        ],
-        supplierLicense: [
-            { required: true, message: `请输入${this.labels.supplierLicense}`, trigger: "blur" },
-        ],
-        supplierName: [
-            { required: true, message: `请输入${this.labels.supplierName}`, trigger: "blur" },
-        ],
-        supplierPhone: [
-            { required: true, message: `请输入${this.labels.supplierPhone}`, trigger: "blur" },
+        amount: [
+            { required: true, message: `请输入${this.labels.amount}`, trigger: "blur" },
         ],
     }
     /* 表单验证规则对象结束 */
