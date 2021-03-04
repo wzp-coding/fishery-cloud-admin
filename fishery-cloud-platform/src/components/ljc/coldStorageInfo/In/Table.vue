@@ -59,10 +59,10 @@
               >
                 <Out
                   :id="scope.row.id"
-                  :labels="labels"
                   :createPersonList="createPersonList"
-                  :seedInfo="seedInfo"
                 />
+
+
               </el-tooltip>
             </el-col>
             <el-col :span="8">
@@ -84,7 +84,7 @@
 
 <script>
 import Delete from "../../public/delete";
-import Out from "../Out/Add";
+import Out from "../../order/form";
 import Edit from "./Edit";
 export default {
   components: {

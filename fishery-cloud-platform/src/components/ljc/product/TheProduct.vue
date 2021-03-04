@@ -14,6 +14,7 @@
       :allList="allList"
       :labels="labels"
       :title="myTitle"
+      :createPersonList="createPersonList"
       :commoditIds="commoditIds"
       :processingFactoryId="processingFactoryId"
       @getAllInfo="getAllInfo()"
