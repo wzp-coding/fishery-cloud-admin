@@ -251,6 +251,14 @@
             <span>基地信息</span>
           </template>
         </el-menu-item>
+        <el-menu-item index="/node-pad">
+          <template slot="title">
+            <!-- 图标 -->
+            <i class="el-icon-document-copy"></i>
+            <!-- 文本 -->
+            <span>备忘录</span>
+          </template>
+        </el-menu-item>
       </el-submenu>
       <!-- 领导仓 -->
       <el-submenu index="7">

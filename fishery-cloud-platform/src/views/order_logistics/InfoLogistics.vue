@@ -282,7 +282,7 @@
                 type="danger"
                 icon="el-icon-delete"
                 size="mini"
-                @click="111"
+                @click="deletestation(scope.row.id)"
               ></el-button>
             </el-tooltip>
             </el-col>
@@ -299,11 +299,19 @@
         :page-sizes="[4, 6, 8, 10]"
         :page-size="pageInfo2.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
+        :total="total2"
       >
       </el-pagination>
       </el-tab-pane>
     </el-tabs>
+     <CreatedLogisrics
+      :stationcard='stationcard'
+      :stationtitle="stationtitle"
+      :stationData="stationData"
+      :look2="look2"
+      @createnotifyParent="createnotifyParent"
+      >
+      </CreatedLogisrics>
       <ModifyLogistics
       :createdialogVisible="createdialogVisible"
       :id="logisticsId"
@@ -326,14 +334,7 @@
       :title="stationFromtitle"
       >
       </StationForm>
-      <CreatedLogisrics
-      :stationcard="stationcard"
-      :stationtitle="stationtitle"
-      :stationData="stationData"
-      :look2="look2"
-      @createnotifyParent="createnotifyParent"
-      >
-      </CreatedLogisrics>
+     
   </div>
   
 </template>
@@ -347,7 +348,7 @@ export default {
     ModifyLogistics,
     ShowInfo,
     StationForm,
-    CreatedLogisrics
+    CreatedLogisrics,
   },
   data(){
     return {
@@ -399,11 +400,36 @@ export default {
       },
       total:null,
       total2:null,
-    };
+    }
   },
   methods:{
+    //删除站点
+   async deletestation(id){
+      const confirmResult = await this.elConfirm(
+        `此操作将永久删除站点, 是否继续?`,
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => {
+        return err;
+      });
+      if (confirmResult !== "confirm") {
+        return this.elMessage.info("已取消删除");
+      }
+      const { data: res } = await this.$logistics.delete(
+        `station/${id}`
+      );
+      if (res.statusCode == 20000) { 
+        this.elMessage.success(res.message);
+      }
+      this.setNode();
+    },
     //修改站点
     Modifystation(data){
+      console.log("55555555")
       this.stationcard = true
       this.stationtitle = "修改站点信息"
       this.stationData = data
@@ -412,8 +438,9 @@ export default {
     //站点创建
     createstation(){
       console.log("222222")
-      this.stationcard = true
-      this.stationtitle = "创建站点"
+      this.stationcard=true
+      this.stationtitle = "添加站点"
+      console.log(this.stationcard,this.stationtitle)
     },
     //关闭站点
     createnotifyParent(){
@@ -543,6 +570,7 @@ export default {
     //改变卡片
     changes(){
       this.crad = !this.crad
+      this.setNode()
     },
     // 监听pagesize(每页显示条数)改变事件
     handleSizeChange(newSize) {

@@ -52,23 +52,27 @@
 </el-dialog>
 </template>
 <script>
-import Map from "../../../public_components/MyLocationPicker"
+import Map from "../../public_components/MyLocationPicker"
   export default {
       components:{
           Map,
       },
       props:{
           stationcard:{
-              type:Boolean
+              type:Boolean,
+              default:"",
           },
           stationtitle:{
-            type:String
+            type:String,
+            default:false
           },
           stationData:{
-            type:Object
+            type:Object,
+            default:{}
           },
           look2:{
-            type:Boolean
+            type:Boolean,
+            default:false
           }
           
       },
@@ -182,7 +186,7 @@ import Map from "../../../public_components/MyLocationPicker"
             console.log(111111111)
           this.Modifyorder();
           console.log("customerdata2222-->",this.stationData)
-          
+
         }
         },
     },
@@ -190,7 +194,6 @@ import Map from "../../../public_components/MyLocationPicker"
           look2:function(){
             this.judge();
           }
-          
         },
         created(){
               this.stationobject.baseId=this.$store.state.userInfo.baseId

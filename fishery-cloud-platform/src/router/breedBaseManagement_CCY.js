@@ -10,6 +10,7 @@ import ManagementSupplies from '../views/management_fishery/ManagementSupplies.v
 import ManagementPond from '../views/management_fishery/ManagementPond.vue'    //
 import ManagementAuthority from '../views/management_base/ManagementAuthority.vue'    //权限管理
 import leaderWarehouse from "../views/leader_warehouse/leaderWarehouse.vue"
+import NotePad from "../views/management_base/NotePad.vue"     //备忘录
 export default [
     {
         // 数字基地
@@ -72,5 +73,10 @@ export default [
         //领导仓
         path:'/leader-warehouse',
         component:leaderWarehouse
+    },
+    {
+        //备忘录
+        path:'/Note-pad',
+        component: NotePad
     }
 ]
