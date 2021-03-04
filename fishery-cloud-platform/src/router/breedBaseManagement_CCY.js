@@ -84,5 +84,10 @@ export default [
         //领导仓
         path:'/leader-warehouse',
         component:leaderWarehouse
+    },
+    {
+        //备忘录
+        path:'/Node-pad',
+        component: NodePad
     }
 ]

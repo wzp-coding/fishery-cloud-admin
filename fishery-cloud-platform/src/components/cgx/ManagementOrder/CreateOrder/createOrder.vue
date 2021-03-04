@@ -8,14 +8,21 @@
     <el-form 
     ref="form" 
     :model="orderobject" 
-    label-width="80px">
+    label-width="85px">
    
      <el-form-item label="客户类型">
     <el-select v-model="orderobject.targetType" placeholder="请选择客户类型" >
-      <el-option label="1.个人" value=1></el-option>
-      <el-option label="2.企业" value=2></el-option>
-      <el-option label="3.加工厂" value=3></el-option>
-      <el-option label="4.冷库" value=4></el-option>
+      <el-option label="1.个人" :value="1"></el-option>
+      <el-option label="2.企业" :value="2"></el-option>
+      <el-option label="3.加工厂" :value="3"></el-option>
+      <el-option label="4.冷库" :value="4"></el-option>
+    </el-select>
+   </el-form-item>
+   <el-form-item label="发货方类型">
+    <el-select v-model="orderobject.sourceType" placeholder="请选择发货方类型" >
+      <el-option label="1.养殖基地" :value="1"></el-option>
+      <el-option label="2.加工厂" :value="2"></el-option>
+      <el-option label="3.冷库" :value="3"></el-option>
     </el-select>
    </el-form-item>
    <el-form-item label="客户名" v-if="orderobject.targetType<=2">
@@ -36,7 +43,7 @@
     <el-input v-model="orderobject.baseId" placeholder="请输入内容"></el-input>
   </el-form-item>
   <el-form-item label="重量">
-    <el-input v-model="orderobject.amount" placeholder="请输入内容" ></el-input>
+    <el-input v-model="orderobject.weight" placeholder="请输入内容" ></el-input>
   </el-form-item>
   <el-form-item label="金额(万元)">
     <el-input v-model="orderobject.money" placeholder="请输入内容"></el-input>
@@ -113,13 +120,14 @@ import Customerfrom from './Customerfrom.vue'
             },
       // --------列表数据-------
         orderobject: {
+          sourceType:null,
           // 接受坐标
           addressLatitude:"",
           addressLongitude:"",
           // 接收地址
           receiveAddress:"",
           //   产品数量
-          amount:null,
+          amount:Number,
           baseId :"",
           money:null,
           weight:null,
@@ -142,16 +150,17 @@ import Customerfrom from './Customerfrom.vue'
       
       // 关闭时设置为空
       setcloseorderobject(){
+        this.orderobject.sourceType=null;
         this.orderobject.targetName="";
-        this.orderobject.baseId="";
+        this.orderobject.baseId=this.$store.state.userInfo.baseId;
         this.orderobject.phoneNumber="";
         this.orderobject.targetId="";
-        this.orderobject.targetType="";
+        this.orderobject.targetType=null;
         this.orderobject.receiveAddress="";
         this.orderobject.addressLatitude="";
         this.orderobject.amount="";
         this.orderobject.money="";
-        this.orderobject.productId="";
+        this.orderobject.productId="1364935085419737090";
         this.orderobject.productName="";
         this.orderobject.addressLongitude="";
         },
@@ -239,7 +248,11 @@ import Customerfrom from './Customerfrom.vue'
         //提交修改订单
         async SubmitModify(){
           console.log('即将修改的订单--> ', this.orderobject);
-          const { data: res } = await this.$managementOrder.put("", this.orderobject);
+          if(this.orderobject.logisticsId){
+            this.elMessage.error("该订单已经发货，无法完成该操作！");
+            this.close();
+          }
+          const { data: res } = await this.$managementOrder.put("",this.orderobject);
           console.log("handleSubmit: ", res);
           if (res.statusCode === 20000) {
             this.elMessage.success(res.message);
@@ -250,10 +263,12 @@ import Customerfrom from './Customerfrom.vue'
         },
         //提交订单（修改或创建）
         submitorder(){
-          if(this.customertitle=="修改订单"){
+          console.log("1111111")
+          if(this.ordertitle=="修改订单"){
+            console.log("1111111")
               this.SubmitModify();
           }
-          if(this.customertitle=="创建订单"){
+          if(this.ordertitle=="创建订单"){
               this.handleSubmit();
           }
         },
@@ -263,5 +278,9 @@ import Customerfrom from './Customerfrom.vue'
             this.judge();
           }
         },
+        created(){
+          this.orderobject.baseId=this.$store.state.userInfo.baseId
+          this.orderobject.productId="1364935085419737090";
+        }
   }
 </script>

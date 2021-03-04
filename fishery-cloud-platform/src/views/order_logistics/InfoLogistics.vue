@@ -4,91 +4,175 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item>订单物流</el-breadcrumb-item>
       <el-breadcrumb-item>物流信息</el-breadcrumb-item>
+      <el-breadcrumb-item v-if="!crad">站点管理</el-breadcrumb-item>
     </el-breadcrumb>
-
-    <!-- 卡片视图区域 -->
-    <el-card>
-      <el-row
+    <el-row
         class="globalHeader"
         style="margin-bottom: 20px; padding-bottom: 45px"
       >
         <el-col :span="4">
-          <i class="el-icon-truck"></i>
-          <span>物流信息</span>
+          <i class="el-icon-document"></i>
+          <span v-if="crad">物流信息</span>
+          <span v-if="!crad">站点管理</span>
         </el-col>
       </el-row>
-      <!-- 订单信息列表区域 -->
+    <!-- 卡片视图区域 -->
+    <el-tabs type="border-card" @tab-click="changes()">
+      <el-tab-pane label="物流信息">
+      <!-- 物流信息列表区域 -->
       <el-table :data="logisticsList" border stripe>
         <!-- border： 加入边框线 -->
         <!-- type="index"： 索引列 -->
         >
-        <el-table-column type="index"></el-table-column>
-        <el-table-column label="出发">
-          <el-table-column prop="departureAddr" label="地址"></el-table-column>
-          <el-table-column prop="departureTime" label="时间"></el-table-column>
-        </el-table-column>
-        <el-table-column label="抵达">
-          <el-table-column prop="arrivalAddr" label="地址"></el-table-column>
-          <el-table-column prop="arrivalTime" label="时间"></el-table-column>
-        </el-table-column>
-        <!-- <el-table-column prop="createBy" label="创建者"></el-table-column> -->
-        <el-table-column label="物流状态">
+        <el-table-column type="expand">
+      <template slot-scope="props">
+        <el-form label-position="left" inline class="demo-table-expand">
+          <el-row :gutter="10">
+            <el-col >
+              <el-form-item label="基地id">
+                <span>{{props.row.baseId}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="订单物流id">
+                <span>{{props.row.id}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="创建时间">
+                <span>{{props.row.gmtCreate}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="修改时间">
+                <span>{{props.row.gmtModified}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="起点站">
+                <span>{{props.row.logisticsStartStation.logisticsStationAddress}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="终点站">
+                <span>{{props.row.logisticsArrivalStation.logisticsStationAddress}}</span>
+              </el-form-item>
+            </el-col>
+            </el-row>
+        </el-form>
+      </template>
+    </el-table-column>
+        <el-table-column
+          prop="logisticsOrderCreateBy"
+          label="创建人"
+          width="120"
+        ></el-table-column>
+        <el-table-column
+          prop="logisticsOrderStatus"
+          :formatter="logisticsType"
+          label="物流状态"
+          width="120"
+        ></el-table-column>
+         <el-table-column
+          prop="logisticsStartStation.logisticsStationAddress"
+          label="起点站"
+          width="200"
+        ></el-table-column>
+         <el-table-column
+          prop="logisticsArrivalStation.logisticsStationAddress"
+          label="终点站"
+          width="200"
+        ></el-table-column>
+         <el-table-column
+          prop="gmtCreate"
+          label="创建时间"
+          width="100"
+        ></el-table-column>
+
+        <el-table-column label="操作" width="350px">
           <template slot-scope="scope">
-            {{ scope.row.logisticsStatus === '1' ? '已到达' : '未到达' }}
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="240px">
-          <template slot-scope="scope">
-            <!-- 修改按钮 -->
+             <el-row :gutter="30">
+            <el-col :span="4">
+              <!-- 修改按钮 -->
+              <el-tooltip
+              effect="dark"
+              content="修改订单"
+              placement="top"
+              :enterable="false"
+            >
             <el-button
               type="primary"
               icon="el-icon-edit"
               size="mini"
-              @click="
-                showEditDialog(scope.row.id).then(() => {
-                  reload1(), reload2()
-                })
-              "
+              @click="showEditDialog(scope.row)"
             ></el-button>
-            <!-- 查看虾苗信息按钮 -->
-            <el-tooltip
-              effect="dark"
-              content="订单信息"
-              placement="top"
-              :enterable="false"
-            >
-              <el-button
-                type="warning"
-                icon="el-icon-tickets"
-                size="mini"
-                @click="getOrderById(scope.row.orderId)"
-              ></el-button>
-            </el-tooltip>
-
+              </el-tooltip>
+            </el-col>
             <!-- 查看物流信息 -->
+            <el-col :span="4">
             <el-tooltip
               effect="dark"
-              content="定位"
+              content="物流信息"
               placement="top"
               :enterable="false"
             >
               <el-button
                 type="success"
-                icon="el-icon-location-information"
+                icon="el-icon-truck"
                 size="mini"
-                @click="
-                  getLogisticsById(scope.row.adultShrimpId).then(() => init())
-                "
+                @click="toShowLogisticsInfo(scope.row.id)"
               ></el-button>
             </el-tooltip>
-
+            </el-col>
+            <!-- 进站操作 -->
+            <el-col :span="4">
+            <el-tooltip
+              effect="dark"
+              content="进站"
+              placement="top"
+              :enterable="false"
+            >
+              <el-button
+                type="warning"
+                icon="el-icon-caret-bottom"
+                size="mini"
+                @click="InopenStationVisible(scope.row.id)"
+              ></el-button>
+            </el-tooltip>
+            </el-col>
+            <!-- 出站操作 -->
+            <el-col :span="4">
+            <el-tooltip
+              effect="dark"
+              content="出站"
+              placement="top"
+              :enterable="false"
+            >
+              <el-button
+                type="warning"
+                icon="el-icon-caret-top"
+                size="mini"
+                @click="OutsetStation(scope.row.id)"
+              ></el-button>
+            </el-tooltip>
+            </el-col>
             <!-- 删除按钮 -->
-            <el-button
-              type="danger"
-              icon="el-icon-delete"
-              size="mini"
-              @click="removeLogisticsById(scope.row.id)"
-            ></el-button>
+            <el-col :span="4">
+              <el-tooltip
+              effect="dark"
+              content="删除"
+              placement="top"
+              :enterable="false"
+            >
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                size="mini"
+                @click="deletelogistics(scope.row.id)"
+              ></el-button>
+            </el-tooltip>
+            </el-col>
+             </el-row>
           </template>
         </el-table-column>
       </el-table>
@@ -104,514 +188,465 @@
         :total="total"
       >
       </el-pagination>
-    </el-card>
+      </el-tab-pane>
+      
+     <el-tab-pane label="站点管理">
+       <div style="width: 75px; float: right;padding:0 30px 10px 0">
+          <el-button type="primary" style=" " @click="createstation()">创建站点</el-button>
+        </div>
+      <!-- 物流信息列表区域 -->
+      <el-table :data="stationList" border stripe>
+        <!-- border： 加入边框线 -->
+        <!-- type="index"： 索引列 -->
+        >
+        <el-table-column type="expand">
+      <template slot-scope="props">
+        <el-form label-position="left" inline class="demo-table-expand">
+          <el-row :gutter="10">
+            <el-col>
+              <el-form-item label="位置">
+                <span>{{props.row.logisticsStationAddress}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="电话：">
+                <span>{{props.row.phoneNumber}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col >
+              <el-form-item label="基地id">
+                <span>{{props.row.baseId}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="站点id">
+                <span>{{props.row.id}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="创建时间">
+                <span>{{props.row.gmtCreate}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="修改时间">
+                <span>{{props.row.gmtModified}}</span>
+              </el-form-item>
+            </el-col>            
+            </el-row>
+        </el-form>
+      </template>
+    </el-table-column>
+          <el-table-column
+          label="站点地址"
+          prop="logisticsStationAddress">
+          </el-table-column>
+          <el-table-column
+            label="电话"
+            prop="phoneNumber">
+          </el-table-column>
+          <el-table-column
+            label="类型"
+            :formatter="stationjudge"
+            prop="logisticsStationType">
+          </el-table-column>
 
-    <!-- 展示订单信息 -->
-    <el-dialog
-      title="订单信息"
-      :visible.sync="orderDialogVisible"
-      width="30%"
-      @close="orderDialogClosed"
-    >
-      <!-- 内容主题区 -->
-      <el-form :model="orderForm" ref="orderFormRef" label-width="120px">
-        <el-form-item label="客户名">
-          <el-input v-model="orderForm.customerName" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="客户类型">
-          <el-input v-model="orderForm.customerType" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="金额/元">
-          <el-input v-model="orderForm.money" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="重量/kg">
-          <el-input v-model="orderForm.weight" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="创建者">
-          <el-input v-model="orderForm.createBy" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="创建时间">
-          <el-date-picker
-            v-model="orderForm.createDate"
-            type="datetime"
-            placeholder="选择日期时间"
-            disabled
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="收货地址">
-          <el-input v-model="orderForm.receiptAddress" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="虾苗批次名称">
-          <el-input v-model="orderForm.shrimpBatchName" disabled></el-input>
-        </el-form-item>
-      </el-form>
-      <!-- 页脚 -->
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="orderDialogVisible = false">取 消</el-button>
-      </span>
-    </el-dialog>
-
-    <!-- 展示物流信息 -->
-    <el-dialog
-      title="物流信息"
-      :visible.sync="logisticsDialogVisible"
-      width="50%"
-    >
-      <!-- 内容主题区 -->
-      <div id="map"></div>
-      <!-- 页脚 -->
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="logisticsDialogVisible = false">关闭</el-button>
-      </span>
-    </el-dialog>
-
-    <!-- 修改物流信息 -->
-    <el-dialog
-      title="修改物流信息"
-      :visible.sync="aditDialogVisible"
-      width="35%"
-      @close="aditDialogClosed"
-    >
-      <!-- 内容主题区 -->
-      <el-form :model="editForm" ref="editFormRef" label-width="120px">
-        <el-form-item label="创建者" prop="createBy">
-          <el-select v-model="editForm.createBy" placeholder="请选择">
-            <el-option
-              v-for="(item, i) in personInfoList"
-              :key="i"
-              :value="item.name"
+        <el-table-column label="操作" width="240px">
+          <template slot-scope="scope">
+             <el-row :gutter="10">
+            <!-- 修改按钮 -->
+            <el-col :span="6">
+              <el-tooltip
+              effect="dark"
+              content="修改站点信息"
+              placement="top"
+              :enterable="false"
             >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="出发日期" prop="departureTime">
-          <el-date-picker
-            v-model="editForm.departureTime"
-            type="datetime"
-            placeholder="选择日期时间"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="抵达日期" prop="arrivalTime">
-          <el-date-picker
-            v-model="editForm.arrivalTime"
-            type="datetime"
-            placeholder="选择日期时间"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="发货地址" prop="departureAddr">
-          <el-input
-            v-model="editForm.departureAddr"
-            @blur="reload1"
-            @focus="hideShow(1)"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="收货地址" prop="arrivalAddr">
-          <el-input
-            v-model="editForm.arrivalAddr"
-            @blur="reload2"
-            @focus="hideShow(2)"
-          ></el-input>
-        </el-form-item>
-      </el-form>
-      <Map
-        style="
-          height: 442px;
-          margin: auto;
-          border-radius: 4px;
-          box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-        "
-        v-show="isShowMap1"
-        specialId="map1"
-        :receiptAddress="editForm.departureAddr"
-        @outLocation="outLoaction1"
-        @outAddress="outAddressToBox1"
-        ref="editMap1"
-      />
-      <Map
-        style="
-          height: 442px;
-          margin: auto;
-          border-radius: 4px;
-          box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-        "
-        v-show="isShowMap2"
-        specialId="map2"
-        :receiptAddress="editForm.arrivalAddr"
-        @outLoation="outLoaction2"
-        @outAddress="outAddressToBox2"
-        ref="editMap2"
-      />
-      <!-- 页脚 -->
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="aditDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editLogisticsInfo">确 定</el-button>
-      </span>
-    </el-dialog>
+              <el-button
+                type="primary"
+                icon="el-icon-edit"
+                size="mini"
+                @click="Modifystation(scope.row)"
+              ></el-button>
+            </el-tooltip>
+            </el-col>
+            <!-- 删除按钮 -->
+            <el-col :span="6">
+              <el-tooltip
+              effect="dark"
+              content="删除"
+              placement="top"
+              :enterable="false"
+            >
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                size="mini"
+                @click="deletestation(scope.row.id)"
+              ></el-button>
+            </el-tooltip>
+            </el-col>
+             </el-row>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <!-- 分页区域 -->
+      <el-pagination
+        @size-change="handleSizeChange2"
+        @current-change="handleCurrentChange2"
+        :current-page="pageInfo2.pagenum"
+        :page-sizes="[4, 6, 8, 10]"
+        :page-size="pageInfo2.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total2"
+      >
+      </el-pagination>
+      </el-tab-pane>
+    </el-tabs>
+     <Created-logisrics
+      :stationcard="stationcard"
+      :stationtitle="stationtitle"
+      :stationData="stationData"
+      :look2="look2"
+      @createnotifyParent2="createnotifyParent2"
+      >
+      </Created-logisrics>
+      <ModifyLogistics
+      :createdialogVisible="createdialogVisible"
+      :id="logisticsId"
+      :look="look"
+     @createnotifyParent="changeModifyLogistics"
+      >
+      </ModifyLogistics>
+      <Show-info
+      :title="title"
+      :is-logistics="jugie"
+      :dialog-visible="dialogVisible"
+      :id="id"
+      @notifyParent="ChangeDialogVisible"
+    ></Show-info> 
+
+      <StationForm
+      @formClose="formClose"
+      @InsetStation="InsetStation"
+      :stationVisible="stationVisible"
+      :title="stationFromtitle"
+      >
+      </StationForm>
+     
   </div>
+  
 </template>
-
 <script>
-import Map from '../../components/cgx/InfoLogistics/Map'
+import ModifyLogistics from "../../components/cgx/LogisticsOrder/ModifyLogistics"
+import ShowInfo from   "../../components/cgx/ManagementOrder/ShowInfo/ShowInfo1";
+import StationForm from "../../components/cgx/LogisticsOrder/StationForm"
+import CreatedLogisrics from "../../components/cgx/LogisticsOrder/createdLogisrics.vue"
 export default {
-  components: {
-    Map,
+  components:{
+    ModifyLogistics,
+    ShowInfo,
+    StationForm,
+    CreatedLogisrics,
   },
-  data() {
+  data(){
     return {
-      token: window.localStorage.getItem('token'),
-      isShowMap1: true,
-      isShowMap2: false,
-      // 基地编号
-      baseId: "1350657222372835330",
+      //创建站点的组件变量
+      stationcard:false,
+      stationtitle:"",
+      stationData:{},
+      look2:true,
 
+      stationType:['养殖基地','个人', '企业', '加工厂', '冷库'],
+      stationFromtitle:"",
+      //控制站点表单
+      stationVisible:false,
+      //控制物流位置
+      dialogVisible:false,
+      itMap:false,
+      //坐标
+      initPoint:{
+        lat:"",
+        lng:""
+      },
+      id:"",
+      title:"物流位置",
+      jugie:true,
+      
+      look:true,
+      createdialogVisible:false,
+      logisticsId:"",
+      //物流状态
+      logisticsJudge:["运输中","已送达"],
+      crad:true,
+      //站点列表
+      stationList:[],
+      //物流信息列表
+      logisticsList:[],
+      baseId:"",
       // 用于控制分页的当前页码和条数
       pageInfo: {
+      // 当前页码
+      pagenum: 1,
+      // 每页显示条数
+      pagesize: 10,
+      },
+       pageInfo2: {
         // 当前页码
         pagenum: 1,
         // 每页显示条数
-        pagesize: 4,
+        pagesize: 10,
       },
-
-      // 总条数
-      total: 0,
-
-      // 控制订单信息对话框的显示和隐藏
-      orderDialogVisible: false,
-
-      // 控制修改信息对话框的显示和隐藏
-      logisticsDialogVisible: false,
-
-      // 控制物流信息对话框的显示和隐藏
-      aditDialogVisible: false,
-
-      // 修改表单的验证规则
-      // editFormRules: [],
-
-      // 用于存放人员信息
-      personInfoList: [],
-
-      // 物流信息列表
-      logisticsList: [],
-
-      // 订单信息
-      orderForm: {},
-
-      // 物流信息byid
-      logisticsForm: {},
-
-      // 修改信息表
-      editForm: {},
-
-      // // 地图
-      // // 出发位置
-      // startPos: '',
-
-      // // 抵达位置
-      // endPos: '',
-
-      // // 地图设置
-      // map: '',
-
-      // // 初始点信息窗口
-      // infoWin1: '',
-
-      // // 抵达点信息窗口
-      // infoWin2: '',
-
-      // // 初始点标
-      // mark1: '',
-
-      // // 抵达点标记
-      // mark2: '',
-
-      // // 折线区
-      // polyline: ''
+      total:null,
+      total2:null,
     }
   },
-  created() {
-    this.setNode()
-  },
-  methods: {
-    // 页面刷新 再次获取baseId
-    setNode() {
-      if (this.baseId !== '') {
-        this.getlogisticsList()
-        this.getPersonInfoList()
-      } else {
-        const loading = this.$loading({
-          lock: true,
-          text: 'Loading',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)',
-        })
-        setTimeout(() => {
-          this.baseId = this.defines.baseId
-          this.getlogisticsList()
-          this.getPersonInfoList()
-          loading.close()
-        }, 1000)
+  methods:{
+    //删除站点
+   async deletestation(id){
+      const confirmResult = await this.elConfirm(
+        `此操作将永久删除站点, 是否继续?`,
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => {
+        return err;
+      });
+      if (confirmResult !== "confirm") {
+        return this.elMessage.info("已取消删除");
       }
-    },
-    outLoaction1(lat, lng) {
-      this.editForm.logisticsStartLongitude = lng
-      this.editForm.logisticsStartLatitude = lat
-    },
-    outLoaction2(lat, lng) {
-      this.editForm.logisticsArrivalLongitude = lng
-      this.editForm.logisticsArrivalLatitude = lat
-    },
-    hideShow(num) {
-      if (num === 1) {
-        this.isShowMap1 = true
-        this.isShowMap2 = false
-      } else {
-        this.isShowMap1 = false
-        this.isShowMap2 = true
+      const { data: res } = await this.$logistics.delete(
+        `station/${id}`
+      );
+      if (res.statusCode == 20000) { 
+        this.elMessage.success(res.message);
       }
+      this.setNode();
     },
-    // 接受地图返回的地址
-    outAddressToBox1(data) {
-      this.editForm.departureAddr = data
+    //修改站点
+    Modifystation(data){
+      console.log("55555555")
+      this.stationcard=true
+      this.stationtitle = "修改站点信息"
+      this.stationData = data
+      this.look2 = !this.look2
     },
-    outAddressToBox2(data) {
-      this.editForm.arrivalAddr = data
+    //站点创建
+    createstation(){
+      console.log("222222")
+      this.stationcard=true
+      this.stationtitle = "添加站点"
+      console.log(this.stationcard,this.stationtitle)
     },
-    // 输入框失去焦点，刷新地图
-    reload1() {
-      this.$refs.editMap1.onKeyDown()
+    //关闭站点
+    createnotifyParent2(){
+      this.stationcard = false
+      this.setNode();
     },
-    reload2() {
-      this.$refs.editMap2.onKeyDown()
+    //站点判断类型
+        stationjudge(rwo){
+            return this.stationType[rwo.logisticsStationType]
+        },
+    //删除
+    async deletelogistics(id){
+        const confirmResult = await this.elConfirm(
+        `此操作将永久删除订单, 是否继续?`,
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => {
+        return err;
+      });
+      if (confirmResult !== "confirm") {
+        return this.elMessage.info("已取消删除");
+      }
+      const { data: res } = await this.$logistics.delete(
+        `order/${id}`
+      );
+      if (res.statusCode == 20000) { 
+        this.elMessage.success(res.message);
+      }
+      this.setNode();
+    },
+    //入站
+    async InsetStation(station){
+        const {data : res} = await this.$logistics.put(`path/${this.logisticsId}/${station.id}`)
+         console.log("---->",res.data)
+       if (res.statusCode == 20000) {
+         return this.elMessage.success(res.message);
+      }
+       else  { 
+        return this.elMessage.error("入站失败");
+        }
+    },
+    //出站1
+    async OutsetStation(id){
+       const confirmResult = await this.elConfirm(
+        `是否决定出站`,
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => {
+        return err;
+      });
+      if (confirmResult !== "confirm") {
+        return this.elMessage.info("已取消出站");
+      }
+       const {data : res} = await this.$logistics.get(`path/${id}`)
+       console.log("路径-->",res.data)
+       if (res.statusCode != 20000) {
+         return this.elMessage.error("res.message");
+      }
+      let stationid = res.data[res.data.length-1].logisticsPathStationId
+      this.OutsetStation2(stationid,id)
+    },
+    //出站2
+    async OutsetStation2(stationid,id){
+      const {data : res} = await this.$logistics.post(`path/${id}/${stationid}`)
+      if (res.statusCode = 20000) {
+         return this.elMessage.success(res.message);
+      }
+      else{
+        return this.elMessage.error("出站失败！");
+      }
+      
+    },
+    //打开站点from
+    InopenStationVisible(id){
+      this.logisticsId = id
+      this.stationVisible = true
+      this.stationFromtitle = "选择入站站点"
+    },
+    OutopenStationVisible(id){
+      this.logisticsId = id
+      this.stationVisible = true
+      this.stationFromtitle = "选择出站站点"
+    },
+    //关闭站点form
+      formClose(){
+      this.stationVisible = false
+      },
+    //物流信息开
+     toShowLogisticsInfo(id){
+       console.log("id-->",id)
+       this.dialogVisible = true
+       this.id = id
+    },
+    //物流信息关
+    ChangeDialogVisible(){
+       this.dialogVisible = false
+    },
+
+    //打开物流信息修改
+    showEditDialog(id){
+      this.logisticsId = id
+      this.createdialogVisible = true
+      this.look = !this.look
+      
+    },
+    //关闭物流信息修改
+    changeModifyLogistics(){
+      this.createdialogVisible = false;
+      this.setNode();
+    },
+    //获取时间
+    theTime(rwo){
+      return rwo.gmtCreate.substring(0,10)
+    },
+    //物流状态判断
+    logisticsType(rwo){
+      return this.logisticsJudge[rwo.logisticsOrderStatus];
+    },
+    //改变卡片
+    changes(){
+      this.crad = !this.crad
+      this.setNode()
     },
     // 监听pagesize(每页显示条数)改变事件
     handleSizeChange(newSize) {
-      this.pageInfo.pagesize = newSize
-      this.getlogisticsList()
+      this.pageInfo.pagesize = newSize;
+      this.getlogisticsList();
     },
-
+    handleSizeChange2(newSize) {
+      this.pageInfo2.pagesize = newSize;
+      this.getstationList();
+    },
     // 监听页码值改变的事件
     handleCurrentChange(newPage) {
-      this.pageInfo.pagenum = newPage
-      this.getlogisticsList()
+      this.pageInfo.pagenum = newPage;
+      this.getlogisticsList();
+      console.log("222333")
     },
-
-    // 监听定单信息对话框的关闭事件，关闭时重置
-    orderDialogClosed() {
-      this.$refs.orderFormRef.resetFields()
+    handleCurrentChange2(newPage) {
+      this.pageInfo2.pagenum = newPage;
+      this.getstationList();
+      console.log("111222")
     },
-
-    // 监听修改信息对话框的关闭事件，关闭时重置
-    aditDialogClosed() {
-      this.$refs.editFormRef.resetFields()
-    },
-
-    // 获取人员信息
-    async getPersonInfoList() {
-      // const { data: res } = await this.$http.get(`${this.$limit}/user/getBaseMember`, {
-      //   headers: {
-      //     Authorization: this.token
-      //   }
-      // })
-      // this.personInfoList = res.data
-      // console.log(this.personInfoList)
-    },
-
-    // 获取订单信息
-    async getOrderById(id) {
-      // 调用根据ID查询用户信息接口
-      const { data: res } = await this.$http.get('/order/' + id)
-      if (res.code !== 20000) {
-        return this.$message.error('查询该订单信息失败！！')
-      }
-      this.orderForm = res.data
-      this.orderDialogVisible = true
-    },
-
-    // 获取物流列表
-    async getlogisticsList() {
-      // const { data: res } = await this.$http.post(
-      //   `/logistics/search/${this.pageInfo.pagenum}/${this.pageInfo.pagesize}`,
-      //   {
-      //     baseId: this.baseId,
-      //   }
-      // )
-      // console.log(res)
-      // if (res.code !== 20000) {
-      //   return this.$message.error('获取物流信息列表失败！！')
-      // }
-      // this.logisticsList = res.data.rows
-      // this.total = res.data.total
-      // console.log(this.logisticsList)
-    },
-
-    // 定位的对话框
-    async getLogisticsById(id) {
-      // console.log(id)
-      // 调用根据ID查询
-      const { data: res } = await this.$http.get('/logistics/findForQR/' + id)
-      if (res.code !== 20000) {
-        return this.$message.error('查询该物流信息失败！！')
-      }
-      // console.log(res)
-      this.logisticsForm = res.data
-      console.log(this.logisticsForm)
-      this.logisticsDialogVisible = true
-    },
-
-    // 展示修改的对话框
-    async showEditDialog(id) {
-      const { data: res } = await this.$http.get('/logistics/' + id)
-      if (res.code !== 20000) {
-        return this.$message.error('查询该物流信息失败！！')
-      }
-      this.editForm = res.data
-      this.aditDialogVisible = true
-    },
-
-    // 修改信息并提交
-    editLogisticsInfo() {
-      // 先进行表单的预验证
-      this.$refs.editFormRef.validate(async (valid) => {
-        if (!valid) return false
-        // 转化时间为标准形式
-        if (this.editForm.departureTime !== null) {
-          var date = new Date(this.editForm.departureTime)
-          this.editForm.createDate = `${date.getFullYear()}-${
-            date.getMonth() + 1
-          }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-        }
-        if (this.editForm.arrivalTime !== null) {
-          var date1 = new Date(this.editForm.arrivalTime)
-          this.editForm.createDate = `${date1.getFullYear()}-${
-            date1.getMonth() + 1
-          }-${date1.getDate()} ${date1.getHours()}:${date1.getMinutes()}:${date1.getSeconds()}`
-        }
-        const { data: res } = await this.$http.put(
-          `/logistics/${this.editForm.id}`,
-          {
-            id: this.editForm.id,
-            departureAddr: this.editForm.departureAddr,
-            logisticsStartLongitude: this.editForm.logisticsStartLongitude,
-            logisticsStartLatitude: this.editForm.logisticsStartLatitude,
-            arrivalAddr: this.editForm.arrivalAddr,
-            logisticsArrivalLongitude: this.editForm.logisticsArrivalLongitude,
-            logisticsArrivalLatitude: this.editForm.logisticsArrivalLatitude,
-            departureTime: this.editForm.departureTime,
-            arrivalTime: this.editForm.arrivalTime,
-            adultShrimpId: this.editForm.adultShrimpId,
-            createBy: this.editForm.createBy,
-            logisticsStatus: this.editForm.logisticsStatus,
-            orderId: this.editForm.orderId,
-          }
-        )
-        console.log(res)
-        if (res.code !== 20000) {
-          return this.$message.error('更新物流信息失败！！')
-        }
-        // 关闭对话框
-        this.aditDialogVisible = false
-        // 刷新列表
+    //初始化
+    setNode(){
+      if (this.baseId !== "") {
         this.getlogisticsList()
-        // 提示修改成功
-        this.$message.success('更新物流信息成功！！')
-      })
-    },
-
-    // 根据id删除对应的信息
-    async removeLogisticsById(id) {
-      // 前提：在elementUI中挂载confirm
-      // （提示消息，标题文本，｛确认按钮的文本，取消按钮的文本，提示的类型｝）
-      const confirmResult = await this.$confirm(
-        '此操作将永久删除该物流信息, 是否继续?',
-        '提示',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        }
-        // .catch 用于捕获错误返回给confirmResult
-      ).catch((err) => {
-        return err
-      })
-      // 如果确认删除，则返回值为字符串 confirm
-      // 如果取消了删除， 则返回值为字符串 cancel
-      if (confirmResult !== 'confirm') {
-        // this.$message.info: 灰色提示框
-        return this.$message.info('已取消删除')
+        this.getstationList()
+      } else {
+        const loading = this.$loading({
+          lock: true,
+          text: "Loading",
+          spinner: "el-icon-loading",
+          background: "rgba(0, 0, 0, 0.7)",
+        });
+        setTimeout(() => {
+          this.baseId = this.$store.state.userInfo.baseId
+         this.getlogisticsList()
+         this.getstationList()
+          loading.close();
+        }, 1000);
       }
-      const { data: res } = await this.$http.delete('/logistics/' + id)
-      if (res.code !== 20000) {
-        return this.$message.error('删除物流信息失败！！')
-      }
-      this.$message.success('删除物流信息成功！！')
-      this.getlogisticsList()
+      
     },
-
-    // 地图
-    init() {
-      var This = this
-      // 经纬度设置
-      This.startPos = new qq.maps.LatLng(
-        This.logisticsForm.logisticsStartLatitude,
-        This.logisticsForm.logisticsStartLongitude
-      )
-      This.endPos = new qq.maps.LatLng(
-        This.logisticsForm.logisticsArrivalLatitude,
-        This.logisticsForm.logisticsArrivalLongitude
-      )
-      // 开始画地图
-      This.map = new qq.maps.Map(document.getElementById('map'), {
-        // 地图的中心地理坐标，这里设为西安市。
-        center: new qq.maps.LatLng(34.01, 108.41),
-        zoom: 5,
-      })
-      // InfoWindow表示信息窗口
-      This.infoWin1 = new qq.maps.InfoWindow({
-        map: This.map,
-      })
-      This.infoWin2 = new qq.maps.InfoWindow({
-        map: This.map,
-      })
-      This.infoWin1.open()
-      This.infoWin1.setContent(
-        '<div style="width:200px;padding-top:10px;">' +
-          '离开地址:' +
-          This.logisticsForm.departureAddr +
-          '<br/>离开时间:' +
-          This.logisticsForm.departureTime +
-          '</div>'
-      )
-      This.infoWin1.setPosition(This.startPos)
-      This.infoWin2.open()
-      This.infoWin2.setContent(
-        '<div style="width:200px;padding-top:10px;">' +
-          '抵达地址:' +
-          This.logisticsForm.arrivalAddr +
-          '<br/>抵达时间:' +
-          This.logisticsForm.arrivalTime +
-          '</div>'
-      )
-      This.infoWin2.setPosition(This.endPos)
-      This.mark1 = new qq.maps.Marker({
-        position: This.startPos,
-        map: This.map,
-      })
-      This.mark2 = new qq.maps.Marker({
-        position: This.endPos,
-        map: This.map,
-      })
-      This.polyline = new qq.maps.Polyline({
-        path: [This.startPos, This.endPos],
-        strokeColor: '#39bf3e',
-        strokeWeight: 4,
-        map: This.map,
-      })
+    //获取物流信息列表
+     async getlogisticsList(){
+      const {data : res} = await this.$logistics.put(
+        `order/${this.baseId}/${this.pageInfo.pagenum}/${this.pageInfo.pagesize}`,{"sort": 0,"status": 2}
+      );
+      console.log("获取物流列表-->",res.data)
+       if (res.statusCode !== 20000) {
+        return this.$message.error("获取物流信息列表失败！！");
+      }
+      this.logisticsList = res.data.records
+      this.total = res.data.total;
+      console.log("物流total-->",res.data.total)
+    },
+    //获取站点信息列表
+    async getstationList(){
+      const {data : res} = await this.$logistics.get(
+        `station/${this.baseId}/${this.pageInfo2.pagenum}/${this.pageInfo2.pagesize}`
+      );
+      console.log("res",res)
+      console.log("获取站点列表-->",res.data.records)
+       if (res.statusCode !== 20000) {
+        return this.$message.error("获取站点列表失败！！");
+      }
+      this.stationList = res.data.records
+      this.total2 = res.data.total;
+      console.log("站点total-->",res.data.total)
     },
   },
+  created(){
+    this.baseId = this.$store.state.userInfo.baseId
+    this.setNode();
+    console.log(this.baseId)
+  },
+  
 }
 </script>
-
 <style lang="less" scoped>

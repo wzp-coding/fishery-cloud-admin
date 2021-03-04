@@ -1,11 +1,11 @@
 <template>
 <el-dialog
-      title="列表"
+      title="客户列表"
       :visible.sync="CustomerVisible"
       width="50%"
       @close="closed"
 > 
-  <el-table
+  <el-table height="450" 
     :data="tableData.filter(data => !search || data.customerName.toLowerCase().includes(search.toLowerCase())||
     data.phoneNumber.toLowerCase().includes(search.toLowerCase()))"
     style="width: 100%">
@@ -37,8 +37,7 @@
     </el-table-column>
   </el-table>
    <span slot="footer" class="dialog-footer">
-       <el-button @click="closed">确 定</el-button>
-        <el-button @click="closed">取 消</el-button>
+       <el-button @click="closed">关 闭</el-button>
       </span>
 </el-dialog> 
 </template>
@@ -64,14 +63,15 @@
         },
       handleEdit(row) {
         this.$emit("setCustomer",row);
-        console.log(row)
+        this.elMessage.success("已选择该顾客信息");
+        console.log("选择的顾客信息-->",row)
       },
         // 获取顾客数据
        async getComputedlist(){
-        const { data: res } = await this.$Customer.get(this.baseid);
+        const { data: res } = await this.$Customer.get(this.$store.state.userInfo.baseId);
         console.log("customer--->",res.data)
       if (res.statusCode !== 20000) {
-        return this.$message.error("查询该虾苗信息失败！！");
+        return this.elMessage.error("查询该虾苗信息失败！！");
       }
       this.tableData = res.data;
         },

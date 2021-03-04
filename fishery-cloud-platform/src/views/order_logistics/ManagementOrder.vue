@@ -34,7 +34,54 @@
         <!-- border： 加入边框线 -->
         <!-- type="index"： 索引列 -->
         >
-        <el-table-column type="index"> </el-table-column>
+        <el-table-column type="expand">
+      <template slot-scope="props">
+        <el-form label-position="left" inline class="demo-table-expand">
+          <el-row :gutter="24">
+             <el-col :span="6">
+              <el-form-item label="电话：">
+                <span>{{props.row.phoneNumber}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="数量">
+                <span>{{props.row.phoneNumber}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="重量/kg">
+                <span>{{props.row.weight}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col  :span="6">
+              <el-form-item label="创建时间">
+                <span>{{props.row.gmtCreate}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="修改时间">
+                <span>{{props.row.gmtModified}}</span>
+              </el-form-item>
+            </el-col>
+              <el-col :span="6">
+              <el-form-item label="基地id">
+                <span>{{props.row.baseId}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="产品编号">
+                <span>{{props.row.productId}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="物流编号">
+                <span>{{props.row.logisticsId}}</span>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </template>
+    </el-table-column>
 
         <el-table-column
           prop="targetName"
@@ -71,6 +118,7 @@
         <el-table-column
           prop="receiveAddress"
           label="收货地址"
+          width="300"
         ></el-table-column>
         <el-table-column label="二维码" width="150">
           <template slot-scope="">
@@ -252,13 +300,13 @@
 
       <!-- 分页区域 -->
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="pageInfo.pagenum"
+        @size-change="handleSizeChange2"
+        @current-change="handleCurrentChange2"
+        :current-page="pageInfo2.pagenum"
         :page-sizes="[4, 6, 8, 10]"
-        :page-size="pageInfo.pagesize"
+        :page-size="pageInfo2.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
+        :total="total2"
       >
       </el-pagination>
       </el-tab-pane>
@@ -279,7 +327,6 @@
     :ortitle="orTitle"
     :is-show-code="isShowCode"
     :adult-shrimp-id="adultShrimpId"
-    :options="options"
     @notifyParent2="closeCode"
     
     >
@@ -295,14 +342,14 @@
     >
     </Create-order> 
     <!-- 创建/修改顾客 -->
-    <CreateCustomer
+    <Create-customer
     :customercard="createCustomers"
     :customertitle="customertitle"
     :customerData="customerData"
     :look2="look2"
     @createnotifyParent="changecustomerdialogVisible"
     >
-    </CreateCustomer>
+    </Create-customer>
   </div>
  
   
@@ -332,7 +379,7 @@ export default {
       //添加/修改顾客开关
       createCustomers:false,
       customertitle:"",
-      customerData:null,
+      customerData:{},
       look2:true,
       //控制订单和顾客管理卡片
       card:true,
@@ -351,7 +398,7 @@ export default {
       customerjudge : ['个人', '企业', '加工厂', '冷库'],
       // orderstatus:['未发货','已发货'],
       // 传递给子组件
-      title: "虾苗信息",
+      title: "",
       isLogistics: false,
       showInfoId: "",
       dialogVisible: false,
@@ -376,9 +423,16 @@ export default {
         // 每页显示条数
         pagesize: 10,
       },
+       pageInfo2: {
+        // 当前页码
+        pagenum: 1,
+        // 每页显示条数
+        pagesize: 10,
+      },
 
       // 总条数
-      total: "",
+      total: null,
+      total2:null,
       // 订单列表
       OrderList: [],
       //顾客列表
@@ -406,7 +460,7 @@ export default {
       this.customertitle="修改信息"
       this.look2=!this.look2
       this.customerData=data
-      console.log("customerData--->",data)
+      console.log("customerData--->",this.customerData)
     },
     //删除顾客
     async deleteCustomer(id){
@@ -438,6 +492,8 @@ export default {
       this.card=!this.card
       this.pageInfo.pagenum=1
       this.pageInfo.pagesize=10
+      this.pageInfo2.pagenum=1
+      this.pageInfo2.pagesize=10
     },
     //执行发货操作
     async delivery(id){
@@ -490,13 +546,7 @@ export default {
     this.createdialogVisible=false;
     this.setNode();
   },
-    // 展示虾苗信息时要传递给子组件的信息
-    // toShowShrimpInfo(id) {
-    // this.title = "虾苗信息";
-    //   this.isLogistics = false;
-    //   this.showInfoId = id;
-    //   this.dialogVisible = true;
-    // },
+
     // 展示物流信息时要传递给子组件的信息
     toShowLogisticsInfo(id) {
       this.title = "物流信息";
@@ -508,7 +558,6 @@ export default {
     ChangeDialogVisible() {
       this.dialogVisible = false;
     },
-    // -----------------------------------------------
     // 页面刷新 再次获取baseId
     setNode() {
       if (this.baseId !== "") {
@@ -588,10 +637,20 @@ export default {
       this.pageInfo.pagesize = newSize;
       this.getOrderList();
     },
+    handleSizeChange2(newSize) {
+      this.pageInfo2.pagesize = newSize;
+      this.getCustomerList();
+    },
     // 监听页码值改变的事件
     handleCurrentChange(newPage) {
       this.pageInfo.pagenum = newPage;
       this.getOrderList();
+      console.log("222333")
+    },
+    handleCurrentChange2(newPage) {
+      this.pageInfo2.pagenum = newPage;
+      this.getCustomerList();
+      console.log("111222")
     },
 
     // 获取订单信息
@@ -599,29 +658,29 @@ export default {
       const { data: res } = await this.$managementOrder.get(
         `baseOrder/${this.baseId}/${this.pageInfo.pagenum}/${this.pageInfo.pagesize}`
       );
-      console.log("结果:",res);
+      console.log("结果1:",res);
       if (res.statusCode !== 20000) {
         return this.$message.error("获取虾苗订单列表失败！！");
       }
       this.OrderList = res.data.records;
       this.total = res.data.total;
-      console.log("uersinfo-->",this.$store.state.userInfo.baseId)
+      console.log("uersinfo-->",this.$store.state.userInfo)
       console.log("OrderList:",this.OrderList)
       console.log("total:",this.total)
     },
     // 获取顾客信息
     async getCustomerList() {
       const { data: res } = await this.$Customer.get(
-        `${this.baseId}/${this.pageInfo.pagenum}/${this.pageInfo.pagesize}`
+        `${this.baseId}/${this.pageInfo2.pagenum}/${this.pageInfo2.pagesize}`
       );
-      console.log("结果:",res);
+      console.log("结果2:",res);
       if (res.statusCode !== 20000) {
         return this.$message.error("获取顾客信息失败！！");
       }
       this.CustomerList = res.data.records;
-      this.total = res.data.total;
+      this.total2 = res.data.total;
       console.log("getCustomerList:",this.CustomerList)
-      console.log("total:",this.total)
+      console.log("total2:",this.total2)
     },
 
      // 展示修改的对话框
@@ -645,9 +704,6 @@ export default {
   border: 1px solid rgb(161, 161, 161);
   border-radius: 6px;
 }
-#map {
-  width: 100%;
-  height: 480px;
-}
+
 </style>
 >>>>>>> c8aba1c1744b85dbb07ac9c209d617647127392c
