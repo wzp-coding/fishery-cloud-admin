@@ -30,7 +30,7 @@ import lodash from './util/lodash';
 Vue.use(lodash);
 
 // 安装echarts并且全局挂载
-import echarts from 'echarts'
+import * as echarts from 'echarts'
 Vue.prototype.$echarts = echarts
 
 // 给所有组件添加一个save方法，用于保存拖拽模块

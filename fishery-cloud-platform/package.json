@@ -13,7 +13,7 @@
     "@uppy/vue": "0.1.4",
     "axios": "0.21.1",
     "core-js": "3.6.5",
-    "echarts": "4.9.0",
+    "echarts": "5.0.2",
     "element-ui": "2.15.0",
     "lodash": "4.17.20",
     "nprogress": "0.2.0",
