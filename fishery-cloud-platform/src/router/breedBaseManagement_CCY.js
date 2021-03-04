@@ -87,7 +87,7 @@ export default [
     },
     {
         //备忘录
-        path:'/Note-pad',
-        component: NotePad
+        path:'/Node-pad',
+        component: NodePad
     }
 ]

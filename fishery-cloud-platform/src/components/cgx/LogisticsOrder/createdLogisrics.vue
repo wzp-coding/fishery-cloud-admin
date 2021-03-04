@@ -121,7 +121,7 @@ import Map from "../../public_components/MyLocationPicker"
         },
         // 关闭表单
         close(){
-            this.$emit("createnotifyParent");
+            this.$emit("createnotifyParent2");
             this.setclose();
         },
         // 设置地图返回的定点位置

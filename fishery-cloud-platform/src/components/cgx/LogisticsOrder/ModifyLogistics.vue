@@ -94,7 +94,7 @@ import StationForm from "./StationForm"
     // 关闭表单
         close(){
             this.$emit("createnotifyParent");
-            // this.setcloseorderobject();
+            this.setcloseorderobject();
         },
     //获取物流信息
      async getlogisticsList(){

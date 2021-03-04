@@ -309,7 +309,7 @@
       :stationtitle="stationtitle"
       :stationData="stationData"
       :look2="look2"
-      @createnotifyParent="createnotifyParent"
+      @createnotifyParent2="createnotifyParent2"
       >
       </CreatedLogisrics>
       <ModifyLogistics
@@ -443,7 +443,7 @@ export default {
       console.log(this.stationcard,this.stationtitle)
     },
     //关闭站点
-    createnotifyParent(){
+    createnotifyParent2(){
       this.stationcard = false
       this.setNode();
     },
@@ -550,8 +550,8 @@ export default {
     //打开物流信息修改
     showEditDialog(id){
       this.logisticsId = id
-      this.look = !this.look
       this.createdialogVisible = true
+      this.look = !this.look
       
     },
     //关闭物流信息修改
