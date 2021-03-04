@@ -252,7 +252,8 @@ export default {
       console.log(res);
       if (res.statusCode === 20000) {
         this.pondInfo = res.data;
-        this.Chart2(this.pondInfo.length, this.pondInfo);
+        this.putChart2(this.pondInfo)
+        // this.Chart2(this.pondInfo.length, this.pondInfo);
       }
     },
     async getSupplyOutInfo() {
@@ -370,18 +371,21 @@ export default {
           trigger: "item",
           formatter: "{a} <br/>{b} : {c}尾 ({d}%)",
         },
-        width: "250px",
+        // width: "250px",
         legend: {
+          type: "scroll",
           orient: "vertical",
           left: "left",
+          top: 5,
+          bottom: 20,
           data: name,
         },
         series: [
           {
-            name: "虾苗进货量",
+            name: "种苗进货量",
             type: "pie",
-            radius: "70%",
-            center: ["70%", "60%"],
+            radius: "55%",
+            center: ["55%", "50%"],
             data: obj,
             emphasis: {
               itemStyle: {
@@ -527,8 +531,10 @@ export default {
           formatter: "{a} <br/>{b} : {c}尾 ({d}%)",
         },
         legend: {
+          type: "scroll",
           orient: "vertical",
           left: "left",
+          top: 5,
           data: name,
         },
         series: [
@@ -536,7 +542,7 @@ export default {
             name: "虾苗产量",
             type: "pie",
             radius: "55%",
-            center: ["50%", "50%"],
+            center: ["55%", "45%"],
             data: obj,
             emphasis: {
               itemStyle: {
@@ -570,8 +576,11 @@ export default {
           formatter: "{a} <br/>{b} : {c}kg ({d}%)",
         },
         legend: {
+          type: "scroll",
           orient: "vertical",
           left: "left",
+          top: 5,
+          bottom: 20,
           data: name,
         },
         series: [
@@ -579,7 +588,7 @@ export default {
             name: "入库量",
             type: "pie",
             radius: "55%",
-            center: ["50%", "71%"],
+            center: ["57%", "51%"],
             data: obj,
             emphasis: {
               itemStyle: {
@@ -616,8 +625,11 @@ export default {
           formatter: "{a} <br/>{b} : {c}kg ({d}%)",
         },
         legend: {
+          type: "scroll",
           orient: "vertical",
           left: "left",
+          top: 5,
+          bottom: 20,
           data: name,
         },
         series: [
@@ -625,7 +637,7 @@ export default {
             name: "出库量",
             type: "pie",
             radius: "55%",
-            center: ["50%", "60%"],
+            center: ["66%", "60%"],
             data: obj,
             emphasis: {
               itemStyle: {
@@ -672,7 +684,7 @@ export default {
           data: ["剩余量", "使用量"],
         },
         grid: {
-          left: "3%",
+          left: "1%",
           right: "8%",
           bottom: "3%",
           containLabel: true,
@@ -691,8 +703,8 @@ export default {
             type: "bar",
             stack: "总量",
             label: {
-              show: true,
-              position: "insideRight",
+              // show: true,
+              // position: "insideLeft ",
             },
             data: surplusWeight,
           },
@@ -700,10 +712,10 @@ export default {
             name: "使用量",
             type: "bar",
             stack: "总量",
-            label: {
-              show: true,
-              position: "insideRight",
-            },
+            // label: {
+            //   show: true,
+            //   position: "insideRight",
+            // },
             data: useWeight,
           },
         ],
@@ -896,8 +908,9 @@ header .showTime {
   border-right: 2px solid #02a6b5;
 }
 .chart {
-  height: 150px;
+  height: 200px;
   width: 100%;
+  // height: 100%;
 }
 .order {
   text-align: center;
@@ -910,7 +923,6 @@ header .showTime {
     font-family: electronicFont;
     font-size: 18px;
     color: #ffeb7b;
-
     .el-row {
       margin: 0 0 3px 0;
     }
