@@ -78,7 +78,7 @@ export default {
     // 根据roleId获取权限列表
     async getFunctionByRoleId(roleId) {
       const { data: res } = await this.$function.get(`/findFunction/${roleId}`);
-      console.log("findFunction: ", res);
+      // console.log("findFunction: ", res);
       if (res.statusCode === 20000) {
         res.data.length === 0 ? this.elMessage.info("暂无权限") : "";
         this.dataList = res.data;

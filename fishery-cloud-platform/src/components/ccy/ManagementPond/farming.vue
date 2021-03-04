@@ -1,28 +1,35 @@
 <template>
   <el-dialog
     title="投苗信息"
-    :visible.sync="toDialogInfo.dialogVisible"
+    :visible.sync="toDialog.dialogVisible"
     width="28%"
   >
     <el-form>
       <el-form-item label="投入品类型">
-        <el-select v-model="addFarmInfo.germchitId" placeholder="请选择投入品类型">
+        <el-select v-model="addFarmInfo.germchitId" placeholder="请选择投放种苗" @change="selectEvent">
           <el-option
             v-for="item in germchitList"
-            :key="item.id"
-            :value="item.id"
+            :key="item.germchitId"
+            :value="item.germchitId"
             :label="item.germchitSpecies"
           >
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="投放量kg" prop="inputNum">
+      <el-form-item label="投放量" prop="inputNum">
         <el-input-number
           v-model="addFarmInfo.inputNum"
           controls-position="right"
-          :min="0.01"
+          :min="1"
         ></el-input-number>
+        
       </el-form-item>
+      <!-- <el-form-item label="投放量kg" prop="inputNum">
+        <el-input-number
+          v-model="addFarmInfo.inputWeight"
+          controls-position="right"
+          :precision="2"
+        ></el-input-number> -->
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="toDialogInfo.dialogVisible = false">取 消</el-button>
@@ -34,7 +41,7 @@
 <script>
 export default {
   props: {
-    toDialogInfo: {
+    toDialog: {
       type: Object,
     },
   },
@@ -44,6 +51,7 @@ export default {
       addFarmInfo: {
         germchitId: "",
         inputNum: 1, //投入量
+        inputWeight:null,
         pondId: this.toPond.pondId,
         baseId: "1248910886228332544",
       },

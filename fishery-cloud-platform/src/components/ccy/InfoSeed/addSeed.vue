@@ -135,6 +135,7 @@ export default {
       if(res.statusCode ===20000){
         this.$emit('fatherMethod')
         this.toAddSeedInfo.dialogVisible = false
+        this.elMessage.success('添加种苗成功')
       }
     },
     timeFormat(date) {

@@ -485,8 +485,8 @@
   transition: opacity 0.3s cubic-bezier(0.55, 0, 0.1, 1); }
 
 .el-collapse {
-  border-top: 1px solid #151A30;
-  border-bottom: 1px solid #151A30; }
+  border-top: 1px solid #1F1F1F;
+  border-bottom: 1px solid #1F1F1F; }
 
 .el-collapse-item.is-disabled .el-collapse-item__header {
   color: #bbb;
@@ -501,10 +501,10 @@
   align-items: center;
   height: 48px;
   line-height: 48px;
-  background-color: #222B45;
-  color: #F1F3FE;
+  background-color: #353535;
+  color: #FFFFFF;
   cursor: pointer;
-  border-bottom: 1px solid #151A30;
+  border-bottom: 1px solid #1F1F1F;
   font-size: 13px;
   font-weight: 500;
   -webkit-transition: border-bottom-color .3s;
@@ -521,22 +521,22 @@
       -webkit-transform: rotate(90deg);
       transform: rotate(90deg); }
   .el-collapse-item__header.focusing:focus:not(:hover) {
-    color: #409EFF; }
+    color: #F24681; }
   .el-collapse-item__header.is-active {
     border-bottom-color: transparent; }
 
 .el-collapse-item__wrap {
   will-change: height;
-  background-color: #222B45;
+  background-color: #353535;
   overflow: hidden;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  border-bottom: 1px solid #151A30; }
+  border-bottom: 1px solid #1F1F1F; }
 
 .el-collapse-item__content {
   padding-bottom: 25px;
   font-size: 13px;
-  color: #F1F3FE;
+  color: #FFFFFF;
   line-height: 1.769230769230769; }
 
 .el-collapse-item:last-child {

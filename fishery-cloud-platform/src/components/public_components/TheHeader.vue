@@ -6,7 +6,13 @@
         <span>智慧渔业云服务平台</span>
       </div>
       <div>
-        <el-select v-model="theme" placeholder="请选择" @change="changeTheme" size="medium" style="width:100px">
+        <el-select
+          v-model="theme"
+          placeholder="请选择"
+          @change="changeTheme"
+          size="medium"
+          style="width: 150px"
+        >
           <el-option
             v-for="item in themes"
             :key="item.value"
@@ -24,12 +30,12 @@
             <el-dropdown-item style="width: 60px" command="modifyPassword"
               >修改密码</el-dropdown-item
             >
+            <!-- <el-dropdown-item style="width: 60px" command="showInvitation"
+              >查看邀请
+            </el-dropdown-item> -->
             <el-dropdown-item style="width: 60px" command="loginOut"
               >退出登录</el-dropdown-item
             >
-            <el-dropdown-item style="width: 60px" command="changeTheme"
-              >更换主题
-            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -44,17 +50,24 @@
       :isShow="isShowMPD"
       :close-callback="() => (this.isShowMPD = false)"
     ></ModifyPassword>
+    <!-- 查看邀请 -->
+    <ShowInvitation
+      :isShow="isShowSI"
+      :close-callback="() => (this.isShowSI = false)"
+    ></ShowInvitation>
   </div>
 </template>
 <script>
+import { mapMutations, mapState } from "vuex";
 import InfoUser from "../wzp/user_info/InfoUser";
 import ModifyPassword from "../wzp/user_info/ModifyPassword";
+import ShowInvitation from "../wzp/user_info/ShowInvitation";
 export default {
   data() {
     return {
-      isShowIU: false,
-      isShowMPD: false,
-      curThemeName: "deepBlue",
+      isShowIU: false, //个人中心
+      isShowMPD: false, //修改密码
+      isShowSI: false, //查看邀请
       theme: "cosmic",
       themes: [
         {
@@ -69,17 +82,23 @@ export default {
           value: "dark",
           label: "dark",
         },
+        {
+          value: "metarial-dark",
+          label: "metarial-dark",
+        },
       ],
     };
-  },
-  computed: {
   },
   components: {
     InfoUser,
     ModifyPassword,
+    ShowInvitation,
+  },
+  computed: {
+    ...mapState(["userInfo"]),
   },
   methods: {
-
+    ...mapMutations(["setUserInfo"]),
     // 处理下拉框指令
     handleCommand(command) {
       // console.log(command);
@@ -90,8 +109,8 @@ export default {
         case "modifyPassword":
           this.modifyPassword();
           break;
-        case "changeTheme":
-          this.changeTheme();
+        case "showInvitation":
+          this.showInvitation();
           break;
       }
     },
@@ -107,13 +126,29 @@ export default {
       this.isShowMPD = true;
     },
 
+    // 查看用户邀请
+    showInvitation() {
+      this.isShowSI = true;
+    },
+
     // 换主题皮肤
-    changeTheme(color) {
-      document.body.className = 'custom-'+color;
+    async changeTheme(color) {
+      const form = Object.assign(this.userInfo, { theme: color });
+      // console.log('form: ', form);
+      const { data: res } = await this.$user.put("/user", form);
+      if (res.statusCode === 20000) {
+        document.body.className = "custom-" + color;
+        // 更新vuex里的用户信息
+        this.$store.commit("setUserInfo", form);
+        this.elMessage.success(res.message);
+      } else {
+        this.elMessage.error(res.message);
+      }
     },
   },
   created() {
-    this.changeTheme(this.theme)
+    document.body.className = "custom-" + this.userInfo.theme;
+    this.theme = this.userInfo.theme;
   },
 };
 </script>

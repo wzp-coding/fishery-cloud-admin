@@ -1,6 +1,6 @@
 <script>
 import Form from "../Form";
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 export default {
   components: {
     Form,
@@ -20,9 +20,11 @@ export default {
       isUpdated: false,
     };
   },
+  computed:{
+    ...mapState(['userInfo'])
+  },
   methods: {
-    ...mapMutations(["setUserInfo"]),
-
+    ...mapMutations(['setUserInfo']),
     // 修改信息按钮
     async handleSubmit(form) {
       form.id = this.infoForm.id;
@@ -32,19 +34,13 @@ export default {
       console.log("handleSubmit: ", res);
       if (res.statusCode === 20000) {
         this.isUpdated = true;
+        // 更新vuex里的用户信息
+        this.$store.commit('setUserInfo',Object.assign(this.userInfo,form));
         this.elMessage.success(res.message);
         this.closeCallback();
       } else {
         this.elMessage.error(res.message);
       }
-    },
-
-    // 获取登录用户的具体信息
-    async getSelfInfo() {
-      const { data: res } = await this.$user.get("/self");
-      console.log("getSelfInfo: ", res);
-      this.infoForm = res.data;
-      this.$store.commit("setUserInfo", res.data);
     },
 
     // 关闭前的回调
@@ -65,7 +61,7 @@ export default {
     },
   },
   created() {
-    this.getSelfInfo();
+    this.infoForm = this.userInfo;
   },
   render(h) {
     const listeners = {

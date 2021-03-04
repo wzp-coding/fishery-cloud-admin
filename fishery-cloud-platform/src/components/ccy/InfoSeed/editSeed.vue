@@ -153,7 +153,7 @@ export default {
       this.toEditSeedInfo.dialogVisible = false;
       console.log(res);
       this.$emit("fatherMethod");
-      // console.log(id);
+      this.elMessage.success('修改种苗信息成功')
     },
     timeFormat(date) {
       var y = date.getFullYear();

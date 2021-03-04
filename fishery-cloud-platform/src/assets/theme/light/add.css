@@ -21,3 +21,14 @@
 .custom-light .main {
     border: 1px solid #1b1b38 !important;
 }
+
+/* 领导仓-基地数据 */
+
+.custom-light .mainbox {
+    background-color: #fafafa;
+    color: rgb(31, 29, 29);
+}
+
+.custom-light .panel {
+    background-color: #fafafa;
+}

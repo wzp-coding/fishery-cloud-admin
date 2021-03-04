@@ -25,6 +25,7 @@ import Breadcrumb from "../public/breadcrumb";
 import Title from "../public/title";
 import In from "../coldStorageInfo/In/InInfo";
 import Out from "../coldStorageInfo/Out/OutInfo";
+import Public from "../public/public";
 
 export default {
   components: {
@@ -35,14 +36,21 @@ export default {
   },
   data() {
     return {
+      model: new Public(this),
+
       /* 面包屑导航区信息开始 */
       breadcrumbInfo: ["养殖生产", "冷库", "冷库信息管理"],
       /* 面包屑导航区信息结束 */
 
       myTitle: "冷库出入信息管理",
+
+      staffs: [],
     };
   },
-  created() {},
+  computed: {},
+  created() {
+    this.staff();
+  },
   methods: {
     /* 返回开始 */
     goBack() {
@@ -51,6 +59,11 @@ export default {
       });
     },
     /* 返回结束 */
+
+    async staff() {
+      const { data: res } = await this.model.getStaff();
+      console.log(res);
+    },
   },
 };
 </script>

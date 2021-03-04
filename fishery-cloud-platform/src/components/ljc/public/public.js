@@ -29,4 +29,17 @@ module.exports = class {
         }
     ]
     /* 加工产品数组结束 */
+
+    /* 获取基地人员开始 */
+    getStaff() {
+        return new Promise((resolve) => {
+            this.vue.$admin.post(`search/1/1000`)
+                .then((res) => {
+                    resolve(res);
+                })
+        })
+    }
+    /* 获取基地人员结束 */
+
+
 }

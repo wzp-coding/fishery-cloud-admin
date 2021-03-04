@@ -640,7 +640,7 @@
     width: 39%;
     text-align: center;
     font-size: 14px;
-    color: #DCE3F5; }
+    color: #FFFFFF; }
     .el-date-editor .el-range-input::-webkit-input-placeholder {
       color: #C0C4CC; }
     .el-date-editor .el-range-input::-moz-placeholder {
@@ -658,7 +658,7 @@
     line-height: 32px;
     font-size: 14px;
     width: 5%;
-    color: #F1F3FE; }
+    color: #FFFFFF; }
   .el-date-editor .el-range__close-icon {
     font-size: 14px;
     color: #C0C4CC;
@@ -680,9 +680,9 @@
   line-height: 1; }
 
 .el-range-editor.is-active {
-  border-color: #409EFF; }
+  border-color: #F24681; }
   .el-range-editor.is-active:hover {
-    border-color: #409EFF; }
+    border-color: #F24681; }
 
 .el-range-editor--medium.el-input__inner {
   height: 36px; }
@@ -727,14 +727,14 @@
   line-height: 20px; }
 
 .el-range-editor.is-disabled {
-  background-color: #151A30;
-  border-color: #151A30;
+  background-color: #303030;
+  border-color: #1F1F1F;
   color: #C0C4CC;
   cursor: not-allowed; }
   .el-range-editor.is-disabled:hover, .el-range-editor.is-disabled:focus {
-    border-color: #151A30; }
+    border-color: #1F1F1F; }
   .el-range-editor.is-disabled input {
-    background-color: #151A30;
+    background-color: #303030;
     color: #C0C4CC;
     cursor: not-allowed; }
     .el-range-editor.is-disabled input::-webkit-input-placeholder {
@@ -1119,11 +1119,11 @@
 /* Break-point
 --------------------------*/
 .el-picker-panel {
-  color: #DCE3F5;
-  border: 1px solid #151A30;
+  color: #FFFFFF;
+  border: 1px solid #1F1F1F;
   -webkit-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  background: #222B45;
+  background: #353535;
   border-radius: 4px;
   line-height: 30px;
   margin: 5px 0; }
@@ -1138,7 +1138,7 @@
     border-top: 1px solid #e4e4e4;
     padding: 4px;
     text-align: right;
-    background-color: #222B45;
+    background-color: #353535;
     position: relative;
     font-size: 0; }
   .el-picker-panel__shortcut {
@@ -1148,16 +1148,16 @@
     background-color: transparent;
     line-height: 28px;
     font-size: 14px;
-    color: #DCE3F5;
+    color: #FFFFFF;
     padding-left: 12px;
     text-align: left;
     outline: none;
     cursor: pointer; }
     .el-picker-panel__shortcut:hover {
-      color: #409EFF; }
+      color: #F24681; }
     .el-picker-panel__shortcut.active {
       background-color: #e6f1fe;
-      color: #409EFF; }
+      color: #F24681; }
   .el-picker-panel__btn {
     border: 1px solid #dcdcdc;
     color: #333;
@@ -1173,14 +1173,14 @@
       cursor: not-allowed; }
   .el-picker-panel__icon-btn {
     font-size: 12px;
-    color: #F1F3FE;
+    color: #FFFFFF;
     border: 0;
     background: transparent;
     cursor: pointer;
     outline: none;
     margin-top: 8px; }
     .el-picker-panel__icon-btn:hover {
-      color: #409EFF; }
+      color: #F24681; }
     .el-picker-panel__icon-btn.is-disabled {
       color: #bbb; }
       .el-picker-panel__icon-btn.is-disabled:hover {
@@ -1198,7 +1198,7 @@
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   padding-top: 6px;
-  background-color: #222B45;
+  background-color: #353535;
   overflow: auto; }
 
 .el-picker-panel *[slot=sidebar] + .el-picker-panel__body,
@@ -1237,7 +1237,7 @@
     .el-date-picker__header--bordered {
       margin-bottom: 0;
       padding-bottom: 12px;
-      border-bottom: solid 1px #151A30; }
+      border-bottom: solid 1px #1F1F1F; }
       .el-date-picker__header--bordered + .el-picker-panel__content {
         margin-top: 0; }
   .el-date-picker__header-label {
@@ -1247,11 +1247,11 @@
     line-height: 22px;
     text-align: center;
     cursor: pointer;
-    color: #DCE3F5; }
+    color: #FFFFFF; }
     .el-date-picker__header-label:hover {
-      color: #409EFF; }
+      color: #F24681; }
     .el-date-picker__header-label.active {
-      color: #409EFF; }
+      color: #F24681; }
   .el-date-picker__prev-btn {
     float: left; }
   .el-date-picker__next-btn {
@@ -1837,12 +1837,12 @@
   bottom: -6px;
   left: 50%;
   margin-right: 3px;
-  border-top-color: #151A30;
+  border-top-color: #1F1F1F;
   border-bottom-width: 0; }
   .el-popper[x-placement^="top"] .popper__arrow::after {
     bottom: 1px;
     margin-left: -6px;
-    border-top-color: #222B45;
+    border-top-color: #353535;
     border-bottom-width: 0; }
 
 .el-popper[x-placement^="bottom"] {
@@ -1853,12 +1853,12 @@
   left: 50%;
   margin-right: 3px;
   border-top-width: 0;
-  border-bottom-color: #151A30; }
+  border-bottom-color: #1F1F1F; }
   .el-popper[x-placement^="bottom"] .popper__arrow::after {
     top: 1px;
     margin-left: -6px;
     border-top-width: 0;
-    border-bottom-color: #222B45; }
+    border-bottom-color: #353535; }
 
 .el-popper[x-placement^="right"] {
   margin-left: 12px; }
@@ -1867,12 +1867,12 @@
   top: 50%;
   left: -6px;
   margin-bottom: 3px;
-  border-right-color: #151A30;
+  border-right-color: #1F1F1F;
   border-left-width: 0; }
   .el-popper[x-placement^="right"] .popper__arrow::after {
     bottom: -6px;
     left: 1px;
-    border-right-color: #222B45;
+    border-right-color: #353535;
     border-left-width: 0; }
 
 .el-popper[x-placement^="left"] {
@@ -1883,13 +1883,13 @@
   right: -6px;
   margin-bottom: 3px;
   border-right-width: 0;
-  border-left-color: #151A30; }
+  border-left-color: #1F1F1F; }
   .el-popper[x-placement^="left"] .popper__arrow::after {
     right: 1px;
     bottom: -6px;
     margin-left: -6px;
     border-right-width: 0;
-    border-left-color: #222B45; }
+    border-left-color: #353535; }
 
 .time-select {
   margin: 5px 0;
@@ -1905,14 +1905,14 @@
   line-height: 20px; }
 
 .time-select-item.selected:not(.disabled) {
-  color: #409EFF;
+  color: #F24681;
   font-weight: bold; }
 
 .time-select-item.disabled {
-  color: #151A30;
+  color: #1F1F1F;
   cursor: not-allowed; }
 
 .time-select-item:hover {
-  background-color: #151A30;
+  background-color: #303030;
   font-weight: bold;
   cursor: pointer; }

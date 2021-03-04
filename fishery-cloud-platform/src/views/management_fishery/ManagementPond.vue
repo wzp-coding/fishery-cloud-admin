@@ -16,9 +16,6 @@
               >添加池塘</el-button
             >
           </el-col>
-          <el-col style="width: 120px; float: right">
-            <el-button type="success" >养殖建议卡</el-button>
-          </el-col>
         </div>
         <div class="bigBox" slot="bigBox">
           <!-- 池塘子组件 -->
@@ -35,63 +32,9 @@
         @fatherMethod="paginationChangeEvent"
       ></ThePagination>
     </el-card>
-    <!-- @click="dialogFormVisible = false" -->
-    
-    
-    <!-- <TheDialogAll
-      :toDialogInfo="addPondInfo"
-      ref="addeFormRef"
-      :FormInfo="addeForm"
-      page="currentPage"
-      size="currentSize"
-    >
-      <div slot="forAdd">
-        <el-form :model="addeForm" :rules="addPondInfo.FormRules">
-          <el-form-item label="池塘名称" prop="name">
-            <el-input v-model="addeForm.name"></el-input>
-          </el-form-item>
-          <el-form-item label="池塘类型" prop="type">
-            <el-input v-model="addeForm.type"></el-input>
-          </el-form-item>
-          <el-form-item label="池塘面积/m²" prop="area">
-            <el-input-number
-              v-model="addeForm.area"
-              controls-position="right"
-              :min="1"
-            ></el-input-number>
-          </el-form-item>
-          <el-form-item label="池塘深度/m" prop="depth">
-            <el-input-number
-              v-model="addeForm.depth"
-              controls-position="right"
-              :min="1"
-            ></el-input-number>
-          </el-form-item>
-        </el-form>
-      </div>
-      <span slot="footer">
-        <el-row :gutter="80" class="elrow">
-          <el-col :span="5" :offset="9">
-            <el-button @click="addPondInfo.dialogVisible = false"
-              >取 消</el-button
-            ></el-col
-          >
-          <el-col :span="5"
-            ><el-button type="primary" @click="addPondEvent"
-              >确 定</el-button
-            ></el-col
-          >
-        </el-row>
-      </span>
-    </TheDialogAll> -->
     <!-- 添加池塘 -->
     <addPond :toDialogInfo="addPondInfo" @fatherMethods="getPondList"></addPond>
-    <!-- 修改池塘信息对话框 -->
-    <!-- <TheDialogAll :toDialogInfo="editPondInfo"></TheDialogAll> -->
-    <!-- <TheDialogAll :toDialogInfo="farmInfo"></TheDialogAll>  -->
-    <!-- <TheDialogAll :toDialogInfo="adviseInput" >
 
-    </TheDialogAll> -->
   </div>
 </template>
 
@@ -101,19 +44,19 @@ import TheDialogAll from "../../components/ccy/TheDialogAll";
 import ThePagination from "../../components/ccy/ThePagination";
 import pond from "../../components/ccy/ManagementPond/pond";
 import addPond from "../../components/ccy/ManagementPond/addPond"
+
 export default {
   components: { TheCardHead, pond, ThePagination, TheDialogAll,addPond },
   data() {
     return {
-     
       //全部池塘信息
       pondList: [],
       paginationInfo:{
-        size:3,
+        size:6,
         page:1,
         total:0
       },
-      baseId: "1248910886228332544", //基地ID
+      baseId: this.$store.state.userInfo.baseId, //基地ID
       // 添加池塘的表单数据
       addeForm: {
         //与对话框的输入数据绑定
@@ -123,7 +66,6 @@ export default {
         depth: "", //池塘深度
         name: "", //池塘名称
         type: "", //池塘类型
-        // version:0
       },
       addPondInfo: {
         
@@ -210,26 +152,20 @@ export default {
     },
     async getPondList() {
       console.log("获取池塘信息");
-      // this.reRender= false;
       const { data: res } = await this.$pondController.get(
         `getInfo/${this.baseId}/${this.paginationInfo.size}/${this.paginationInfo.page}`
       );
-      if (res.statusCode !== 2000) {
+      console.log(res);
+      if (res.statusCode === 20000) {
         console.log(res);
         this.pondList = res.data.records;
-        // for (let i = 0; i < this.pondList.length; i++) {
-        //   this.pondList[i].pondType = this.pondList[i].type;
-        // }
         this.addPondInfo.total = res.data.total;
         this.paginationInfo.total = res.data.total
-      
       } else {
         console.log("查询池塘信息失败");
       }
     },
-    
     eventRefresh() {
-     
       this.getPondList(this.addPondInfo.size, 1);
     },
     //创建池塘
@@ -275,21 +211,7 @@ export default {
     catchDialogClosed() {
       this.$refs.catchFormRef.resetFields();
     },
-    
-    timeFormat(date) {
-      var y = date.getFullYear();
-      var m = date.getMonth() + 1;
-      m = m < 10 ? "0" + m : m;
-      var d = date.getDate();
-      d = d < 10 ? "0" + d : d;
-      var h = date.getHours();
-      h = h < 10 ? "0" + h : h;
-      var minute = date.getMinutes();
-      minute = minute < 10 ? "0" + minute : minute;
-      var second = date.getSeconds();
-      second = second < 10 ? "0" + second : second;
-      return y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second;
-    },
+
   },
 };
 </script>

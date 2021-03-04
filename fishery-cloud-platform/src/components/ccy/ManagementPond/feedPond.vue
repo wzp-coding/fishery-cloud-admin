@@ -19,12 +19,12 @@
         <el-input v-model="feedInfo.warehouseNumber"></el-input>
       </el-form-item>
       <el-form-item label="请选择投入品" prop="supplyName">
-        <el-select v-model="feedInfo.supplyId" placeholder="请选择">
+        <el-select v-model="feedInfo.supplyName" placeholder="请选择" @change="selectEvent">
           <el-option
-            v-for="item in supplyList"
-            :key="item.id"
+            v-for="(item, index) in supplyList"
+            :key="index"
             :label="item.name"
-            :value="item.supplyId"
+            :value="index"
           >
           </el-option>
         </el-select>
@@ -37,10 +37,13 @@
           v-model="feedInfo.feedingVolume"
         ></el-input-number>
       </el-form-item>
+      <el-form-item label="备注信息" prop="remark">
+        <el-input v-model="feedInfo.remark"></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="toDialogInfo.dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="searchSupply">确 定</el-button>
+      <el-button type="primary" @click="createFeed">确 定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -55,14 +58,14 @@ export default {
   data() {
     return {
       supplyList: [],
-      baseId: "1248910886228332544",
+      baseId: this.$store.state.userInfo.baseId,
       feedInfo: {
-        baseId: "1248910886228332544",
+        baseId: this.$store.state.userInfo.baseId,
         feedingVolume: 0,
         operatorIdentity: "",
         operatorName: "",
         pondId: this.toDialogInfo.pondId,
-        remark: "暂无", //备注信息
+        remark: "", //备注信息
         supplyId: "",
         supplyName: "",
         supplyType: "饲料",
@@ -87,6 +90,7 @@ export default {
   
   methods: {
     async createFeed() {
+      console.log(this.feedInfo);
       const { data: res } = await this.$pondController.post(
         "feeding",
         this.feedInfo
@@ -98,7 +102,7 @@ export default {
     },
     async getSupplyList() {
       const { data: res } = await this.$baseSupply.get(`all/${this.baseId}`);
-      console.log(res);
+      // console.log(res);
       if (res.statusCode === 20000) {
         this.supplyList = res.data;
       }
@@ -117,6 +121,10 @@ export default {
     },
     closeEvent(){
         this.$refs.formRef.resetFields()
+    },
+    selectEvent(res){
+      this.feedInfo.supplyId = this.supplyList[res].id
+      this.feedInfo.supplyName = this.supplyList[res].name
     }
   },
 };

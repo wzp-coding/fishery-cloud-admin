@@ -269,7 +269,7 @@
       top: 50%;
       -webkit-transform: translateY(-50%);
       transform: translateY(-50%);
-      background-color: #151a30; }
+      background-color: #1F1F1F; }
     .el-page-header__left .el-icon-back {
       font-size: 18px;
       margin-right: 6px;
@@ -280,4 +280,4 @@
       font-weight: 500; }
   .el-page-header__content {
     font-size: 18px;
-    color: #F1F3FE; }
+    color: #FFFFFF; }

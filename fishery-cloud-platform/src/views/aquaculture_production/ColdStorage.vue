@@ -103,7 +103,6 @@ export default {
       if (res.statusCode !== 20000) {
         this.$message.error(res.message);
       }
-      console.log(res.data.records);
       this.allList = [];
       this.allList.push(res.data.records);
       this.total = res.data.total;

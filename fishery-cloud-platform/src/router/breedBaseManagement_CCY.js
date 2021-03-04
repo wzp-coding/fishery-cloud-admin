@@ -4,13 +4,13 @@ import InfoSeed from '../views/management_fishery/InfoSeed.vue'           //
 import InfoCustomer from '../views/management_base/InfoCustomer.vue'   //客户管理
 import InfoSupplies from '../views/management_fishery/InfoSupplies.vue'    //
 import InfoBase from '../views/management_base/InfoBase.vue'
-import InfoPond from '../views/management_fishery/InfoPond.vue'
+// import InfoPond from '../views/management_fishery/InfoPond.vue'
 import ManagementStaff from '../views/management_base/ManagementStaff.vue'      //
 import ManagementSupplies from '../views/management_fishery/ManagementSupplies.vue'       //
 import ManagementPond from '../views/management_fishery/ManagementPond.vue'    //
 import ManagementAuthority from '../views/management_base/ManagementAuthority.vue'    //权限管理
 import leaderWarehouse from "../views/leader_warehouse/leaderWarehouse.vue"
-import NotePad from "../views/management_base/NotePad.vue"     //备忘录
+import ManagementAdvise from "../views/management_fishery/ManagementAdvise.vue"   //养殖建议卡
 export default [
     {
         // 数字基地
@@ -59,10 +59,15 @@ export default [
         path: '/management-pond',
         component: ManagementPond
     },
+    // {
+    //     // 池塘信息
+    //     path: '/info-pond',
+    //     component: InfoPond
+    // },
+    // management-advise
     {
-        // 池塘信息
-        path: '/info-pond',
-        component: InfoPond
+        path: '/management-advise',
+        component:ManagementAdvise
     },
     {
         // 权限管理

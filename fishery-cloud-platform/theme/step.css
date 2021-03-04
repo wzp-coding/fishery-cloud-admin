@@ -268,20 +268,20 @@
     position: relative;
     width: 100%; }
     .el-step__head.is-process {
-      color: #F1F3FE;
-      border-color: #F1F3FE; }
+      color: #FFFFFF;
+      border-color: #FFFFFF; }
     .el-step__head.is-wait {
       color: #C0C4CC;
       border-color: #C0C4CC; }
     .el-step__head.is-success {
-      color: #67C23A;
-      border-color: #67C23A; }
+      color: #63B124;
+      border-color: #63B124; }
     .el-step__head.is-error {
-      color: #F56C6C;
-      border-color: #F56C6C; }
+      color: #B50926;
+      border-color: #B50926; }
     .el-step__head.is-finish {
-      color: #409EFF;
-      border-color: #409EFF; }
+      color: #F24681;
+      border-color: #F24681; }
   .el-step__icon {
     position: relative;
     z-index: 1;
@@ -299,7 +299,7 @@
     font-size: 14px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    background: #222B45;
+    background: #353535;
     -webkit-transition: .15s ease-out;
     transition: .15s ease-out; }
     .el-step__icon.is-text {
@@ -347,15 +347,15 @@
     line-height: 38px; }
     .el-step__title.is-process {
       font-weight: bold;
-      color: #F1F3FE; }
+      color: #FFFFFF; }
     .el-step__title.is-wait {
       color: #C0C4CC; }
     .el-step__title.is-success {
-      color: #67C23A; }
+      color: #63B124; }
     .el-step__title.is-error {
-      color: #F56C6C; }
+      color: #B50926; }
     .el-step__title.is-finish {
-      color: #409EFF; }
+      color: #F24681; }
   .el-step__description {
     padding-right: 10%;
     margin-top: -5px;
@@ -363,15 +363,15 @@
     line-height: 20px;
     font-weight: normal; }
     .el-step__description.is-process {
-      color: #F1F3FE; }
+      color: #FFFFFF; }
     .el-step__description.is-wait {
       color: #C0C4CC; }
     .el-step__description.is-success {
-      color: #67C23A; }
+      color: #63B124; }
     .el-step__description.is-error {
-      color: #F56C6C; }
+      color: #B50926; }
     .el-step__description.is-finish {
-      color: #409EFF; }
+      color: #F24681; }
   .el-step.is-horizontal {
     display: inline-block; }
     .el-step.is-horizontal .el-step__line {

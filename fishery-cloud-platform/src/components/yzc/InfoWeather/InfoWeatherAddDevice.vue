@@ -78,7 +78,7 @@ export default {
     methods: {
         // 查询基地名称
         async getbasename() {
-            const { data:res } = await this.$base.post('search',{
+            const { data:res } = await this.$baseid.post('search',{
                 baseId:this.baseId
             })
             this.baseList = res.data

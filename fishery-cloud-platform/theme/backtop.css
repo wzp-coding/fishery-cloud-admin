@@ -250,11 +250,11 @@
 --------------------------*/
 .el-backtop {
   position: fixed;
-  background-color: #222B45;
+  background-color: #353535;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  color: #409EFF;
+  color: #F24681;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -270,4 +270,4 @@
   cursor: pointer;
   z-index: 5; }
   .el-backtop:hover {
-    background-color: #151A30; }
+    background-color: #1F1F1F; }
