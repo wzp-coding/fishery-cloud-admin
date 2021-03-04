@@ -50,9 +50,7 @@ import StationForm from "./StationForm"
           look:{
             type:Boolean
           },
-          stationdata:{
-            type:Object
-          }
+          
       },
     data() {
       return {
@@ -128,8 +126,8 @@ import StationForm from "./StationForm"
         },
         watch:{
             look(){
-                // this.getlogisticsList();
-                this.logisticsobject= this.stationdata
+                this.getlogisticsList();
+                // this.logisticsobject= this.stationdata
             }
         }
   }

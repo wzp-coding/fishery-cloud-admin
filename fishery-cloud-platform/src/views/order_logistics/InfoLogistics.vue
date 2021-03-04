@@ -314,7 +314,7 @@
       </Created-logisrics>
       <ModifyLogistics
       :createdialogVisible="createdialogVisible"
-      :stationdata="logisticsId"
+      :id="logisticsId"
       :look="look"
      @createnotifyParent="changeModifyLogistics"
       >
@@ -376,7 +376,7 @@ export default {
       
       look:true,
       createdialogVisible:false,
-      logisticsId:{},
+      logisticsId:"",
       //物流状态
       logisticsJudge:["运输中","已送达"],
       crad:true,
@@ -548,8 +548,8 @@ export default {
     },
 
     //打开物流信息修改
-    showEditDialog(data){
-      this.logisticsId = data
+    showEditDialog(id){
+      this.logisticsId = id
       this.createdialogVisible = true
       this.look = !this.look
       
