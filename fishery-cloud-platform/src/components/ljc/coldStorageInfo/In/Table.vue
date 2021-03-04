@@ -59,7 +59,9 @@
               >
                 <Out
                   :id="scope.row.id"
+                  :productName="scope.row.productName"
                   :createPersonList="createPersonList"
+                  tag="storage"
                 />
 
 

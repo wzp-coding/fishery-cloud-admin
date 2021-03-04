@@ -6,7 +6,6 @@ module.exports = class {
     /* 标签开始 */
     labels = {
         gmtCreate: "创建时间",
-
         productName: "产品名",
         baseId: "基地编号 ",
         refrigeratoryInId: "入库编号id",
@@ -14,17 +13,16 @@ module.exports = class {
         addressLongitude: "收货地址经度",
         productId: "产品编号",
         status: "订单状态",
-
-        amount: '数量',
-        money: "金额(万元)",
         phoneNumber: " 收货联系电话",
         receiveAddress: "收货地址",
-        refrigeratoryOutDescription: "购买留言",
-        refrigeratoryOutTime: "出库时间",
-        targetId: "目标",
+        targetId: "客户",
         targetName: "客户名称 ",
         targetType: "客户类型",
-        type: "目标的类型",
+        type: "客户类型",
+        amount: '数量',
+        money: "金额(万元)",
+        refrigeratoryOutDescription: "购买留言",
+        refrigeratoryOutTime: "出库时间",
         warehousingPersonId: "管理人员id ",
         weight: " 产品重量",
 
@@ -70,22 +68,20 @@ module.exports = class {
     /* 表单验证规则对象结束 */
 
     // 冷库创建订单
-    orderStorage(form) {
+    createOrder(form, tag) {
         return new Promise((resolve) => {
-            this.vue.$storage.post(`/refrigeratoryOutInfo/createOrder`, form)
-                .then((res) => {
-                    resolve(res);
-                })
-        })
-    }
+            if (tag == "storage") {
+                this.vue.$storage.post(`/refrigeratoryOutInfo/createOrder`, form)
+                    .then((res) => {
+                        resolve(res);
+                    })
+            } else {
+                this.vue.$plant.put(`/processingFactory/product/order`, form)
+                    .then((res) => {
+                        resolve(res);
+                    })
 
-    // 加工厂创建订单
-    orderPlant(form) {
-        return new Promise((resolve) => {
-            this.vue.$plant.put(`/processingFactory/product/order`, form)
-                .then((res) => {
-                    resolve(res);
-                })
+            }
         })
     }
 }

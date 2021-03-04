@@ -2,8 +2,8 @@
   <div>
     <!-- 修改按钮开始 -->
     <el-button
-      type="success"
-      icon="el-icon-document"
+      type="info"
+      icon="el-icon-s-order"
       size="mini"
       @click="dialogVisible = true"
     ></el-button>
@@ -25,19 +25,22 @@
         label-position="left"
         :hide-required-asterisk="true"
       >
-        <el-form-item :label="labels.phoneNumber" prop="phoneNumber">
-          <el-input placeholder="请输入内容" v-model="form.phoneNumber">
-          </el-input>
-        </el-form-item>
-
-        <el-form-item :label="labels.receiveAddress" prop="receiveAddress">
-          <el-input placeholder="请输入内容" v-model="form.receiveAddress">
-          </el-input>
+        <el-form-item :label="labels.targetId">
+          <el-select v-model="form.targetId" value-key="customerName">
+            <el-option
+              v-for="item in customerList"
+              :key="item.id"
+              :label="item.customerName"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item
           :label="labels.refrigeratoryOutTime"
           prop="refrigeratoryOutTime"
+          v-if="this.tag == 'storage'"
         >
           <el-date-picker
             v-model="form.refrigeratoryOutTime"
@@ -49,6 +52,7 @@
         </el-form-item>
 
         <el-form-item
+          v-if="this.tag == 'storage'"
           :label="labels.refrigeratoryOutDescription"
           prop="refrigeratoryOutDescription"
         >
@@ -60,7 +64,10 @@
           </el-input>
         </el-form-item>
 
-        <el-form-item :label="labels.warehousingPersonId" prop="warehousingPersonId">
+        <el-form-item
+          :label="labels.warehousingPersonId"
+          prop="warehousingPersonId"
+        >
           <el-select v-model="form.warehousingPersonId">
             <el-option
               v-for="item in createPersonList"
@@ -96,7 +103,7 @@
       </el-form>
       <div slot="footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button @click="addInfo()">创建</el-button>
+        <el-button @click="createOrder()">创建</el-button>
       </div>
     </el-dialog>
     <!-- 添加表单区域结束 -->
@@ -105,6 +112,7 @@
 <script>
 /* 路径（按需改） */
 import ljc from "./order";
+import Public from "../public/public";
 export default {
   props: {
     id: {},
@@ -115,6 +123,8 @@ export default {
   data() {
     return {
       model: new ljc(this),
+
+      public: new Public(this),
       // 表单名称
       formTitle: "创建订单",
 
@@ -123,6 +133,10 @@ export default {
 
       // 表单
       form: {},
+
+      baseId: "1350657222372835330",
+
+      customerList: [],
     };
   },
   computed: {
@@ -135,7 +149,9 @@ export default {
       return this.model.labels;
     },
   },
-  created() {},
+  created() {
+    this.getCustomer();
+  },
   methods: {
     /* 监听窗口关闭事件开始 */
     dialogClosed() {
@@ -145,17 +161,41 @@ export default {
     /* 监听窗口关闭事件关闭 */
 
     /* 添加 */
-    addInfo(tag) {
+    createOrder() {
       this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
 
+        // 入库id
+        this.form.refrigeratoryInId = this.id;
+        this.form.productId = this.id;
+        this.form.type = this.form.targetId.customerType;
+        this.form.productName = this.productName;
+        this.form.receiveAddress = this.form.targetId.receiveAddress;
+        this.form.addressLatitude = this.form.targetId.addressLatitude;
+        this.form.addressLongitude = this.form.targetId.addressLongitude;
+        this.form.phoneNumber = this.form.targetId.phoneNumber;
+        this.form.baseId = this.form.targetId.baseId;
+        this.form.targetName = this.form.targetId.customerName;
+        this.form.targetType = this.form.targetId.customerType;
+        this.form.status = 0;
+        this.form.targetId = this.form.targetId.id;
+
         console.log(this.form);
-        const { data: res } = await this.model.addInfo(this.form);
+        const { data: res } = await this.model.createOrder(this.form, this.tag);
+        console.log(res);
         if (res.statusCode == 20000) {
           this.elMessage.success(res.message);
+        } else {
+          this.elMessage.error(res.message);
         }
         this.dialogVisible = false;
       });
+    },
+
+    /* 获取所有客户信息 */
+    async getCustomer() {
+      const { data: res } = await this.public.getCustomer(this.baseId);
+      this.customerList = res.data;
     },
   },
 };

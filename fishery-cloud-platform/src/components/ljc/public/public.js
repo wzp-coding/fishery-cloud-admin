@@ -23,4 +23,15 @@ module.exports = class {
                 })
         })
     }
+
+    // 获取所有客户信息
+    getCustomer(id) {
+        return new Promise((resolve) => {
+            this.vue.$Customer.get(`/${id}`)
+                .then((res) => {
+                    resolve(res);
+                })
+        })
+    }
+
 }
