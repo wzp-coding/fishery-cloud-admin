@@ -11,6 +11,7 @@ import ManagementPond from '../views/management_fishery/ManagementPond.vue'    /
 import ManagementAuthority from '../views/management_base/ManagementAuthority.vue'    //权限管理
 import leaderWarehouse from "../views/leader_warehouse/leaderWarehouse.vue"
 import ManagementAdvise from "../views/management_fishery/ManagementAdvise.vue"   //养殖建议卡
+import NotePad from "../views/management_base/NotePad.vue"
 export default [
     {
         // 数字基地
