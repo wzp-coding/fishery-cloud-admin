@@ -18,7 +18,7 @@
           <el-input v-model="createInfo.funds"></el-input>
         </el-form-item>
         <el-form-item slot="after" label="基地类型" label-width="115px">
-          <el-select v-model="createInfo.types" multiple   placeholder="请选择">
+          <el-select v-model="createInfo.types" multiple placeholder="请选择">
             <el-option
               v-for="item in baseTypeList"
               :key="item._id"
@@ -34,7 +34,15 @@
           <el-input v-model="createInfo.registerNumber"></el-input>
         </el-form-item>
         <el-form-item slot="after" label="养殖类型" label-width="115px">
-          <el-input v-model="createInfo.scope"></el-input>
+          <el-select v-model="createInfo.scope" placeholder="请选择">
+            <el-option
+              v-for="(item, index) in options"
+              :key="index"
+              :label="item.value"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
       </TheDialogLayout>
       <TheDialogLayout>
@@ -82,7 +90,7 @@
         </el-col>
       </el-row>
       <!-- <TheDialogLayout> -->
-      <el-row >
+      <el-row>
         <el-col :span="24">
           <el-form-item label="基地地址" label-width="115px">
             <el-select
@@ -152,6 +160,15 @@ export default {
         lng: "",
       },
       baseTypeList: [],
+      options: [{
+        value:'养殖基地',
+      },
+      {
+        value:'加工厂',
+      },
+      {
+        value:'冷库',
+      }],
     };
   },
   created() {
@@ -163,8 +180,8 @@ export default {
       console.log(res);
       if (res.statusCode === 20000) {
         this.baseTypeList = res.data;
-        for(let i=0;i<this.baseTypeList.length;i++){
-          this.baseTypeList[i] = JSON.parse(this.baseTypeList[i])
+        for (let i = 0; i < this.baseTypeList.length; i++) {
+          this.baseTypeList[i] = JSON.parse(this.baseTypeList[i]);
         }
       }
     },
