@@ -4,7 +4,7 @@
       <el-carousel-item v-for="item in carousels" :key="item">
         <el-image :src="item"></el-image>
       </el-carousel-item>
-    </el-carousel>
+    </el-carousel> 
     <el-row class="baseInformation">
       <p>
         <i class="el-icon-office-building"></i>
