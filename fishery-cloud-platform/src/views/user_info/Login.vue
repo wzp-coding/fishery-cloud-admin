@@ -79,11 +79,7 @@ export default {
         );
         await this.getFunctionByRoleId(roleId);
         this.elMessage.success(res.message);
-        if(!this.$store.state.userInfo.baseId){
-          this.$router.push("/info-base");
-        }else{
-          this.$router.push("/digital-base");
-        }
+        this.$router.push("/digital-base");
       } else {
         this.$refs.passwordLogin.getCaptcha();
         this.elMessage.error(res.message);
