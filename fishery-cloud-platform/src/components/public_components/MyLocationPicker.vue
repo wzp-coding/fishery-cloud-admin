@@ -193,7 +193,7 @@ export default {
     },
 
     // 更新标注点图层
-    updateMarkerLayer(){
+    updateMarkerLayer() {
       // 创建新的中心点的标记
       const centerMarker = {
         id: "1", //点标记唯一标识，后续如果有删除、修改位置等操作，都需要此id
@@ -211,7 +211,12 @@ export default {
     // 根据关键字搜索提示
     async searchInputTip(keywords) {
       console.log("keywords: ", keywords);
-      let url = "/api/ws/place/v1/suggestion/?";
+      let url = "";
+      // if (process.env.NODE_ENV === "development") {
+        url = "/api/ws/place/v1/suggestion/?";
+      // } else {
+      //   url = "https://apis.map.qq.com/ws/place/v1/suggestion/?";
+      // }
       url += `region=${this.city}`;
       url += `&keyword=${keywords}`;
       url += `&key=${this.key}`;
@@ -223,7 +228,12 @@ export default {
 
     // 将中心点坐标逆解析成地址
     async pointToAddress() {
-      let url = "/api/ws/geocoder/v1/?";
+      let url = "";
+      // if (process.env.NODE_ENV === "development") {
+        url = "/api/ws/geocoder/v1/?";
+      // } else {
+      //   url = "https://apis.map.qq.com/ws/geocoder/v1/?";
+      // }
       url += `location=${this.center.lat},${this.center.lng}`;
       url += `&get_poi=${this.options.getPoi ? 1 : 0}`;
       url += `&poi_options=`;

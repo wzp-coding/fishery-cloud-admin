@@ -13,6 +13,10 @@
     color: #fff !important;
 }
 
+.custom-dark #mapCard #mapContainer {
+    color: rgb(133, 130, 130);
+}
+
 /* 我的基地-实况监控 */
 
 .custom-dark .wzp_style_countRunningDevice {

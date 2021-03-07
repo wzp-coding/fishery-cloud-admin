@@ -3,6 +3,7 @@
     <!-- 头部区域 -->
     <el-header id="custom-wzp-header">
       <div>
+        <img style="height:50px;width:50px" src="../../assets/images/logo1.png" :fit="'fit'"/>
         <span>智慧渔业云服务平台</span>
       </div>
       <div>

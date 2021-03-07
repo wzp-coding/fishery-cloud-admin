@@ -11,26 +11,25 @@ import './assets/fonts/iconfont.css'
 import './assets/theme/index.js'
 
 // 封装axios并且把包挂载到原型对象上
-import axiosObject from './util/request/index'
+import axiosObject from './util/request/index.js'
 Vue.use(axiosObject)
 
 // 导入全局注册的自定义组件
-import './util/components'
+import './util/components.js'
 
 // 安装自定义指令
-import directives from './util/directives/index';
+import directives from './util/directives/index.js';
 Vue.use(directives)
 
 // 安装过滤器
-import filters from './util/filters/index';
+import filters from './util/filters/index.js';
 Vue.use(filters)
 
 // 安装lodash
-import lodash from './util/lodash';
+import lodash from './util/lodash.js';
 Vue.use(lodash);
 
-// 安装echarts并且全局挂载
-import * as echarts from 'echarts'
+import echarts from './plugins/echart.js'
 Vue.prototype.$echarts = echarts
 
 // 给所有组件添加一个save方法，用于保存拖拽模块

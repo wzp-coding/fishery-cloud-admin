@@ -89,9 +89,9 @@ export default {
       validator(str) {
         return ["logistics", "base"].includes(str);
       },
-       default() {
+      default() {
         return {
-          a:'base'
+          a: "base",
         };
       },
     },
@@ -176,7 +176,12 @@ export default {
 
     // 获取物流地图的路线（不是实际路线，只是为了好看）
     async getLogisticsRouteAndDisplay() {
-      let url = "/api/ws/direction/v1/driving/?";
+      let url = "";
+      // if (process.env.NODE_ENV === "development") {
+        url = "/api/ws/direction/v1/driving/?";
+      // } else {
+      //   url = "https://apis.map.qq.com/ws/direction/v1/driving/?";
+      // }
       // 路线出发点
       url += `from=${this.startPoint.lat},${this.startPoint.lng}`;
       // 路线终点

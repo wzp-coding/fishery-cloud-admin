@@ -16,7 +16,13 @@ export default [
         beforeEnter: async (to, from, next) => {
             // console.log(Vue.prototype.$originAxios);
             // 获取本地坐标和详细地址
-            let { data: res } = await Vue.prototype.$originAxios.get("/api/ws/location/v1/ip?key=4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ&ip=" + localStorage.getItem('Ip'))
+            let res;
+            // if (process.env.NODE_ENV === 'development') {
+                res = await Vue.prototype.$originAxios.get("/api/ws/location/v1/ip?key=4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ&ip=" + localStorage.getItem('Ip'))
+            // } else {
+            //     res = await Vue.prototype.$originAxios.get("https://apis.map.qq.com/ws/location/v1/ip?key=4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ&ip=" + localStorage.getItem('Ip'))
+            // }
+            res = res.data;
             res = res.result;
             const location = res.location;
             localStorage.setItem("location", JSON.stringify(location));

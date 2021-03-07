@@ -1,8 +1,8 @@
 <template>
   <div class="body">
-    <header>
+    <header style="position:relative">
       <h1 class="wzp_style_leaderTitle">基地信息概览</h1>
-      <div class="showTime">当前时间：</div>
+      <!-- <div class="showTime">当前时间：{{}}</div> -->
     </header>
     <section class="mainbox">
       <div class="column">

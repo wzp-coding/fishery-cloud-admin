@@ -122,10 +122,10 @@ export default {
             trigger: "blur",
             required: true,
           },
-          {
-            pattern: /^[a-zA-Z]\w{5,17}$/,
-            message: "以字母开头，长度在6~18之间，只能包含字母、数字和下划线",
-          },
+          // {
+          //   pattern: /^[a-zA-Z]\w{5,17}$/,
+          //   message: "以字母开头，长度在6~18之间，只能包含字母、数字和下划线",
+          // },
         ],
 
         // 确认密码
@@ -155,11 +155,11 @@ export default {
             message: "请输入手机号码",
             trigger: "blur",
           },
-          {
-            len: 11,
-            pattern: /1\d{10}/,
-            message: "号码必须以1开头且长度是11位",
-          },
+          // {
+          //   len: 11,
+          //   pattern: /1\d{10}/,
+          //   message: "号码必须以1开头且长度是11位",
+          // },
         ],
 
         // 图形验证码
@@ -357,8 +357,7 @@ export default {
         {...{
           props: {
             model: this.form,
-            // -----------------------------------------------------------------------------------------------------------
-            // rules: this.rules,
+            rules: this.rules,
           },
         }}
         ref="form"
@@ -400,12 +399,12 @@ export default {
     // 验证码发送倒计时
     startCountDown() {
       let timer = setInterval(() => {
-        if (this.count > 0) {
+        if (this.count > 1) {
           this.count--;
         } else {
           clearInterval(timer);
           this.isSended = false;
-          this.count = 60;
+          this.count = 59;
         }
       }, 1000);
     },
