@@ -11,7 +11,7 @@
           <span>基地信息</span>
           <el-col style="float: right; width: 100px; margin-right: 10px">
             <el-button type="primary" 
-            v-if="!baseId"
+            v-if="!baseId || true"
             @click="createBase.dialogVisible = true"
               >创建基地</el-button
             >

@@ -68,7 +68,7 @@ export default {
         };
       },
       validator(obj) {
-        return obj.lat && obj.lng;
+        return obj.lat != undefined && obj.lng != undefined;
       },
     },
 
@@ -123,7 +123,7 @@ export default {
     selectedLocation: {
       type: Object,
       validator(obj) {
-        return obj.lat && obj.lng;
+        return obj.lat != undefined && obj.lng != undefined;
       },
     },
   },
@@ -213,7 +213,7 @@ export default {
       console.log("keywords: ", keywords);
       let url = "";
       // if (process.env.NODE_ENV === "development") {
-        url = "/api/ws/place/v1/suggestion/?";
+      url = "/api/ws/place/v1/suggestion/?";
       // } else {
       //   url = "https://apis.map.qq.com/ws/place/v1/suggestion/?";
       // }
@@ -230,7 +230,7 @@ export default {
     async pointToAddress() {
       let url = "";
       // if (process.env.NODE_ENV === "development") {
-        url = "/api/ws/geocoder/v1/?";
+      url = "/api/ws/geocoder/v1/?";
       // } else {
       //   url = "https://apis.map.qq.com/ws/geocoder/v1/?";
       // }

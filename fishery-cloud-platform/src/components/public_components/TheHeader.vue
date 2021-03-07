@@ -3,7 +3,11 @@
     <!-- 头部区域 -->
     <el-header id="custom-wzp-header">
       <div>
-        <img style="height:50px;width:50px" src="../../assets/images/logo1.png" :fit="'fit'"/>
+        <img
+          style="height: 50px; width: 50px"
+          src="../../assets/images/logo1.png"
+          :fit="'fit'"
+        />
         <span>智慧渔业云服务平台</span>
       </div>
       <div>
@@ -69,7 +73,7 @@ export default {
       isShowIU: false, //个人中心
       isShowMPD: false, //修改密码
       isShowSI: false, //查看邀请
-      theme: "cosmic",
+      theme: "metarial-dark",
       themes: [
         {
           value: "cosmic",
@@ -148,8 +152,12 @@ export default {
     },
   },
   created() {
-    document.body.className = "custom-" + this.userInfo.theme;
-    this.theme = this.userInfo.theme;
+    if (this.userInfo.theme) {
+      document.body.className = "custom-" + this.userInfo.theme;
+      this.theme = this.userInfo.theme;
+    } else {
+      document.body.className = "custom-" + this.theme;
+    }
   },
 };
 </script>

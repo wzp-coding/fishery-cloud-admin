@@ -196,7 +196,7 @@ export default {
     async getLabel() {
       const params = { baseId: this.userInfo.baseId, role: this.userInfo.role };
       const { data: res } = await this.$label.post("", params);
-      // console.log("this.$label: ", res);
+      console.log("this.$label: ", res);
       if (res.statusCode === 20000) {
         const labels = JSON.parse(res.data).labels;
         this.newSortMenus = this.formatLabel(labels);

@@ -37,9 +37,9 @@ export default {
       baseInfo: {},
       pondInfo: {},
       carousels: [
-        "http://134.175.208.235/group1/M00/00/28/rBAAD1_YZIyAHq-UAAGH2TCKbN0940.jpg",
-        "http://134.175.208.235/group1/M00/00/29/rBAAD1_5Q3eAB1JXAAFNS57b_0o146.jpg",
-        "http://134.175.208.235/group1/M00/00/29/rBAAD1_5Q3qAYZdLAACvnk9mlZg029.jpg",
+        "https://tse2-mm.cn.bing.net/th/id/OIP.e-c24MOqFFu-_o8yxBiHiAHaE5?w=255&h=180&c=7&o=5&dpr=1.25&pid=1.7",
+        "https://tse3-mm.cn.bing.net/th/id/OIP.rZ28fuXbCDIxI6T1pCWxAwHaDt?w=305&h=174&c=7&o=5&dpr=1.25&pid=1.7",
+        "https://tse2-mm.cn.bing.net/th/id/OIP.UNCyxL_8qRPce4gjdwZpsAHaDe?w=346&h=164&c=7&o=5&dpr=1.25&pid=1.7",
       ],
     };
   },
@@ -48,7 +48,7 @@ export default {
     // 获取基地信息
     async getBaseInfo(baseId) {
       const { data: res } = await this.$base.get(`/${baseId}`);
-      // console.log("getBaseInfo: ", res);
+      console.log("getBaseInfo: ", res);
       if(res.statusCode === 20000){
         this.baseInfo = res.data;
         this.$store.commit("setBaseInfo",res.data);
