@@ -9,13 +9,6 @@
         <div slot="CardTitle">
           <i class="el-icon-document-copy"></i>
           <span>基地信息</span>
-          <el-col style="float: right; width: 100px; margin-right: 10px">
-            <el-button type="primary" 
-            v-if="!baseId || true"
-            @click="createBase.dialogVisible = true"
-              >创建基地</el-button
-            >
-          </el-col>
         </div>
       </TheCardHead>
       <el-form
@@ -237,7 +230,6 @@
         >
       </span>
     </el-dialog>
-    <createBaseDialog :toDialogInfo="createBase"></createBaseDialog>
   </div>
 </template>
 
@@ -245,20 +237,15 @@
 import TheCardHead from "../../components/ccy/TheCardHead";
 import InfoBaseLayout from "../../components/ccy/InfoBaseLayout";
 import Map from "../../components/public_components/MyLocationPicker";
-import createBaseDialog from "../../components/ccy/infoBase/createBaseDialog"
 export default {
   components: {
     TheCardHead,
     InfoBaseLayout,
     Map,
-    createBaseDialog
   },
   data() {
     return {
       baseId:this.$store.state.baseInfo.id,
-      createBase:{
-        dialogVisible:false
-      },
       baseInfo: {
         name: "",
         creator: "",

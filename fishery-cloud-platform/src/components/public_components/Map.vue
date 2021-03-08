@@ -11,7 +11,7 @@
  * @Author: 吴泽鹏
  * @Date: 2021/1/20 0:00
  * @LastEditors: 吴泽鹏
- * @LastEditTime: 2021/1/24 16:54
+ * @LastEditTime: 2021/3/8 13:04
 -->
 <template>
   <!--   定义地图显示容器   -->
@@ -178,7 +178,7 @@ export default {
     async getLogisticsRouteAndDisplay() {
       let url = "";
       // if (process.env.NODE_ENV === "development") {
-        url = "/api/ws/direction/v1/driving/?";
+      url = "/api/ws/direction/v1/driving/?";
       // } else {
       //   url = "https://apis.map.qq.com/ws/direction/v1/driving/?";
       // }
@@ -234,6 +234,12 @@ export default {
 
     //初始化基地地图
     async initBaseMap() {
+      // 如果经纬度超出[-90,90]的范围，初始化为IP地址
+      if (this.centerPoint.lat < -90 || this.centerPoint.lat > 90)
+        this.centerPoint.lat = JSON.parse(localStorage.getItem("location")).lat;
+      if (this.centerPoint.lng < -90 || this.centerPoint.lng > 90)
+        this.centerPoint.lng = JSON.parse(localStorage.getItem("location")).lng;
+
       //定义地图中心点坐标
       const center = new TMap.LatLng(
         this.centerPoint.lat,
@@ -265,6 +271,16 @@ export default {
 
     //初始化物流地图
     async initLogisticsMap() {
+      // 如果经纬度超出[-90,90]的范围，初始化为IP地址
+      if (this.startPoint.lat < -90 || this.startPoint.lat > 90)
+        this.startPoint.lat = JSON.parse(localStorage.getItem("location")).lat;
+      if (this.startPoint.lng < -90 || this.startPoint.lng > 90)
+        this.startPoint.lng = JSON.parse(localStorage.getItem("location")).lng;
+      if (this.endPoint.lat < -90 || this.endPoint.lat > 90)
+        this.endPoint.lat = JSON.parse(localStorage.getItem("location")).lat;
+      if (this.endPoint.lng < -90 || this.endPoint.lng > 90)
+        this.endPoint.lng = JSON.parse(localStorage.getItem("location")).lng;
+
       let start = new TMap.LatLng(this.startPoint.lat, this.startPoint.lng);
       let end = new TMap.LatLng(this.endPoint.lat, this.endPoint.lng);
 

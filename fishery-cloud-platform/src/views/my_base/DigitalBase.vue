@@ -35,7 +35,7 @@
       >
         <template v-slot:default="scope">
           <component
-            style="margin: 5px"
+            style="margin: 5px;"
             v-for="item in scope.moduleChecked"
             :key="item.id"
             :is="item.name"
