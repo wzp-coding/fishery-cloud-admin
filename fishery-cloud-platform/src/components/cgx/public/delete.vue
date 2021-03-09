@@ -14,7 +14,7 @@
 export default {
   props: {
     // 要删除的ID
-    id: {},
+    id:{},
     // 标题
     title: {},
     // 删除路径
@@ -29,6 +29,7 @@ export default {
   methods: {
     /* 删除开始 */
     async removeById() {
+     
       const confirmResult = await this.elConfirm(
         `此操作将永久删除${this.title}, 是否继续?`,
         "提示",
@@ -43,18 +44,25 @@ export default {
       if (confirmResult !== "confirm") {
         return this.elMessage.info("已取消删除");
       }
+      const { data: res1 } = await this.managementOrder.get(`${this.id}`)
+       if(res1.logisticsId){
+         this.elMessage.info("该订单已发货，无法删除！");
+      }
       const { data: res } = await this["$" + this.root].delete(
         `${this.deleteUrl}/${this.id}`
       );
       if (res.statusCode == 20000) { 
         this.$emit("getAllInfo");
-        this.elMessage.success(res.message);
+        return this.elMessage.success(res.message);
+      }else{
+        return this.elMessage.error(res.message);
       }
     },
     /* 删除结束 */
     
   },
 };
+
 </script>
 
 <style scoped>
