@@ -56,7 +56,7 @@
         </div>
       </el-col>
     </el-row>
-    <el-row>
+    <el-row class="pondInfo">
       <el-col :span="8">
         <div class="imgBox">
           <img src="../../../assets/images/pond.jpg" alt="" />
@@ -86,8 +86,8 @@
         </p>
       </el-col>
     </el-row>
-    <el-row class="buttons">
-      <el-col :span="24">
+    <el-row >
+      <el-col :span="20" :offset="11" class="buttons">
         <div>
           <!-- 有投放的才有捕捞选项 -->
           <el-tooltip
@@ -120,7 +120,6 @@
             ></el-button>
           </el-tooltip>
           <!-- 投苗过的不可以再投 -->
-          <!--  -->
           <el-tooltip
             effect="dark"
             content="投苗"
@@ -477,7 +476,7 @@ export default {
   padding: 5px;
   margin: 0 0 10px 10px;
   border-radius: 4px;
-  height: 270px;
+  height: 260px;
   position: relative;
 }
 .el-row {
@@ -511,10 +510,11 @@ el-col {
     height: 100%;
   }
 }
-
+.pondInfo{
+  height: 180px;
+}
 .buttons {
-  position: absolute;
-  bottom: 3px;
+  bottom: 1px;
   right: 5px;
 }
 </style>

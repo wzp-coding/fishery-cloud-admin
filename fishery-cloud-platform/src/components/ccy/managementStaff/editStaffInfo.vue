@@ -7,28 +7,28 @@
   >
     <el-form :model="editForm" label-width="100px" :rules="rules" ref="fromRef">
       <!-- <el-form-item label="姓名" prop="username">
-        <el-input v-model="editForm.username" disabled></el-input>
+        <el-input v-model="editForm.username" ></el-input>
       </el-form-item> -->
       <el-form-item label="身份" prop="baseIdentity">
-        <el-select v-model="editForm.baseIdentity" placeholder="请选择身份">
+        <el-select v-model="editForm.roleId" placeholder="请选择身份">
           <el-option
             v-for="item in options"
             :key="item.id"
-            :label="item.value"
+            :label="item.name"
             :value="item.id"
           >
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="邮箱" prop="email">
+      <!-- <el-form-item label="邮箱" prop="email">
         <el-input v-model="editForm.email"></el-input>
       </el-form-item>
       <el-form-item label="联系电话" prop="phone">
         <el-input v-model="editForm.phone"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="passwork">
+      </el-form-item> -->
+      <!-- <el-form-item label="密码" prop="passwork">
         <el-input v-model="editForm.passwork"></el-input>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="toDialogInfo.dialogVisible = false">取 消</el-button>
@@ -47,26 +47,20 @@ export default {
   data() {
     return {
       editForm: {
-        avatar: "",
-        baseId: this.$store.state.baseInfo.id,
-        baseIdentity: null,
-        email: "",
-        id: "",
+        // avatar: "",
+        // baseId: this.$store.state.baseInfo.id,
+        // baseIdentity: null,
+        // email: "",
+        // id: "",
+        userId:'',
+        roleId:'',
         // username:this.toDialogInfo.username ,
-        passwork: "",
+        // passwork: "",
         // username:"",
-        phone: "",
+        // phone: "",
       },
-      options: [
-        {
-          id: "1",
-          value: "员工",
-        },
-        {
-          id: "2",
-          value: "老板",
-        },
-      ],
+      // 角色数组
+      options: [],
       rules: {
         email: [
           { required: true, message: "请输入邮箱", trigger: "blur" },
@@ -107,17 +101,15 @@ export default {
       },
     };
   },
+  created(){
+    this.getRoleList()
+  },
   methods: {
     async editEvent() {
       console.log(this.toDialogInfo);
-      this.editForm.id = this.toDialogInfo.id;
-
-      this.editForm.baseIdentity = parseInt(this.editForm.baseIdentity);
+      this.editForm.userId = this.toDialogInfo.id;
       console.log(this.editForm);
-      const { data: res } = await this.$admin.put(
-        "admin/update",
-        this.editForm
-      );
+      const { data: res } = await this.$user.put(`updateUserRole/?userId=${this.editForm.userId}&roleId=${this.editForm.roleId}`)
       console.log(res);
       if (res.statusCode === 20000) {
         this.elMessage.success("修改成功");
@@ -128,6 +120,14 @@ export default {
     closeEvent() {
       this.$refs.fromRef.resetFields();
     },
+    async getRoleList(){
+      const {data: res} = await this.$role(`noPage/${this.$store.state.baseInfo.id}`)
+      console.log(res);
+      if(res.statusCode === 20000){
+        this.options = res.data
+        this.options = this.options.slice(0,2)
+      }
+    }
   },
 };
 </script>
