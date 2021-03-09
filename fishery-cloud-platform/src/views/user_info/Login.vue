@@ -26,7 +26,7 @@
 
 <script>
 import Form from "../../components/wzp/Form";
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 export default {
   data() {
     return {
@@ -40,6 +40,9 @@ export default {
   },
   components: {
     Form,
+  },
+  computed: {
+    ...mapState(["userInfo"]),
   },
   methods: {
     ...mapMutations(["setUserInfo", "setPermissionList"]),
@@ -69,44 +72,35 @@ export default {
       console.log("user: ", res);
       if (res.statusCode === 20000) {
         localStorage.setItem("token", headers.token);
-        const { id: roleId, name: role } = await this.getRoleInfoByLoginId(
-          res.data.id
-        );
-        const detailUserInfo = await this.getSelfInfo();
-        this.$store.commit(
-          "setUserInfo",
-          Object.assign(detailUserInfo, { roleId, role })
-        );
-        await this.getFunctionByRoleId(roleId);
+        this.$store.commit("setUserInfo", res.data);
         this.elMessage.success(res.message);
-        this.$router.push("/digital-base");
+        if (!this.userInfo.baseId) {
+          // 如果是新注册的用户，提醒创建基地
+          this.$router.push("/create-base");
+        } else if (this.userInfo.role && this.userInfo.role === "user") {
+          // 如果只是普通用户
+          this.$router.push('common-user');
+        } else {
+          // 如果是基地老板或其他非普通用户角色，请求权限列表
+          await this.getFunctionByRoleId(res.data.roleId);
+          this.$router.push("/digital-base");
+        }
       } else {
         this.$refs.passwordLogin.getCaptcha();
         this.elMessage.error(res.message);
       }
     },
 
-    // 获取登录用户的详情信息（比登录之后返回的信息多了个邮箱）
-    async getSelfInfo() {
-      const { data: res } = await this.$user.get("/self");
-      // console.log("getSelfInfo: ", res);
-      if (res.statusCode === 20000) {
-        return res.data;
-      } else {
-        this.elMessage.error(res.message);
-      }
-    },
-
     // 根据loginId得到roleId
-    async getRoleInfoByLoginId(loginId) {
-      const { data: res } = await this.$role.get(`/getByUserId/${loginId}`);
-      console.log("getRoleInfoByLoginId: ", res);
-      if (res.statusCode === 20000) {
-        return res.data[0];
-      } else {
-        this.elMessage.error(res.message);
-      }
-    },
+    // async getRoleInfoByLoginId(loginId) {
+    //   const { data: res } = await this.$role.get(`/getByUserId/${loginId}`);
+    //   console.log("getRoleInfoByLoginId: ", res);
+    //   if (res.statusCode === 20000) {
+    //     return res.data[0];
+    //   } else {
+    //     this.elMessage.error(res.message);
+    //   }
+    // },
 
     // 根据loginId得到的roleId查询登录用户的权限，并存到vuex中
     async getFunctionByRoleId(roleId) {

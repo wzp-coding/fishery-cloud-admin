@@ -18,15 +18,17 @@ max<Number>:最大数量，示例：:max="1"
 min<Number>:最小数量，示例：:min="1"
 
 upload-success<Function>:文件上传成功时的回调
-回调函数接受一个参数，参数内容包含文件路径和文件名
+回调函数接受一个参数，参数内容是一个字符串，包含所有文件路径（逗号分隔）
 
 close-modal<Function>:关闭弹窗时的回调(需要手动将isOpen变为false)
 
+initFiles<String>:初始展示时的文件（传文件路径,逗号分隔）
+示例："xxx.jpg,yyy.png"
 
 * @Author: 吴泽鹏
 * @Date: 2021/2/4 21:46
 * @LastEditors: 吴泽鹏
-* @LastEditTime: 2021/2/11 20:06
+* @LastEditTime: 2021/3/9 18:47
 -->
 <script>
 import "@uppy/core/dist/style.css";
@@ -55,8 +57,8 @@ export default {
       type: Number,
       default: 1,
     },
-    uploadSuccess:{
-      type:Function
+    uploadSuccess: {
+      type: Function,
     },
     isOpen: {
       type: Boolean,
@@ -65,6 +67,9 @@ export default {
     },
     closeModal: {
       type: Function,
+    },
+    initFiles: {
+      type: String,
     },
   },
   data() {
@@ -119,6 +124,7 @@ export default {
         // 上传地址
         endpoint: "http://119.23.218.131:9800/group1/big/upload/",
       },
+      fileStr: "",
     };
   },
   components: {
@@ -131,24 +137,65 @@ export default {
     // 初始化
     init() {
       let { uppy, uppyOptions, tusOptions } = this.$data;
+      let retryNum = 0;// 重传次数
       uppy = new Uppy(uppyOptions);
       uppy.use(Tus, tusOptions);
       uppy.on("file-added", (file) => {
         uppy.setFileMeta(file);
       });
+      // 监听单个文件上传成功
       uppy.on("upload-success", (file, res) => {
-        let ret = {
-          name: file.name,
-          url: res.uploadURL,
-          preview: file.preview,
-        };
-        this.uploadSuccess(ret);
+        // console.log("file: ", file);
+        if (this.fileStr == "") {
+          this.fileStr += res.uploadURL;
+        } else {
+          this.fileStr += "," + res.uploadURL;
+        }
       });
+      // 监听单个文件上传失败
       uppy.on("upload-error", (file, error, res) => {
         this.elMessage.error(error);
+        setTimeout(() => {
+          if(retryNum >3){ 
+            uppy.off('upload-error',()=>{
+              this.elMessage.error('尝试次数过多，均失败');
+            });
+          }
+          this.elMessage.info("正在尝试重新上传");
+          uppy.retryUpload(file.id);
+          retryNum++;
+        }, 2000);
       });
+      // 监听所有文件上传成功
+      uppy.on("complete", (result) => {
+        this.uploadSuccess(this.fileStr);
+        // console.log('this.fileStr: ', this.fileStr.split(','));
+      });
+      // 监听关闭弹窗事件
       uppy.on("dashboard:modal-closed", () => {
         this.closeModal();
+      });
+      // 监听打开弹窗事件
+      uppy.on("dashboard:modal-open", () => {
+        // 初始展示的文件
+        if (this.initFiles) {
+          // 如果需要初始文件展示，先将容器清空
+          const files = uppy.getFiles();
+          files.forEach(file=>uppy.removeFile(file.id));
+          // 接下来添加展示文件
+          const cFiles = this.initFiles.split(",");
+          cFiles.forEach((file, index) => {
+            fetch(file)
+              .then((res) => res.blob())
+              .then((blob) => {
+                uppy.addFile({
+                  name: `文件${index + 1}`,
+                  type: blob.type,
+                  data: blob,
+                });
+              });
+          });
+        }
       });
       this.uppy = uppy;
     },

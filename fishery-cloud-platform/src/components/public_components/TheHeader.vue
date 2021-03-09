@@ -3,7 +3,11 @@
     <!-- 头部区域 -->
     <el-header id="custom-wzp-header">
       <div>
-        <img style="height:50px;width:50px" src="../../assets/images/logo1.png" :fit="'fit'"/>
+        <img
+          style="height: 50px; width: 50px"
+          src="../../assets/images/logo1.png"
+          :fit="'fit'"
+        />
         <span>智慧渔业云服务平台</span>
       </div>
       <div>
@@ -28,12 +32,12 @@
             个人中心<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item style="width: 60px" command="chooseNavbar"
+              >选择菜单
+            </el-dropdown-item>
             <el-dropdown-item style="width: 60px" command="modifyPassword"
               >修改密码</el-dropdown-item
             >
-            <!-- <el-dropdown-item style="width: 60px" command="showInvitation"
-              >查看邀请
-            </el-dropdown-item> -->
             <el-dropdown-item style="width: 60px" command="loginOut"
               >退出登录</el-dropdown-item
             >
@@ -51,25 +55,25 @@
       :isShow="isShowMPD"
       :close-callback="() => (this.isShowMPD = false)"
     ></ModifyPassword>
-    <!-- 查看邀请 -->
-    <ShowInvitation
-      :isShow="isShowSI"
-      :close-callback="() => (this.isShowSI = false)"
-    ></ShowInvitation>
+    <!-- 选择菜单 -->
+    <TheChooseNav
+      :isShow="isShowNavModules"
+      @close="() => (this.isShowNavModules = false)"
+    ></TheChooseNav>
   </div>
 </template>
 <script>
 import { mapMutations, mapState } from "vuex";
 import InfoUser from "../wzp/user_info/InfoUser";
 import ModifyPassword from "../wzp/user_info/ModifyPassword";
-import ShowInvitation from "../wzp/user_info/ShowInvitation";
+import TheChooseNav from "../public_components/TheChooseNav";
 export default {
   data() {
     return {
       isShowIU: false, //个人中心
       isShowMPD: false, //修改密码
-      isShowSI: false, //查看邀请
-      theme: "cosmic",
+      isShowNavModules: false, //选择菜单
+      theme: "metarial-dark",
       themes: [
         {
           value: "cosmic",
@@ -93,7 +97,7 @@ export default {
   components: {
     InfoUser,
     ModifyPassword,
-    ShowInvitation,
+    TheChooseNav,
   },
   computed: {
     ...mapState(["userInfo"]),
@@ -110,8 +114,8 @@ export default {
         case "modifyPassword":
           this.modifyPassword();
           break;
-        case "showInvitation":
-          this.showInvitation();
+        case "chooseNavbar":
+          this.chooseNavbar();
           break;
       }
     },
@@ -127,9 +131,9 @@ export default {
       this.isShowMPD = true;
     },
 
-    // 查看用户邀请
-    showInvitation() {
-      this.isShowSI = true;
+    // 选择菜单
+    chooseNavbar() {
+      this.isShowNavModules = true;
     },
 
     // 换主题皮肤
@@ -148,8 +152,12 @@ export default {
     },
   },
   created() {
-    document.body.className = "custom-" + this.userInfo.theme;
-    this.theme = this.userInfo.theme;
+    if (this.userInfo.theme) {
+      document.body.className = "custom-" + this.userInfo.theme;
+      this.theme = this.userInfo.theme;
+    } else {
+      document.body.className = "custom-" + this.theme;
+    }
   },
 };
 </script>

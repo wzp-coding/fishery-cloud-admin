@@ -11,7 +11,8 @@
  * @Author: 吴泽鹏
  * @Date: 2021/1/20 0:00
  * @LastEditors: 吴泽鹏
- * @LastEditTime: 2021/1/24 16:54
+ * @LastEditTime: 2021/3/9 19:23
+ * 修复经纬度报错问题（经纬度写反了）
 -->
 <template>
   <!--   定义地图显示容器   -->
@@ -178,7 +179,7 @@ export default {
     async getLogisticsRouteAndDisplay() {
       let url = "";
       // if (process.env.NODE_ENV === "development") {
-        url = "/api/ws/direction/v1/driving/?";
+      url = "/api/ws/direction/v1/driving/?";
       // } else {
       //   url = "https://apis.map.qq.com/ws/direction/v1/driving/?";
       // }
@@ -234,10 +235,12 @@ export default {
 
     //初始化基地地图
     async initBaseMap() {
+
       //定义地图中心点坐标
+      console.log("this.centerPoint: ", this.centerPoint);
       const center = new TMap.LatLng(
-        this.centerPoint.lat,
-        this.centerPoint.lng
+        this.centerPoint.lng,
+        this.centerPoint.lat
       );
 
       //createMap函数创建地图(并且有地图中心点)
@@ -265,8 +268,9 @@ export default {
 
     //初始化物流地图
     async initLogisticsMap() {
-      let start = new TMap.LatLng(this.startPoint.lat, this.startPoint.lng);
-      let end = new TMap.LatLng(this.endPoint.lat, this.endPoint.lng);
+
+      let start = new TMap.LatLng(this.startPoint.lng, this.startPoint.lat);
+      let end = new TMap.LatLng(this.endPoint.lng, this.endPoint.lat);
 
       this.createMap();
 

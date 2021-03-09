@@ -38,12 +38,12 @@ export default {
     // 当第一次传入，选择模块，第二次载入页面时
     modules: {
       handler(val) {
-        const moduleChecked=localStorage.getItem("wzp-DigitalBase-checked");
-        if(moduleChecked){
+        const moduleChecked = localStorage.getItem("wzp-DigitalBase-checked");
+        if (moduleChecked) {
           // 第二次载入页面的时候，获取上一次用户保存的布局
           this.moduleChecked = JSON.parse(moduleChecked);
-          localStorage.removeItem("wzp-DigitalBase-checked")
-        }else{
+          localStorage.removeItem("wzp-DigitalBase-checked");
+        } else {
           this.moduleChecked = val.filter((item) => item.checked);
         }
       },

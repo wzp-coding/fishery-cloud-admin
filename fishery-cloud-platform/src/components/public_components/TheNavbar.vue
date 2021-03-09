@@ -50,8 +50,8 @@ export default {
     return {
       isCollapse: false, // 是否折叠
 
+      // 原始有固定顺序的标签菜单
       menus: {
-        // 原始有固定顺序的标签菜单
         我的基地: {
           icon: "office-building",
           children: {
@@ -196,40 +196,49 @@ export default {
     async getLabel() {
       const params = { baseId: this.userInfo.baseId, role: this.userInfo.role };
       const { data: res } = await this.$label.post("", params);
-      // console.log("this.$label: ", res);
+      console.log("this.$label: ", res);
       if (res.statusCode === 20000) {
         const labels = JSON.parse(res.data).labels;
         this.newSortMenus = this.formatLabel(labels);
-        console.log('this.newSortMenus: ', this.newSortMenus);
+        console.log("this.newSortMenus: ", this.newSortMenus);
       } else {
         this.elMessage.error(res.message);
       }
     },
 
     // 将接口返回的无序菜单数组格式化
+    // 根据labels判断原始的menus是否有标签，没有则删除即可
     formatLabel(labels) {
-      const { menus, newMenus = {} } = this.$data;
+      console.log("labels: ", labels);
+      let cMenu = this._.cloneDeep(this.menus);
+      // 生成一级标签map
+      const mapOneLabel = {};
       labels.forEach((oneLabel) => {
-        if (menus[oneLabel.name] && oneLabel.children.length !== 0) {
-          // 存在一级标签且二级标签不为0
-          newMenus[oneLabel.name] = menus[oneLabel.name];
-          oneLabel.children.forEach((twoLabel) => {
-            const path = `[${oneLabel.name}].children[${twoLabel}]`;
-            if (menus[path]) {
-              // 如果存在二级标签
-              newMenus[path] = menus[path];
-            }
-          });
-        }
+        mapOneLabel[oneLabel.name] = oneLabel.children;
       });
-      const newSortMenus = {};
-      // 顺序遍历原始菜单，按顺序给newSortMenus添加新的键值对
-      for (let key in menus) {
-        if (newMenus[key]) {
-          newSortMenus[key] = newMenus[key];
+      // 根据map判断cMenu中是否有一级标签
+      for (const key in cMenu) {
+        if (!mapOneLabel[key]) {
+          // 如果不存在该一级标签
+          // 删除cMenu中的一级标签
+          delete cMenu[key];
+        } else {
+          // 存在则处理二级标签
+          // 生成二级map
+          const mapTwoLabel = {};
+          mapOneLabel[key].forEach(
+            (twoLabel) => (mapTwoLabel[twoLabel] = true)
+          );
+          // 根据map判断该一级标签中是否有二级标签
+          for (const ckey in cMenu[key].children) {
+            if (!mapTwoLabel[ckey]) {
+              delete cMenu[key].children[ckey];
+            }
+          }
         }
       }
-      return newSortMenus;
+      // console.log('cMenu: ', cMenu);
+      return cMenu;
     },
   },
   created() {

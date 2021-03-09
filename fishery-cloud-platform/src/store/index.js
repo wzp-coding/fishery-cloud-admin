@@ -13,6 +13,9 @@ const state = {
   // 该用户的基地信息
   baseInfo: {},
 
+  // 该用户选择的标签菜单
+  navbarChecked:[]
+
 }
 
 const mutations = {

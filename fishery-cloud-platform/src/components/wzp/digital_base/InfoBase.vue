@@ -4,7 +4,7 @@
       <el-carousel-item v-for="item in carousels" :key="item">
         <el-image :src="item"></el-image>
       </el-carousel-item>
-    </el-carousel>
+    </el-carousel> 
     <el-row class="baseInformation">
       <p>
         <i class="el-icon-office-building"></i>
@@ -24,7 +24,7 @@
       </p>
       <p>
         <i class="el-icon-data-line"></i>
-        池塘数量：{{ pondInfo.totalArea }}个
+        池塘数量：{{ pondInfo.totalArea || 0}}个
       </p>
     </el-row>
   </el-card>
@@ -36,11 +36,7 @@ export default {
     return {
       baseInfo: {},
       pondInfo: {},
-      carousels: [
-        "http://134.175.208.235/group1/M00/00/28/rBAAD1_YZIyAHq-UAAGH2TCKbN0940.jpg",
-        "http://134.175.208.235/group1/M00/00/29/rBAAD1_5Q3eAB1JXAAFNS57b_0o146.jpg",
-        "http://134.175.208.235/group1/M00/00/29/rBAAD1_5Q3qAYZdLAACvnk9mlZg029.jpg",
-      ],
+      carousels: [],
     };
   },
   methods: {
@@ -48,9 +44,10 @@ export default {
     // 获取基地信息
     async getBaseInfo(baseId) {
       const { data: res } = await this.$base.get(`/${baseId}`);
-      // console.log("getBaseInfo: ", res);
+      console.log("getBaseInfo: ", res);
       if(res.statusCode === 20000){
         this.baseInfo = res.data;
+        this.carousels=this.baseInfo.picture.split(',')
         this.$store.commit("setBaseInfo",res.data);
       }else{
         this.elMessage.error(res.message);

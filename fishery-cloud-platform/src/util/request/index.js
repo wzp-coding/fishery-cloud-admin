@@ -39,7 +39,7 @@ const baseURLObject = {
     
 }
 
-console.table(baseURLObject);
+// console.table(baseURLObject);
 // 异常拦截处理器
 const errorHandler = (error) => {
     const status = get(error, 'response.status');

@@ -21,6 +21,8 @@ export default {
           "userName",
           "email",
           "avatar",
+          "roleName",
+          "roleRemark",
         ];
         let valid = true;
         arr.some((option) => {
@@ -37,9 +39,15 @@ export default {
       type: String,
       default: "登录",
       validator(val) {
-        return ["登录", "注册", "找回密码", "修改信息", "修改密码"].includes(
-          val
-        );
+        return [
+          "登录",
+          "注册",
+          "找回密码",
+          "修改信息",
+          "修改密码",
+          "添加角色",
+          "修改角色",
+        ].includes(val);
       },
     },
     defaultForm: {
@@ -100,6 +108,8 @@ export default {
         avatar:
           this.defaultForm.avatar ||
           "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+        roleName: this.defaultForm.roleName,
+        roleRemark: this.defaultForm.roleRemark,
       },
 
       //表单验证规则
@@ -193,6 +203,16 @@ export default {
 
         // 头像
         avatar: [{ required: true, message: "请上传图片", trigger: "blur" }],
+
+        // 角色名称
+        roleName: [
+          { required: true, message: "请填写角色名", trigger: "blur" },
+        ],
+
+        // 角色标签
+        roleRemark: [
+          { required: true, message: "请填写角色标签", trigger: "blur" },
+        ],
       },
     };
   },
@@ -321,10 +341,29 @@ export default {
           upload-success={(file) => this.uploadAvatar(file)}
           close-modal={() => (this.isOpen = false)}
           is-open={this.isOpen}
+          init-files={this.avatar}
         ></UploadFile>
       </el-form-item>
     );
 
+    // 角色名
+    let roleName = (
+      <el-form-item label="角色名" prop="roleName">
+        <el-input
+          vModel={this.form.roleName}
+          placeholder="请输入角色名"
+        ></el-input>
+      </el-form-item>
+    );
+    // 角色标签
+    let roleRemark = (
+      <el-form-item label="角色标签" prop="roleRemark">
+        <el-input
+          vModel={this.form.roleRemark}
+          placeholder="请输入角色标签"
+        ></el-input>
+      </el-form-item>
+    );
     // 所有的表单选项
     let allOptions = {
       phone,
@@ -336,6 +375,8 @@ export default {
       userName,
       email,
       avatar,
+      roleName,
+      roleRemark,
     };
 
     // 按钮
@@ -444,9 +485,9 @@ export default {
     },
 
     // 点击上传图片
-    async uploadAvatar(file) {
-      console.log("file: ", file);
-      this.form.avatar = file.url;
+    async uploadAvatar(fileStr) {
+      console.log("fileStr: ", fileStr);
+      this.form.avatar = fileStr;
     },
   },
 };
