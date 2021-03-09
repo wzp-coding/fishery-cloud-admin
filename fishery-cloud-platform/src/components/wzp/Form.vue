@@ -341,6 +341,7 @@ export default {
           upload-success={(file) => this.uploadAvatar(file)}
           close-modal={() => (this.isOpen = false)}
           is-open={this.isOpen}
+          init-files={this.avatar}
         ></UploadFile>
       </el-form-item>
     );
@@ -484,9 +485,9 @@ export default {
     },
 
     // 点击上传图片
-    async uploadAvatar(file) {
-      console.log("file: ", file);
-      this.form.avatar = file.url;
+    async uploadAvatar(fileStr) {
+      console.log("fileStr: ", fileStr);
+      this.form.avatar = fileStr;
     },
   },
 };

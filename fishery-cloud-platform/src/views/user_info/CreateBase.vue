@@ -9,21 +9,46 @@
           >
         </div>
       </template>
-      <el-form :model="createInfo">
+      <el-form :model="createInfo" :rules="rules">
         <TheDialogLayout>
-          <el-form-item slot="pre" label="基地老板" label-width="115px">
+          <el-form-item
+            slot="pre"
+            label="基地老板"
+            label-width="130px"
+            prop="creator"
+          >
             <el-input v-model="createInfo.creator"></el-input>
           </el-form-item>
-          <el-form-item slot="after" label="基地名称" label-width="115px">
+          <el-form-item
+            slot="after"
+            label="基地名称"
+            label-width="130px"
+            prop="name"
+          >
             <el-input v-model="createInfo.name"></el-input>
           </el-form-item>
         </TheDialogLayout>
         <TheDialogLayout>
-          <el-form-item slot="pre" label="成立基金" label-width="115px">
+          <el-form-item
+            slot="pre"
+            label="成立基金"
+            label-width="130px"
+            prop="funds"
+          >
             <el-input v-model="createInfo.funds"></el-input>
           </el-form-item>
-          <el-form-item slot="after" label="基地类型" label-width="115px">
-            <el-select v-model="createInfo.types" multiple placeholder="请选择">
+          <el-form-item
+            slot="after"
+            label="基地类型"
+            label-width="130px"
+            prop="types"
+          >
+            <el-select
+              v-model="createInfo.types"
+              multiple
+              placeholder="请选择"
+              style="width: 100%"
+            >
               <el-option
                 v-for="item in baseTypeList"
                 :key="item._id"
@@ -35,36 +60,39 @@
           </el-form-item>
         </TheDialogLayout>
         <TheDialogLayout>
-          <el-form-item slot="pre" label="营业执照注册号" label-width="115px">
+          <el-form-item
+            slot="pre"
+            label="营业执照注册号"
+            label-width="130px"
+            prop="registerNumber"
+          >
             <el-input v-model="createInfo.registerNumber"></el-input>
           </el-form-item>
-          <el-form-item slot="after" label="养殖类型" label-width="115px">
+          <el-form-item
+            slot="after"
+            label="养殖类型"
+            label-width="130px"
+            prop="scope"
+          >
             <el-input v-model="createInfo.scope"></el-input>
           </el-form-item>
         </TheDialogLayout>
         <TheDialogLayout>
           <el-row slot="pre">
-            <el-col :offset="3" :span="5">基地图片</el-col>
-            <el-col :offset="1" :span="15">
-              <div class="upload">
-                <el-upload
-                  action="http://119.23.218.131:9103/base/file/upload"
-                  ref="upload"
-                  name="multipartFile"
-                  class="avatar-uploader"
-                  :on-success="handleAvatarSuccess"
-                  multiple
-                  :on-remove="handleRemove"
-                  :show-file-list="false"
-                >
-                  <img
-                    v-if="createInfo.picture"
-                    :src="createInfo.picture"
-                    class="avatar"
-                  />
-                  <i class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-              </div>
+            <el-col :offset="3" :span="4">基地图片</el-col>
+            <el-col :span="17">
+              <el-button type="primary" @click="isOpenUpload = true"
+                >上传图片（限制3张）</el-button
+              >
+              <UploadFile
+                :is-open="isOpenUpload"
+                :close-modal="() => (this.isOpenUpload = false)"
+                :max="3"
+                :min="3"
+                :type="'image'"
+                :init-files="createInfo.picture"
+                :upload-success="handleUploadPic"
+              ></UploadFile>
             </el-col>
           </el-row>
         </TheDialogLayout>
@@ -72,7 +100,7 @@
           <el-col>
             <el-form-item
               label="基地简介"
-              label-width="115px"
+              label-width="130px"
               prop="introduction"
             >
               <el-input
@@ -89,7 +117,7 @@
         <!-- <TheDialogLayout> -->
         <el-row>
           <el-col :span="24">
-            <el-form-item label="基地地址" label-width="115px">
+            <el-form-item label="基地地址" label-width="130px" prop="address">
               <el-select
                 placeholder="请通过拖拽地图选择基地地址"
                 v-model="createInfo.address"
@@ -121,16 +149,19 @@
   </div>
 </template>
 <script>
-import { mapMutations, mapState } from 'vuex';
+import { mapMutations, mapState } from "vuex";
 import TheDialogLayout from "../../components/ccy/public/TheDialogLayout";
 import Map from "../../components/public_components/MyLocationPicker";
+import UploadFile from "../../components/public_components/UploadFile";
 export default {
   components: {
     TheDialogLayout,
     Map,
+    UploadFile,
   },
   data() {
     return {
+      isOpenUpload: false,
       createInfo: {
         address: "",
         creator: "",
@@ -152,38 +183,65 @@ export default {
         lng: "",
       },
       baseTypeList: [],
+      rules: {
+        creator: [
+          { required: true, message: "请输入基地老板", trigger: "blur" },
+        ],
+        name: [{ required: true, message: "请输入基地名称", trigger: "blur" }],
+        funds: [{ required: true, message: "请输入成立基金", trigger: "blur" }],
+        types: [{ required: true, message: "请选择基地类型", trigger: "blur" }],
+        registerNumber: [
+          {
+            required: true,
+            message: "请输入营业执照注册号",
+            trigger: "blur",
+          },
+        ],
+        scope: [{ required: true, message: "请输入养殖类型", trigger: "blur" }],
+        introduction: [
+          { required: true, message: "请输入基地简介", trigger: "blur" },
+        ],
+        address: [
+          { required: true, message: "请输入基地地址", trigger: "blur" },
+        ],
+      },
     };
   },
-  computed:{
-      ...mapState(['userInfo'])
+  computed: {
+    ...mapState(["userInfo"]),
   },
   created() {
     this.getBaseType();
   },
   methods: {
-      ...mapMutations(['setUserInfo']),
+    ...mapMutations(["setUserInfo"]),
     async getBaseType() {
       const { data: res } = await this.$baseType.get();
-      console.log(res);
+      console.log("baseType: ", res);
       if (res.statusCode === 20000) {
         this.baseTypeList = res.data;
         for (let i = 0; i < this.baseTypeList.length; i++) {
           this.baseTypeList[i] = JSON.parse(this.baseTypeList[i]);
         }
+      } else {
+        this.elMessage.error(res.message);
       }
     },
     async createEvent() {
-      console.log(this.createInfo);
-      const { data: res } = await this.$admin.post("/addBase/"+this.userInfo.id, this.createInfo);
-      console.log(res);
+      console.log('this.createInfo: ', this.createInfo);
+      const { data: res } = await this.$admin.post(
+        "/addBase/" + this.userInfo.id,
+        this.createInfo
+      );
+      console.log("addBase: ", res);
       if (res.statusCode === 20000) {
         this.elMessage.success("创建基地成功");
         // 基地创建后，用户信息会发生改变
         const newUserInfo = await this.getSelfInfo();
-        this.$store.commit('setUserInfo', newUserInfo);
-        this.$router.push('digital-base');
-      }else{
-          this.elMessage.error(res.message);
+        this.$store.commit("setUserInfo", newUserInfo);
+        this.$router.push("digital-base");
+      } else {
+        this.elMessage.error(res.message);
       }
     },
     // 获取创建基地后用户的详情信息
@@ -196,15 +254,16 @@ export default {
         this.elMessage.error(res.message);
       }
     },
-    handleAvatarSuccess(res, file) {
-      this.createInfo.picture = URL.createObjectURL(file.raw);
-      console.log(this.createInfo.picture);
-    },
-    handleRemove() {
-      this.createInfo.picture = null;
+    // 点击完成触发
+    handleUploadPic(fileStr) {
+      this.createInfo.picture = fileStr;
     },
     // 设置地图返回的定点位置
-    setAddress(address) {
+    setAddress(address,centerPos) {
+      console.log('centerPos: ', centerPos);
+      this.createInfo.positionLongitude = centerPos.lat;
+      this.createInfo.positionLatitude = centerPos.lng;
+
       console.log("address-->", address);
       this.createInfo.address = address;
     },

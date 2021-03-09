@@ -255,7 +255,7 @@ export default {
       const detail = res.formatted_addresses.recommend;
       const address = province + city + detail;
       const pois = res.pois;
-      this.$emit("getCenterAddress", address);
+      this.$emit("getCenterAddress", address,this.center);
       this.$emit("getAroundPoi", pois);
     },
 

@@ -24,7 +24,7 @@
       </p>
       <p>
         <i class="el-icon-data-line"></i>
-        池塘数量：{{ pondInfo.totalArea }}个
+        池塘数量：{{ pondInfo.totalArea || 0}}个
       </p>
     </el-row>
   </el-card>
@@ -36,11 +36,7 @@ export default {
     return {
       baseInfo: {},
       pondInfo: {},
-      carousels: [
-        "https://tse2-mm.cn.bing.net/th/id/OIP.e-c24MOqFFu-_o8yxBiHiAHaE5?w=255&h=180&c=7&o=5&dpr=1.25&pid=1.7",
-        "https://tse3-mm.cn.bing.net/th/id/OIP.rZ28fuXbCDIxI6T1pCWxAwHaDt?w=305&h=174&c=7&o=5&dpr=1.25&pid=1.7",
-        "https://tse2-mm.cn.bing.net/th/id/OIP.UNCyxL_8qRPce4gjdwZpsAHaDe?w=346&h=164&c=7&o=5&dpr=1.25&pid=1.7",
-      ],
+      carousels: [],
     };
   },
   methods: {
@@ -51,6 +47,7 @@ export default {
       console.log("getBaseInfo: ", res);
       if(res.statusCode === 20000){
         this.baseInfo = res.data;
+        this.carousels=this.baseInfo.picture.split(',')
         this.$store.commit("setBaseInfo",res.data);
       }else{
         this.elMessage.error(res.message);
