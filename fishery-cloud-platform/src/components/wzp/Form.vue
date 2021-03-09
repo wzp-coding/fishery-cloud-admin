@@ -57,6 +57,16 @@ export default {
       },
     },
   },
+  watch: {
+    defaultForm: {
+      deep: true,
+      handler(newForm) {
+        // console.log('newForm: ', newForm);
+        this.form.roleName = this.defaultForm.name;
+        this.form.roleRemark = this.defaultForm.remarks;
+      },
+    },
+  },
   data() {
     // 自定义表单校验设置密码和确认密码
     var validatePassword = (rule, value, callback) => {
@@ -108,8 +118,8 @@ export default {
         avatar:
           this.defaultForm.avatar ||
           "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-        roleName: this.defaultForm.roleName,
-        roleRemark: this.defaultForm.roleRemark,
+        roleName: this.defaultForm.name,
+        roleRemark: this.defaultForm.remarks,
       },
 
       //表单验证规则

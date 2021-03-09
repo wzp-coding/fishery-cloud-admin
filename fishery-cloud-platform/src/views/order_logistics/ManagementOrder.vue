@@ -706,4 +706,3 @@ export default {
 }
 
 </style>
->>>>>>> c8aba1c1744b85dbb07ac9c209d617647127392c
