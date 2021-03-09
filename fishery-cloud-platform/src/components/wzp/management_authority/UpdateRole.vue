@@ -7,6 +7,7 @@
         done();
       }
     "
+    @open="openProxy"
     width="30%"
     center
     title="修改角色"
@@ -22,10 +23,14 @@
   </el-dialog>
 </template>
 <script>
+import { mapState } from 'vuex';
 import Form from "../Form";
 export default {
   components: {
     Form,
+  },
+  computed:{
+    ...mapState(['userInfo'])
   },
   data() {
     return {
@@ -45,9 +50,9 @@ export default {
     // 根据角色Id查询角色信息
     async getRoleInfo(id) {
       const { data: res } = await this.$role.get(`/get/${id}`);
+      console.log('getRoleInfo: ', res);
       if (res.statusCode === 20000) {
-        const { name: roleName, remarks: roleRemark } = res.data;
-        this.infoForm = { roleName, roleRemark };
+        this.infoForm = res.data;
       }else{
         this.elMessage.error(res.message);
       }
@@ -73,9 +78,13 @@ export default {
 
     // 打开之前获取角色信息
     async openProxy() {
-      if (this.roleId) {
+      console.log('this.roleId: ', this.roleId);
+      if (this.roleId && this.roleId !== this.userInfo.roleId) {
         await this.getRoleInfo(this.roleId);
-      } 
+      }else{
+        this.elMessage.warning('不能修改自己的权限！！')
+        this.$emit('close')
+      }
     },
   },
 };

@@ -7,7 +7,7 @@
         done();
       }
     "
-    @open="openProxy"
+    
     width="30%"
     center
     title="添加角色"

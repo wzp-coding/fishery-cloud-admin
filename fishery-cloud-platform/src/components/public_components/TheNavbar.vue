@@ -194,7 +194,7 @@ export default {
   methods: {
     // 获取动态菜单
     async getLabel() {
-      const params = { baseId: this.userInfo.baseId, role: this.userInfo.role };
+      const params = { baseId: this.userInfo.baseId, role: this.userInfo.role,userId:this.userInfo.id };
       const { data: res } = await this.$label.post("", params);
       console.log("this.$label: ", res);
       if (res.statusCode === 20000) {
