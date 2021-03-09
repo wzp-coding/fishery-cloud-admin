@@ -11,7 +11,7 @@
     <el-tree
       ref="tree"
       :data="navList"
-      :props="defaultChecked"
+      :props="defualtProps"
       default-expand-all
       node-key="id"
       show-checkbox
@@ -88,10 +88,11 @@ export default {
           ],
         },
       ],
-      preUserChecked: {
+      defualtProps: {
         children: "children",
         label: "label",
       },
+      preUserChecked:[]
     };
   },
   // 获取树结构的中的所有叶子节点

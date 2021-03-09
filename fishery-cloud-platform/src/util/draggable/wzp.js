@@ -2,6 +2,7 @@
 import Map from "../../components/public_components/Map";
 import WeatherCard from "../../components/wzp/digital_base/WeatherCard";
 import InfoBase from "../../components/wzp/digital_base/InfoBase";
+import { mapState } from "vuex";
 
 const DigitalBase = {
     DraggableInfoBase: {
@@ -16,10 +17,13 @@ const DigitalBase = {
     },
     DraggableMap: {
         components: { Map },
+        computed:{
+            ...mapState(['baseInfo'])
+        },
         render(h) {
             return (
                 <el-col span={11}>
-                    <Map map-name="base" center-point={{ lat: this.$store.state.baseInfo.positionLatitude || 1, lng: this.$store.state.baseInfo.positionLongitude || 1, content: this.$store.state.baseInfo.name}}></Map>
+                    <Map map-name="base" center-point={{ lat: this.baseInfo.positionLatitude || 1, lng: this.baseInfo.positionLongitude || 1, content: this.$store.state.baseInfo.name }}></Map>
                 </el-col>
             );
         },

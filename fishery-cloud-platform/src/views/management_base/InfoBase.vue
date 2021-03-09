@@ -141,8 +141,8 @@
         <InfoBaseLayout>
           <el-row slot="pre">
             <el-col :offset="3" :span="4">基地图片</el-col>
-            <el-col :offset="1" :span="15">
-              <div class="upload">
+            <el-col :span="17">
+              <!-- <div class="upload">
                 <el-upload
                   action="http://119.23.218.131:9103/base/file/upload"
                   ref="upload"
@@ -160,7 +160,19 @@
                   />
                   <i class="el-icon-plus"></i>
                 </el-upload>
-              </div>
+              </div> -->
+              <el-button type="primary" @click="isOpenUpload = true"
+                >上传图片（限制3张）</el-button
+              >
+              <UploadFile
+                :is-open="isOpenUpload"
+                :close-modal="() => (this.isOpenUpload = false)"
+                :max="3"
+                :min="3"
+                :type="'image'"
+                :init-files="baseInfo.picture"
+                :upload-success="handleUploadPic"
+              ></UploadFile>
             </el-col>
           </el-row>
         </InfoBaseLayout>
@@ -189,7 +201,7 @@
         </el-row>
       </el-form>
     </el-card>
-    <el-dialog title="基地定位" :visible.sync="dialogVisible" width="33%">
+    <el-dialog title="基地定位" :visible.sync="dialogVisible" width="33%" :close-on-click-modal="false">
       <el-form :model="baseInfo">
         <el-form-item
           label="基地地址"
@@ -237,6 +249,7 @@
 import TheCardHead from "../../components/ccy/TheCardHead";
 import InfoBaseLayout from "../../components/ccy/InfoBaseLayout";
 import Map from "../../components/public_components/MyLocationPicker";
+import { mapMutations } from "vuex";
 export default {
   components: {
     TheCardHead,
@@ -245,7 +258,8 @@ export default {
   },
   data() {
     return {
-      baseId:this.$store.state.baseInfo.id,
+      isOpenUpload: false,
+      baseId: this.$store.state.baseInfo.id,
       baseInfo: {
         name: "",
         creator: "",
@@ -300,6 +314,7 @@ export default {
     this.getBaseInfo();
   },
   methods: {
+    ...mapMutations(["setBaseInfo"]),
     async getBaseInfo() {
       const { data: res } = await this.$base.get(
         `${this.$store.state.baseInfo.id}`
@@ -324,24 +339,32 @@ export default {
       const { data: res } = await this.$base.put("update", this.baseInfo);
       if (res.statusCode === 20000) {
         this.elMessage.success("修改基地信息成功");
+        this.$stroe.commit("setBaseInfo", this.baseInfo);
       }
       this.getBaseInfo();
     },
-    handleAvatarSuccess(res, file) {
-      this.baseInfo.picture = URL.createObjectURL(file.raw);
-      console.log(this.baseInfo.picture);
+    // handleAvatarSuccess(res, file) {
+    //   this.baseInfo.picture = URL.createObjectURL(file.raw);
+    //   console.log(this.baseInfo.picture);
+    // },
+    // 所有文件上传完成触发
+    handleUploadPic(fileStr) {
+      console.log("fileStr: ", fileStr);
+      this.baseInfo.picture = fileStr;
     },
     handleRemove() {
       this.baseInfo.picture = null;
     },
-    handleAvatarSuccess(res) {
-      let picUrl = JSON.parse(res.data);
-      this.baseInfo.picture = picUrl.url;
-    },
+    // handleAvatarSuccess(res) {
+    //   let picUrl = JSON.parse(res.data);
+    //   this.baseInfo.picture = picUrl.url;
+    // },
     // 设置地图返回的定点位置
-    setAddress(address) {
+    setAddress(address, center) {
       console.log("address-->", address);
       this.baseInfo.address = address;
+      this.baseInfo.positionLongitude = center.lng;
+      this.baseInfo.positionLatitude = center.lat;
     },
     // 设置地图返回的位置数组
     setpoi(poi) {

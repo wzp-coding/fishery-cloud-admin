@@ -11,7 +11,8 @@
  * @Author: 吴泽鹏
  * @Date: 2021/1/20 0:00
  * @LastEditors: 吴泽鹏
- * @LastEditTime: 2021/3/8 13:04
+ * @LastEditTime: 2021/3/9 19:23
+ * 修复经纬度报错问题（经纬度写反了）
 -->
 <template>
   <!--   定义地图显示容器   -->
@@ -234,16 +235,12 @@ export default {
 
     //初始化基地地图
     async initBaseMap() {
-      // 如果经纬度超出[-90,90]的范围，初始化为IP地址
-      if (this.centerPoint.lat < -90 || this.centerPoint.lat > 90)
-        this.centerPoint.lat = JSON.parse(localStorage.getItem("location")).lat;
-      if (this.centerPoint.lng < -90 || this.centerPoint.lng > 90)
-        this.centerPoint.lng = JSON.parse(localStorage.getItem("location")).lng;
 
       //定义地图中心点坐标
+      console.log("this.centerPoint: ", this.centerPoint);
       const center = new TMap.LatLng(
-        this.centerPoint.lat,
-        this.centerPoint.lng
+        this.centerPoint.lng,
+        this.centerPoint.lat
       );
 
       //createMap函数创建地图(并且有地图中心点)
@@ -271,18 +268,9 @@ export default {
 
     //初始化物流地图
     async initLogisticsMap() {
-      // 如果经纬度超出[-90,90]的范围，初始化为IP地址
-      if (this.startPoint.lat < -90 || this.startPoint.lat > 90)
-        this.startPoint.lat = JSON.parse(localStorage.getItem("location")).lat;
-      if (this.startPoint.lng < -90 || this.startPoint.lng > 90)
-        this.startPoint.lng = JSON.parse(localStorage.getItem("location")).lng;
-      if (this.endPoint.lat < -90 || this.endPoint.lat > 90)
-        this.endPoint.lat = JSON.parse(localStorage.getItem("location")).lat;
-      if (this.endPoint.lng < -90 || this.endPoint.lng > 90)
-        this.endPoint.lng = JSON.parse(localStorage.getItem("location")).lng;
 
-      let start = new TMap.LatLng(this.startPoint.lat, this.startPoint.lng);
-      let end = new TMap.LatLng(this.endPoint.lat, this.endPoint.lng);
+      let start = new TMap.LatLng(this.startPoint.lng, this.startPoint.lat);
+      let end = new TMap.LatLng(this.endPoint.lng, this.endPoint.lat);
 
       this.createMap();
 

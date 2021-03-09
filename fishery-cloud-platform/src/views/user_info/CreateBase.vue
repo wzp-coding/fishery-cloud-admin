@@ -254,7 +254,7 @@ export default {
         this.elMessage.error(res.message);
       }
     },
-    // 点击完成触发
+    // 所有文件上传完成触发
     handleUploadPic(fileStr) {
       this.createInfo.picture = fileStr;
     },
