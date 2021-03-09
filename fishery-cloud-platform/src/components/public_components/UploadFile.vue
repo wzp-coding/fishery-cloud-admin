@@ -28,7 +28,7 @@ initFiles<String>:初始展示时的文件（传文件路径,逗号分隔）
 * @Author: 吴泽鹏
 * @Date: 2021/2/4 21:46
 * @LastEditors: 吴泽鹏
-* @LastEditTime: 2021/2/11 20:06
+* @LastEditTime: 2021/3/9 18:47
 -->
 <script>
 import "@uppy/core/dist/style.css";
