@@ -79,7 +79,7 @@ export default {
           this.$router.push("/create-base");
         } else if (this.userInfo.role && this.userInfo.role === "user") {
           // 如果只是普通用户
-          this.$router.push('common-user');
+          this.$router.push('/common-user');
         } else {
           // 如果是基地老板或其他非普通用户角色，请求权限列表
           await this.getFunctionByRoleId(res.data.roleId);
@@ -88,6 +88,7 @@ export default {
       } else {
         this.$refs.passwordLogin.getCaptcha();
         this.elMessage.error(res.message);
+        console.error(res.message);
       }
     },
 
@@ -105,11 +106,11 @@ export default {
     // 根据loginId得到的roleId查询登录用户的权限，并存到vuex中
     async getFunctionByRoleId(roleId) {
       const { data: res } = await this.$function.get(`/findFunction/${roleId}`);
-      // console.log("getFunctionByRoleId: ", res);
+      console.log("getFunctionByRoleId: ", res);
       if (res.statusCode === 20000) {
         this.$store.commit("setPermissionList", res.data);
       } else {
-        this.elMessage.error(res.message);
+        console.error(res.message);
       }
     },
   },

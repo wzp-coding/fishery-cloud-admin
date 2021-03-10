@@ -64,13 +64,13 @@
               v-auth="'authority_role_update'"
               >修改</el-button
             >
-            <el-button
+            <!-- <el-button
               type="danger"
               icon="el-icon-delete"
               @click="deleteRole(scope.row.id)"
               v-auth="'authority_role_delete'"
               >删除</el-button
-            >
+            > -->
           </template>
         </el-table-column>
       </el-table>
@@ -131,7 +131,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["baseInfo"]),
+    ...mapState(["baseInfo", "userInfo"]),
   },
   components: {
     Authority,
@@ -154,30 +154,33 @@ export default {
         const options = { page, size, total: res.totla };
         return options;
       } else {
-        this.elMessage.error(res.message);
+        console.error(res.message);
       }
     },
-
     // 根据id删除角色
-    async deleteRole(id) {
-      this.elConfirm(
-        "该操作可能影响已分配该角色的员工身份，你确定删除该角色吗？"
-      )
-        .then(async (_) => {
-          const { data: res } = await this.$role.delete(`/remove/${id}`);
-          if (res.statusCode === 20000) {
-            this.elMessage.success(res.message);
-          } else {
-            this.elMessage.error(res.message);
-          }
-          done();
-        })
-        .catch((_) => {
-          //   console.log(_)
-          this.elMessage.warning("取消删除");
-          done();
-        });
-    },
+    // async deleteRole(id) {
+    //   if (id === this.userInfo.roleId) {
+    //     this.elMessage.warning("不能删除自己的权限！！");
+    //     this.$emit("close");
+    //     return;
+    //   }
+    //   this.elConfirm(
+    //     "该操作可能影响已分配该角色的员工身份，你确定删除该角色吗？"
+    //   )
+    //     .then(async (_) => {
+    //       // console.log('_: ', _);
+    //       const { data: res } = await this.$role.delete(`/remove/${id}`);
+    //       if (res.statusCode === 20000) {
+    //         this.elMessage.success(res.message);
+    //       } else {
+    //         this.elMessage.error(res.message);
+    //       }
+    //     })
+    //     .catch((_) => {
+    //       // console.log('_: ', _);
+    //       this.elMessage.warning("取消删除");
+    //     });
+    // },
   },
 };
 </script>

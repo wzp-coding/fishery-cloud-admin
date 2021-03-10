@@ -14,7 +14,7 @@ const state = {
   baseInfo: {},
 
   // 该用户选择的标签菜单
-  navbarChecked:[]
+  navbarChecked: []
 
 }
 
@@ -24,7 +24,7 @@ const mutations = {
   setUserInfo(state, data) {
     state.userInfo = data;
   },
-  
+
   // 设置权限
   setPermissionList(state, data) {
     state.permissionList = data;
@@ -34,9 +34,18 @@ const mutations = {
   setBaseInfo(state, data) {
     state.baseInfo = data;
   },
+}
+const actions ={
 
+  // 重置State
+  resetState({commit}){
+    commit('setUserInfo',{})
+    commit('setPermissionList',[])
+    commit('setBaseInfo',{})
+  }
 }
 export default new Vuex.Store({
   state,
-  mutations
+  mutations,
+  actions
 })

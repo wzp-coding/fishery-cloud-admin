@@ -62,8 +62,8 @@ export default {
       deep: true,
       handler(newForm) {
         // console.log('newForm: ', newForm);
-        this.form.roleName = this.defaultForm.name;
-        this.form.roleRemark = this.defaultForm.remarks;
+        this.form.roleName = newForm.name;
+        this.form.roleRemark = newForm.remarks;
       },
     },
   },
@@ -185,11 +185,11 @@ export default {
         // 图形验证码
         captcha: [
           { required: true, message: "请输入验证码", trigger: "blur" },
-          {
-            len: 4,
-            message: "长度为4个字符",
-            trigger: "blur",
-          },
+          // {
+          //   len: 4,
+          //   message: "长度为4个字符",
+          //   trigger: "blur",
+          // },
         ],
 
         // 短信验证码

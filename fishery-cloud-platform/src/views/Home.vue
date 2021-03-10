@@ -47,7 +47,7 @@ export default {
 .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */ {
   transform: translateX(10px);
-  height: 150%;
+  height: 1000%;
   opacity: 0;
 }
 ::-webkit-scrollbar {

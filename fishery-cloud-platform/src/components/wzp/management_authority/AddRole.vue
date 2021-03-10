@@ -22,6 +22,7 @@
   </el-dialog>
 </template>
 <script>
+import { mapState } from 'vuex';
 import Form from "../Form";
 export default {
   components: {
@@ -33,6 +34,9 @@ export default {
       required: true,
     },
   },
+  computed:{
+    ...mapState(['baseInfo'])
+  },
   methods: {
     //   添加角色 按钮
     async handleSubmit(form) {
@@ -40,10 +44,10 @@ export default {
       const sForm = {
         name: form.roleName,
         remarks: form.roleRemark,
-        useable: true,
       };
-      const { data: res } = await this.$role.post("/save", sForm);
+      const { data: res } = await this.$role.post("/save?baseId="+this.baseInfo.id, sForm);
       if (res.statusCode === 20000) {
+        await this.synMenuByRole(form.roleName);
         this.elMessage.success(res.message);
         this.$emit("close");
       } else {
@@ -51,6 +55,18 @@ export default {
       }
     },
 
+    // 调用涛哥的接口更新用户角色权限
+    async synMenuByRole(role) {
+      console.log('role: ', role);
+      const params = {
+        baseId:this.baseInfo.id,
+        role,
+      }
+      const{data:res} = await this.$label.post('/role/generate',params);
+      if(res.statusCode !== 20000){
+        console.error(res.message);
+      }
+    },
     
   },
 };

@@ -236,7 +236,7 @@ export default {
     async initBaseMap() {
 
       //定义地图中心点坐标
-      // console.log("this.centerPoint: ", this.centerPoint);
+      console.log("this.centerPoint: ", this.centerPoint);
       const center = new TMap.LatLng(
         this.centerPoint.lat,
         this.centerPoint.lng

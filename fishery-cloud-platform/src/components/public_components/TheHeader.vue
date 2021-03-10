@@ -122,7 +122,10 @@ export default {
 
     // 退出登录操作
     loginOut() {
+      // 清除token
       localStorage.removeItem("token");
+      // 清空vuex
+      this.$store.dispatch('resetState');
       this.$router.push("/login");
     },
 

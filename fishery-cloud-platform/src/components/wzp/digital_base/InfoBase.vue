@@ -4,7 +4,7 @@
       <el-carousel-item v-for="item in carousels" :key="item">
         <el-image :src="item"></el-image>
       </el-carousel-item>
-    </el-carousel> 
+    </el-carousel>
     <el-row class="baseInformation">
       <p>
         <i class="el-icon-office-building"></i>
@@ -24,13 +24,13 @@
       </p>
       <p>
         <i class="el-icon-data-line"></i>
-        池塘数量：{{ pondInfo.totalArea || 0}}个
+        池塘数量：{{ pondInfo.totalArea || 0 }}个
       </p>
     </el-row>
   </el-card>
 </template>
 <script>
-import {mapMutations} from 'vuex'
+import { mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -45,25 +45,25 @@ export default {
     async getBaseInfo(baseId) {
       const { data: res } = await this.$base.get(`/${baseId}`);
       console.log("getBaseInfo: ", res);
-      if(res.statusCode === 20000){
+      if (res.statusCode === 20000) {
         this.baseInfo = res.data;
-        this.carousels=this.baseInfo.picture.split(',')
-        this.$store.commit("setBaseInfo",res.data);
-      }else{
-        this.elMessage.error(res.message);
+        this.carousels = this.baseInfo.picture?this.baseInfo.picture.split(","):[];
+        this.$store.commit("setBaseInfo", res.data);
+      } else {
+        console.error(res.message);
       }
     },
 
     // 获取基地池塘的总数量、总面积
-    async getPondInfo(baseId){
+    async getPondInfo(baseId) {
       const { data: res } = await this.$pondController.get(`/count/${baseId}`);
-      // console.log("getPondInfo: ", res);
-      if(res.statusCode === 20000){
+      console.log("getPondInfo: ", res);
+      if (res.statusCode === 20000) {
         this.pondInfo = res.data;
-      }else{
-        this.elMessage.error(res.message);
+      } else {
+        console.error(res.message);
       }
-    }
+    },
   },
   created() {
     this.getBaseInfo(this.$store.state.userInfo.baseId);

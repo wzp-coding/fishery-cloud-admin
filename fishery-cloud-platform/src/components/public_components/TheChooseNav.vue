@@ -12,9 +12,11 @@
       ref="tree"
       :data="navList"
       :props="defualtProps"
-      default-expand-all
       node-key="id"
       show-checkbox
+      accordion
+      draggable
+      :allow-drop="handleDrop"
     ></el-tree>
     <div style="padding: 20px 10px; overflow: hidden">
       <el-button
@@ -38,61 +40,12 @@ export default {
   },
   data() {
     return {
-      navList: [
-        {
-          id: 1,
-          label: "一级 1",
-          children: [
-            {
-              id: 4,
-              label: "二级 1-1",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1",
-                },
-                {
-                  id: 10,
-                  label: "三级 1-1-2",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          id: 2,
-          label: "一级 2",
-          children: [
-            {
-              id: 5,
-              label: "二级 2-1",
-            },
-            {
-              id: 6,
-              label: "二级 2-2",
-            },
-          ],
-        },
-        {
-          id: 3,
-          label: "一级 3",
-          children: [
-            {
-              id: 7,
-              label: "二级 3-1",
-            },
-            {
-              id: 8,
-              label: "二级 3-2",
-            },
-          ],
-        },
-      ],
+      navList: [],
       defualtProps: {
         children: "children",
         label: "label",
       },
-      preUserChecked:[]
+      preUserChecked: [],
     };
   },
   // 获取树结构的中的所有叶子节点
@@ -109,11 +62,17 @@ export default {
       //     .concat(this.$refs.tree.getCheckedKeys());
       // 接下来跟上一次用户选择的菜单比较也就是preUserChecked
       // 比较将增加的添加到addList中，减少的添加到subList中传给后端
+    },// 判断拖拽放置位置
+    handleDrop(draggingNode,dropNode,type){
+      console.log('type: ', type);
+      console.log('dropNode: ', dropNode);
+      console.log('draggingNode: ', draggingNode);
+
     },
-    openProxy() {
+    async openProxy() {
       // 打开之前先请求该用户最原始所拥有的标签菜单（并存在本地，不必总是请求）
       // 存在本地注意通过用户ID作为键值，防止两个不同的用户在同一台电脑登录
-      
+      // const {data:res} = await this.$
       // 再请求该用户已经选择的标签菜单（进行初始化tree，同时记录一下标签菜单）
       // 这里设置上一次已经选择的二级菜单，注意defaultChecked包含的只有叶子节点
       //   this.$refs.tree.setCheckedKeys(this.defaultChecked);

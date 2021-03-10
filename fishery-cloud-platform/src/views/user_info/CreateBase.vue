@@ -31,7 +31,7 @@
         <TheDialogLayout>
           <el-form-item
             slot="pre"
-            label="成立基金"
+            label="成立基金(万元)"
             label-width="130px"
             prop="funds"
           >
@@ -224,11 +224,11 @@ export default {
           this.baseTypeList[i] = JSON.parse(this.baseTypeList[i]);
         }
       } else {
-        this.elMessage.error(res.message);
+        console.error(res.message);
       }
     },
     async createEvent() {
-      console.log('this.createInfo: ', this.createInfo);
+      console.log("this.createInfo: ", this.createInfo);
       const { data: res } = await this.$admin.post(
         "/addBase/" + this.userInfo.id,
         this.createInfo
@@ -236,10 +236,18 @@ export default {
       console.log("addBase: ", res);
       if (res.statusCode === 20000) {
         this.elMessage.success("创建基地成功");
-        // 基地创建后，用户信息会发生改变
+        // 基地创建后，用户信息(role,roleId,baseId)会发生改变
         const newUserInfo = await this.getSelfInfo();
-        this.$store.commit("setUserInfo", newUserInfo);
-        this.$router.push("digital-base");
+        console.log("newUserInfo: ", newUserInfo);
+        this.$store.commit(
+          "setUserInfo",
+          Object.assign(this.userInfo, {
+            role: newUserInfo.roleName,
+            roleId: newUserInfo.roleId,
+            baseId:newUserInfo.baseId
+          })
+        );
+        this.$router.push("/digital-base");
       } else {
         this.elMessage.error(res.message);
       }
@@ -251,7 +259,7 @@ export default {
       if (res.statusCode === 20000) {
         return res.data;
       } else {
-        this.elMessage.error(res.message);
+        console.error(res.message);
       }
     },
     // 所有文件上传完成触发
@@ -259,10 +267,10 @@ export default {
       this.createInfo.picture = fileStr;
     },
     // 设置地图返回的定点位置
-    setAddress(address,centerPos) {
-      console.log('centerPos: ', centerPos);
-      this.createInfo.positionLongitude = centerPos.lat;
-      this.createInfo.positionLatitude = centerPos.lng;
+    setAddress(address, centerPos) {
+      console.log("centerPos: ", centerPos);
+      this.createInfo.positionLongitude = centerPos.lng;
+      this.createInfo.positionLatitude = centerPos.lat;
 
       console.log("address-->", address);
       this.createInfo.address = address;
@@ -275,8 +283,8 @@ export default {
     // 设置坐标
     setcoordinates(location) {
       this.location = location;
-      this.createInfo.positionLongitude = this.location.lat;
-      this.createInfo.positionLatitude = this.location.lng;
+      this.createInfo.positionLongitude = this.location.lng;
+      this.createInfo.positionLatitude = this.location.lat;
       console.log("location-->", this.location);
     },
   },

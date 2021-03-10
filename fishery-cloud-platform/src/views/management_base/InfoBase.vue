@@ -339,7 +339,9 @@ export default {
       const { data: res } = await this.$base.put("update", this.baseInfo);
       if (res.statusCode === 20000) {
         this.elMessage.success("修改基地信息成功");
-        this.$stroe.commit("setBaseInfo", this.baseInfo);
+        this.$store.commit("setBaseInfo", this.baseInfo);
+      }else{
+        console.error(res.message);
       }
       this.getBaseInfo();
     },
@@ -374,8 +376,8 @@ export default {
     // 设置坐标
     setcoordinates(location) {
       this.location = location;
-      this.baseInfo.positionLongitude = this.location.lat;
-      this.baseInfo.positionLatitude = this.location.lng;
+      this.baseInfo.positionLongitude = this.location.lng;
+      this.baseInfo.positionLatitude = this.location.lat;
       console.log("location-->", this.location);
     },
   },

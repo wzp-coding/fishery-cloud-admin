@@ -65,7 +65,6 @@ export default {
         id:this.roleId,
         name: form.roleName,
         remarks: form.roleRemark,
-        useable: true,
       };
       const { data: res } = await this.$role.post("/uodate", sForm);
       if (res.statusCode === 20000) {

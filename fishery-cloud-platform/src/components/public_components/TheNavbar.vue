@@ -195,6 +195,7 @@ export default {
     // 获取动态菜单
     async getLabel() {
       const params = { baseId: this.userInfo.baseId, role: this.userInfo.role,userId:this.userInfo.id };
+      // console.log('params: ', params);
       const { data: res } = await this.$label.post("", params);
       console.log("this.$label: ", res);
       if (res.statusCode === 20000) {
@@ -202,7 +203,7 @@ export default {
         this.newSortMenus = this.formatLabel(labels);
         console.log("this.newSortMenus: ", this.newSortMenus);
       } else {
-        this.elMessage.error(res.message);
+        console.error(res.message);
       }
     },
 

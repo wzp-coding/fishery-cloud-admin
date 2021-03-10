@@ -46,7 +46,7 @@ export default {
       const { data: res } = await this["$" + this.root].delete(
         `${this.deleteUrl}/${this.id}`
       );
-      if (res.statusCode == 20000) {  
+      if (res.statusCode == 20000) {
         this.$emit("getAllInfo");
         this.elMessage.success(res.message);
       }

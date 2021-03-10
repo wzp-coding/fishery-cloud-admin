@@ -40,13 +40,13 @@ export default {
                     })
                 }
             })
+            console.log('threeLevel: ');
+            console.table(threeLevel)
         }
         // console.log('oneLevel: ');
         // console.table(oneLevel)
         // console.log('twoLevel: ');
         // console.table(twoLevel)
-        console.log('threeLevel: ');
-        console.table(threeLevel)
         // 判断是否存在权限
         if (oneLevel[binding.value] || twoLevel[binding.value] || threeLevel[binding.value]) {
             el.disabled = false;
