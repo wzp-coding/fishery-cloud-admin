@@ -65,28 +65,28 @@
         <el-table-column
           prop="logisticsOrderCreateBy"
           label="创建人"
-          width="120"
+          
         ></el-table-column>
         <el-table-column
           prop="logisticsOrderStatus"
           :formatter="logisticsType"
           label="物流状态"
-          width="120"
+          
         ></el-table-column>
          <el-table-column
           prop="logisticsStartStation.logisticsStationAddress"
           label="起点站"
-          width="200"
+         
         ></el-table-column>
          <el-table-column
           prop="logisticsArrivalStation.logisticsStationAddress"
           label="终点站"
-          width="200"
+         
         ></el-table-column>
          <el-table-column
           prop="gmtCreate"
           label="创建时间"
-          width="100"
+          
         ></el-table-column>
 
         <el-table-column label="操作" width="350px">

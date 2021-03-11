@@ -1,5 +1,4 @@
 <template>
-  <div>
     <!-- 删除按钮开始 -->
     <el-button
       type="danger"
@@ -8,7 +7,6 @@
       @click="removeById()"
     ></el-button>
     <!-- 删除按钮结束 -->
-  </div>
 </template>
 <script>
 export default {

@@ -159,7 +159,7 @@ export default {
     // 展示物流信息的对话框
     async getLogisticsById(id) {
       // 调用根据ID查询
-     const { data: res } = await this.$managementOrder.get(`${this.id}`);
+     const { data: res } = await this.$managementOrder.get(`${id}`);
       if (res.statusCode !== 20000) {
         return this.elMessage.info("查询该物流信息失败！！");
       }
@@ -201,12 +201,12 @@ export default {
       // 对话框出现才请求数据
       if (this.title=="物流信息") {
         //   如果是物流信息
-        this.getLogisticsById(this.id);
+        this.getLogisticsById(id);
       }
       if (this.title=="虾苗信息")
       {
         // 否则是对虾信息
-        this.getShrimpById(this.id);
+        this.getShrimpById(id);
       }
       if(this.title=="物流位置"){
           this.getLogisticsById2(id)

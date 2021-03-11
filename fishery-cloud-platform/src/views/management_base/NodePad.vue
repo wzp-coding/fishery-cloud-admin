@@ -56,7 +56,7 @@
             <el-col :span="6">
               <el-tooltip
               effect="dark"
-              content="修改订单"
+              content="修改备忘录"
               placement="top"
               :enterable="false"
             >
@@ -290,7 +290,7 @@ import CreateMemo from "../../components/cgx/Memorandum/CreatedMemo"
       }
     },
     created(){
-        this.userId = "testPhone_15913547145"
+        this.userId = this.$store.state.userInfo.phone
         this.setNode()
     }
   }

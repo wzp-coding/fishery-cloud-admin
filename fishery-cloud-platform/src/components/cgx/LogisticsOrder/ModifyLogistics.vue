@@ -8,7 +8,7 @@
     <el-form 
     ref="form" 
     :model="logisticsobject" 
-    label-width="80px">
+    label-width="85px">
    
      <el-form-item label="基地编号">
     <el-input v-model="logisticsobject.baseId" ></el-input>

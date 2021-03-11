@@ -13,8 +13,7 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeCode()">取 消</el-button>
         <el-button type="primary" @click="toLcodeWeb(adultShrimpId)"
-          >确 定</el-button
-        >
+          >确 定</el-button>
       </div>
     </el-dialog>
 </template>
@@ -36,28 +35,33 @@ export default {
     },
     data(){
         return{
+          url1:"http://119.23.218.131:9301/IsArriveLcode?id="
 
         }
     },
     methods:{
-    //    createlcode() {
-    //   new QRCode("orcode", {
-    //     width: 250,
-    //     height: 250,
-    //   }).makeCode(
-    //     "http://106.75.132.85:9002/#/IsArriveLcode?id=" + this.adultShrimpId
-    //   );
-    // },
+       createlcode() {
+      new QRCode("orcode", {
+        width: 250,
+        height: 250,
+      }).makeCode(
+        "http://119.23.218.131:9301/IsArriveLcode?id=" + this.adultShrimpId
+      );
+    },
         closeCode(){
             this.$refs.orcode.innerHTML = ''
-            console.log("isShowCode---->",this.isShowCode)
             this.$emit("notifyParent2");
         },
-
+        toLcodeWeb(){
+           this.$router.push({
+        path: "../../../../views/order_logistics/",
+        query: { id: id },
+      });
+        }
     },
-//   mounted() {
-//     this.createlcode();
-//       },
+  created() {
+    this.createlcode();
+      },
     
 }
 </script>
