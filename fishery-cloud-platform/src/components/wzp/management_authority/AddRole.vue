@@ -33,6 +33,9 @@ export default {
       type: Boolean,
       required: true,
     },
+    flushData:{
+      type:Function
+    }
   },
   computed:{
     ...mapState(['baseInfo'])
@@ -48,6 +51,7 @@ export default {
       const { data: res } = await this.$role.post("/save?baseId="+this.baseInfo.id, sForm);
       if (res.statusCode === 20000) {
         await this.synMenuByRole(form.roleName);
+        this.flushData()
         this.elMessage.success(res.message);
         this.$emit("close");
       } else {

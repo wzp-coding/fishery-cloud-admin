@@ -3,7 +3,8 @@
     @close="closeEvent"
     title="邀请员工"
     :visible.sync="toDialogInfo.dialogVisible"
-    width="30%"
+    :close-on-click-modal="false"
+    width="50%"
   >
     <el-form :model="searchInfo">
       <el-form-item
@@ -25,12 +26,12 @@
         </el-input>
       </el-form-item>
     </el-form>
-    <el-table :data="userData" height="250" v-loading="loading" v-if="!loading">
-      <el-table-column prop="name" label="姓名" width="120">
+    <el-table :data="userData"  v-loading="loading" v-if="!loading" style="width:100%">
+      <el-table-column prop="id" label="id">
       </el-table-column>
-      <el-table-column prop="remarks" label="权限" width="150">
+      <el-table-column prop="phone" label="手机号码">
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" align="center">
         <template>
           <el-button
             size="mini"
@@ -115,13 +116,14 @@ export default {
   methods: {
     closeEvent() {
       this.userData = [];
+      this.searchInfo.id = ""
     },
     async searchInviteMember() {
       console.log(this.searchInfo.id);
-      const { data: res } = await this.$role.get(`getByUserId/${this.searchInfo.id}`);
+      const { data: res } = await this.$user.get(`/${this.searchInfo.id}`);
       console.log(res);
-      if(res.statusCode === 20000 &&res.data.length>=1){
-        this.userData = res.data;
+      if(res.statusCode === 20000 ){
+        this.userData = [res.data];
         this.loading = false;
       }else{
         this.elMessage.info('查无此ID用户')
@@ -142,7 +144,7 @@ export default {
         this.elMessage.success("成功发出邀请");
         this.toDialogInfo.dialogVisible = false;
       } else {
-        console.log("邀请失败");
+        console.error("邀请失败");
       }
     },
   },

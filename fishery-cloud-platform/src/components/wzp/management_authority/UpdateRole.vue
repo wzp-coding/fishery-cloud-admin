@@ -46,6 +46,9 @@ export default {
     roleId: {
       type: String,
     },
+    flushData:{
+      type:Function
+    }
   },
   computed:{
     ...mapState(['userInfo'])
@@ -70,10 +73,12 @@ export default {
         id:this.roleId,
         name: form.roleName,
         remarks: form.roleRemark,
+        useable:true
       };
-      const { data: res } = await this.$role.post("/uodate", sForm);
+      const { data: res } = await this.$role.post("/update", sForm);
       if (res.statusCode === 20000) {
         await this.synMenuByRole(sForm.name);
+        this.flushData();
         this.elMessage.success(res.message);
         this.$emit("close");
       } else {
