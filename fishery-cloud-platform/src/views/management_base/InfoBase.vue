@@ -147,6 +147,7 @@
                   action="http://119.23.218.131:9103/base/file/upload"
                   ref="upload"
                   name="multipartFile"
+                  :on-preview="handlePictureCardPreview"
                   class="avatar-uploader"
                   :on-success="handleAvatarSuccess"
                   multiple
@@ -379,6 +380,12 @@ export default {
       this.baseInfo.positionLongitude = this.location.lng;
       this.baseInfo.positionLatitude = this.location.lat;
       console.log("location-->", this.location);
+    },
+    //放大基地图片
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.imgdialogVisible = true;
+      console.log('11');
     },
   },
 };

@@ -188,7 +188,7 @@ export default {
       //分页信息
       paginationInfo: {
         total: 0,
-        size: 3,
+        size: 6,
         page: 1,
       },
       //修改种苗信息

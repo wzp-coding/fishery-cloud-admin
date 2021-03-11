@@ -771,10 +771,7 @@ header h1 {
   font-size: 2rem;
   text-align: center;
 }
-header {
-  // background-color: aqua;
-  // background: url(../../assets/head_bg.png) no-repeat top center;
-}
+
 .mainbox {
   display: flex;
   padding: 5px;

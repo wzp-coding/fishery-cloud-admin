@@ -329,9 +329,8 @@ export default {
       fileList: [],
       paginationInfo: {
         total: 0,
-        size: 3,
+        size: 6,
         page: 1,
-        // sizeGroup:[4,6,8,10]
       },
       // 放大图片路径
       previewImg: "",
