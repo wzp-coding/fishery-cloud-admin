@@ -64,13 +64,13 @@
               v-auth="'authority_role_update'"
               >修改</el-button
             >
-            <el-button
+            <!-- <el-button
               type="danger"
               icon="el-icon-delete"
               @click="deleteRole(scope.row.id)"
               v-auth="'authority_role_delete'"
               >删除</el-button
-            >
+            > -->
           </template>
         </el-table-column>
       </el-table>
@@ -130,7 +130,7 @@ export default {
       roleList: [],
       // 点击按钮时的roleId
       roleId: undefined,
-      total: 0,
+      total: undefined,
     };
   },
   computed: {
@@ -146,10 +146,13 @@ export default {
   methods: {
     // 分页获取角色
     async getRoleList(page = 1, size = 5) {
+      const upRange = this.total
+        ? page * size > this.total
+          ? this.total
+          : page * size
+        : page * size;
       let { data: res } = await this.$role.get(
-        `/${this.baseInfo.id}/${(page - 1) * size}/${
-          page * size > this.total ? this.total : page * size
-        }`
+        `/${this.baseInfo.id}/${(page - 1) * size}/${upRange}`
       );
       console.log("getRoleList: ", res);
       if (res.statusCode === 20000) {
