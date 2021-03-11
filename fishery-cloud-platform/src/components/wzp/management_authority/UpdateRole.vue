@@ -35,6 +35,7 @@ export default {
   data() {
     return {
       infoForm: {},
+      oldName:""
     };
   },
   props: {
@@ -46,6 +47,9 @@ export default {
       type: String,
     },
   },
+  computed:{
+    ...mapState(['userInfo'])
+  },
   methods: {
     // 根据角色Id查询角色信息
     async getRoleInfo(id) {
@@ -53,8 +57,9 @@ export default {
       console.log('getRoleInfo: ', res);
       if (res.statusCode === 20000) {
         this.infoForm = res.data;
+        this.oldName = res.data.name;
       }else{
-        this.elMessage.error(res.message);
+        console.error(res.message);
       }
     },
 
@@ -68,10 +73,24 @@ export default {
       };
       const { data: res } = await this.$role.post("/uodate", sForm);
       if (res.statusCode === 20000) {
+        await this.synMenuByRole(sForm.name);
         this.elMessage.success(res.message);
         this.$emit("close");
       } else {
         this.elMessage.error(res.message);
+      }
+    },
+
+    // 调用涛哥的接口更新用户角色权限
+    async synMenuByRole(newName) {
+      const params  = {
+        baseId:this.userInfo.baseId,
+        newName,
+        oldName:this.oldName
+      }
+      const {data:res} = await this.$label.put('/role/name',params);
+      if(res.statusCode !== 20000){
+        console.error(res.message)
       }
     },
 

@@ -74,12 +74,13 @@ export default {
         localStorage.setItem("token", headers.token);
         this.$store.commit("setUserInfo", res.data);
         this.elMessage.success(res.message);
-        if (!this.userInfo.baseId) {
-          // 如果是新注册的用户，提醒创建基地
-          this.$router.push("/create-base");
-        } else if (this.userInfo.role && this.userInfo.role === "user") {
+        // if (!this.userInfo.baseId) {
+        //   // 如果是新注册的用户，提醒创建基地
+        //   this.$router.push("/create-base");
+        // } else
+        if (this.userInfo.role && this.userInfo.role === "user") {
           // 如果只是普通用户
-          this.$router.push('/common-user');
+          this.$router.push("/common-user");
         } else {
           // 如果是基地老板或其他非普通用户角色，请求权限列表
           await this.getFunctionByRoleId(res.data.roleId);
