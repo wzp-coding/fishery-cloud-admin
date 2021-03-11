@@ -313,7 +313,7 @@ export default {
     });
   },
   beforeDestroy() {
-    this.map.destroy();
+    this.map?.destroy();
   },
 };
 </script>

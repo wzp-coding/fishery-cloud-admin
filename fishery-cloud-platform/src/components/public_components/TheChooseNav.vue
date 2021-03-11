@@ -95,7 +95,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setShouldFlushNavbar']),
+    ...mapMutations(["setShouldFlushNavbar"]),
 
     // 将乱序的标签排序，思路：先拷贝一份完全的顺序的菜单，再根据乱序的数组中查看是否有该菜单名，没有则删除即可
     sortRetLabels(retLabels) {
@@ -155,8 +155,8 @@ export default {
       // console.log("res: ", res);
       if (res.statusCode === 20000) {
         this.elMessage.success(res.message);
-        this.$store.commit('setShouldFlushNavbar',true);
-        this.$emit('close')
+        this.$store.commit("setShouldFlushNavbar", true);
+        this.$emit("close");
       } else {
         this.elMessage.error(res.message);
         console.error(res.message);
@@ -216,7 +216,7 @@ export default {
       if (res.statusCode !== 20000) {
         console.error(res.message);
       } else {
-        // console.log('userLabel: ', JSON.parse(res.data));
+        console.log("userLabel: ", JSON.parse(res.data));
         this.retNavList = this.sortRetLabels(JSON.parse(res.data).labels);
         // console.log("navList: ", this.navList);
       }
@@ -227,9 +227,12 @@ export default {
       if (ret.statusCode !== 20000) {
         console.error(ret.message);
       } else {
-        // console.log('$label.post.customized_labels: ', JSON.parse(ret.data).customized_labels);
+        console.log("$label.post ", JSON.parse(ret.data));
+        let checkedLabels = JSON.parse(ret.data);
         this.retCheckedNav = this.sortRetLabels(
-          JSON.parse(ret.data).customized_labels
+          checkedLabels.customized_labels
+            ? checkedLabels.customized_labels
+            : checkedLabels.labels
         );
         // console.log(this.nameToIdMap);
         this.$refs.tree.setCheckedKeys(this.checkedNav);

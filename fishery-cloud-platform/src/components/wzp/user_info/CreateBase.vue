@@ -1,14 +1,5 @@
 <template>
   <div class="create-base-container">
-    <el-card class="create-base-card">
-      <template #header>
-        <div class="card-header">
-          <span>创建基地</span>
-          <el-button type="text" @click="$router.push('common-user')"
-            >如果您只是普通用户，无需创建基地，请点击这里</el-button
-          >
-        </div>
-      </template>
       <el-form :model="createInfo" :rules="rules">
         <TheDialogLayout>
           <el-form-item
@@ -79,8 +70,8 @@
         </TheDialogLayout>
         <TheDialogLayout>
           <el-row slot="pre">
-            <el-col :offset="3" :span="4">基地图片</el-col>
-            <el-col :span="17">
+            <el-col :offset="4" :span="6">基地图片</el-col>
+            <el-col :span="14">
               <el-button type="primary" @click="isOpenUpload = true"
                 >上传图片（限制3张）</el-button
               >
@@ -145,14 +136,14 @@
       <div class="create-base-footer">
         <el-button type="primary" @click="createEvent">确认创建</el-button>
       </div>
-    </el-card>
+  
   </div>
 </template>
 <script>
 import { mapMutations, mapState } from "vuex";
-import TheDialogLayout from "../../components/ccy/public/TheDialogLayout";
-import Map from "../../components/public_components/MyLocationPicker";
-import UploadFile from "../../components/public_components/UploadFile";
+import TheDialogLayout from "../../ccy/public/TheDialogLayout";
+import Map from "../../public_components/MyLocationPicker";
+import UploadFile from "../../public_components/UploadFile";
 export default {
   components: {
     TheDialogLayout,
@@ -313,9 +304,9 @@ export default {
   text-align: center;
 }
 .create-base-container {
-  background-image: url("../../assets/images/loginbg.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
+  // background-image: url("../../assets/images/loginbg.jpg");
+  // background-repeat: no-repeat;
+  // background-size: cover;
   .create-base-card {
     margin: auto;
     width: 70%;

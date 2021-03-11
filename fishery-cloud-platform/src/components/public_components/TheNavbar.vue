@@ -189,20 +189,19 @@ export default {
     };
   },
   computed: {
-    ...mapState(["userInfo","shouldFlushNavbar"]),
-  
+    ...mapState(["userInfo", "shouldFlushNavbar"]),
   },
-  watch:{
-    shouldFlushNavbar(val){
-      if(val){
+  watch: {
+    shouldFlushNavbar(val) {
+      if (val) {
         this.getLabel();
-        this.$store.commit('setShouldFlushNavbar',false)
+        this.$store.commit("setShouldFlushNavbar", false);
       }
-    }
+    },
   },
   methods: {
-    ...mapMutations(['setShouldFlushNavbar']),
-    
+    ...mapMutations(["setShouldFlushNavbar"]),
+
     // 获取动态菜单
     async getLabel() {
       const params = {
@@ -214,7 +213,10 @@ export default {
       const { data: res } = await this.$label.post("", params);
       console.log("this.$label: ", res);
       if (res.statusCode === 20000) {
-        const labels = JSON.parse(res.data).customized_labels;
+        let data = JSON.parse(res.data);
+        const labels = data.customized_labels
+          ? data.customized_labels
+          : data.labels;
         this.newSortMenus = this.formatLabel(labels);
         // console.log("this.newSortMenus: ", this.newSortMenus);
       } else {
