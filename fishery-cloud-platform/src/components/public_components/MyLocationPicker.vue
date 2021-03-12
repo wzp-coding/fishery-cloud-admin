@@ -52,7 +52,7 @@
 <template>
   <!--   定义地图显示容器   -->
   <el-card id="mapCard">
-    <div id="mapContainer" style="width: 100%; height: 500px"></div>
+    <div id="mapContainer_wzp" style="width: 100%; height: 500px"></div>
   </el-card>
 </template>
 <script>
@@ -140,7 +140,7 @@ export default {
   methods: {
     // 动态引入腾讯地图
     // key = 4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ
-    loadScript() {
+     loadScript() {
       // console.log("key: ", key);
       return new Promise((resolve) => {
         var script = document.createElement("script");
@@ -148,18 +148,19 @@ export default {
         script.src = `https://map.qq.com/api/gljs?v=1.exp&key=${this.key}&callback=init`;
         document.body.appendChild(script);
         window.init = function () {
+          // console.log("TMap: ", TMap);
           resolve(TMap);
         };
       });
     },
 
     // 创建map实例
-    createMap(config = {}) {
-      this.map = new TMap.Map(document.getElementById("mapContainer"), config);
+   async createMap(config = {}) {
+      this.map = new TMap.Map(document.getElementById("mapContainer_wzp"), config);
     },
 
     // 创建标记点的图层
-    createMarkerLayer(markerArr) {
+   async createMarkerLayer(markerArr) {
       // console.log("markerArr: ", JSON.parse(JSON.stringify(markerArr)));
       this.markerLayer = new TMap.MultiMarker({
         map: this.map, //指定地图容器
@@ -255,16 +256,16 @@ export default {
       const detail = res.formatted_addresses.recommend;
       const address = province + city + detail;
       const pois = res.pois;
-      this.$emit("getCenterAddress", address,this.center);
+      this.$emit("getCenterAddress", address, this.center);
       this.$emit("getAroundPoi", pois);
     },
 
     // 初始化
-    init() {
+   async init() {
       //定义地图中心点坐标(默认是本地地址)
       this.center = new TMap.LatLng(this.center.lat, this.center.lng);
       //createMap函数创建地图(并且有地图中心点)
-      this.createMap({ center: this.center });
+     await this.createMap({ center: this.center });
 
       // 创建中心点的标记
       const centerMarker = {
@@ -278,7 +279,7 @@ export default {
       };
 
       // createMarkerLayer函数创建标记点的层面
-      this.createMarkerLayer([centerMarker]);
+     await this.createMarkerLayer([centerMarker]);
 
       // 监听地图拖拽事件(节流函数)
       const throttle = this._.throttle(this.handleDragMap, 200);
@@ -307,10 +308,12 @@ export default {
       debounceSearchInputTip: undefined,
     };
   },
-  created() {
-    this.loadScript().then(() => {
-      this.init();
-    });
+   mounted() {
+     this.loadScript()
+      .then(() => {
+        // console.log(TMap)
+        this.init();
+      })
   },
   beforeDestroy() {
     this.map?.destroy();

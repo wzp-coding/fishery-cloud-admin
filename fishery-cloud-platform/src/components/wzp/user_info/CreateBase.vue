@@ -136,7 +136,6 @@
       <div class="create-base-footer">
         <el-button type="primary" @click="createEvent">确认创建</el-button>
       </div>
-  
   </div>
 </template>
 <script>

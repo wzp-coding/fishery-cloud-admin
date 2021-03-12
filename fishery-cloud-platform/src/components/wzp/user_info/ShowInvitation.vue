@@ -10,8 +10,6 @@ export default {
       type: Function,
     },
   },
-  methods: {
-  },
   render(h) {
       const listeners = {
       "update:visible": (val) => this.closeCallback(val),

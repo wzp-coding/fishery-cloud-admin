@@ -10,7 +10,8 @@
               box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
               margin-bottom: 5px;
             "
-            >普 通 用 户
+          >
+            用 户 管 理 中 心
           </el-header>
           <el-tabs v-model="activeName" type="card" stretch>
             <el-tab-pane label="用户中心" name="userInfo">
@@ -23,13 +24,13 @@
               >
               </Form>
             </el-tab-pane>
-            <el-tab-pane label="修改密码" name="updatePsd">
-              <UpdatePsd></UpdatePsd>
-            </el-tab-pane>
             <el-tab-pane label="邀请信息" name="invitedInfo">
               <InvitatedInfo></InvitatedInfo>
             </el-tab-pane>
-            <el-tab-pane label="创建基地" name="createBase">
+            <el-tab-pane label="修改密码" name="updatePsd">
+              <UpdatePsd></UpdatePsd>
+            </el-tab-pane>
+            <el-tab-pane label="创建基地" name="createBase" lazy>
               <CreateBase></CreateBase>
             </el-tab-pane>
           </el-tabs>

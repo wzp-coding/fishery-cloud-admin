@@ -508,7 +508,7 @@ export default {
 .uploadAvatar {
   display: inline-block;
   vertical-align: 20px;
-  margin-left: 20px;
+  margin-left: 20px!important;
 }
 .avatar {
   width: 50px;
