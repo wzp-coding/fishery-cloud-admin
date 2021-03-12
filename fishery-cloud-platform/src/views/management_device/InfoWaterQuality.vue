@@ -14,7 +14,7 @@
           <span>水质设备</span>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary" @click="ShowAddDevice=true">添加设备</el-button>
+          <el-button type="primary" @click="ShowAddDevice=true" v-auth="'traceability_waterquality_add'">添加设备</el-button>
         </el-col>
       </el-row>
       <!--标题区域——send-->
@@ -36,7 +36,7 @@
             </el-col>
             <!--搜索区域——start-->
             <el-col :span="9" :push="3">
-              <SearchDevice @getequipmentList="getequipmentList" @searchfor="searchfor($event)" :SearchType="SearchType"></SearchDevice>
+              <SearchDevice @getequipmentList="getequipmentList" @searchfor="searchfor($event)" :SearchType="SearchType" :auth="'traceability_waterquality_select'"></SearchDevice>
             </el-col>
             <!--搜索区域——end-->
           </el-row>
@@ -53,10 +53,10 @@
             <el-table-column label="操作" width="180px" align="center">
               <template slot-scope="scope">
               <el-tooltip content="修改设备信息">
-                  <el-button type="primary" icon="el-icon-edit" size="mini" @click="editshow(scope.row)"></el-button>
+                  <el-button type="primary" icon="el-icon-edit" size="mini" @click="editshow(scope.row)" v-auth="'traceability_waterquality_update'"></el-button>
               </el-tooltip>
               <el-tooltip content="修改水质预警阈值"><el-button type="success" icon="el-icon-data-line" size="mini" @click="ToManagementWQW(scope.row.equipmentId)"></el-button></el-tooltip>
-              <el-tooltip content="删除设备"><el-button type="danger" icon="el-icon-delete" size="mini" @click="deletedevice(scope.row.id)"></el-button></el-tooltip>
+              <el-tooltip content="删除设备"><el-button type="danger" icon="el-icon-delete" size="mini" @click="deletedevice(scope.row.id)" v-auth="'traceability_waterquality_delete'"></el-button></el-tooltip>
               </template>
             </el-table-column>
             </el-table>

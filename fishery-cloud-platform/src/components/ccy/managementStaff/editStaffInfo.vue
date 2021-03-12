@@ -32,7 +32,7 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="toDialogInfo.dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="editEvent">确 定</el-button>
+      <el-button type="primary" @click="editEvent" v-auth="'enterprise_enterprise_user'">确 定</el-button>
     </div>
   </el-dialog>
 </template>

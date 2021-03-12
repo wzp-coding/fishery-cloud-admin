@@ -26,7 +26,7 @@
 
 <script>
 import Form from "../../components/wzp/Form";
-import { mapMutations, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 export default {
   data() {
     return {
@@ -45,8 +45,8 @@ export default {
     ...mapState(["userInfo"]),
   },
   methods: {
-    ...mapMutations(["setUserInfo", "setPermissionList"]),
-
+    ...mapMutations(["setUserInfo"]),
+    ...mapActions(["getFunctionByRoleId"]),
     // 切换登录方式
     handleTabClick(tab) {
       // console.log("tab: ", tab);
@@ -83,34 +83,12 @@ export default {
           this.$router.push("/common-user");
         } else {
           // 如果是基地老板或其他非普通用户角色，请求权限列表
-          await this.getFunctionByRoleId(res.data.roleId);
+          await this.$store.dispatch('getFunctionByRoleId',this)
           this.$router.push("/digital-base");
         }
       } else {
         this.$refs.passwordLogin.getCaptcha();
         this.elMessage.error(res.message);
-        console.error(res.message);
-      }
-    },
-
-    // 根据loginId得到roleId
-    // async getRoleInfoByLoginId(loginId) {
-    //   const { data: res } = await this.$role.get(`/getByUserId/${loginId}`);
-    //   console.log("getRoleInfoByLoginId: ", res);
-    //   if (res.statusCode === 20000) {
-    //     return res.data[0];
-    //   } else {
-    //     this.elMessage.error(res.message);
-    //   }
-    // },
-
-    // 根据loginId得到的roleId查询登录用户的权限，并存到vuex中
-    async getFunctionByRoleId(roleId) {
-      const { data: res } = await this.$function.get(`/findFunction/${roleId}`);
-      console.log("getFunctionByRoleId: ", res);
-      if (res.statusCode === 20000) {
-        this.$store.commit("setPermissionList", res.data);
-      } else {
         console.error(res.message);
       }
     },

@@ -6,6 +6,7 @@
       icon="el-icon-upload2"
       size="mini"
       @click="getInfoById()"
+      v-auth="auth"
     ></el-button>
     <!-- 按钮结束 -->
 
@@ -111,6 +112,7 @@ export default {
     id: {},
     createPersonList: {},
     seedInfo: {},
+    auth:''
   },
   data() {
     return {

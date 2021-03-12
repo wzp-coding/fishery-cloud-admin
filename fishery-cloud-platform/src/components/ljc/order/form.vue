@@ -6,6 +6,7 @@
       icon="el-icon-s-order"
       size="mini"
       @click="dialogVisible = true"
+      v-auth="'traceability_refrigeratory'"
     ></el-button>
     <!-- 修改按钮结束 -->
 

@@ -1,5 +1,5 @@
 <template>
-    <div style="" class="search"><input class="wzp_style_input" placeholder="输入设备名称(序列号)" v-model="searchinput" style="border:0;outline:none"><i class="el-icon-search searchicon" @click="search"></i></div>
+    <div style="" class="search"><input class="wzp_style_input" placeholder="输入设备名称(序列号)" v-model="searchinput" style="border:0;outline:none"><i class="el-icon-search searchicon" @click="search" v-auth="auth"></i></div>
 </template>
 
 <script>
@@ -8,6 +8,7 @@ export default {
         SearchType: {
             reauire:true
         },
+        auth:''
     },
     data() {
         return {

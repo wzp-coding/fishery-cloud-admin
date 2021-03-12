@@ -5,6 +5,7 @@
       icon="el-icon-delete"
       size="mini"
       @click="removeById()"
+      v-auth="auth"
     ></el-button>
     <!-- 删除按钮结束 -->
 </template>
@@ -19,6 +20,8 @@ export default {
     deleteUrl: {},
     // 根路径
     root: {},
+
+    auth:""
   },
   data() {
     return {};

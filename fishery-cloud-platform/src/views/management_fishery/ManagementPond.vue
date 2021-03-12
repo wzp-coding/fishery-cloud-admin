@@ -13,6 +13,7 @@
           </el-col>
           <el-col style="width: 100px; float: right">
             <el-button type="primary" @click="addPondInfo.dialogVisible = true"
+            v-auth="'traceability_pond_add'"
               >添加池塘</el-button
             >
           </el-col>

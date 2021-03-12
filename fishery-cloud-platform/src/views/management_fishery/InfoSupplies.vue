@@ -16,6 +16,7 @@
             <el-button
               type="primary"
               @click="toDialogSupply.dialogVisible = true"
+              v-auth="'traceability_fishery_add'"
               >添加投入品</el-button
             >
           </el-col>
@@ -102,6 +103,7 @@
             <el-row :gutter="15">
               <el-col :span="11"
                 ><el-button size="mini" @click="editSupplyEvent(scope.row.id)"
+                v-auth="'traceability_fishery_update'"
                   >编辑</el-button
                 ></el-col
               >
@@ -110,6 +112,7 @@
                   size="mini"
                   type="danger"
                   @click="removeSupply(scope.row.id)"
+                  v-auth="'traceability_fishery_delete'"
                   >删除</el-button
                 ></el-col
               >

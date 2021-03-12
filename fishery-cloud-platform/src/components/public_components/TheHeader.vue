@@ -126,7 +126,14 @@ export default {
       localStorage.removeItem("token");
       // 清空vuex
       this.$store.dispatch('resetState');
+      // 清除全局__permisstionList,__oneLevel,__twoLevel,__threeLevel
+      window.__permissionList = undefined;
+      window.__oneLevel = {};
+      window.__twoLevel = {};
+      window.__threeLevel = {};
       this.$router.push("/login");
+      // 清除主题
+      document.body.className = ''
     },
 
     // 修改密码操作

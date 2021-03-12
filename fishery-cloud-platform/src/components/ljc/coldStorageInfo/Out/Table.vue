@@ -53,6 +53,7 @@
                 :root="root"
                 :deleteUrl="deleteUrl"
                 @getAllInfo="getAllInfo()"
+                :auth="'traceability_refrigeratory'"
               />
             </el-col>
           </el-row>

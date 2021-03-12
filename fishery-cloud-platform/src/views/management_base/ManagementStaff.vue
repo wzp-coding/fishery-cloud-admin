@@ -16,6 +16,7 @@
             <el-button
               type="primary"
               @click="toInviteStaff.dialogVisible = true"
+              v-auth="'enterprise_enterprise_user'"
               >邀请员工</el-button
             >
           </el-col>
@@ -35,6 +36,7 @@
               icon="el-icon-edit"
               size="small"
               @click="editAdminInfo(scope.row.id, scope.row.username)"
+              v-auth="'authority_role_update'"
             >修改角色</el-button>
             <!-- 删除按钮 -->
             <!-- type="danger": 红色警告按钮 -->
@@ -43,6 +45,7 @@
               icon="el-icon-delete"
               size="small"
               @click="removeStaff(scope.row.id)"
+              v-auth="'enterprise_enterprise_user'"
             ></el-button>
           </template>
         </el-table-column>

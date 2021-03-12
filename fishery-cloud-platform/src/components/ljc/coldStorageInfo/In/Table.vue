@@ -63,8 +63,6 @@
                   :createPersonList="createPersonList"
                   tag="storage"
                 />
-
-
               </el-tooltip>
             </el-col>
             <el-col :span="8">
@@ -74,6 +72,7 @@
                 :title="title"
                 :deleteUrl="deleteUrl"
                 @getAllInfo="getAllInfo()"
+                :auth="'traceability_refrigeratory'"
               />
             </el-col>
           </el-row>

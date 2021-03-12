@@ -6,6 +6,7 @@
       icon="el-icon-edit"
       size="mini"
       @click="getInfoById()"
+      v-auth="'traceability_process'"
     ></el-button>
     <!-- 修改按钮结束 -->
 

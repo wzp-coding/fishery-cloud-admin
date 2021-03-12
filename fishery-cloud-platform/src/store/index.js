@@ -59,7 +59,20 @@ const actions = {
     commit('setUserInfo', {})
     commit('setPermissionList', [])
     commit('setBaseInfo', {})
-  }
+    commit('setShouldFlushNavbar', false)
+  },
+
+  // 根据roleId查询登录用户的权限，并存到vuex中
+ async getFunctionByRoleId({ commit, state },vm) {
+    // console.log('state: ', state);
+    const { data: res } = await vm.$function.get(`/findFunction/${state.userInfo.roleId}`);
+    console.log("getFunctionByRoleId: ", res);
+    if (res.statusCode === 20000) {
+      commit("setPermissionList", res.data);
+    } else {
+      console.error(res.message);
+    }
+  },
 }
 export default new Vuex.Store({
   state,
