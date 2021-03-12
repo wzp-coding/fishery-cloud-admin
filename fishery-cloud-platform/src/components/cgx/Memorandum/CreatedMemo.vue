@@ -97,7 +97,7 @@
         this.form.taskWeekday = ""
         this.form.taskTime = ""
         this.form.taskContent = ""
-        this.form.userId = "testPhone_15913547145"
+        this.form.userId = this.$store.state.userInfo.phone
       },
       onSubmit() {
         if(this.title=="添加备忘录"){
@@ -110,7 +110,7 @@
     },
     created(){
         // this.form.userId = this.$store.state.userInfo.id
-        this.form.userId ="testPhone_15913547145"
+        this.form.userId =this.$store.state.userInfo.phone
     },
     watch:{
       look(){
