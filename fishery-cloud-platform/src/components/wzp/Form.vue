@@ -195,11 +195,11 @@ export default {
         // 短信验证码
         phoneCode: [
           { required: true, message: "请输入短信验证码", trigger: "blur" },
-          {
-            len: 6,
-            message: "长度为6个字符",
-            trigger: "blur",
-          },
+          // {
+          //   len: 6,
+          //   message: "长度为6个字符",
+          //   trigger: "blur",
+          // },
         ],
 
         // 邮箱

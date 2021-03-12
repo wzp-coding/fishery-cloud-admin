@@ -97,109 +97,6 @@ export default {
   methods: {
     ...mapMutations(["setShouldFlushNavbar"]),
 
-    // 将乱序的标签排序，思路：先拷贝一份完全的顺序的菜单，再根据乱序的数组中查看是否有该菜单名，没有则删除即可
-    sortRetLabels(retLabels) {
-      // console.log("retLabels: ", retLabels);
-      const ret = this._.cloneDeep(this.stdNavbar);
-      // 生成一级标签map
-      const mapOneLabel = {};
-
-      retLabels?.forEach((oneLabel) => {
-        mapOneLabel[oneLabel.name] = oneLabel.children;
-      });
-      // 必须倒着遍历然后删除，否则前边删除后index会影响后面的删除
-      for (let index = ret.length - 1; index >= 0; index--) {
-        let item = ret[index];
-        if (mapOneLabel[item.name]) {
-          // 如果返回包含该一级菜单
-          // 生成二级map
-          const mapTwoLabel = {};
-          mapOneLabel[item.name].forEach(
-            (twoLabel) => (mapTwoLabel[twoLabel] = true)
-          );
-          for (let cindex = item.children.length - 1; cindex >= 0; cindex--) {
-            let citem = item.children[cindex];
-            if (!mapTwoLabel[citem]) {
-              // delete ret[index].children[cindex];
-              ret[index].children.splice(cindex, 1);
-            }
-          }
-        } else {
-          // delete ret[index];
-          ret.splice(index, 1);
-        }
-      }
-      console.log("ret: ", ret);
-      return ret;
-    },
-
-    // 点击保存自定义的时候
-    async saveNav() {
-      // 这里注意：还要获取半选中的父节点
-      const curUserCheckedIds = this.$refs.tree
-        .getHalfCheckedKeys()
-        .concat(this.$refs.tree.getCheckedKeys());
-      let c_navList = this._.cloneDeep(this.navList);
-      // console.log("c_navList: ", c_navList);
-      const customizedLabels = this.formatCNavList(
-        c_navList,
-        curUserCheckedIds
-      );
-      console.log("customizedLabels: ", customizedLabels);
-
-      let params = {
-        userId: this.userInfo.id,
-        customizedLabels,
-      };
-      const { data: res } = await this.$userLabel.put("", params);
-      // console.log("res: ", res);
-      if (res.statusCode === 20000) {
-        this.elMessage.success(res.message);
-        this.$store.commit("setShouldFlushNavbar", true);
-        this.$emit("close");
-      } else {
-        this.elMessage.error(res.message);
-        console.error(res.message);
-      }
-      // if(res.statusCode !==)
-    },
-    // 将c_navList格式化传给后端
-    formatCNavList(c_navList, curUserCheckedIds) {
-      // 先删除一级菜单(从后往前)
-      for (let i = c_navList.length - 1; i >= 0; i--) {
-        let item = c_navList[i];
-        if (!curUserCheckedIds.includes(item.id)) {
-          // 用户选中的id中没有该一级菜单
-          // delete c_navList[i];
-          c_navList.splice(i, 1);
-        } else {
-          for (let cindex = item.children.length - 1; cindex >= 0; cindex--) {
-            let citem = item.children[cindex];
-            if (!curUserCheckedIds.includes(citem.id)) {
-              // delete c_navList[i].children[cindex];
-              c_navList[i].children.splice(cindex, 1);
-            }
-          }
-        }
-      }
-      let ret = [];
-      c_navList.forEach((item, index) => {
-        ret.push({
-          name: item.name,
-          children: [],
-        });
-        item.children.forEach((citem) => {
-          ret[index].children.push(citem.name);
-        });
-      });
-      return ret;
-    },
-    // 判断拖拽放置位置
-    handleDrop(draggingNode, dropNode, type) {
-      console.log("type: ", type);
-      console.log("dropNode: ", dropNode);
-      console.log("draggingNode: ", draggingNode);
-    },
     // 打开弹窗处理
     async openProxy() {
       // console.log("open");
@@ -238,8 +135,114 @@ export default {
         this.$refs.tree.setCheckedKeys(this.checkedNav);
       }
     },
+
+    // 点击保存自定义的时候
+    async saveNav() {
+      // 这里注意：还要获取半选中的父节点
+      const curUserCheckedIds = this.$refs.tree
+        .getHalfCheckedKeys()
+        .concat(this.$refs.tree.getCheckedKeys());
+      let c_navList = this._.cloneDeep(this.navList);
+      // console.log("c_navList: ", c_navList);
+      const customizedLabels = this.formatCNavList(
+        c_navList,
+        curUserCheckedIds
+      );
+      console.log("customizedLabels: ", customizedLabels);
+
+      let params = {
+        userId: this.userInfo.id,
+        customizedLabels,
+        baseId:this.userInfo.baseId,
+        role:this.userInfo.role
+      };
+      const { data: res } = await this.$userLabel.put("", params);
+      // console.log("res: ", res);
+      if (res.statusCode === 20000) {
+        this.elMessage.success(res.message);
+        this.$store.commit("setShouldFlushNavbar", true);
+        this.$emit("close");
+      } else {
+        this.elMessage.error(res.message);
+        console.error(res.message);
+      }
+      // if(res.statusCode !==)
+    },
+
+    // 判断拖拽放置位置
+    handleDrop(draggingNode, dropNode, type) {
+      console.log("type: ", type);
+      console.log("dropNode: ", dropNode);
+      console.log("draggingNode: ", draggingNode);
+    },
+
+    // 将后端返回的乱序的标签排序，思路：先拷贝一份完全的顺序的菜单，再根据乱序的数组中查看是否有该菜单名，没有则删除即可
+    sortRetLabels(retLabels) {
+      // console.log("retLabels: ", retLabels);
+      const ret = this._.cloneDeep(this.stdNavbar);
+      // 生成一级标签map
+      const mapOneLabel = {};
+
+      retLabels?.forEach((oneLabel) => {
+        mapOneLabel[oneLabel.name] = oneLabel.children;
+      });
+      // 必须倒着遍历然后删除，否则前边删除后index会影响后面的删除
+      for (let index = ret.length - 1; index >= 0; index--) {
+        let item = ret[index];
+        if (mapOneLabel[item.name]) {
+          // 如果返回包含该一级菜单
+          // 生成二级map
+          const mapTwoLabel = {};
+          mapOneLabel[item.name].forEach(
+            (twoLabel) => (mapTwoLabel[twoLabel] = true)
+          );
+          for (let cindex = item.children.length - 1; cindex >= 0; cindex--) {
+            let citem = item.children[cindex];
+            if (!mapTwoLabel[citem]) {
+              // delete ret[index].children[cindex];
+              ret[index].children.splice(cindex, 1);
+            }
+          }
+        } else {
+          // delete ret[index];
+          ret.splice(index, 1);
+        }
+      }
+      console.log("ret: ", ret);
+      return ret;
+    },
+
+    // 将选中的菜单c_navList格式化传给后端
+    formatCNavList(c_navList, curUserCheckedIds) {
+      // 先删除一级菜单(从后往前)
+      for (let i = c_navList.length - 1; i >= 0; i--) {
+        let item = c_navList[i];
+        if (!curUserCheckedIds.includes(item.id)) {
+          // 用户选中的id中没有该一级菜单
+          // delete c_navList[i];
+          c_navList.splice(i, 1);
+        } else {
+          for (let cindex = item.children.length - 1; cindex >= 0; cindex--) {
+            let citem = item.children[cindex];
+            if (!curUserCheckedIds.includes(citem.id)) {
+              // delete c_navList[i].children[cindex];
+              c_navList[i].children.splice(cindex, 1);
+            }
+          }
+        }
+      }
+      let ret = [];
+      c_navList.forEach((item, index) => {
+        ret.push({
+          name: item.name,
+          children: [],
+        });
+        item.children.forEach((citem) => {
+          ret[index].children.push(citem.name);
+        });
+      });
+      return ret;
+    },
   },
 };
 </script>
-<style lang="less" scoped>
-</style>

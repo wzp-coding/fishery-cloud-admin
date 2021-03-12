@@ -2,7 +2,7 @@
   <div style="containter">
     <!-- 面包屑 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item>对虾管理</el-breadcrumb-item>
+      <el-breadcrumb-item>渔业管理</el-breadcrumb-item>
       <el-breadcrumb-item>投入品管理</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card style="containter">
