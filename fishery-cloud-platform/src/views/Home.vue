@@ -51,6 +51,7 @@ export default {
 .slide-fade-enter-active {
   // transition: all 0.5s ease 500ms;
   transition: all 0.5s ease-out;
+  width: 100%;
 }
 .slide-fade-leave-active {
   // transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
