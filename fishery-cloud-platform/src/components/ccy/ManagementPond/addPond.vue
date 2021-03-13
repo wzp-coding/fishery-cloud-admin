@@ -51,7 +51,7 @@ export default {
       addeForm: {
         //与对话框的输入数据绑定
         area: "", //池塘面积
-        baseId: "1248910886228332544", //基地id
+        baseId: this.$store.state.baseInfo.id, //基地id
         creator: "boss", //创建者
         depth: "", //池塘深度
         name: "", //池塘名称

@@ -1,7 +1,6 @@
 import Login from '../views/user_info/Login.vue'
 import Register from '../views/user_info/Register.vue'
 import ForgetPassword from '../views/user_info/ForgetPassword.vue'
-import CreateBase from '../views/user_info/CreateBase.vue'
 import CommonUser from '../views/user_info/CommonUser.vue'
 import Vue from "vue"
 export default [
@@ -48,12 +47,12 @@ export default [
         name: 'forgetPassword',
         component: ForgetPassword,
     },
-    {
-        // 创建基地页面
-        path: '/create-base',
-        name: 'create-base',
-        component: CreateBase,
-    },
+    // {
+    //     // 创建基地页面
+    //     path: '/create-base',
+    //     name: 'create-base',
+    //     component: CreateBase,
+    // },
     {
         // 普通用户页面
         path: '/common-user',

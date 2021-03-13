@@ -6,6 +6,7 @@
       icon="el-icon-edit"
       size="mini"
       @click="getInfoById()"
+      v-auth="'traceability_refrigeratory'"
     ></el-button>
     <!-- 按钮结束 -->
 

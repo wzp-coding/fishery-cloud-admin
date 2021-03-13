@@ -5,6 +5,7 @@
       type="primary"
       @click="addDialogVisible = true"
       style="margin-top: 20px"
+      v-auth="'traceability_process'"
       >{{ formTitle }}</el-button
     >
     <!-- 添加区域结束 -->

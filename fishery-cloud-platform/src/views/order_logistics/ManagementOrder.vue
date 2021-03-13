@@ -86,39 +86,39 @@
         <el-table-column
           prop="targetName"
           label="客户名"
-          width="120"
+
         ></el-table-column>
         <el-table-column
           prop="targetType"
           :formatter="customerType"
           label="客户类型"
-          width="80"
+
         ></el-table-column>
         <el-table-column
           prop="productName"
           label="产品名"
-          width="100"
+
         ></el-table-column>
         <el-table-column
           prop="money"
           label="金额/元"
-          width="80"
+
         ></el-table-column>
         <el-table-column
           prop="status"
           :formatter="statusType"
           label="订单状态"
-          width="80"
+
         ></el-table-column>
         <el-table-column
           prop="gmtCreate"
           label="创建时间"
-          width="100"
+
         ></el-table-column>
         <el-table-column
           prop="receiveAddress"
           label="收货地址"
-          width="300"
+
         ></el-table-column>
         <el-table-column label="二维码" width="150">
           <template slot-scope="">
@@ -138,11 +138,9 @@
             >
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="240px">
+        <el-table-column label="操作" width="250">
           <template slot-scope="scope">
-             <el-row :gutter="10">
-            <el-col :span="6">
-              <!-- 修改按钮 -->
+            
               <el-tooltip
               effect="dark"
               content="修改订单"
@@ -156,12 +154,12 @@
               @click="showEditDialog(scope.row.id)"
             ></el-button>
               </el-tooltip>
-            </el-col>
+              <!-- 修改按钮 -->
+            
             <!-- 发货按钮 -->
-            <el-col :span="6">
               <el-tooltip
               effect="dark"
-              content="发货操作"
+              content="发货"
               placement="top"
               :enterable="false"
             >
@@ -172,10 +170,10 @@
                 @click="delivery(scope.row.id)"
               ></el-button>
             </el-tooltip>
-            </el-col>
+            
+            
 
             <!-- 查看物流信息 -->
-            <el-col :span="6">
             <el-tooltip
               effect="dark"
               content="物流信息"
@@ -189,10 +187,10 @@
                 @click="toShowLogisticsInfo(scope.row.id)"
               ></el-button>
             </el-tooltip>
-            </el-col>
+            
+            
 
             <!-- 删除按钮 -->
-            <el-col :span="6">
               <Delete
               :id="scope.row.id"
               :title="deletetitle"
@@ -201,8 +199,9 @@
               @getAllInfo="setNode"
               >
               </Delete>
-            </el-col>
-             </el-row>
+            
+            
+        
           </template>
         </el-table-column>
       </el-table>
@@ -228,7 +227,7 @@
           <el-button type="success" style=" "  @click="createCustomera()">添加顾客</el-button>
         </div>
       </el-row>
-      <el-table :data="CustomerList" border stripe>
+      <el-table :data="CustomerList" border stripe style="width:100%">
         <!-- border： 加入边框线 -->
         <!-- type="index"： 索引列 -->
         >
@@ -237,30 +236,30 @@
         <el-table-column
           prop="customerName"
           label="客户名"
-          width="130"
+
         ></el-table-column>
         <el-table-column
           prop="customerType"
           :formatter="customerType2"
           label="客户类型"
-          width="100"
+
         ></el-table-column>
         <el-table-column
           prop="phoneNumber"
           label="电话"
-          width="200"
+
         ></el-table-column>
         <el-table-column
           prop="email"
           label="邮箱"
-          width="250"
+
         ></el-table-column>
         <el-table-column
           prop="receiveAddress"
           label="地址"
-          width="400"
+
         ></el-table-column>
-        <el-table-column label="操作" width="190px">
+        <el-table-column label="操作">
           <template slot-scope="scope">
           <!-- 修改按钮 -->
               <el-tooltip
@@ -361,7 +360,7 @@ import ShowInfo from   "../../components/cgx/ManagementOrder/ShowInfo/ShowInfo1"
 import ShowOrinfo from "../../components/cgx/ManagementOrder/ShowOrcode/ShowOrcode2";
 import ShowChange from "../../components/cgx/ManagementOrder/ModifyInformation/ShowChange";
 import CreateOrder from '../../components/cgx/ManagementOrder/CreateOrder/createOrder';
-import Delete from '../../components/ljc/public/delete.vue';
+import Delete from '../../components/cgx/public/delete';
 import Map from '../../components/public_components/MyLocationPicker';
 import CreateCustomer from '../../components/cgx/ManagementOrder/CreateCustomer/createCustomer'
 export default {
@@ -582,18 +581,18 @@ export default {
       this.adultShrimpId = "1304076777332805632";
       this.orTitle="物流二维码"
       this.isShowCode = true;
-      this.$nextTick(() => {
-        this.createlcode();
-      });
+      // this.$nextTick(() => {
+      //   this.createlcode();
+      // });
     },
     // 溯源二维码弹窗
     originOrcode() {
       this.adultShrimpId = "1304076777332805632";
       this.orTitle="溯源二维码"
       this.isShowCode = true;
-      this.$nextTick(() => {
-        this.createocode();
-      });
+      // this.$nextTick(() => {
+      //   this.createocode();
+      // });
     },
     // // 前往判断是否收货页面
     toLcodeWeb(id) {
@@ -609,28 +608,27 @@ export default {
         query: { id: id },
       });
     },
-    // 生成物流二维码
-    createlcode() {
-      new QRCode("orcode", {
-        width: 250,
-        height: 250,
-      }).makeCode(
-        "http://106.75.132.85:9002/#/IsArriveLcode?id=" + this.adultShrimpId
-      );
-    },
-    // 生成溯源二维码
-    createocode() {
-      new QRCode("orcode", {
-        width: 250,
-        height: 250,
-      }).makeCode(
-        "http://106.75.132.85:9002/#/IsArriveOcode?id=" + this.adultShrimpId
-      );
-    },
+    // // 生成物流二维码
+    // createlcode() {
+    //   new QRCode("orcode", {
+    //     width: 250,
+    //     height: 250,
+    //   }).makeCode(
+    //     "http://106.75.132.85:9002/#/IsArriveLcode?id=" + this.adultShrimpId
+    //   );
+    // },
+    // // 生成溯源二维码
+    // createocode() {
+    //   new QRCode("orcode", {
+    //     width: 250,
+    //     height: 250,
+    //   }).makeCode(
+    //     "http://106.75.132.85:9002/#/IsArriveOcode?id=" + this.adultShrimpId
+    //   );
+    // },
     // 关闭弹框,清除已经生成的二维码
     closeCode() {
       this.isShowCode = false;
-      console.log("isShowCode1---->",this.isShowCode)
     },
     // 监听pagesize(每页显示条数)改变事件
     handleSizeChange(newSize) {
@@ -706,4 +704,3 @@ export default {
 }
 
 </style>
->>>>>>> c8aba1c1744b85dbb07ac9c209d617647127392c

@@ -57,6 +57,16 @@ export default {
       },
     },
   },
+  watch: {
+    defaultForm: {
+      deep: true,
+      handler(newForm) {
+        // console.log('newForm: ', newForm);
+        this.form.roleName = newForm.name;
+        this.form.roleRemark = newForm.remarks;
+      },
+    },
+  },
   data() {
     // 自定义表单校验设置密码和确认密码
     var validatePassword = (rule, value, callback) => {
@@ -108,8 +118,8 @@ export default {
         avatar:
           this.defaultForm.avatar ||
           "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-        roleName: this.defaultForm.roleName,
-        roleRemark: this.defaultForm.roleRemark,
+        roleName: this.defaultForm.name,
+        roleRemark: this.defaultForm.remarks,
       },
 
       //表单验证规则
@@ -117,12 +127,12 @@ export default {
         // 验证用户ID是否合法
         loginId: [
           { required: true, message: "请输入用户ID", trigger: "blur" },
-          {
-            min: 1,
-            max: 10,
-            message: "长度在 1 到 10 个字符",
-            trigger: "blur",
-          },
+          // {
+          //   min: 1,
+          //   max: 10,
+          //   message: "长度在 1 到 10 个字符",
+          //   trigger: "blur",
+          // },
         ],
 
         // 验证密码
@@ -175,21 +185,21 @@ export default {
         // 图形验证码
         captcha: [
           { required: true, message: "请输入验证码", trigger: "blur" },
-          {
-            len: 4,
-            message: "长度为4个字符",
-            trigger: "blur",
-          },
+          // {
+          //   len: 4,
+          //   message: "长度为4个字符",
+          //   trigger: "blur",
+          // },
         ],
 
         // 短信验证码
         phoneCode: [
           { required: true, message: "请输入短信验证码", trigger: "blur" },
-          {
-            len: 6,
-            message: "长度为6个字符",
-            trigger: "blur",
-          },
+          // {
+          //   len: 6,
+          //   message: "长度为6个字符",
+          //   trigger: "blur",
+          // },
         ],
 
         // 邮箱
@@ -225,6 +235,7 @@ export default {
           placeholder="请输入手机号码"
           prefix-icon="el-icon-mobile-phone"
           style="font-size:14px;"
+          disabled={this.button=='修改信息'}
         ></el-input>
       </el-form-item>
     );
@@ -234,7 +245,7 @@ export default {
       <el-form-item label="验证码" prop="phoneCode" inline={true}>
         <el-input
           placeholder="短信验证码"
-          style="width: 100px"
+          style={this.button=='修改密码'?"width: 150px":"width: 100px"}
           vModel={this.form.phoneCode}
         ></el-input>
         <el-button
@@ -292,7 +303,7 @@ export default {
 
     // 用户ID
     let loginId = (
-      <el-form-item prop="loginId">
+      <el-form-item prop="loginId" label="用户id">
         <el-input
           autofocus
           type="text"
@@ -300,6 +311,7 @@ export default {
           placeholder=" 账号"
           vModel={this.form.loginId}
           prefix-icon="iconfont icon-xia"
+          disabled
         ></el-input>
       </el-form-item>
     );
@@ -496,7 +508,7 @@ export default {
 .uploadAvatar {
   display: inline-block;
   vertical-align: 20px;
-  margin-left: 20px;
+  margin-left: 20px!important;
 }
 .avatar {
   width: 50px;

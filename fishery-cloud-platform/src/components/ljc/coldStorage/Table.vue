@@ -110,6 +110,7 @@
                   :id="scope.row.id"
                   :createPersonList="createPersonList"
                   :seedInfo="seedInfo"
+                  :auth="'traceability_refrigeratory'"
                 />
               </el-tooltip>
             </el-col>
@@ -137,6 +138,7 @@
                 :title="title"
                 :root="root"
                 :deleteUrl="deleteUrl"
+                :auth="'traceability_refrigeratory_delete'"
                 @getAllInfo="getAllInfo()"
               />
             </el-col>

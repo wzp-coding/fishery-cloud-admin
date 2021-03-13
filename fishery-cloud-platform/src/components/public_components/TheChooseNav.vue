@@ -12,9 +12,11 @@
       ref="tree"
       :data="navList"
       :props="defualtProps"
-      default-expand-all
       node-key="id"
       show-checkbox
+      accordion
+      draggable
+      :allow-drop="handleDrop"
     ></el-tree>
     <div style="padding: 20px 10px; overflow: hidden">
       <el-button
@@ -30,6 +32,7 @@
   </el-drawer>
 </template>
 <script>
+import { mapMutations, mapState } from "vuex";
 export default {
   props: {
     isShow: {
@@ -38,88 +41,208 @@ export default {
   },
   data() {
     return {
-      navList: [
-        {
-          id: 1,
-          label: "一级 1",
-          children: [
-            {
-              id: 4,
-              label: "二级 1-1",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1",
-                },
-                {
-                  id: 10,
-                  label: "三级 1-1-2",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          id: 2,
-          label: "一级 2",
-          children: [
-            {
-              id: 5,
-              label: "二级 2-1",
-            },
-            {
-              id: 6,
-              label: "二级 2-2",
-            },
-          ],
-        },
-        {
-          id: 3,
-          label: "一级 3",
-          children: [
-            {
-              id: 7,
-              label: "二级 3-1",
-            },
-            {
-              id: 8,
-              label: "二级 3-2",
-            },
-          ],
-        },
-      ],
+      retNavList: [],
+      retCheckedNav: [],
       defualtProps: {
         children: "children",
-        label: "label",
+        label: "name",
       },
-      preUserChecked:[]
+      preUserChecked: [],
+      nameToIdMap: {},
     };
   },
-  // 获取树结构的中的所有叶子节点
-  defaultChecked() {
-    let tem = [""];
-
-    return tem;
+  computed: {
+    ...mapState(["userInfo", "stdNavbar"]),
+    // 有授权的全部用户菜单
+    navList() {
+      const ret = [];
+      let parentId = 1000;
+      let childId = 10000;
+      this.retNavList.forEach((item, index) => {
+        ret.push({
+          id: parentId,
+          name: item.name,
+          children: [],
+        });
+        this.$set(this.nameToIdMap, item.name, parentId);
+        if (item.children.length !== 0) {
+          item.children.forEach((name) => {
+            ret[index].children.push({
+              id: childId,
+              name,
+              parentId,
+            });
+            this.$set(this.nameToIdMap, name, childId);
+            childId++;
+          });
+        }
+        parentId++;
+      });
+      console.log("navList: ", ret);
+      return ret;
+    },
+    // 上一次用户选中的菜单ID(只要叶子节点即可)
+    checkedNav() {
+      const checkedIds = [];
+      this.retCheckedNav.forEach((item) => {
+        if (item.children.length != 0) {
+          item.children.forEach((citem) => {
+            checkedIds.push(this.nameToIdMap[citem]);
+          });
+        }
+      });
+      return checkedIds;
+    },
   },
   methods: {
-    saveNav() {
-      // 这里注意：还要获取半选中的父节点
-      //   const curUserChecked = this.$refs.tree
-      //     .getHalfCheckedKeys()
-      //     .concat(this.$refs.tree.getCheckedKeys());
-      // 接下来跟上一次用户选择的菜单比较也就是preUserChecked
-      // 比较将增加的添加到addList中，减少的添加到subList中传给后端
-    },
-    openProxy() {
+    ...mapMutations(["setShouldFlushNavbar"]),
+
+    // 打开弹窗处理
+    async openProxy() {
+      // console.log("open");
       // 打开之前先请求该用户最原始所拥有的标签菜单（并存在本地，不必总是请求）
       // 存在本地注意通过用户ID作为键值，防止两个不同的用户在同一台电脑登录
-      
+      const { baseId, role, id: userId } = this.userInfo;
+      const params = {
+        baseId,
+        role,
+        userId,
+      };
+      const { data: res } = await this.$userLabel.post("", params);
+      // console.log("userLabel: ", res);
+      if (res.statusCode !== 20000) {
+        console.error(res.message);
+      } else {
+        console.log("userLabel: ", JSON.parse(res.data));
+        this.retNavList = this.sortRetLabels(JSON.parse(res.data).labels);
+        // console.log("navList: ", this.navList);
+      }
       // 再请求该用户已经选择的标签菜单（进行初始化tree，同时记录一下标签菜单）
-      // 这里设置上一次已经选择的二级菜单，注意defaultChecked包含的只有叶子节点
-      //   this.$refs.tree.setCheckedKeys(this.defaultChecked);
+      // 这里设置上一次已经选择的二级菜单，注意checkedNav包含的只有叶子节点
+      const { data: ret } = await this.$label.post("", params);
+      // console.log('label: ', ret);
+      if (ret.statusCode !== 20000) {
+        console.error(ret.message);
+      } else {
+        console.log("$label.post ", JSON.parse(ret.data));
+        let checkedLabels = JSON.parse(ret.data);
+        this.retCheckedNav = this.sortRetLabels(
+          checkedLabels.customized_labels
+            ? checkedLabels.customized_labels
+            : checkedLabels.labels
+        );
+        // console.log(this.nameToIdMap);
+        this.$refs.tree.setCheckedKeys(this.checkedNav);
+      }
+    },
+
+    // 点击保存自定义的时候
+    async saveNav() {
+      // 这里注意：还要获取半选中的父节点
+      const curUserCheckedIds = this.$refs.tree
+        .getHalfCheckedKeys()
+        .concat(this.$refs.tree.getCheckedKeys());
+      let c_navList = this._.cloneDeep(this.navList);
+      // console.log("c_navList: ", c_navList);
+      const customizedLabels = this.formatCNavList(
+        c_navList,
+        curUserCheckedIds
+      );
+      console.log("customizedLabels: ", customizedLabels);
+
+      let params = {
+        userId: this.userInfo.id,
+        customizedLabels,
+        baseId:this.userInfo.baseId,
+        role:this.userInfo.role
+      };
+      const { data: res } = await this.$userLabel.put("", params);
+      // console.log("res: ", res);
+      if (res.statusCode === 20000) {
+        this.elMessage.success(res.message);
+        this.$store.commit("setShouldFlushNavbar", true);
+        this.$emit("close");
+      } else {
+        this.elMessage.error(res.message);
+        console.error(res.message);
+      }
+      // if(res.statusCode !==)
+    },
+
+    // 判断拖拽放置位置
+    handleDrop(draggingNode, dropNode, type) {
+      console.log("type: ", type);
+      console.log("dropNode: ", dropNode);
+      console.log("draggingNode: ", draggingNode);
+    },
+
+    // 将后端返回的乱序的标签排序，思路：先拷贝一份完全的顺序的菜单，再根据乱序的数组中查看是否有该菜单名，没有则删除即可
+    sortRetLabels(retLabels) {
+      // console.log("retLabels: ", retLabels);
+      const ret = this._.cloneDeep(this.stdNavbar);
+      // 生成一级标签map
+      const mapOneLabel = {};
+
+      retLabels?.forEach((oneLabel) => {
+        mapOneLabel[oneLabel.name] = oneLabel.children;
+      });
+      // 必须倒着遍历然后删除，否则前边删除后index会影响后面的删除
+      for (let index = ret.length - 1; index >= 0; index--) {
+        let item = ret[index];
+        if (mapOneLabel[item.name]) {
+          // 如果返回包含该一级菜单
+          // 生成二级map
+          const mapTwoLabel = {};
+          mapOneLabel[item.name].forEach(
+            (twoLabel) => (mapTwoLabel[twoLabel] = true)
+          );
+          for (let cindex = item.children.length - 1; cindex >= 0; cindex--) {
+            let citem = item.children[cindex];
+            if (!mapTwoLabel[citem]) {
+              // delete ret[index].children[cindex];
+              ret[index].children.splice(cindex, 1);
+            }
+          }
+        } else {
+          // delete ret[index];
+          ret.splice(index, 1);
+        }
+      }
+      console.log("ret: ", ret);
+      return ret;
+    },
+
+    // 将选中的菜单c_navList格式化传给后端
+    formatCNavList(c_navList, curUserCheckedIds) {
+      // 先删除一级菜单(从后往前)
+      for (let i = c_navList.length - 1; i >= 0; i--) {
+        let item = c_navList[i];
+        if (!curUserCheckedIds.includes(item.id)) {
+          // 用户选中的id中没有该一级菜单
+          // delete c_navList[i];
+          c_navList.splice(i, 1);
+        } else {
+          for (let cindex = item.children.length - 1; cindex >= 0; cindex--) {
+            let citem = item.children[cindex];
+            if (!curUserCheckedIds.includes(citem.id)) {
+              // delete c_navList[i].children[cindex];
+              c_navList[i].children.splice(cindex, 1);
+            }
+          }
+        }
+      }
+      let ret = [];
+      c_navList.forEach((item, index) => {
+        ret.push({
+          name: item.name,
+          children: [],
+        });
+        item.children.forEach((citem) => {
+          ret[index].children.push(citem.name);
+        });
+      });
+      return ret;
     },
   },
 };
 </script>
-<style lang="less" scoped>
-</style>

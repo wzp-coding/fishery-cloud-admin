@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 添加区域开始 -->
-    <el-button type="primary" @click="addDialogVisible = true">{{
+    <el-button type="primary" @click="addDialogVisible = true" v-auth="'traceability_refrigeratory_add'">{{
       formTitle
     }}</el-button>
     <!-- 添加区域结束 -->

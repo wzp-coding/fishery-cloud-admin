@@ -44,7 +44,7 @@
   </el-aside>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 export default {
   data() {
     return {
@@ -189,20 +189,38 @@ export default {
     };
   },
   computed: {
-    ...mapState(["userInfo"]),
+    ...mapState(["userInfo", "shouldFlushNavbar"]),
+  },
+  watch: {
+    shouldFlushNavbar(val) {
+      if (val) {
+        this.getLabel();
+        this.$store.commit("setShouldFlushNavbar", false);
+      }
+    },
   },
   methods: {
+    ...mapMutations(["setShouldFlushNavbar"]),
+
     // 获取动态菜单
     async getLabel() {
-      const params = { baseId: this.userInfo.baseId, role: this.userInfo.role };
+      const params = {
+        baseId: this.userInfo.baseId,
+        role: this.userInfo.role,
+        userId: this.userInfo.id,
+      };
+      // console.log('params: ', params);
       const { data: res } = await this.$label.post("", params);
       console.log("this.$label: ", res);
       if (res.statusCode === 20000) {
-        const labels = JSON.parse(res.data).labels;
+        let data = JSON.parse(res.data);
+        const labels = data.customized_labels
+          ? data.customized_labels
+          : data.labels;
         this.newSortMenus = this.formatLabel(labels);
-        console.log("this.newSortMenus: ", this.newSortMenus);
+        // console.log("this.newSortMenus: ", this.newSortMenus);
       } else {
-        this.elMessage.error(res.message);
+        console.error(res.message);
       }
     },
 

@@ -1,7 +1,7 @@
  <template>
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item>养殖管理</el-breadcrumb-item>
+      <el-breadcrumb-item>渔业管理</el-breadcrumb-item>
       <el-breadcrumb-item>池塘管理</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
@@ -13,6 +13,7 @@
           </el-col>
           <el-col style="width: 100px; float: right">
             <el-button type="primary" @click="addPondInfo.dialogVisible = true"
+            v-auth="'traceability_pond_add'"
               >添加池塘</el-button
             >
           </el-col>

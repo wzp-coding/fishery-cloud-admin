@@ -21,12 +21,14 @@
                 effect="dark"
                 content="导出基地订单信息"
                 placement="top-start"
+                v-auth="'traceability_fishery'"
                 ><el-button type="success">导出</el-button></el-tooltip
               >
             </downloadExcel>
           </el-col>
           <el-col style="float: right; width: 100px; margin-right: 10px">
             <el-button type="primary" @click="dialogVisible = true"
+            v-auth="'traceability_fishery'"
               >种苗进货</el-button
             >
           </el-col>
@@ -129,6 +131,7 @@
               icon="el-icon-edit"
               size="mini"
               @click="editEvent(scope.row.id)"
+              v-auth="'traceability_fishery'"
             ></el-button>
             <el-tooltip
               effect="dark"
@@ -141,6 +144,7 @@
                 icon="el-icon-mobile"
                 size="mini"
                 @click="storageById(scope.row.id)"
+                v-auth="'traceability_fishery'"
               ></el-button>
             </el-tooltip>
             <!-- 删除按钮 -->
@@ -149,6 +153,7 @@
               icon="el-icon-delete"
               size="mini"
               @click="removePurchaseInfo(scope.row.id)"
+              v-auth="'traceability_fishery'"
             ></el-button>
           </template>
         </el-table-column>
@@ -292,7 +297,7 @@ export default {
       paginationInfo: {
         total: 0,
         page: 1,
-        size: 3,
+        size: 6,
       },
       editPurchaseInfo: {
         creatorName: "",

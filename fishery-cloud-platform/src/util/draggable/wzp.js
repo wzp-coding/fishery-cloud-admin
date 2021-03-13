@@ -23,7 +23,7 @@ const DigitalBase = {
         render(h) {
             return (
                 <el-col span={11}>
-                    <Map map-name="base" center-point={{ lat: this.baseInfo.positionLatitude || 1, lng: this.baseInfo.positionLongitude || 1, content: this.$store.state.baseInfo.name }}></Map>
+                    <Map map-name="base" center-point={{ lat: this.baseInfo.positionLatitude || 1, lng: this.baseInfo.positionLongitude || 1, content: this.baseInfo.name }}></Map>
                 </el-col>
             );
         },

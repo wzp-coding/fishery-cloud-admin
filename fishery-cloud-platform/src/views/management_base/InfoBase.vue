@@ -137,6 +137,28 @@
               clearable
             ></el-input>
           </el-form-item>
+          <el-form-item
+            slot="after"
+            label="扩展基地类型"
+            label-width="130px"
+            prop="types"
+            v-if="showAddType"
+          >
+            <el-select
+              v-model="addTypeList"
+              multiple
+              placeholder="请选择"
+              style="width: 100%"
+            >
+              <el-option
+                v-for="item in selectableTypeList"
+                :key="item._id"
+                :label="item.name"
+                :value="item._id"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
         </InfoBaseLayout>
         <InfoBaseLayout>
           <el-row slot="pre">
@@ -147,6 +169,7 @@
                   action="http://119.23.218.131:9103/base/file/upload"
                   ref="upload"
                   name="multipartFile"
+                  :on-preview="handlePictureCardPreview"
                   class="avatar-uploader"
                   :on-success="handleAvatarSuccess"
                   multiple
@@ -161,7 +184,52 @@
                   <i class="el-icon-plus"></i>
                 </el-upload>
               </div> -->
-              <el-button type="primary" @click="isOpenUpload = true"
+              <el-button
+                type="primary"
+                @click="isOpenUpload = true"
+                style="margin-left: 8px"
+                >上传图片（限制3张）</el-button
+              >
+              <UploadFile
+                :is-open="isOpenUpload"
+                :close-modal="() => (this.isOpenUpload = false)"
+                :max="3"
+                :min="3"
+                :type="'image'"
+                :init-files="baseInfo.picture"
+                :upload-success="handleUploadPic"
+              ></UploadFile>
+            </el-col>
+          </el-row>
+        </InfoBaseLayout>
+        <InfoBaseLayout>
+          <el-row slot="pre">
+            <el-col :offset="3" :span="4">基地图片</el-col>
+            <el-col :span="17">
+              <!-- <div class="upload">
+                <el-upload
+                  action="http://119.23.218.131:9103/base/file/upload"
+                  ref="upload"
+                  name="multipartFile"
+                  :on-preview="handlePictureCardPreview"
+                  class="avatar-uploader"
+                  :on-success="handleAvatarSuccess"
+                  multiple
+                  :on-remove="handleRemove"
+                  :show-file-list="false"
+                >
+                  <img
+                    v-if="baseInfo.picture"
+                    :src="baseInfo.picture"
+                    class="avatar"
+                  />
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+              </div> -->
+              <el-button
+                type="primary"
+                @click="isOpenUpload = true"
+                style="margin-left: 8px"
                 >上传图片（限制3张）</el-button
               >
               <UploadFile
@@ -196,12 +264,22 @@
         </el-row>
         <el-row>
           <el-col :offset="22" :span="2">
-            <el-button type="primary" @click="saveBaseInfo">保存</el-button>
+            <el-button
+              type="primary"
+              @click="saveBaseInfo"
+              v-auth="'enterprise_enterprise_update'"
+              >保存</el-button
+            >
           </el-col>
         </el-row>
       </el-form>
     </el-card>
-    <el-dialog title="基地定位" :visible.sync="dialogVisible" width="33%" :close-on-click-modal="false">
+    <el-dialog
+      title="基地定位"
+      :visible.sync="dialogVisible"
+      width="33%"
+      :close-on-click-modal="false"
+    >
       <el-form :model="baseInfo">
         <el-form-item
           label="基地地址"
@@ -237,7 +315,10 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
+        <el-button
+          type="primary"
+          @click="dialogVisible = false"
+          v-auth="'enterprise_enterprise_update'"
           >确 定</el-button
         >
       </span>
@@ -308,13 +389,47 @@ export default {
         lng: "",
       },
       dialogVisible: false,
+
+      showAddType: true,
+      addTypeList: [],
+      selectableTypeList: [],
     };
   },
   created() {
     this.getBaseInfo();
+    this.getBaseType();
   },
   methods: {
-    ...mapMutations(["setBaseInfo"]),
+    ...mapMutations(["setBaseInfo","setShouldFlushNavbar"]),
+    async getBaseType() {
+      const { data: res } = await this.$baseType.get();
+      console.log("baseType: ", res);
+      if (res.statusCode === 20000) {
+        let allTypes = res.data.map((item) => JSON.parse(item));
+        // console.log("allTypes: ", allTypes);
+        let initTypeList = await this.getInitType();
+        this.selectableTypeList = allTypes.filter(
+          (item) => !initTypeList.includes(item._id)
+        );
+        if (this.selectableTypeList.length === 0) {
+          this.showAddType = false;
+        }
+      } else {
+        console.error(res.message);
+      }
+    },
+    async getInitType() {
+      const { data: res } = await this.$label.get(
+        "/type/" + this.$store.state.baseInfo.id
+      );
+      console.log("getInitType: ", res);
+      if (res.statusCode === 20000) {
+        return res.data;
+      } else {
+        console.error(res.message);
+      }
+    },
+
     async getBaseInfo() {
       const { data: res } = await this.$base.get(
         `${this.$store.state.baseInfo.id}`
@@ -335,11 +450,32 @@ export default {
         this.baseInfo.introduction = res.data.introduction;
       }
     },
+    async extendBaseType() {
+      const parmas = {
+        baseId: this.$store.state.baseInfo.id,
+        types: this.addTypeList,
+      };
+      console.log("parmas: ", parmas);
+      const { data: res } = await this.$label.put("/extension", parmas);
+      if (res.statusCode === 20000) {
+        return true;
+      } else {
+        console.error(res.message);
+      }
+    },
     async saveBaseInfo() {
       const { data: res } = await this.$base.put("update", this.baseInfo);
       if (res.statusCode === 20000) {
-        this.elMessage.success("修改基地信息成功");
-        this.$stroe.commit("setBaseInfo", this.baseInfo);
+        let flag = await this.extendBaseType();
+        if (flag) {
+          this.$store.commit('setShouldFlushNavbar',true)
+          this.elMessage.success(res.message);
+        } else {
+          this.elMessage.error("扩展类型失败");
+        }
+        this.$store.commit("setBaseInfo", this.baseInfo);
+      } else {
+        console.error(res.message);
       }
       this.getBaseInfo();
     },
@@ -374,9 +510,15 @@ export default {
     // 设置坐标
     setcoordinates(location) {
       this.location = location;
-      this.baseInfo.positionLongitude = this.location.lat;
-      this.baseInfo.positionLatitude = this.location.lng;
+      this.baseInfo.positionLongitude = this.location.lng;
+      this.baseInfo.positionLatitude = this.location.lat;
       console.log("location-->", this.location);
+    },
+    //放大基地图片
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.imgdialogVisible = true;
+      console.log("11");
     },
   },
 };
