@@ -23,7 +23,7 @@ export default {
         if (!permissionList) {
             // 第一次时获取数据
             permissionList = vm.$store.state.permissionList;
-            // console.log('permissionList: ', JSON.parse(JSON.stringify(permissionList)));
+            console.log('permissionList: ', JSON.parse(JSON.stringify(permissionList)));
         }
         if (vm._.isEmpty(oneLevel) && vm._.isEmpty(twoLevel) && vm._.isEmpty(threeLevel)) {
             // 遍历一二三级权限
