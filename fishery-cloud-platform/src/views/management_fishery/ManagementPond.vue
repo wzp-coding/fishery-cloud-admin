@@ -11,30 +11,88 @@
             <i class="el-icon-receiving"></i>
             <span>池塘管理</span>
           </el-col>
-          <el-col style="width: 100px; float: right">
-            <el-button type="primary" @click="addPondInfo.dialogVisible = true"
-              >添加池塘</el-button
-            >
-          </el-col>
-        </div>
-        <div class="bigBox" slot="bigBox">
-          <!-- 池塘子组件 -->
-          <pond
-            :toPond="item"
-            v-for="item in pondList"
-            :key="item.pondId"
-            @fatherMethod="getPondList"
-          ></pond>
         </div>
       </TheCardHead>
-      <ThePagination
-        :toPagination="paginationInfo"
-        @fatherMethod="paginationChangeEvent"
-      ></ThePagination>
+      <el-tabs type="border-card">
+        <el-tab-pane label="池塘信息">
+          <el-row>
+            <el-col style="width: 100px; float: right">
+              <el-button
+                type="primary"
+                @click="addPondInfo.dialogVisible = true"
+                >添加池塘</el-button
+              >
+            </el-col>
+          </el-row>
+          <div class="bigBox">
+            <!-- 池塘子组件 -->
+            <pond
+              :toPond="item"
+              v-for="item in pondList"
+              :key="item.pondId"
+              @fatherMethod="getPondList"
+            ></pond>
+          </div>
+          <ThePagination
+            :toPagination="paginationInfo"
+            @fatherMethod="paginationChangeEvent"
+          ></ThePagination>
+        </el-tab-pane>
+        <el-tab-pane label="捕捞信息">
+          <el-table border stripe :data="catchInfo">
+            <el-table-column label="批次名称" prop="germchitBatchName">
+            </el-table-column>
+            <el-table-column label="捕捞人" prop="operatorName">
+            </el-table-column>
+            <el-table-column label="捕捞数量" prop="catchAmount">
+            </el-table-column>
+            <el-table-column label="捕捞质量" prop="totalWeight">
+            </el-table-column>
+            <el-table-column label="剩余质量" prop="surplusWeight">
+            </el-table-column>
+            <el-table-column label="剩余数量" prop="surplusAmount">
+            </el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button
+                  type="primary"
+                  icon="el-icon-edit"
+                  size="small"
+                  @click="
+                    creteOrderEvent(scope.row.id, scope.row.germchitBatchName, scope.row.surplusWeight, scope.row.surplusAmount)
+                  "
+                  >创建订单</el-button
+                >
+                <el-button
+                  type="danger"
+                  icon="el-icon-delete"
+                  size="small"
+                  @click="removeCatchInfo(scope.row.id)"
+                ></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <ThePagination
+            :toPagination="paginationCatchInfo"
+            @fatherMethod="paginationCatchChangeEvent"
+          ></ThePagination>
+        </el-tab-pane>
+      </el-tabs>
     </el-card>
     <!-- 添加池塘 -->
     <addPond :toDialogInfo="addPondInfo" @fatherMethods="getPondList"></addPond>
-
+    <!-- 创建订单 -->
+    <Create-order
+      :createdialogVisible="createdialogVisible"
+      :orderid="orderid"
+      :ordertitle="ordertitle"
+      :look="look"
+      :orderName="orderName"
+      :catchMax="catchMax"
+      :surplusAmount="surplusAmount"
+      @createnotifyParent="changecreatedialogVisible"
+    >
+    </Create-order>
   </div>
 </template>
 
@@ -43,18 +101,31 @@ import TheCardHead from "../../components/ccy/TheCardHead";
 import TheDialogAll from "../../components/ccy/TheDialogAll";
 import ThePagination from "../../components/ccy/ThePagination";
 import pond from "../../components/ccy/ManagementPond/pond";
-import addPond from "../../components/ccy/ManagementPond/addPond"
-
+import addPond from "../../components/ccy/ManagementPond/addPond";
+import CreateOrder from "../../components/cgx/ManagementOrder/CreateOrder/createOrder";
 export default {
-  components: { TheCardHead, pond, ThePagination, TheDialogAll,addPond },
+  components: {
+    TheCardHead,
+    pond,
+    ThePagination,
+    TheDialogAll,
+    addPond,
+    CreateOrder,
+  },
   data() {
     return {
       //全部池塘信息
       pondList: [],
-      paginationInfo:{
-        size:6,
-        page:1,
-        total:0
+      catchInfo: [], //捕捞信息
+      paginationInfo: {
+        size: 6,
+        page: 1,
+        total: 0,
+      },
+      paginationCatchInfo: {
+        size: 6,
+        page: 1,
+        total: 0,
       },
       baseId: this.$store.state.userInfo.baseId, //基地ID
       // 添加池塘的表单数据
@@ -68,7 +139,6 @@ export default {
         type: "", //池塘类型
       },
       addPondInfo: {
-        
         dialogVisible: false,
         total: 0,
         size: 3,
@@ -122,6 +192,14 @@ export default {
         shrimpKindId: "",
         shrimpMethod: "",
       },
+      //创建订单
+      createdialogVisible: false,
+      orderid: "",
+      look: true,
+      orderName: "",
+      ordertitle: "创建订单",
+      catchMax:null,    //最大出售质量
+      surplusAmount:null, //最大出售数量
       //建议卡输入
       adviseInput: {
         title: "池塘信息输入",
@@ -143,12 +221,18 @@ export default {
   },
   created() {
     this.getPondList(); //获取池塘信息
+    this.getCatchInfo(); //获取捕捞信息
   },
   methods: {
-    paginationChangeEvent(size, page){
-      this.paginationInfo.size = size
-      this.paginationInfo.page = page
-      this.getPondList()
+    paginationChangeEvent(size, page) {
+      this.paginationInfo.size = size;
+      this.paginationInfo.page = page;
+      this.getPondList();
+    },
+    paginationCatchChangeEvent(size, page) {
+      this.paginationCatchInfo.size = size;
+      this.paginationCatchInfo.page = page;
+      this.getCatchInfo(); //获取捕捞信息
     },
     async getPondList() {
       console.log("获取池塘信息");
@@ -160,7 +244,7 @@ export default {
         console.log(res);
         this.pondList = res.data.records;
         this.addPondInfo.total = res.data.total;
-        this.paginationInfo.total = res.data.total
+        this.paginationInfo.total = res.data.total;
       } else {
         console.log("查询池塘信息失败");
       }
@@ -196,13 +280,16 @@ export default {
     //触发子组件的表单验证表单验证
     verification() {
       this.$refs.addeFormRef.dialogVerification();
-      // if (this.$refs.addeFormRef.dialogVerification()) {
-      //   console.log("验证通过");
-      //   return true
-      // } else {
-      //   console.log("验证不通过");
-      //   return false;
-      // }
+    },
+    async getCatchInfo() {
+      const { data: res } = await this.$catchController.get(
+        `${this.$store.state.baseInfo.id}/${this.paginationCatchInfo.size}/${this.paginationCatchInfo.page}`
+      );
+      console.log(res);
+      if (res.statusCode === 20000) {
+        this.paginationCatchInfo.total = res.data.total;
+        this.catchInfo = res.data.records;
+      }
     },
     parentMehod() {
       this.createPond();
@@ -211,7 +298,42 @@ export default {
     catchDialogClosed() {
       this.$refs.catchFormRef.resetFields();
     },
-
+    //删除捕捞记录
+    async removeCatchInfo(id) {
+      const confirmResult = await this.elConfirm(
+        `此操作将永久删除该捕捞纪录, 是否继续?`,
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => {
+        return err;
+      });
+      if (confirmResult !== "confirm") {
+        return this.elMessage.info("已取消删除");
+      }
+      const { data: res } = await this.$catchController.delete(`${id}`);
+      if (res.statusCode === 20000) {
+        this.elMessage.success("删除记录成功");
+        this.getCatchInfo();
+      }
+    },
+    changecreatedialogVisible() {
+      this.createdialogVisible = false;
+    },
+    //创建订单
+    creteOrderEvent(id, name, surplusWeight, surplusAmount) {
+      console.log(id);
+      this.orderid = id;
+      this.orderName = name;
+      this.surplusAmount = surplusAmount
+      this.catchMax = surplusWeight
+      this.createdialogVisible = true;
+      console.log('最大出售质量',surplusWeight);
+      console.log('最大出售数量',surplusAmount);
+    },
   },
 };
 </script>

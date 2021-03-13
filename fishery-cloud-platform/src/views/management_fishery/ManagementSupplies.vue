@@ -39,15 +39,6 @@
             >
           </el-col>
           <el-col>
-            <!-- <el-select v-model="selectType1" @change="typeChange1">
-              <el-option
-                v-for="item in type"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select> -->
           </el-col>
         </el-row>
         <el-table :data="baseSupplyList" border stripe>

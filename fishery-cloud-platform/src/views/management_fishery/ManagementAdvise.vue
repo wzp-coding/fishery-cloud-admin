@@ -17,14 +17,14 @@
             >
           </el-col>
           <el-col style="width: 75px; float: right">
-            <downloadExcel :data="adviseList" name="养殖建议信息导出.xls">
+            <!-- <downloadExcel :data="adviseList" name="养殖建议信息导出.xls"> -->
               <el-tooltip
                 effect="dark"
                 content="导出养殖建议信息"
                 placement="top-start"
-                ><el-button type="success">导出</el-button></el-tooltip
+                ><el-button type="success" @click="downloadExcel">导出</el-button></el-tooltip
               >
-            </downloadExcel>
+            <!-- </downloadExcel> -->
           </el-col>
         </div>
       </TheCardHead>
@@ -122,6 +122,10 @@ export default {
       this.elMessage.success("删除成功");
       this.getAdviseInfo();
     },
+    async downloadExcel(){
+      const {data:res} = await this.$advise.get('excel')
+      console.log(res);
+    }
   },
 };
 </script>

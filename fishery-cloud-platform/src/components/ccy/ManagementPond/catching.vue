@@ -20,7 +20,7 @@
       <el-form-item label="捕捞量(尾)" prop="catchAmount">
         <el-input-number
           v-model="catchInfo.catchAmount"
-          :min="0" 
+          :min="0"
           controls-position="right"
         >
         </el-input-number>
@@ -28,7 +28,7 @@
       <el-form-item label="捕捞质量(kg)" prop="totalWeight">
         <el-input-number
           v-model="catchInfo.totalWeight"
-          :min="0" 
+          :min="0"
           controls-position="right"
         >
         </el-input-number>
@@ -58,7 +58,7 @@ export default {
         pondId: this.toDialogInfo.pondId,
         totalWeight: "",
       },
-      max:"",
+      max: "",
       rules: {
         operatorName: [
           { required: true, message: "请输入操作员", trigger: "blur" },
@@ -66,13 +66,7 @@ export default {
       },
     };
   },
-  created() {
-    this.test()
-  },
   methods: {
-test(){
-  console.log(this.catchInfo.pondId);
-},
     async getPondInfo() {
       console.log(this.toDialogInfo.max);
       const { data: res } = await this.$pondController.get(
@@ -80,7 +74,7 @@ test(){
       );
       console.log(res);
       if (res.statusCode === 20000) {
-        if (this.catchInfo.totalWeight<=res.data.surplusWeight) {
+        if (this.catchInfo.totalWeight <= res.data.surplusWeight) {
           let pondInfo = res.data;
           console.log(pondInfo);
           this.catchInfo.germchitId = pondInfo.germchitId;

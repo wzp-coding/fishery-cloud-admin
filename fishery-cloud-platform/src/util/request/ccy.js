@@ -9,5 +9,7 @@ export default {
     leader:'http://119.23.218.131:9106/leader' ,             //领导仓接口
     advise:"http://119.23.218.131:9103/base/germchit/type",      //养殖建议
     fileUpload:"http://119.23.218.131:9103/base/file/upload",    //文件上传
-    baseType:"http://119.23.218.131:9104/customization/label/type/all "  //基地类型 
+    baseType:"http://119.23.218.131:9104/customization/label/type/all ",  //基地类型 
+    catchController:"http://119.23.218.131:9103/base/catch",         //捕捞模块
+    productOrder:"http://119.23.218.131:9103/base/product/order"      //水产品订单
 }
