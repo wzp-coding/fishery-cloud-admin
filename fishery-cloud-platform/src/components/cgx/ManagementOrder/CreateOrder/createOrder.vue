@@ -2,11 +2,19 @@
   <div>
     <el-dialog
       :title="ordertitle"
-      :visible.sync="createdialogVisible"
+      :visible.sync="dialogVisible"
       width="45%"
       @close="close"
     >
-      <el-form ref="form" :model="orderobject" label-width="95px">
+      <el-form
+        ref="form"
+        :model="orderobject"
+        label-width="95px"
+        :rules="rules"
+      >
+        <el-form-item label="产品名">
+          <el-input disabled v-model="orderName"></el-input>
+        </el-form-item>
         <el-form-item label="客户类型">
           <el-select
             v-model="orderobject.targetType"
@@ -18,7 +26,7 @@
             <el-option label="冷库" :value="4"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="发货方类型">
+        <!-- <el-form-item label="发货方类型">
           <el-select
             v-model="orderobject.sourceType"
             placeholder="请选择发货方类型"
@@ -27,8 +35,8 @@
             <el-option label="加工厂" :value="2"></el-option>
             <el-option label="冷库" :value="3"></el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="收货方">
+        </el-form-item> -->
+        <el-form-item label="客户">
           <el-input
             clearable
             v-model="orderobject.targetName"
@@ -68,20 +76,19 @@
         >
           <el-input v-model="orderobject.targetName"></el-input>
         </el-form-item>
-
         <el-form-item label="联系电话 ">
           <el-input
             v-model="orderobject.phoneNumber"
             placeholder="请输入收货方电话"
           ></el-input>
         </el-form-item>
-        <el-form-item label="基地编号 ">
+        <!-- <el-form-item label="基地编号 ">
           <el-input
             v-model="orderobject.baseId"
             placeholder="请输入"
             disabled
           ></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="出售质量(kg)">
           <el-input
             v-model="orderobject.weight"
@@ -89,7 +96,7 @@
             :max="catchMax"
           ></el-input>
         </el-form-item>
-        <el-form-item label="数量">
+        <el-form-item label="出售数量">
           <el-input
             v-model="orderobject.amount"
             placeholder="请输入出售数量"
@@ -100,17 +107,12 @@
           <el-input
             v-model="orderobject.money"
             placeholder="请输入出售金额"
+            :disabled="orderobject.baseId === orderobject.targetId"
           ></el-input>
         </el-form-item>
-        <el-form-item label="产品名">
-          <el-input disabled v-model="orderName"></el-input>
-        </el-form-item>
-        <el-form-item label="产品编号">
-          <el-input
-            v-model="orderid"
-            disabled
-          ></el-input>
-        </el-form-item>
+        <!-- <el-form-item label="产品编号">
+          <el-input v-model="orderid" disabled></el-input>
+        </el-form-item> -->
         <el-form-item label="收货地址">
           <el-select
             v-model="orderobject.receiveAddress"
@@ -136,14 +138,15 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="close">取 消</el-button>
-        <el-button type="primary" @click="submitorder">确定</el-button>
+        <el-button type="primary" @click="handleSubmit">确定</el-button>
       </span>
     </el-dialog>
     <Customerfrom
       :CustomerVisible="CustomerVisible"
-      @CustomerClose="CustomerClose"
       @setCustomer="setCustomer"
       @setRefInfo="setRefInfo"
+      @CustomerClose="CustomerClose"
+      @setProcess="setProcess"
       :tableType="orderobject.targetType"
     >
     </Customerfrom>
@@ -160,6 +163,7 @@ export default {
   props: {
     createdialogVisible: {
       type: Boolean,
+      default: false,
     },
     ordertitle: {
       type: String,
@@ -173,12 +177,12 @@ export default {
     orderName: {
       type: String,
     },
-    catchMax:{
-      type:Number
+    catchMax: {
+      type: Number,
     },
-    surplusAmount:{
-      type:Number
-    }
+    surplusAmount: {
+      type: Number,
+    },
   },
   data() {
     return {
@@ -191,7 +195,7 @@ export default {
       },
       // --------列表数据-------
       orderobject: {
-        sourceType: null,
+        sourceType: 1,
         // 接受坐标
         addressLatitude: "",
         addressLongitude: "",
@@ -216,14 +220,22 @@ export default {
       CustomerVisible: false,
       // 冷库面板
       ProductVisible: false,
+      dialogVisible: this.createdialogVisible,
+      rules: {},
     };
+  },
+  watch: {
+    createdialogVisible: {
+      handler(newVal, oldVal) {
+        this.dialogVisible = newVal;
+      },
+    },
   },
   methods: {
     // 关闭时设置为空
     setcloseorderobject() {
-      this.orderobject.sourceType = null;
+      this.orderobject.sourceType = 1;
       this.orderobject.targetName = "";
-      // this.orderobject.baseId = this.$store.state.userInfo.baseId;
       this.orderobject.phoneNumber = "";
       this.orderobject.targetId = "";
       this.orderobject.targetType = null;
@@ -231,32 +243,12 @@ export default {
       this.orderobject.addressLatitude = "";
       this.orderobject.amount = "";
       this.orderobject.money = "";
+      this.orderobject.weight = null;
       this.orderobject.productId = "1364935085419737090";
       this.orderobject.productName = "";
       this.orderobject.addressLongitude = "";
+      this.close();
     },
-    // 设置子组件传来的顾客信息
-    setCustomer(row) {
-      console.log(row);
-      this.orderobject.targetName = row.customerName;
-      // this.orderobject.baseId = row.baseId;
-      this.orderobject.phoneNumber = row.phoneNumber;
-      this.orderobject.targetId = row.id;
-      // this.orderobject.type = row.customerType;
-      this.orderobject.receiveAddress = row.receiveAddress;
-      this.orderobject.addressLatitude = row.addressLatitude;
-      this.orderobject.addressLongitude = row.addressLongitude;
-      let a = {
-        lat: "",
-        lng: "",
-      };
-      a.lat = row.addressLatitude;
-      a.lng = row.addressLongitude;
-      this.location = a;
-      console.log("location->>", this.location);
-      this.CustomerClose();
-    },
-
     // 设置坐标
     setcoordinates(location) {
       this.location = location;
@@ -267,7 +259,7 @@ export default {
     // 关闭表单
     close() {
       this.$emit("createnotifyParent");
-      // this.setcloseorderobject();
+      this.dialogVisible = false;
     },
     // 设置地图返回的定点位置
     setAddress(address) {
@@ -276,33 +268,32 @@ export default {
     },
     // 设置地图返回的位置数组
     setpoi(poi) {
-      console.log("pio-->", poi);
       this.addressArray = poi;
       this.orderobject.addressLatitude = poi[0].location.lat;
       this.orderobject.addressLongitude = poi[0].location.lng;
     },
-    // 关闭顾客表单
+    // 关闭收货方信息
     CustomerClose() {
       this.CustomerVisible = false;
+      // this.
     },
-    //修改表单
-    async Modifyorder() {
-      const { data: res } = await this.$managementOrder.get(`${this.orderid}`);
-      console.log("获取到的修改信息-->", res);
-      this.orderobject = res.data;
+    // 设置子组件传来的顾客信息
+    setCustomer(row) {
+      console.log(row);
+      this.orderobject.targetName = row.customerName;
+      this.orderobject.phoneNumber = row.phoneNumber;
+      this.orderobject.targetId = row.id;
+      this.orderobject.receiveAddress = row.receiveAddress;
+      this.orderobject.addressLatitude = row.addressLatitude;
+      this.orderobject.addressLongitude = row.addressLongitude;
       let a = {
         lat: "",
         lng: "",
       };
-      a.lat = res.data.addressLatitude;
-      a.lng = res.data.addressLongitude;
+      a.lat = row.addressLatitude;
+      a.lng = row.addressLongitude;
       this.location = a;
-    },
-    //判断为创建表单还是修改
-    judge() {
-      if (this.ordertitle == "修改订单") {
-        this.Modifyorder();
-      }
+      this.CustomerClose();
     },
     //设置冷库信息
     setRefInfo(row) {
@@ -312,18 +303,33 @@ export default {
       this.orderobject.addressLongitude = row.refrigeratoryPositionLongitude;
       this.orderobject.targetId = row.baseId;
       this.orderobject.targetName = row.refrigeratoryName;
-      // this.CustomerClose();
       console.log(this.orderobject);
-      this.CustomerVisible = false;
-      // this.orderobject.targetType = 4
+    },
+    async setProcess(row) {
+      console.log(row);
+      this.orderobject.targetId = row.baseId;
+      this.orderobject.receiveAddress = row.factoryAddress;
+      this.orderobject.targetName = row.factoryName;
+      const { data: res } = await this.$getOneProcess.get(`${row.id}`);
+      if (res.statusCode === 20000) {
+        this.orderobject.addressLatitude =
+          res.data.processingFactoryPositionLongitude;
+        this.orderobject.addressLongitude =
+          res.data.processingFactoryPositionLatitude;
+      }
+      console.log(this.orderobject);
     },
     // 提交创建表单
     async handleSubmit() {
+      if ((this.orderobject.baseId = this.orderobject.targetId)) {
+        this.orderobject.money = 0;
+      } else {
+        this.orderobject.money = parseInt(this.orderobject.money);
+      }
       this.orderobject.productId = this.orderid;
       this.orderobject.productName = this.orderName;
-      this.orderobject.amount = parseInt(this.orderobject.amount)
-      this.orderobject.money = parseInt(this.orderobject.money)
-      this.orderobject.weight = parseInt(this.orderobject.weight)
+      this.orderobject.amount = parseInt(this.orderobject.amount);
+      this.orderobject.weight = parseInt(this.orderobject.weight);
       console.log("即将创建的订单--> ", this.orderobject);
       const { data: res } = await this.$managementOrder.post(
         "",
@@ -332,49 +338,12 @@ export default {
       console.log("res: ", res);
       if (res.statusCode === 20000) {
         this.elMessage.success(res.message);
+        this.$emit("refresh");
+        this.setcloseorderobject();
       } else {
         this.elMessage.error(res.message);
       }
-      this.close();
-      this.setcloseorderobject();
     },
-    //提交修改订单
-    async SubmitModify() {
-      console.log("即将修改的订单--> ", this.orderobject);
-      if (this.orderobject.logisticsId) {
-        this.elMessage.error("该订单已经发货，无法完成该操作！");
-        this.close();
-      }
-      const { data: res } = await this.$managementOrder.put(
-        "",
-        this.orderobject
-      );
-      console.log("handleSubmit: ", res);
-      if (res.statusCode === 20000) {
-        this.elMessage.success(res.message);
-      } else {
-        this.elMessage.error(res.message);
-      }
-      this.close();
-      this.setcloseorderobject();
-    },
-    //提交订单（修改或创建）
-    submitorder() {
-      if (this.ordertitle == "修改订单") {
-        this.SubmitModify();
-      }
-      if (this.ordertitle == "创建订单") {
-        this.handleSubmit();
-      }
-    },
-  },
-  watch: {
-    look: function () {
-      this.judge();
-    },
-  },
-  created() {
-    this.orderobject.baseId = this.$store.state.userInfo.baseId;
   },
 };
 </script>

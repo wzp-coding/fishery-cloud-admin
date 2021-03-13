@@ -16,14 +16,33 @@
               >添加养殖建议</el-button
             >
           </el-col>
+          <el-col style="width: 85px; float: right">
+            <el-tooltip
+              effect="dark"
+              content="保存养殖建议信息"
+              placement="top-start"
+              ><el-upload
+                action="http://119.23.218.131:9103/base/germchit/type/excel
+"
+                :show-file-list="false"
+                :before-upload="beforeUpload"
+                :file-list="fileList"
+                ><el-button type="primary"
+                  >上传<i
+                    class="el-icon-upload el-icon--right"
+                  ></i></el-button></el-upload
+            ></el-tooltip>
+          </el-col>
           <el-col style="width: 75px; float: right">
             <!-- <downloadExcel :data="adviseList" name="养殖建议信息导出.xls"> -->
-              <el-tooltip
-                effect="dark"
-                content="导出养殖建议信息"
-                placement="top-start"
-                ><el-button type="success" @click="downloadExcel">导出</el-button></el-tooltip
-              >
+            <el-tooltip
+              effect="dark"
+              content="导出养殖建议信息"
+              placement="top-start"
+              ><el-button type="success" @click="downloadExcel"
+                >导出</el-button
+              ></el-tooltip
+            >
             <!-- </downloadExcel> -->
           </el-col>
         </div>
@@ -86,6 +105,11 @@ export default {
       toAddInfo: {
         dialogVisible: false,
       },
+      excelData: [],
+      upAction: "http://119.23.218.131:9103/base/germchit/type/excel",
+      file: "",
+      fileList: [],
+      formData: "",
     };
   },
   created() {
@@ -122,10 +146,36 @@ export default {
       this.elMessage.success("删除成功");
       this.getAdviseInfo();
     },
-    async downloadExcel(){
-      const {data:res} = await this.$advise.get('excel')
+    async downloadExcel() {
+      //导出excel
+      window.location.href =
+        "http://119.23.218.131:9103/base/germchit/type/excel";
+    },
+    async saveAdvise() {
+      let fileFormData = new FormData();
+      fileFormData.append("file", this.excelData); //filename是键，file是值，就是要传的文件，test.zip是要传的文件名
+      let requestConfig = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+      const { data: res } = await this.$advise.post("excel", fileFormData);
       console.log(res);
-    }
+      if (res.statusCode === 20000) {
+        this.elMessage.success("保存养殖建议到数据库成功");
+      }
+    },
+    beforeUpload(file) {
+      console.log(file);
+      const extension = file.name.split(".")[1] === "xls";
+      const extension2 = file.name.split(".")[1] === "xlsx";
+      if (!extension && !extension2) {
+        this.elMessage.warning("上传模板只能是 xls、xlsx格式!");
+        return;
+      }
+      this.excelData = file;
+      this.saveAdvise();
+    },
   },
 };
 </script>

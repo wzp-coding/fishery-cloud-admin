@@ -491,6 +491,7 @@ export default {
     // 点击图片获取验证码
     async getCaptcha() {
       const { data: res } = await this.$captcha.post("/getCaptcha");
+      console.log(res);
       this.url = res.data.img;
     },
 

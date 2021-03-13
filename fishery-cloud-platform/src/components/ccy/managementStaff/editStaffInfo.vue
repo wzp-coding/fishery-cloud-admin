@@ -6,9 +6,6 @@
     @close="closeEvent"
   >
     <el-form :model="editForm" label-width="100px" :rules="rules" ref="fromRef">
-      <!-- <el-form-item label="姓名" prop="username">
-        <el-input v-model="editForm.username" ></el-input>
-      </el-form-item> -->
       <el-form-item label="身份" prop="baseIdentity">
         <el-select v-model="editForm.roleId" placeholder="请选择身份">
           <el-option
@@ -20,15 +17,6 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <!-- <el-form-item label="邮箱" prop="email">
-        <el-input v-model="editForm.email"></el-input>
-      </el-form-item>
-      <el-form-item label="联系电话" prop="phone">
-        <el-input v-model="editForm.phone"></el-input>
-      </el-form-item> -->
-      <!-- <el-form-item label="密码" prop="passwork">
-        <el-input v-model="editForm.passwork"></el-input>
-      </el-form-item> -->
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="toDialogInfo.dialogVisible = false">取 消</el-button>
@@ -115,6 +103,15 @@ export default {
         this.elMessage.success("修改成功");
         this.$emit("fatherMethods");
         this.toDialogInfo.dialogVisible = false;
+      }
+    },
+    async deleteLabel(){
+      const {data:res} = await this.$userLabel.delete(`${id}`)
+      console.log(res);
+      if(res.statusCode === 20000){
+        console.log('删除标签成功');
+      }else{
+        console.log('删除标签失败');
       }
     },
     closeEvent() {

@@ -58,8 +58,14 @@
                   type="primary"
                   icon="el-icon-edit"
                   size="small"
+                  :disabled="scope.row.surplusWeight ==0||scope.row.surplusAmount==0"
                   @click="
-                    creteOrderEvent(scope.row.id, scope.row.germchitBatchName, scope.row.surplusWeight, scope.row.surplusAmount)
+                    creteOrderEvent(
+                      scope.row.id,
+                      scope.row.germchitBatchName,
+                      scope.row.surplusWeight,
+                      scope.row.surplusAmount
+                    )
                   "
                   >创建订单</el-button
                 >
@@ -77,6 +83,45 @@
             @fatherMethod="paginationCatchChangeEvent"
           ></ThePagination>
         </el-tab-pane>
+        <el-tab-pane label="投喂信息">
+          <el-row>
+            <el-col>
+              <el-button style="width: 100px; float: right" type="success">导出记录</el-button>
+            </el-col>
+          </el-row>
+          <el-table border stripe :data="feedList">
+            <el-table-column label="投喂人" prop="operatorName">
+            </el-table-column>
+            <el-table-column label="身份" prop="operatorIdentity">
+            </el-table-column>
+            <el-table-column label="投喂品" prop="supplyName">
+            </el-table-column>
+            <el-table-column label="投喂品类型" prop="supplyType">
+            </el-table-column>
+            <el-table-column label="投喂数量" prop="feedingVolume">
+            </el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button
+                  type="primary"
+                  icon="el-icon-edit"
+                  size="small"
+                  @click="editFeedEvent(scope.row.pondId)"
+                ></el-button>
+                <el-button
+                  type="danger"
+                  icon="el-icon-delete"
+                  size="small"
+                  @click="removeFeedInfo(scope.row.pondId)"
+                ></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <ThePagination
+            :toPagination="paginationFeedInfo"
+            @fatherMethod="paginationFeedChangeEvent"
+          ></ThePagination>
+        </el-tab-pane>
       </el-tabs>
     </el-card>
     <!-- 添加池塘 -->
@@ -88,11 +133,17 @@
       :ordertitle="ordertitle"
       :look="look"
       :orderName="orderName"
+      @refresh="eventRefresh"
       :catchMax="catchMax"
       :surplusAmount="surplusAmount"
       @createnotifyParent="changecreatedialogVisible"
     >
     </Create-order>
+    <editFeedDialog
+      :editId="editId"
+      @fatherMethods="editFather"
+      :dialogVisible="editFeedVisible"
+    ></editFeedDialog>
   </div>
 </template>
 
@@ -102,6 +153,7 @@ import TheDialogAll from "../../components/ccy/TheDialogAll";
 import ThePagination from "../../components/ccy/ThePagination";
 import pond from "../../components/ccy/ManagementPond/pond";
 import addPond from "../../components/ccy/ManagementPond/addPond";
+import editFeedDialog from "../../components/ccy/ManagementPond/editFeedDialog";
 import CreateOrder from "../../components/cgx/ManagementOrder/CreateOrder/createOrder";
 export default {
   components: {
@@ -111,6 +163,7 @@ export default {
     TheDialogAll,
     addPond,
     CreateOrder,
+    editFeedDialog,
   },
   data() {
     return {
@@ -127,6 +180,12 @@ export default {
         page: 1,
         total: 0,
       },
+      paginationFeedInfo: {
+        size: 6,
+        page: 1,
+        total: 0,
+      },
+      feedList: [], //投喂信息
       baseId: this.$store.state.userInfo.baseId, //基地ID
       // 添加池塘的表单数据
       addeForm: {
@@ -198,8 +257,8 @@ export default {
       look: true,
       orderName: "",
       ordertitle: "创建订单",
-      catchMax:null,    //最大出售质量
-      surplusAmount:null, //最大出售数量
+      catchMax: null, //最大出售质量
+      surplusAmount: null, //最大出售数量
       //建议卡输入
       adviseInput: {
         title: "池塘信息输入",
@@ -217,11 +276,14 @@ export default {
           ],
         },
       },
+      editId: "",
+      editFeedVisible: false,
     };
   },
   created() {
     this.getPondList(); //获取池塘信息
     this.getCatchInfo(); //获取捕捞信息
+    this.getFeedInfo(); //获取喂养信息
   },
   methods: {
     paginationChangeEvent(size, page) {
@@ -234,14 +296,16 @@ export default {
       this.paginationCatchInfo.page = page;
       this.getCatchInfo(); //获取捕捞信息
     },
+    paginationFeedChangeEvent(size, page) {
+      this.paginationFeedInfo.size = size;
+      this.paginationFeedInfo.page = page;
+      this.getFeedInfo(); //获取捕捞信息
+    },
     async getPondList() {
-      console.log("获取池塘信息");
       const { data: res } = await this.$pondController.get(
         `getInfo/${this.baseId}/${this.paginationInfo.size}/${this.paginationInfo.page}`
       );
-      console.log(res);
       if (res.statusCode === 20000) {
-        console.log(res);
         this.pondList = res.data.records;
         this.addPondInfo.total = res.data.total;
         this.paginationInfo.total = res.data.total;
@@ -250,7 +314,8 @@ export default {
       }
     },
     eventRefresh() {
-      this.getPondList(this.addPondInfo.size, 1);
+      this.getCatchInfo();
+      this.getPondList();
     },
     //创建池塘
     async createPond() {
@@ -285,10 +350,11 @@ export default {
       const { data: res } = await this.$catchController.get(
         `${this.$store.state.baseInfo.id}/${this.paginationCatchInfo.size}/${this.paginationCatchInfo.page}`
       );
-      console.log(res);
       if (res.statusCode === 20000) {
         this.paginationCatchInfo.total = res.data.total;
         this.catchInfo = res.data.records;
+      } else {
+        console.log("获取捕捞信息失败");
       }
     },
     parentMehod() {
@@ -325,14 +391,53 @@ export default {
     },
     //创建订单
     creteOrderEvent(id, name, surplusWeight, surplusAmount) {
-      console.log(id);
       this.orderid = id;
       this.orderName = name;
-      this.surplusAmount = surplusAmount
-      this.catchMax = surplusWeight
+      this.surplusAmount = surplusAmount;
+      this.catchMax = surplusWeight;
       this.createdialogVisible = true;
-      console.log('最大出售质量',surplusWeight);
-      console.log('最大出售数量',surplusAmount);
+      console.log("最大出售质量", surplusWeight);
+      console.log("最大出售数量", surplusAmount);
+    },
+    async getFeedInfo() {
+      const { data: res } = await this.$pondController.get(
+        `feeding/${this.$store.state.baseInfo.id}/${this.paginationFeedInfo.size}/${this.paginationFeedInfo.page}`
+      );
+      console.log(res);
+      if (res.statusCode === 20000) {
+        this.feedList = res.data.records;
+        this.paginationFeedInfo.total = res.data.total;
+      }
+    },
+    async removeFeedInfo(id) {
+      const confirmResult = await this.elConfirm(
+        "此操作将删除该池塘喂养记录，是否继续？",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => {
+        return err;
+      });
+      if (confirmResult !== "confirm") {
+        return this.elMessage.info("已取消删除");
+      }
+      const { data: res } = await this.$pondController.delete(`feeding/${id}`);
+      console.log(res);
+      if (res.statusCode === 20000) {
+        this.elMessage.success("删除成功");
+        this.getFeedInfo();
+      }
+    },
+    editFather() {
+      this.editFeedVisible = false;
+      this.getFeedInfo();
+    },
+    editFeedEvent(id) {
+      this.editFeedVisible = true;
+      this.editId = id;
     },
   },
 };

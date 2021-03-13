@@ -78,15 +78,12 @@
         </p>
         <p v-show="!toPond.germchitId">养殖信息：未投放种苗</p>
         <p v-if="toPond.germchitId">
-          捕捞状态：{{
-            toPond.catchStatus === 0 
-              ? "未捕捞"
-              : "已捕捞"
-          }}
+          捕捞状态：{{ toPond.catchStatus === 0 ? "未捕捞" : "已捕捞" }}
         </p>
+        <p @click="feedRecord = true">喂养记录</p>
       </el-col>
     </el-row>
-    <el-row >
+    <el-row>
       <el-col :span="20" :offset="11" class="buttons">
         <div>
           <!-- 有投放的才有捕捞选项 -->
@@ -350,6 +347,7 @@ export default {
         dialogVisible: false,
         max: 0,
       },
+      feedRecord:false
     };
   },
   created() {
@@ -510,7 +508,7 @@ el-col {
     height: 100%;
   }
 }
-.pondInfo{
+.pondInfo {
   height: 180px;
 }
 .buttons {
