@@ -7,16 +7,26 @@
     <el-card>
       <TheCardHead>
         <div slot="CardTitle">
-          <el-col :span="4">
+          <el-col :span="2" >
             <i class="el-icon-receiving"></i>
             <span>养殖建议</span>
           </el-col>
-          <el-col style="float: right; width: 100px; margin-right: 10px">
+          <el-col :span="1.5" :offset="16">
+            <el-tooltip
+              effect="dark"
+              content="导出养殖建议信息"
+              placement="top-start"
+              ><el-button type="success" @click="downloadExcel"
+                >导出</el-button
+              ></el-tooltip
+            >
+          </el-col>
+          <el-col :span="1.5" style="margin:0 5px">
             <el-button type="primary" @click="toAddInfo.dialogVisible = true"
               >添加养殖建议</el-button
             >
           </el-col>
-          <el-col style="width: 85px; float: right">
+          <el-col :span="1.5" >
             <el-tooltip
               effect="dark"
               content="保存养殖建议信息"
@@ -33,18 +43,7 @@
                   ></i></el-button></el-upload
             ></el-tooltip>
           </el-col>
-          <el-col style="width: 75px; float: right">
-            <!-- <downloadExcel :data="adviseList" name="养殖建议信息导出.xls"> -->
-            <el-tooltip
-              effect="dark"
-              content="导出养殖建议信息"
-              placement="top-start"
-              ><el-button type="success" @click="downloadExcel"
-                >导出</el-button
-              ></el-tooltip
-            >
-            <!-- </downloadExcel> -->
-          </el-col>
+          
         </div>
       </TheCardHead>
       <el-table :data="adviseList" border stripe>
@@ -82,6 +81,7 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- <ThePagination ></ThePagination> -->
     </el-card>
     <!-- 添加养殖建议 -->
     <addAdvise
@@ -94,10 +94,12 @@
 <script>
 import TheCardHead from "../../components/ccy/TheCardHead";
 import addAdvise from "../../components/ccy/adviseCard/addAdvise";
+import ThePagination from "../../components/ccy/ThePagination"
 export default {
   components: {
     TheCardHead,
     addAdvise,
+    ThePagination
   },
   data() {
     return {

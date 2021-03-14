@@ -77,7 +77,7 @@
             <el-table-column prop="phone" label="联系电话"></el-table-column>
             <el-table-column prop="email" label="邮箱"></el-table-column>
             <el-table-column label="操作">
-              <template slot-scope="scope">
+              <template >
                 <el-button
                   type="danger"
                   icon="el-icon-delete"

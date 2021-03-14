@@ -22,14 +22,12 @@
       <el-tab-pane label="入库记录">
         <el-row>
           <el-col style="float: right; width: 70px">
-            <downloadExcel :data="baseSupplyList" name="基地入库信息导出.xls">
               <el-tooltip
                 effect="dark"
                 content="导出基地订单信息"
                 placement="top-start"
-                ><el-button type="success">导出</el-button></el-tooltip
+                ><el-button type="success" @click="downExcelIn">导出</el-button></el-tooltip
               >
-            </downloadExcel>
           </el-col>
           <el-col style="width: 100px; float: right; margin-left: 10px">
             <el-button
@@ -100,22 +98,6 @@
                 size="mini"
                 @click="editInEvent(scope.row.id, scope.row.supplyId)"
               ></el-button>
-              <!-- 出库按钮 -->
-              <!-- <el-tooltip
-                effect="dark"
-                content="出库"
-                placement="top"
-                :enterable="false"
-              >
-                <el-button
-                  @click="delivery(scope.row.supplyId)"
-                  type="warning"
-                  icon="el-icon-upload2"
-                  size="mini"
-                ></el-button>
-              </el-tooltip> -->
-              <!-- 删除按钮 -->
-              <!-- type="danger": 红色警告按钮 -->
               <el-button
                 type="danger"
                 icon="el-icon-delete"
@@ -133,17 +115,12 @@
       <el-tab-pane label="出库记录">
         <el-row>
           <el-col style="float: right; width: 70px">
-            <downloadExcel
-              :data="baseSupplyOutList"
-              name="基地入库信息导出.xls"
-            >
               <el-tooltip
                 effect="dark"
                 content="导出基地订单信息"
                 placement="top-start"
-                ><el-button type="success">导出</el-button></el-tooltip
+                ><el-button type="success"  @click="downExcel">导出</el-button></el-tooltip
               >
-            </downloadExcel>
           </el-col>
           <el-col style="float: right; width: 75px; margin-right: 30px">
             <el-button
@@ -309,12 +286,12 @@ export default {
       paginationInfoIn: {
         total: 0,
         page: 1,
-        size: 3,
+        size: 6,
       },
       paginationInfoOut: {
         total: 0,
         page: 1,
-        size: 3,
+        size: 6,
       },
       toDialogAddInfo: {
         title: "农资入库",
@@ -363,8 +340,6 @@ export default {
     },
     // 出库
     async delivery(supplyId) {
-      // const {data : res} = await this.$baseSupply.put('in')
-      // console.log(res);
       this.toDialogAddOut.dialogVisible = true;
       this.toDialogAddOut.id = supplyId;
       console.log(supplyId);
@@ -453,6 +428,12 @@ export default {
       this.paginationInfoOut.page = page;
       this.getOutSupplyInfo();
     },
+    async downExcel(){
+      window.location.href ='http://119.23.218.131:9103/base/supply/out/excel/+this.$store.state.baseInfo.id'
+    },
+    async downExcelIn(){
+      window.location.href="http://119.23.218.131:9103/base/supply/in/excel/+this.$store.state.baseInfo.id"
+    }
   },
 };
 </script>

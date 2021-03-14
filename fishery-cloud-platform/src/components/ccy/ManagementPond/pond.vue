@@ -63,7 +63,6 @@
         </div>
       </el-col>
       <el-col :span="15">
-        <!-- <p>池塘名称：</p> -->
         <p>池塘面积/m²：{{ toPond.area }}</p>
         <p>池塘深度/m：{{ toPond.depth }}</p>
         <p>池塘类型：{{ toPond.type }}</p>
@@ -80,7 +79,7 @@
         <p v-if="toPond.germchitId">
           捕捞状态：{{ toPond.catchStatus === 0 ? "未捕捞" : "已捕捞" }}
         </p>
-        <p @click="feedRecord = true">喂养记录</p>
+        <p @click="feedRecord.dialogVisible = true">喂养记录</p>
       </el-col>
     </el-row>
     <el-row>
@@ -237,6 +236,8 @@
       :toDialogInfo="toCatchingInfo"
       @fatherMethod="RefreshPond"
     ></catching>
+    <!-- 捕捞记录 -->
+    <feedHistory :feedRecord="feedRecord"></feedHistory>
   </div>
 </template>
 
@@ -244,11 +245,13 @@
 import TheDialogAll from "../../ccy/public/TheDialogAll";
 import feedPond from "../ManagementPond/feedPond";
 import catching from "../ManagementPond/catching";
+import feedHistory from "../ManagementPond/feedHistory";
 export default {
   components: {
     TheDialogAll,
     feedPond,
     catching,
+    feedHistory,
   },
   props: {
     toPond: {
@@ -340,6 +343,7 @@ export default {
       toFeedInfo: {
         pondId: this.toPond.pondId,
         dialogVisible: false,
+        farmingId: this.toPond.farmingId,
       },
       //捕捞
       toCatchingInfo: {
@@ -347,7 +351,10 @@ export default {
         dialogVisible: false,
         max: 0,
       },
-      feedRecord:false
+      feedRecord: {
+        pondId: this.toPond.pondId,
+        dialogVisible: false,
+      },
     };
   },
   created() {
@@ -448,14 +455,12 @@ export default {
       console.log(res);
       if (res.statusCode === 20000) {
         this.germchitDetail = res.data;
-        console.log(this.germchitDetail);
       }
     },
     RefreshPond() {
       this.$emit("fatherMethod");
     },
     selectEvent(res) {
-      console.log(res);
       this.max = this.germchitList[res].germchitSurplusNumber;
       this.farmInfo.germchitId = this.germchitList[res].id;
       this.germchitName = this.germchitList[res].germchitSpecies;

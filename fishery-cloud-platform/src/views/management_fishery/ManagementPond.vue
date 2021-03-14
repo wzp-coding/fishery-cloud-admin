@@ -28,8 +28,8 @@
             <!-- 池塘子组件 -->
             <pond
               :toPond="item"
-              v-for="item in pondList"
-              :key="item.pondId"
+              v-for="(item, index) in pondList"
+              :key="index"
               @fatherMethod="getPondList"
             ></pond>
           </div>
@@ -54,21 +54,30 @@
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button
-                  type="primary"
-                  icon="el-icon-edit"
-                  size="small"
-                  :disabled="scope.row.surplusWeight ==0||scope.row.surplusAmount==0"
-                  @click="
-                    creteOrderEvent(
-                      scope.row.id,
-                      scope.row.germchitBatchName,
-                      scope.row.surplusWeight,
-                      scope.row.surplusAmount
-                    )
-                  "
-                  >创建订单</el-button
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="创建订单"
+                  placement="top-start"
                 >
+                  <el-button
+                    type="primary"
+                    icon="el-icon-s-cooperation"
+                    size="small"
+                    :disabled="
+                      scope.row.surplusWeight == 0 ||
+                      scope.row.surplusAmount == 0
+                    "
+                    @click="
+                      creteOrderEvent(
+                        scope.row.id,
+                        scope.row.germchitBatchName,
+                        scope.row.surplusWeight,
+                        scope.row.surplusAmount
+                      )
+                    "
+                  ></el-button>
+                </el-tooltip>
                 <el-button
                   type="danger"
                   icon="el-icon-delete"
@@ -86,7 +95,12 @@
         <el-tab-pane label="投喂信息">
           <el-row>
             <el-col>
-              <el-button style="width: 100px; float: right" type="success">导出记录</el-button>
+              <el-button
+                @click="downExcel"
+                style="width: 100px; float: right"
+                type="success"
+                >导出记录</el-button
+              >
             </el-col>
           </el-row>
           <el-table border stripe :data="feedList">
@@ -203,7 +217,6 @@ export default {
         size: 3,
         page: 1,
         pondId: "",
-        // sizeGroup:[3,6,9],
         addeForm: this.addeForm,
         // 添加表单的验证规则对象
         FormRules: {
@@ -330,7 +343,7 @@ export default {
       } else {
         console.log(res);
         this.addPondInfo.dialogVisible = !this.addPondInfo.dialogVisible;
-        this.getPondList(this.addPondInfo.size, this.addPondInfo.page);
+        this.getPondList();
         this.reRender = true;
         this.elMessage.success("添加池塘成功!!");
       }
@@ -403,7 +416,7 @@ export default {
       const { data: res } = await this.$pondController.get(
         `feeding/${this.$store.state.baseInfo.id}/${this.paginationFeedInfo.size}/${this.paginationFeedInfo.page}`
       );
-      console.log(res);
+      // console.log(res);
       if (res.statusCode === 20000) {
         this.feedList = res.data.records;
         this.paginationFeedInfo.total = res.data.total;
@@ -438,6 +451,10 @@ export default {
     editFeedEvent(id) {
       this.editFeedVisible = true;
       this.editId = id;
+    },
+    async downExcel() {
+      window.location.href =
+        "http://119.23.218.131:9103/pond/feeding/excel/+this.$state.store.baseInfo.id";
     },
   },
 };

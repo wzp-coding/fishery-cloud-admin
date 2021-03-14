@@ -13,17 +13,12 @@
             <span>种苗进货</span>
           </el-col>
           <el-col style="width: 75px; float: right">
-            <downloadExcel
-              :data="germchitInfoList"
-              name="基地种苗订单信息导出.xls"
-            >
               <el-tooltip
                 effect="dark"
                 content="导出基地订单信息"
                 placement="top-start"
-                ><el-button type="success">导出</el-button></el-tooltip
+                ><el-button type="success" @click="downExcel">导出</el-button></el-tooltip
               >
-            </downloadExcel>
           </el-col>
           <el-col style="float: right; width: 100px; margin-right: 10px">
             <el-button type="primary" @click="dialogVisible = true"
@@ -120,7 +115,6 @@
           label="供应商"
         ></el-table-column>
         <el-table-column prop="creatorName" label="操作人"></el-table-column>
-
         <el-table-column label="操作" width="200px">
           <template slot-scope="scope">
             <!-- 修改按钮 -->
@@ -174,7 +168,8 @@
         ref="purchaseFormRef"
       >
         <el-form-item label="种苗品种" prop="germchitSpecies">
-          <el-select v-model="addPurchaseInfo.germchitId" placeholder="请选择" @change="selectEvent">
+          
+          <el-select v-model="tempName" placeholder="请选择" @change="selectEvent">
             <el-option
               v-for="(item, index) in allSeedInfo"
               :key="item.id"
@@ -256,7 +251,6 @@ export default {
       editDialogVisible: false,
       baseId: this.$store.state.baseInfo.id,
       supplyInfo: {
-        // id:'',                //入库信息ID
         baseId: this.$store.state.baseInfo.id,
         gmtCreate: "", //创建时间
         gmtModified: "", //修改时间
@@ -268,6 +262,7 @@ export default {
         supplyTypeName: "", //投入品类型名字
         warehouseNumber: "", //仓库号
       },
+      tempName:'',
       //查询所有种苗订单信息
       germchitInfoList: [],
       germchitInfo: {},
@@ -318,8 +313,6 @@ export default {
     this.getAllPurchaseInfo();
   },
   methods: {
-    //获取投入品信息
-    // getSupplyInfo() {},
     //根据基地获取种苗订单信息
     async getGermchitPurchaseInfo() {
       const { data: res } = await this.$germchitManagerController.get(
@@ -387,12 +380,9 @@ export default {
           cancelButtonText: "取消",
           type: "warning",
         }
-        // .catch 用于捕获错误返回给confirmResult
       ).catch((err) => {
         return err;
       });
-      // 如果用户确认删除，则返回值为字符串 confirm
-      // 如果用户取消了删除， 则返回值为字符串 cancel
       if (confirmResult !== "confirm") {
         return this.elMessage.info("已取消删除");
       }
@@ -428,6 +418,7 @@ export default {
     },
     puchaseClose() {
       this.$refs.purchaseFormRef.resetFields();
+      this.max = null;
     },
     //种苗入库
     async storageById(id) {
@@ -441,6 +432,9 @@ export default {
     selectEvent(res){
       this.addPurchaseInfo.germchitId = this.allSeedInfo[res].id;
       this.max = this.allSeedInfo[res].germchitAmount;
+    },
+    async downExcel(){
+      window.location.href="http://119.23.218.131:9103/base/germchit/excel/+this.$store.state.baseInfo.id"
     }
   },
 };

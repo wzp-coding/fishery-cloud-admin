@@ -20,7 +20,7 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="toDialogInfo.dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="editEvent">确 定</el-button>
+      <el-button type="primary" @click="deleteLabel">确 定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -35,17 +35,8 @@ export default {
   data() {
     return {
       editForm: {
-        // avatar: "",
-        // baseId: this.$store.state.baseInfo.id,
-        // baseIdentity: null,
-        // email: "",
-        // id: "",
         userId:'',
         roleId:'',
-        // username:this.toDialogInfo.username ,
-        // passwork: "",
-        // username:"",
-        // phone: "",
       },
       // 角色数组
       options: [],
@@ -97,7 +88,7 @@ export default {
       console.log(this.toDialogInfo);
       this.editForm.userId = this.toDialogInfo.id;
       console.log(this.editForm);
-      const { data: res } = await this.$user.put(`updateUserRole/?userId=${this.editForm.userId}&roleId=${this.editForm.roleId}`)
+      const { data: res } = await this.$role.put(`updateUserRole/?userId=${this.editForm.userId}&roleId=${this.editForm.roleId}`)
       console.log(res);
       if (res.statusCode === 20000) {
         this.elMessage.success("修改成功");
@@ -106,12 +97,14 @@ export default {
       }
     },
     async deleteLabel(){
-      const {data:res} = await this.$userLabel.delete(`${id}`)
+      const {data:res} = await this.$userLabel.delete(`${this.toDialogInfo.id}`)
       console.log(res);
       if(res.statusCode === 20000){
         console.log('删除标签成功');
+        this.editEvent();
       }else{
         console.log('删除标签失败');
+        this.elMessage.info("修改失败");
       }
     },
     closeEvent() {
@@ -121,8 +114,8 @@ export default {
       const {data: res} = await this.$role(`noPage/${this.$store.state.baseInfo.id}`)
       console.log(res);
       if(res.statusCode === 20000){
-        this.options = res.data
-        this.options = this.options.slice(0,2)
+        this.options = res.data;
+        this.options = this.options;
       }
     }
   },
