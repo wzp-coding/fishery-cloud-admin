@@ -121,19 +121,19 @@
 
         ></el-table-column>
         <el-table-column label="二维码" width="150">
-          <template slot-scope="">
+          <template slot-scope="scope">
             <!-- 物流二维码按钮 -->
             <el-button
               type="primary"
               size="mini"
-              @click="logisticsOrcode()"
+              @click="logisticsOrcode(scope.row.id)"
               >物流</el-button
             >
             <!-- 溯源二维码按钮 -->
             <el-button
               type="success"
               size="mini"
-              @click="originOrcode()"
+              @click="originOrcode(scope.row.id)"
               >溯源</el-button
             >
           </template>
@@ -323,11 +323,11 @@
 
 <!-- 展示物流 或者 溯源二维码 -->
     <Show-orinfo
-    :ortitle="orTitle"
+    :title="QrTitle"
     :is-show-code="isShowCode"
-    :adult-shrimp-id="adultShrimpId"
+    :Id="QrcodeId"
+    :jQcode="jQcode"
     @notifyParent2="closeCode"
-    
     >
     </Show-orinfo>
 
@@ -357,7 +357,7 @@
 <script>
 import QRCode from "qrcodejs2";
 import ShowInfo from   "../../components/cgx/ManagementOrder/ShowInfo/ShowInfo1";
-import ShowOrinfo from "../../components/cgx/ManagementOrder/ShowOrcode/ShowOrcode2";
+import ShowOrinfo from "../../components/cgx/ManagementOrder/ShowOrcode/ShowOrcode";
 import ShowChange from "../../components/cgx/ManagementOrder/ModifyInformation/ShowChange";
 import CreateOrder from '../../components/cgx/ManagementOrder/CreateOrder/createOrder';
 import Delete from '../../components/cgx/public/delete';
@@ -403,10 +403,11 @@ export default {
       dialogVisible: false,
       // -----------------------------------
       //传给二维码组件
-      orTitle:"",
+      QrTitle:"",
       isShowCode:false,
-      // 当前点击订单的城虾id
-      adultShrimpId: "1304076777332805632",
+      jQcode:true,
+      // 当前点击订单的id
+      QrcodeId: "1304076777332805632",
       // -----------------------------------
       token: window.localStorage.getItem("token"),
       // 基地编号
@@ -577,19 +578,21 @@ export default {
       }
     },
     // 物流二维码弹窗
-    logisticsOrcode() {
-      this.adultShrimpId = "1304076777332805632";
-      this.orTitle="物流二维码"
+    logisticsOrcode(id) {
+      this.QrcodeId = id;
+      this.QrTitle="物流二维码"
       this.isShowCode = true;
+      this.jQcode = !this.jQcode
       // this.$nextTick(() => {
       //   this.createlcode();
       // });
     },
     // 溯源二维码弹窗
-    originOrcode() {
-      this.adultShrimpId = "1304076777332805632";
-      this.orTitle="溯源二维码"
+    originOrcode(id) {
+      this.QrcodeId = id;
+      this.QrTitle="溯源二维码"
       this.isShowCode = true;
+      this.jQcode = !this.jQcode
       // this.$nextTick(() => {
       //   this.createocode();
       // });
