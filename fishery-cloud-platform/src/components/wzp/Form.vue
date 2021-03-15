@@ -113,7 +113,7 @@ export default {
         phoneCode: "",
         loginId: this.defaultForm.id,
         captcha: "",
-        userName: this.defaultForm.username,
+        userName: this.defaultForm.username || this.defaultForm.userName,
         email: this.defaultForm.email,
         avatar:
           this.defaultForm.avatar ||

@@ -1,7 +1,3 @@
-import Login from '../views/user_info/Login.vue'
-import Register from '../views/user_info/Register.vue'
-import ForgetPassword from '../views/user_info/ForgetPassword.vue'
-import CommonUser from '../views/user_info/CommonUser.vue'
 import Vue from "vue"
 export default [
     {
@@ -13,13 +9,13 @@ export default [
         //登陆界面
         path: '/login',
         name: 'login',
-        component: Login,
+        component: () => import(/* webpackChunkName:"Login" */'../views/user_info/Login.vue'),
         beforeEnter: async (to, from, next) => {
             // console.log(Vue.prototype.$originAxios);
             // 获取本地坐标和详细地址
             let res;
             // if (process.env.NODE_ENV === 'development') {
-                res = await Vue.prototype.$originAxios.get("/api/ws/location/v1/ip?key=4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ&ip=" + localStorage.getItem('Ip'))
+            res = await Vue.prototype.$originAxios.get("/api/ws/location/v1/ip?key=4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ&ip=" + localStorage.getItem('Ip'))
             // } else {
             //     res = await Vue.prototype.$originAxios.get("https://apis.map.qq.com/ws/location/v1/ip?key=4YUBZ-GEPK4-6URUL-DV5B4-Q3IWE-EZBCJ&ip=" + localStorage.getItem('Ip'))
             // }
@@ -39,13 +35,13 @@ export default [
         // 注册页面
         path: '/register',
         name: 'register',
-        component: Register,
+        component: ()=>import(/* webpackChunkName:"Register" */'../views/user_info/Register.vue'),
     },
     {
         // 找回密码页面
         path: '/forgetPassword',
         name: 'forgetPassword',
-        component: ForgetPassword,
+        component: ()=>import(/* webpackChunkName:"ForgetPassword" */'../views/user_info/ForgetPassword.vue'),
     },
     // {
     //     // 创建基地页面
@@ -57,12 +53,13 @@ export default [
         // 普通用户页面
         path: '/common-user',
         name: 'common-user',
-        component: CommonUser,
+        // component: CommonUser,
+        component: () => import(/* webpackChunkName:"CommonUser" */'../views/user_info/CommonUser.vue'),
     },
     {
         // 测试页面
         path: '/test',
         name: 'test',
-        component: () => import('../views/user_info/test.vue')
+        component: () => import(/* webpackChunkName:"test" */'../views/user_info/test.vue')
     }
 ]

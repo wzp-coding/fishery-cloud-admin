@@ -237,7 +237,8 @@ export default {
             baseId:newUserInfo.baseId
           })
         );
-        this.$router.push("/digital-base");
+        this.$router.push("/login");
+        this.elMessage.info('权限发生改变，请您重新登录！')
       } else {
         this.elMessage.error(res.message);
       }

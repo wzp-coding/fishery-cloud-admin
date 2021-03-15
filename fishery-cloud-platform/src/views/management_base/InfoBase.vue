@@ -202,48 +202,6 @@
             </el-col>
           </el-row>
         </InfoBaseLayout>
-        <InfoBaseLayout>
-          <el-row slot="pre">
-            <el-col :offset="3" :span="4">基地图片</el-col>
-            <el-col :span="17">
-              <!-- <div class="upload">
-                <el-upload
-                  action="http://119.23.218.131:9103/base/file/upload"
-                  ref="upload"
-                  name="multipartFile"
-                  :on-preview="handlePictureCardPreview"
-                  class="avatar-uploader"
-                  :on-success="handleAvatarSuccess"
-                  multiple
-                  :on-remove="handleRemove"
-                  :show-file-list="false"
-                >
-                  <img
-                    v-if="baseInfo.picture"
-                    :src="baseInfo.picture"
-                    class="avatar"
-                  />
-                  <i class="el-icon-plus"></i>
-                </el-upload>
-              </div> -->
-              <el-button
-                type="primary"
-                @click="isOpenUpload = true"
-                style="margin-left: 8px"
-                >上传图片（限制3张）</el-button
-              >
-              <UploadFile
-                :is-open="isOpenUpload"
-                :close-modal="() => (this.isOpenUpload = false)"
-                :max="3"
-                :min="3"
-                :type="'image'"
-                :init-files="baseInfo.picture"
-                :upload-success="handleUploadPic"
-              ></UploadFile>
-            </el-col>
-          </el-row>
-        </InfoBaseLayout>
         <el-row :gutter="20">
           <el-col>
             <el-form-item

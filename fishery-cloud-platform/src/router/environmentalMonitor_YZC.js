@@ -1,50 +1,42 @@
-import MonitorLive from '../views/my_base/MonitorLive.vue'
-import MonitorEquipment from '../views/management_device/MonitorEquipment.vue'
-import MonitorEnvironment from '../views/my_base/MonitorEnvironment.vue'
-import ManagementWaterQualityWarn from '../views/my_base/ManagementWaterQualityWarn.vue'
-import ManagementWeatherWarn from '../views/my_base/ManagementWeatherWarn.vue'
-import InfoWeather from '../views/management_device/InfoWeather.vue'
-import InfoWaterQuality from '../views/management_device/InfoWaterQuality.vue'
-import DiseaseDiagnosis from '../views/my_base/DiseaseDiagnosis.vue'
 export default [
     {
         // 实况监控
         path: '/monitor-live',
-        component: MonitorLive
+        component: ()=>import('../views/my_base/MonitorLive.vue')
     },
     {
         // 监控设备
         path: '/monitor-equipment',
-        component: MonitorEquipment
+        component: ()=>import('../views/management_device/MonitorEquipment.vue')
     },
     {
         // 环境监测
         path: '/monitor-environment',
-        component: MonitorEnvironment
+        component: ()=>import('../views/my_base/MonitorEnvironment.vue')
     },
     {
         // 气象设备
         path: '/info-weather',
-        component: InfoWeather
+        component: ()=>import('../views/my_base/ManagementWaterQualityWarn.vue')
     },
     {
         // 设置水质阀值
         path: '/management-water-quality-warn',
-        component: ManagementWaterQualityWarn
+        component: ()=>import('../views/my_base/ManagementWeatherWarn.vue')
     },
     {
         // 设置环境阀值
         path: '/management-weather-warn',
-        component: ManagementWeatherWarn
+        component: ()=>import('../views/management_device/InfoWeather.vue')
     },
     {
         // 水质设备
         path: '/info-water-quality',
-        component: InfoWaterQuality
+        component: ()=>import('../views/management_device/InfoWaterQuality.vue')
     },
     {
         // 疾病诊断
         path: '/disease-diagnosis',
-        component: DiseaseDiagnosis
+        component: ()=>import('../views/my_base/DiseaseDiagnosis.vue')
     }
 ]

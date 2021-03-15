@@ -16,7 +16,8 @@
       show-checkbox
       accordion
       draggable
-      :allow-drop="handleDrop"
+      :allow-drop="handleAllowDrop"
+      @node-drop="handleNodeDrop"
     ></el-tree>
     <div style="padding: 20px 10px; overflow: hidden">
       <el-button
@@ -41,14 +42,14 @@ export default {
   },
   data() {
     return {
-      retNavList: [],
-      retCheckedNav: [],
+      retNavList: [], //后端返回的菜单
+      retCheckedNav: [], //后端返回选中的菜单
+      // tree组件
       defualtProps: {
         children: "children",
         label: "name",
       },
-      preUserChecked: [],
-      nameToIdMap: {},
+      nameToIdMap: {}, //菜单名字=>id映射map
     };
   },
   computed: {
@@ -153,8 +154,8 @@ export default {
       let params = {
         userId: this.userInfo.id,
         customizedLabels,
-        baseId:this.userInfo.baseId,
-        role:this.userInfo.role
+        baseId: this.userInfo.baseId,
+        role: this.userInfo.role,
       };
       const { data: res } = await this.$userLabel.put("", params);
       // console.log("res: ", res);
@@ -170,12 +171,35 @@ export default {
     },
 
     // 判断拖拽放置位置
-    handleDrop(draggingNode, dropNode, type) {
-      console.log("type: ", type);
-      console.log("dropNode: ", dropNode);
-      console.log("draggingNode: ", draggingNode);
+    handleAllowDrop(draggingNode, dropNode, type) {
+      // console.log("type: ", type);
+      // console.log("dropNode: ", dropNode);
+      // console.log("draggingNode: ", draggingNode);
+      if (type === "inner") return false;
+      if (draggingNode.level !== dropNode.level) return false;
+      return true;
     },
-
+    // 拖拽完成触发，处理拖拽后取消选中的问题
+    handleNodeDrop(draggingNode) {
+      // console.log("draggingNode: ", draggingNode);
+      if (draggingNode.level === 1) {
+        // 处理一级菜单的拖拽
+        const childNodes = draggingNode.childNodes;
+        const childKeys = childNodes.map((item) =>
+          item.checked ? item.key : ""
+        );
+        console.log("childKeys: ", childKeys);
+        this.$refs.tree.setCheckedKeys(childKeys.concat(this.$refs.tree.getCheckedKeys()));
+      } else if (draggingNode.level === 2) {
+        // 处理二级菜单的拖拽
+        if (draggingNode.checked) {
+          this.$refs.tree.setCheckedKeys([draggingNode.key].concat(this.$refs.tree.getCheckedKeys()));
+        }
+      }
+      console.log(this.navList);
+      // console.log("dropNode: ", dropNode);
+      // console.log("draggingNode: ", draggingNode);
+    },
     // 将后端返回的乱序的标签排序，思路：先拷贝一份完全的顺序的菜单，再根据乱序的数组中查看是否有该菜单名，没有则删除即可
     sortRetLabels(retLabels) {
       // console.log("retLabels: ", retLabels);
@@ -244,5 +268,6 @@ export default {
       return ret;
     },
   },
+  created() {},
 };
 </script>
