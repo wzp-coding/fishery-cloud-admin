@@ -456,17 +456,7 @@ export default {
       this.toDialogEditInfo.dialogVisible = true;
       this.toDialogEditInfo.id = id;
     },
-    /* 图片相关的方法 */
-    // 查看资料放大图片
-    previewInfo(src) {
-      this.isPreview = true;
-      this.previewImg = src;
-    },
-    // 放大图片
-    preview(Pic) {
-      this.isPreview = true;
-      this.previewImg = Pic;
-    },
+   
     // 分页组件事件
     paginationChangeEvent(size, page) {
       this.paginationInfo.size = size;

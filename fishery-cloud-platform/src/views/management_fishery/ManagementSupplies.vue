@@ -33,6 +33,10 @@
           ></el-table-column>
           <el-table-column prop="gmtCreate" label="进货日期"></el-table-column>
         </el-table>
+        <ThePagination
+          :toPagination="paginationNowInfoIn"
+          @fatherMethod="paginationChangeEventNow"
+        ></ThePagination>
       </el-tab-pane>
       <el-tab-pane label="入库记录">
         <el-row>
@@ -302,6 +306,11 @@ export default {
       toSupplyInfo: {
         dialogVisible: false,
       },
+      paginationNowInfoIn: {
+        total: 0,
+        page: 1,
+        size: 6,
+      },
       paginationInfoIn: {
         total: 0,
         page: 1,
@@ -359,6 +368,11 @@ export default {
       this.paginationInfoIn.page = page;
       this.paginationInfoIn.size = size;
       this.getBaseSupplyInfo();
+    },
+    paginationChangeEventNow(size, page) {
+      this.paginationNowInfoIn.page = page;
+      this.paginationNowInfoIn.size = size;
+      this.getBaseNowSupply();
     },
     // 出库
     async delivery(supplyId) {
@@ -460,11 +474,12 @@ export default {
     },
     async getBaseNowSupply() {
       const { data: res } = await this.$baseSupply.get(
-        `all/${this.$store.state.baseInfo.id}`
+        `${this.$store.state.baseInfo.id}/${this.paginationNowInfoIn.size}/${this.paginationNowInfoIn.page}`
       );
       console.log(res);
       if (res.statusCode === 20000) {
-        this.baseNowSupplyList = res.data;
+        this.baseNowSupplyList = res.data.records;
+        this.paginationNowInfoIn.total = res.data.total;
         for(let i=0;i<this.baseNowSupplyList.length;i++){
           this.baseNowSupplyList[i].type = '饲料'
         }
