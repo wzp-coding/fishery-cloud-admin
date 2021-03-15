@@ -136,7 +136,7 @@ export default {
       this.max= null;
     },
     selectEvent(res) {
-      this.feedInfo.supplyId = this.supplyList[res].id;
+      this.feedInfo.supplyId = this.supplyList[res].supplyId;
       this.feedInfo.supplyName = this.supplyList[res].name;
       this.max = this.supplyList[res].surplusWeight;
     },

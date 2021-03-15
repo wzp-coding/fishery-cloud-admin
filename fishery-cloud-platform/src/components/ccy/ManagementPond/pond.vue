@@ -79,7 +79,25 @@
         <p v-if="toPond.germchitId">
           捕捞状态：{{ toPond.catchStatus === 0 ? "未捕捞" : "已捕捞" }}
         </p>
-        <p @click="feedRecord.dialogVisible = true">喂养记录</p>
+        <p><el-tooltip
+          class="item"
+          effect="dark"
+          content="点击查询当前投喂信息"
+          placement="top-start"
+          v-if="toPond.germchitId"
+        >
+          <span @click="feedRecord.dialogVisible1 = true" style="margin-right:18px">喂养记录</span>
+        </el-tooltip>
+        <!--  -->
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="点击查询历史投喂"
+          placement="top-start"
+        >
+          <span @click="feedRecord.dialogVisible2 = true">历史喂养记录</span>
+        </el-tooltip></p>
+        
       </el-col>
     </el-row>
     <el-row>
@@ -237,7 +255,10 @@
       @fatherMethod="RefreshPond"
     ></catching>
     <!-- 捕捞记录 -->
-    <feedHistory :feedRecord="feedRecord"></feedHistory>
+    <feedHistory
+      :feedRecord="feedRecord"
+      @fatherMethods="feedHistoryEvent"
+    ></feedHistory>
   </div>
 </template>
 
@@ -353,7 +374,9 @@ export default {
       },
       feedRecord: {
         pondId: this.toPond.pondId,
-        dialogVisible: false,
+        farmingId: this.toPond.farmingId,
+        dialogVisible1: false,
+        dialogVisible2: false,
       },
     };
   },
@@ -362,7 +385,6 @@ export default {
   },
   methods: {
     async editPondInfo() {
-      // this.$refs.addeFormRef.dialogVerification()
       this.toDialogEdit.dialogVisible = false;
       console.log(this.editInfo);
       const { data: res } = await this.$pondController.put(
@@ -450,9 +472,7 @@ export default {
       console.log(res);
     },
     async searchGermchitInfo(germchitId) {
-      console.log(germchitId);
       const { data: res } = await this.$germchit.get(`${germchitId}`);
-      console.log(res);
       if (res.statusCode === 20000) {
         this.germchitDetail = res.data;
       }
@@ -464,6 +484,10 @@ export default {
       this.max = this.germchitList[res].germchitSurplusNumber;
       this.farmInfo.germchitId = this.germchitList[res].id;
       this.germchitName = this.germchitList[res].germchitSpecies;
+    },
+    feedHistoryEvent() {
+      this.feedRecord.dialogVisible1 = false;
+      this.feedRecord.dialogVisible2 = false;
     },
   },
 };

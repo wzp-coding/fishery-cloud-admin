@@ -82,18 +82,17 @@
             placeholder="请输入收货方电话"
           ></el-input>
         </el-form-item>
-        <!-- <el-form-item label="基地编号 ">
-          <el-input
-            v-model="orderobject.baseId"
-            placeholder="请输入"
-            disabled
-          ></el-input>
-        </el-form-item> -->
         <el-form-item label="出售质量(kg)">
           <el-input
             v-model="orderobject.weight"
             placeholder="请输入出售质量"
             :max="catchMax"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="剩余质量(kg)">
+          <el-input
+            v-model="catchMax"
+            disabled
           ></el-input>
         </el-form-item>
         <el-form-item label="出售数量">
