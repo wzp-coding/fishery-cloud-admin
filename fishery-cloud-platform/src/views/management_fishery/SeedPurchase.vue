@@ -13,12 +13,14 @@
             <span>种苗进货</span>
           </el-col>
           <el-col style="width: 75px; float: right">
-              <el-tooltip
-                effect="dark"
-                content="导出基地订单信息"
-                placement="top-start"
-                ><el-button type="success" @click="downExcel">导出</el-button></el-tooltip
-              >
+            <el-tooltip
+              effect="dark"
+              content="导出基地订单信息"
+              placement="top-start"
+              ><el-button type="success" @click="downExcel"
+                >导出</el-button
+              ></el-tooltip
+            >
           </el-col>
           <el-col style="float: right; width: 100px; margin-right: 10px">
             <el-button type="primary" @click="dialogVisible = true"
@@ -27,130 +29,193 @@
           </el-col>
         </div>
       </TheCardHead>
-      <el-table border stripe :data="germchitInfoList">
-        <el-table-column type="expand">
-          <template slot-scope="props">
-            <el-form label-position="left" label-width="170px">
-              <TheSeedPurchaseLayout>
-                <el-form-item label="订单创建人" class="down-label" slot="pre">
-                  <span>{{ props.row.creatorName }}</span>
-                </el-form-item>
-                <el-form-item label="种苗品种" class="down-label" slot="after">
-                  <span>{{ props.row.germchitSpecies }}</span>
-                </el-form-item>
-              </TheSeedPurchaseLayout>
-              <TheSeedPurchaseLayout>
-                <el-form-item label="种苗产地" class="down-label" slot="pre">
-                  <span>{{ props.row.germchitOrigin }}</span>
-                </el-form-item>
-                <el-form-item
-                  label="种苗批次名称"
-                  class="down-label"
-                  slot="after"
+      <el-tabs type="border-card">
+        <el-tab-pane label="种苗库存">
+          <el-table border stripe :data="baseGermchit">
+            <el-table-column
+              prop="germchitBatchName"
+              label="种苗批次名称"
+            ></el-table-column>
+            <el-table-column
+              prop="germchitSpecies"
+              label="种苗品种"
+            ></el-table-column>
+            <el-table-column
+              prop="germchitNumber"
+              label="进货量/尾"
+            ></el-table-column>
+            <el-table-column
+              prop="germchitOrigin"
+              label="原产地"
+            ></el-table-column>
+            <el-table-column
+              prop="germchitSupplierName"
+              label="供应商"
+            ></el-table-column>
+            <el-table-column
+              prop="germchitSupplierName"
+              label="供应商"
+            ></el-table-column>
+            <el-table-column
+              prop="germchitSurplusNumber"
+              label="剩余量"
+            ></el-table-column>
+          </el-table>
+          <ThePagination
+            @fatherMethod="paginationChangeEvent1"
+            :toPagination="paginationBaseInfo"
+          ></ThePagination>
+        </el-tab-pane>
+        <el-tab-pane label="种苗订单">
+          <el-table border stripe :data="germchitInfoList">
+            <el-table-column type="expand">
+              <template slot-scope="props">
+                <el-form label-position="left" label-width="170px">
+                  <TheSeedPurchaseLayout>
+                    <el-form-item
+                      label="订单创建人"
+                      class="down-label"
+                      slot="pre"
+                    >
+                      <span>{{ props.row.creatorName }}</span>
+                    </el-form-item>
+                    <el-form-item
+                      label="种苗品种"
+                      class="down-label"
+                      slot="after"
+                    >
+                      <span>{{ props.row.germchitSpecies }}</span>
+                    </el-form-item>
+                  </TheSeedPurchaseLayout>
+                  <TheSeedPurchaseLayout>
+                    <el-form-item
+                      label="种苗产地"
+                      class="down-label"
+                      slot="pre"
+                    >
+                      <span>{{ props.row.germchitOrigin }}</span>
+                    </el-form-item>
+                    <el-form-item
+                      label="种苗批次名称"
+                      class="down-label"
+                      slot="after"
+                    >
+                      <span>{{ props.row.germchitBatchName }}</span>
+                    </el-form-item>
+                  </TheSeedPurchaseLayout>
+                  <TheSeedPurchaseLayout>
+                    <el-form-item
+                      label="种苗进货量"
+                      class="down-label"
+                      slot="pre"
+                    >
+                      <span>{{ props.row.purchaseAmount }}</span>
+                    </el-form-item>
+                    <el-form-item
+                      label="种苗供应商"
+                      class="down-label"
+                      slot="after"
+                    >
+                      <span>{{ props.row.germchitSupplierName }}</span>
+                    </el-form-item>
+                  </TheSeedPurchaseLayout>
+                  <TheSeedPurchaseLayout>
+                    <el-form-item
+                      label="供应商电话"
+                      class="down-label"
+                      slot="pre"
+                    >
+                      <span v-if="!props.row.germchitSupplierPhone">{{
+                        props.row.germchitSupplierPhone
+                      }}</span>
+                      <span v-else>暂无相关信息</span>
+                    </el-form-item>
+                    <el-form-item
+                      label="订单创建时间"
+                      class="down-label"
+                      slot="after"
+                    >
+                      <span>{{ props.row.gmtCreate }}</span>
+                    </el-form-item>
+                  </TheSeedPurchaseLayout>
+                  <el-form-item label="质检图片" class="down-label">
+                    <div
+                      class="downBox"
+                      v-if="!props.row.germchitQualityInspection"
+                    >
+                      <img
+                        :src="props.row.germchitQualityInspection"
+                        alt="质检图片"
+                      />
+                      <span class="mask">
+                        <span class="mask-icon1">
+                          <i class="el-icon-zoom-in"></i>
+                        </span>
+                      </span>
+                    </div>
+                    <div v-else><span>暂无</span></div>
+                  </el-form-item>
+                </el-form>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="germchitBatchName"
+              label="种苗批次名称"
+            ></el-table-column>
+            <el-table-column
+              prop="germchitSpecies"
+              label="种苗品种"
+            ></el-table-column>
+            <el-table-column
+              prop="purchaseAmount"
+              label="种苗购买数量/尾"
+            ></el-table-column>
+            <el-table-column
+              prop="germchitSupplierName"
+              label="供应商"
+            ></el-table-column>
+            <el-table-column
+              prop="creatorName"
+              label="操作人"
+            ></el-table-column>
+            <el-table-column label="操作" width="200px">
+              <template slot-scope="scope">
+                <!-- 修改按钮 -->
+                <el-button
+                  type="primary"
+                  icon="el-icon-edit"
+                  size="mini"
+                  @click="editEvent(scope.row.id)"
+                ></el-button>
+                <el-tooltip
+                  effect="dark"
+                  content="货物入库"
+                  placement="top"
+                  :enterable="false"
                 >
-                  <span>{{ props.row.germchitBatchName }}</span>
-                </el-form-item>
-              </TheSeedPurchaseLayout>
-              <TheSeedPurchaseLayout>
-                <el-form-item label="种苗进货量" class="down-label" slot="pre">
-                  <span>{{ props.row.purchaseAmount }}</span>
-                </el-form-item>
-                <el-form-item
-                  label="种苗供应商"
-                  class="down-label"
-                  slot="after"
-                >
-                  <span>{{ props.row.germchitSupplierName }}</span>
-                </el-form-item>
-              </TheSeedPurchaseLayout>
-              <TheSeedPurchaseLayout>
-                <el-form-item label="供应商电话" class="down-label" slot="pre">
-                  <span v-if="!props.row.germchitSupplierPhone">{{
-                    props.row.germchitSupplierPhone
-                  }}</span>
-                  <span v-else>暂无相关信息</span>
-                </el-form-item>
-                <el-form-item
-                  label="订单创建时间"
-                  class="down-label"
-                  slot="after"
-                >
-                  <span>{{ props.row.gmtCreate }}</span>
-                </el-form-item>
-              </TheSeedPurchaseLayout>
-              <el-form-item label="质检图片" class="down-label">
-                <div
-                  class="downBox"
-                  v-if="!props.row.germchitQualityInspection"
-                >
-                  <img
-                    :src="props.row.germchitQualityInspection"
-                    alt="质检图片"
-                  />
-                  <span class="mask">
-                    <span class="mask-icon1">
-                      <i class="el-icon-zoom-in"></i>
-                    </span>
-                  </span>
-                </div>
-                <div v-else><span>暂无</span></div>
-              </el-form-item>
-            </el-form>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="germchitBatchName"
-          label="种苗批次名称"
-        ></el-table-column>
-        <el-table-column
-          prop="germchitSpecies"
-          label="种苗品种"
-        ></el-table-column>
-        <el-table-column
-          prop="purchaseAmount"
-          label="种苗购买数量/尾"
-        ></el-table-column>
-        <el-table-column
-          prop="germchitSupplierName"
-          label="供应商"
-        ></el-table-column>
-        <el-table-column prop="creatorName" label="操作人"></el-table-column>
-        <el-table-column label="操作" width="200px">
-          <template slot-scope="scope">
-            <!-- 修改按钮 -->
-            <el-button
-              type="primary"
-              icon="el-icon-edit"
-              size="mini"
-              @click="editEvent(scope.row.id)"
-            ></el-button>
-            <el-tooltip
-              effect="dark"
-              content="货物入库"
-              placement="top"
-              :enterable="false"
-            >
-              <el-button
-                type="success"
-                icon="el-icon-mobile"
-                size="mini"
-                @click="storageById(scope.row.id)"
-              ></el-button>
-            </el-tooltip>
-            <!-- 删除按钮 -->
-            <el-button
-              type="danger"
-              icon="el-icon-delete"
-              size="mini"
-              @click="removePurchaseInfo(scope.row.id)"
-            ></el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <ThePagination
-        @fatherMethod="paginationChangeEvent"
-        :toPagination="paginationInfo"
-      ></ThePagination>
+                  <el-button
+                    type="success"
+                    icon="el-icon-mobile"
+                    size="mini"
+                    @click="storageById(scope.row.id)"
+                  ></el-button>
+                </el-tooltip>
+                <!-- 删除按钮 -->
+                <el-button
+                  type="danger"
+                  icon="el-icon-delete"
+                  size="mini"
+                  @click="removePurchaseInfo(scope.row.id)"
+                ></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <ThePagination
+            @fatherMethod="paginationChangeEvent"
+            :toPagination="paginationInfo"
+          ></ThePagination>
+        </el-tab-pane>
+      </el-tabs>
     </el-card>
     <!-- echarts视图 -->
     <el-card v-show="germchitInfoList" style="margin-top: 1rem">
@@ -168,8 +233,11 @@
         ref="purchaseFormRef"
       >
         <el-form-item label="种苗品种" prop="germchitSpecies">
-          
-          <el-select v-model="tempName" placeholder="请选择" @change="selectEvent">
+          <el-select
+            v-model="tempName"
+            placeholder="请选择"
+            @change="selectEvent"
+          >
             <el-option
               v-for="(item, index) in allSeedInfo"
               :key="item.id"
@@ -188,7 +256,7 @@
             v-model="addPurchaseInfo.purchaseAmount"
           ></el-input-number>
         </el-form-item>
-        <el-form-item label="操作者" prop="creatorName" >
+        <el-form-item label="操作者" prop="creatorName">
           <el-input v-model="addPurchaseInfo.creatorName"></el-input>
         </el-form-item>
       </el-form>
@@ -262,7 +330,8 @@ export default {
         supplyTypeName: "", //投入品类型名字
         warehouseNumber: "", //仓库号
       },
-      tempName:'',
+      baseGermchit: [],
+      tempName: "",
       //查询所有种苗订单信息
       germchitInfoList: [],
       germchitInfo: {},
@@ -273,7 +342,7 @@ export default {
         title: "种苗进货",
         dialogVisible: false,
       },
-      max:null,
+      max: null,
       //获取所有种苗信息
       allSeedInfo: [],
       //种苗进货请求对象
@@ -285,6 +354,11 @@ export default {
         purchaseAmount: 1,
       },
       paginationInfo: {
+        total: 0,
+        page: 1,
+        size: 6,
+      },
+      paginationBaseInfo: {
         total: 0,
         page: 1,
         size: 6,
@@ -309,8 +383,9 @@ export default {
   },
   created() {
     this.getGermchitInfo();
-    this.getGermchitPurchaseInfo();
+    this.getGermchitPurchaseInfo(); //根据基地获取种苗订单信息
     this.getAllPurchaseInfo();
+    this.getBaseGermchit();
   },
   methods: {
     //根据基地获取种苗订单信息
@@ -328,7 +403,11 @@ export default {
       this.paginationInfo.page = page;
       this.getGermchitPurchaseInfo();
     },
-
+    paginationChangeEvent1(size, page) {
+      this.paginationBaseInfo.size = size;
+      this.paginationBaseInfo.page = page;
+      this.getBaseGermchit();
+    },
     //根据种苗ID获取种苗信息
     async getGermchitInfo(id, index) {
       console.log(id);
@@ -365,7 +444,7 @@ export default {
       console.log(res);
       if (res.statusCode === 20000) {
         this.dialogVisible = false;
-        this.getGermchitPurchaseInfo()
+        this.getGermchitPurchaseInfo();
         this.elMessage.success("进货成功");
       }
     },
@@ -429,13 +508,24 @@ export default {
         this.elMessage.success("种苗入库成功");
       }
     },
-    selectEvent(res){
+    selectEvent(res) {
       this.addPurchaseInfo.germchitId = this.allSeedInfo[res].id;
       this.max = this.allSeedInfo[res].germchitAmount;
     },
-    async downExcel(){
-      window.location.href="http://119.23.218.131:9103/base/germchit/excel/+this.$store.state.baseInfo.id"
-    }
+    async downExcel() {
+      window.location.href =
+        "http://119.23.218.131:9103/base/germchit/excel/+this.$store.state.baseInfo.id";
+    },
+    async getBaseGermchit() {
+      const { data: res } = await this.$germchitManagerController(
+        `${this.$store.state.baseInfo.id}/${this.paginationBaseInfo.size}/${this.paginationBaseInfo.page}`
+      );
+      console.log(res);
+      if (res.statusCode === 20000) {
+        this.baseGermchit = res.data.records;
+        this.paginationBaseInfo.total = res.data.total;
+      }
+    },
   },
 };
 </script>

@@ -7,7 +7,7 @@
       @close="closed"
     >
       <el-table
-        v-if="tableType == 1 || tableType == 2"
+        v-if="tableType == 1"
         element-loading-text="拼命加载中"
         v-loading="loading"
         element-loading-background="rgba(0, 0, 0, 0.8)"

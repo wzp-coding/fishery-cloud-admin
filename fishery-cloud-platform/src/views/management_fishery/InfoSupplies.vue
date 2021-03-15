@@ -444,6 +444,7 @@ export default {
         this.allSupplyList = res.data.records;
         this.paginationInfo.total = res.data.total;
         for(let i=0;i<this.allSupplyList.length;i++){
+          this.allSupplyList[i].type = '饲料';
           if(this.allSupplyList[i].picture || this.allSupplyList[i].supplierLicense){
             this.srcList.push(this.allSupplyList[i].picture)
             this.srcListLicense.push(this.allSupplyList[i].supplierLicense)

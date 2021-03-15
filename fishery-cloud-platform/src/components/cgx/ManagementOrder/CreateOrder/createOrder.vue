@@ -20,22 +20,11 @@
             v-model="orderobject.targetType"
             placeholder="请选择客户类型"
           >
-            <el-option label="个人" :value="1"></el-option>
-            <el-option label="企业" :value="2"></el-option>
+            <el-option label="客户" :value="1"></el-option>
             <el-option label="加工厂" :value="3"></el-option>
             <el-option label="冷库" :value="4"></el-option>
           </el-select>
         </el-form-item>
-        <!-- <el-form-item label="发货方类型">
-          <el-select
-            v-model="orderobject.sourceType"
-            placeholder="请选择发货方类型"
-          >
-            <el-option label="养殖基地" :value="1"></el-option>
-            <el-option label="加工厂" :value="2"></el-option>
-            <el-option label="冷库" :value="3"></el-option>
-          </el-select>
-        </el-form-item> -->
         <el-form-item label="客户">
           <el-input
             clearable
@@ -109,9 +98,6 @@
             :disabled="orderobject.baseId === orderobject.targetId"
           ></el-input>
         </el-form-item>
-        <!-- <el-form-item label="产品编号">
-          <el-input v-model="orderid" disabled></el-input>
-        </el-form-item> -->
         <el-form-item label="收货地址">
           <el-select
             v-model="orderobject.receiveAddress"
@@ -282,6 +268,7 @@ export default {
       this.orderobject.targetName = row.customerName;
       this.orderobject.phoneNumber = row.phoneNumber;
       this.orderobject.targetId = row.id;
+      this.orderobject.targetType = row.customerType
       this.orderobject.receiveAddress = row.receiveAddress;
       this.orderobject.addressLatitude = row.addressLatitude;
       this.orderobject.addressLongitude = row.addressLongitude;

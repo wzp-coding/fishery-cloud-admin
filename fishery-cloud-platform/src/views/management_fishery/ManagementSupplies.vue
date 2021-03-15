@@ -19,15 +19,32 @@
       </el-col>
     </el-row>
     <el-tabs type="border-card">
+      <el-tab-pane label="农资库存">
+        <el-table :data="baseNowSupplyList" border stripe>
+          <el-table-column prop="name" label="农资名称"></el-table-column>
+          <el-table-column prop="type" label="投入品类型"></el-table-column>
+          <el-table-column
+            prop="totalWeight"
+            label="进货量(kg)"
+          ></el-table-column>
+          <el-table-column
+            prop="surplusWeight"
+            label="剩余量(kg)"
+          ></el-table-column>
+          <el-table-column prop="gmtCreate" label="进货日期"></el-table-column>
+        </el-table>
+      </el-tab-pane>
       <el-tab-pane label="入库记录">
         <el-row>
           <el-col style="float: right; width: 70px">
-              <el-tooltip
-                effect="dark"
-                content="导出基地订单信息"
-                placement="top-start"
-                ><el-button type="success" @click="downExcelIn">导出</el-button></el-tooltip
-              >
+            <el-tooltip
+              effect="dark"
+              content="导出基地订单信息"
+              placement="top-start"
+              ><el-button type="success" @click="downExcelIn"
+                >导出</el-button
+              ></el-tooltip
+            >
           </el-col>
           <el-col style="width: 100px; float: right; margin-left: 10px">
             <el-button
@@ -36,8 +53,7 @@
               >农资入库</el-button
             >
           </el-col>
-          <el-col>
-          </el-col>
+          <el-col> </el-col>
         </el-row>
         <el-table :data="baseSupplyList" border stripe>
           <el-table-column type="expand">
@@ -115,12 +131,14 @@
       <el-tab-pane label="出库记录">
         <el-row>
           <el-col style="float: right; width: 70px">
-              <el-tooltip
-                effect="dark"
-                content="导出基地订单信息"
-                placement="top-start"
-                ><el-button type="success"  @click="downExcel">导出</el-button></el-tooltip
-              >
+            <el-tooltip
+              effect="dark"
+              content="导出基地订单信息"
+              placement="top-start"
+              ><el-button type="success" @click="downExcel"
+                >导出</el-button
+              ></el-tooltip
+            >
           </el-col>
           <el-col style="float: right; width: 75px; margin-right: 30px">
             <el-button
@@ -256,6 +274,7 @@ export default {
     return {
       baseId: this.$store.state.userInfo.baseId,
       // baseId: "1248910886228332544",
+      baseNowSupplyList: [],
       baseSupplyList: [],
       baseSupplyOutList: [],
       addInfo: {
@@ -320,6 +339,7 @@ export default {
   created() {
     this.getBaseSupplyInfo(); //获取基地入库记录
     this.getOutSupplyInfo(); //获取基地出库记录
+    this.getBaseNowSupply(); //获取基地库存
   },
   methods: {
     async getBaseSupplyInfo() {
@@ -327,8 +347,10 @@ export default {
         `in/${this.baseId}/${this.paginationInfoIn.size}/${this.paginationInfoIn.page}`
       );
       console.log(res);
-      this.baseSupplyList = res.data.records;
-      this.paginationInfoIn.total = res.data.total;
+      if (res.statusCode === 20000) {
+        this.baseSupplyList = res.data.records;
+        this.paginationInfoIn.total = res.data.total;
+      }
     },
     async addBaseSupply() {
       console.log(this.addInfo);
@@ -428,12 +450,26 @@ export default {
       this.paginationInfoOut.page = page;
       this.getOutSupplyInfo();
     },
-    async downExcel(){
-      window.location.href ='http://119.23.218.131:9103/base/supply/out/excel/+this.$store.state.baseInfo.id'
+    async downExcel() {
+      window.location.href =
+        "http://119.23.218.131:9103/base/supply/out/excel/+this.$store.state.baseInfo.id";
     },
-    async downExcelIn(){
-      window.location.href="http://119.23.218.131:9103/base/supply/in/excel/+this.$store.state.baseInfo.id"
-    }
+    async downExcelIn() {
+      window.location.href =
+        "http://119.23.218.131:9103/base/supply/in/excel/+this.$store.state.baseInfo.id";
+    },
+    async getBaseNowSupply() {
+      const { data: res } = await this.$baseSupply.get(
+        `all/${this.$store.state.baseInfo.id}`
+      );
+      console.log(res);
+      if (res.statusCode === 20000) {
+        this.baseNowSupplyList = res.data;
+        for(let i=0;i<this.baseNowSupplyList.length;i++){
+          this.baseNowSupplyList[i].type = '饲料'
+        }
+      }
+    },
   },
 };
 </script>
