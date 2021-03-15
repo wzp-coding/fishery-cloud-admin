@@ -2,7 +2,7 @@
   <div>
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item>养殖管理</el-breadcrumb-item>
+      <el-breadcrumb-item>渔业管理</el-breadcrumb-item>
       <el-breadcrumb-item>农资管理</el-breadcrumb-item>
     </el-breadcrumb>
     <el-row
@@ -35,6 +35,7 @@
             <el-button
               type="primary"
               @click="toDialogAddInfo.dialogVisible = true"
+              v-auth="'traceability_agricultural'"
               >农资入库</el-button
             >
           </el-col>
@@ -108,6 +109,7 @@
                 icon="el-icon-edit"
                 size="mini"
                 @click="editInEvent(scope.row.id, scope.row.supplyId)"
+                v-auth="'traceability_agricultural_update'"
               ></el-button>
               <!-- 出库按钮 -->
               <!-- <el-tooltip
@@ -130,6 +132,7 @@
                 icon="el-icon-delete"
                 size="mini"
                 @click="removeSupplyIn(scope.row.id)"
+                v-auth="'traceability_agricultural_delete'"
               ></el-button>
             </template>
           </el-table-column>
@@ -150,14 +153,15 @@
                 effect="dark"
                 content="导出基地订单信息"
                 placement="top-start"
-                ><el-button type="success">导出</el-button></el-tooltip
+                ><el-button type="success" v-auth="'traceability_agricultural_select'">导出</el-button></el-tooltip
               >
             </downloadExcel>
           </el-col>
-          <el-col style="float: right; width: 75px; margin-right: 30px">
+          <el-col style="float: right; width: 75px; margin-right: 25px">
             <el-button
               type="primary"
               @click="toDialogAddOut.dialogVisible = true"
+              v-auth="'traceability_agricultural'"
               >农资出库</el-button
             >
           </el-col>

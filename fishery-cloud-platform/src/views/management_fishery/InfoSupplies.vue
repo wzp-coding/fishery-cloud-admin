@@ -2,7 +2,7 @@
   <div style="containter">
     <!-- 面包屑 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item>对虾管理</el-breadcrumb-item>
+      <el-breadcrumb-item>渔业管理</el-breadcrumb-item>
       <el-breadcrumb-item>投入品管理</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card style="containter">
@@ -16,6 +16,7 @@
             <el-button
               type="primary"
               @click="toDialogSupply.dialogVisible = true"
+              v-auth="'traceability_fishery_add'"
               >添加投入品</el-button
             >
           </el-col>
@@ -102,6 +103,7 @@
             <el-row :gutter="15">
               <el-col :span="11"
                 ><el-button size="mini" @click="editSupplyEvent(scope.row.id)"
+                v-auth="'traceability_fishery_update'"
                   >编辑</el-button
                 ></el-col
               >
@@ -110,6 +112,7 @@
                   size="mini"
                   type="danger"
                   @click="removeSupply(scope.row.id)"
+                  v-auth="'traceability_fishery_delete'"
                   >删除</el-button
                 ></el-col
               >
@@ -329,9 +332,8 @@ export default {
       fileList: [],
       paginationInfo: {
         total: 0,
-        size: 3,
+        size: 6,
         page: 1,
-        // sizeGroup:[4,6,8,10]
       },
       // 放大图片路径
       previewImg: "",

@@ -63,15 +63,15 @@
           <el-row class="weatherBottom">
             <el-col :span="12" class="weatherBL">
               <p style="font-weight: bold; font-size: 20px">早</p>
-              <p>气温:{{ item.qw1 }} ℃</p>
-              <p>天气:{{ item.tq1 }}</p>
-              <p>风力:{{ item.fl1 }}</p>
+              <p>气温：{{ item.qw1 }} ℃</p>
+              <p>天气：{{ item.tq1 }}</p>
+              <p>风力：{{ item.fl1 }}</p>
             </el-col>
             <el-col :span="12" class="weatherBR">
               <p style="font-weight: bold; font-size: 20px">晚</p>
-              <p>气温:{{ item.qw2 }} ℃</p>
-              <p>天气:{{ item.tq2 }}</p>
-              <p>风力:{{ item.fl2 }}</p>
+              <p>气温：{{ item.qw2 }} ℃</p>
+              <p>天气：{{ item.tq2 }}</p>
+              <p>风力：{{ item.fl2 }}</p>
             </el-col>
           </el-row>
         </div>
@@ -85,49 +85,38 @@ export default {
   data() {
     return {
       weatherIndex: "00",
-      weatherData: {
-        cityId: "CH280101",
-        cityName: "广州",
-        list: [
-          {
-            date: "2021-01-20",
-            fl1: "微风",
-            fl2: "微风",
-            fx1: "无持续风向",
-            fx2: "无持续风向",
-            numfl1: "0",
-            numfl2: "0",
-            numfx1: "0",
-            numfx2: "0",
-            numtq1: "01",
-            numtq2: "01",
-            qw1: "22",
-            qw2: "14",
-            tq1: "多云",
-            tq2: "多云",
-          },
-          {
-            date: "2021-01-21",
-            fl1: "微风",
-            fl2: "微风",
-            fx1: "无持续风向",
-            fx2: "无持续风向",
-            numfl1: "0",
-            numfl2: "0",
-            numfx1: "0",
-            numfx2: "0",
-            numtq1: "02",
-            numtq2: "02",
-            qw1: "23",
-            qw2: "16",
-            tq1: "阴",
-            tq2: "阴",
-          },
-        ],
-        sj: "2021-01-20 15:00:00",
-      },
+      weatherData: {},
       weatherFlag: 1,
     };
+  },
+  methods: {
+    async getWeather() {
+      // console.log(this.key)
+      // console.log(this.lat)
+      // console.log(this.lng)
+      const key = "pwft87o59d5qillf";
+      const { lat, lng } = JSON.parse(localStorage.getItem("location"));
+      const { data: res } = await this.$originAxios.get(
+        "http://api.yytianqi.com/forecast7d",
+        {
+          params: {
+            city: lat + "," + lng,
+            key: key,
+          },
+        }
+      );
+      this.weatherData = res.data;
+      console.log("this.weatherData: ", this.weatherData);
+      // console.log(res)
+      let sj = parseInt(res.data.sj.split(" ")[1].split(":")[0]);
+      // console.log(sj)
+      if ((sj > 0 && sj <= 6) || (sj >= 18 && sj <= 24)) this.weatherFlag = 2;
+      else this.weatherFlag = 1;
+      // console.log(this.weatherFlag)
+    },
+  },
+  created() {
+    this.getWeather();
   },
 };
 </script>

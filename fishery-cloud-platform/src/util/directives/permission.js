@@ -1,54 +1,55 @@
-let permissionList = undefined;
-
+window.__permissionList = undefined;
+// --------------处理刷新---开始------------
 // 每次加载这个JS文件的时候，从session获取
-const one = sessionStorage.getItem('oneLevel');
-const two = sessionStorage.getItem('twoLevel');
-const three = sessionStorage.getItem('threeLevel');
-sessionStorage.removeItem('oneLevel');
-sessionStorage.removeItem('twoLevel');
-sessionStorage.removeItem('threeLevel');
-const oneLevel = one ? JSON.parse(one) : {};
-const twoLevel = two ? JSON.parse(two) : {};
-const threeLevel = three ? JSON.parse(three) : {};
+let one = sessionStorage.getItem('__oneLevel');
+let two = sessionStorage.getItem('__twoLevel');
+let three = sessionStorage.getItem('__threeLevel');
+sessionStorage.removeItem('__oneLevel');
+sessionStorage.removeItem('__twoLevel');
+sessionStorage.removeItem('__threeLevel');
+window.__oneLevel = one ? JSON.parse(one) : {};
+window.__twoLevel = two ? JSON.parse(two) : {};
+window.__threeLevel = three ? JSON.parse(three) : {};
 
-// 在页面刷新之前将oneLevel,twoLevel,threeLevel的信息存在sessionStorage(监听刷新触发的事件)
+// 在页面刷新之前将__oneLevel,__twoLevel,__threeLevel的信息存在sessionStorage(监听刷新触发的事件)
 window.addEventListener('beforeunload', () => {
-    sessionStorage.setItem('oneLevel', JSON.stringify(oneLevel))
-    sessionStorage.setItem('twoLevel', JSON.stringify(twoLevel))
-    sessionStorage.setItem('threeLevel', JSON.stringify(threeLevel))
+    sessionStorage.setItem('__oneLevel', JSON.stringify(__oneLevel))
+    sessionStorage.setItem('__twoLevel', JSON.stringify(__twoLevel))
+    sessionStorage.setItem('__threeLevel', JSON.stringify(__threeLevel))
 })
+// --------------处理刷新---结束------------
 export default {
     bind: function (el, binding, vnode) {
         const { context: vm } = vnode;
-        if (!permissionList) {
-            // 第一次时获取数据
-            permissionList = vm.$store.state.permissionList;
-            // console.log('permissionList: ', JSON.parse(JSON.stringify(permissionList)));
+        if(!__permissionList){
+            // 第一次取数据
+            __permissionList = vm.$store.state.permissionList;
+            console.log('__permissionList: ', __permissionList);
         }
-        if (vm._.isEmpty(oneLevel) && vm._.isEmpty(twoLevel) && vm._.isEmpty(threeLevel)) {
+        if (vm._.isEmpty(__oneLevel) && vm._.isEmpty(__twoLevel) && vm._.isEmpty(__threeLevel)) {
             // 遍历一二三级权限
-            permissionList.forEach(one => {
-                oneLevel[one.name] = true;
+            __permissionList.forEach(one => {
+                __oneLevel[one.name] = true;
                 if (one.children) {
                     one.children.forEach(two => {
-                        twoLevel[two.name] = true;
+                        __twoLevel[two.name] = true;
                         if (two.children) {
                             two.children.forEach(three => {
-                                threeLevel[three.name] = true;
+                                __threeLevel[three.name] = true;
                             })
                         }
                     })
                 }
             })
+            console.log('__threeLevel: ');
+            console.table(__threeLevel)
         }
-        // console.log('oneLevel: ');
-        // console.table(oneLevel)
-        // console.log('twoLevel: ');
-        // console.table(twoLevel)
-        console.log('threeLevel: ');
-        console.table(threeLevel)
+        // console.log('__oneLevel: ');
+        // console.table(__oneLevel)
+        // console.log('__twoLevel: ');
+        // console.table(__twoLevel)
         // 判断是否存在权限
-        if (oneLevel[binding.value] || twoLevel[binding.value] || threeLevel[binding.value]) {
+        if (__oneLevel[binding.value] || __twoLevel[binding.value] || __threeLevel[binding.value]) {
             el.disabled = false;
             el.classList.remove("is-disabled");
         } else {

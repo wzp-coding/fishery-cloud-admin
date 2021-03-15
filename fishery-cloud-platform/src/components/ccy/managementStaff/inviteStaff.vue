@@ -1,39 +1,51 @@
 <template>
   <el-dialog
     @close="closeEvent"
-    title="添加员工"
+    title="邀请员工"
     :visible.sync="toDialogInfo.dialogVisible"
-    width="30%"
+    :close-on-click-modal="false"
+    width="50%"
   >
-    <el-form :model="addInfo" :rules="rules" label-width="115px" ref="formRef">
-      <el-form-item label="姓名" prop="username">
-        <el-input v-model="addInfo.username"></el-input>
-      </el-form-item>
-      <el-form-item label="职位" prop="baseIdentity">
-        <el-select v-model="addInfo.baseIdentity" placeholder="请选择身份">
-          <el-option
-            v-for="item in options"
-            :key="item.id"
-            :label="item.value"
-            :value="item.id"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="addInfo.email"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="addInfo.password"></el-input>
-      </el-form-item>
-      <el-form-item label="电话" prop="phone">
-        <el-input v-model="addInfo.phone"></el-input>
+    <el-form :model="searchInfo">
+      <el-form-item
+        label="搜索员工"
+        prop="id"
+        class="inviteMember"
+        label-width="90px"
+      >
+        <el-input
+          placeholder="请输入要邀请的用户ID"
+          v-model="searchInfo.id"
+          class="input-with-select"
+        >
+          <el-button
+            slot="append"
+            icon="el-icon-search"
+            @click="searchInviteMember"
+          ></el-button>
+        </el-input>
       </el-form-item>
     </el-form>
-    <div slot="footer" class="dialog-footer">
+    <el-table :data="userData"  v-loading="loading" v-if="!loading" style="width:100%">
+      <el-table-column prop="id" label="id">
+      </el-table-column>
+      <el-table-column prop="phone" label="手机号码">
+      </el-table-column>
+      <el-table-column label="操作" align="center">
+        <template>
+          <el-button
+            size="mini"
+            type="primary"
+            @click="inviteWorker()"
+            >邀请</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+    <!-- <div slot="footer" class="dialog-footer">
       <el-button @click="toDialogInfo.dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="editEvent">确 定</el-button>
-    </div>
+      <el-button type="primary" @click="inviteEvent">确 定</el-button>
+    </div> -->
   </el-dialog>
 </template>
 
@@ -46,15 +58,11 @@ export default {
   },
   data() {
     return {
-      addInfo: {
-        // avatar: "",
-        baseId: this.$store.state.baseInfo.id,
-        baseIdentity: null,
-        email: "",
-        password: "",
-        phone: "",
-        username: "",
+      searchInfo: {
+        id: "",
       },
+      loading: true,
+      userData: [],
       options: [
         {
           id: "1",
@@ -106,19 +114,38 @@ export default {
     };
   },
   methods: {
-    async editEvent() {
-      console.log(this.addInfo);
-      const { data: res } = await this.$admin.post("", this.addInfo);
-      if (res.statusCode === 20000) {
-        this.toDialogInfo.dialogVisible = false;
-        this.elMessage.success('添加成功')
-        this.$emit('fatherMethods')
-      }
-      console.log(res);
-      console.log(this.addInfo);
-    },
     closeEvent() {
-      this.$refs.formRef.resetFields();
+      this.userData = [];
+      this.searchInfo.id = ""
+    },
+    async searchInviteMember() {
+      console.log(this.searchInfo.id);
+      const { data: res } = await this.$user.get(`/${this.searchInfo.id}`);
+      console.log(res);
+      if(res.statusCode === 20000 ){
+        this.userData = [res.data];
+        this.loading = false;
+      }else{
+        this.elMessage.info('查无此ID用户')
+      }
+      // const { data: res } = await this.$user.get(`${this.searchInfo.id}`);
+      // console.log(res);
+      // if (res.statusCode === 20000) {
+      //   this.userData[0] = res.data;
+      //   this.loading = false;
+      // } else {
+      //   this.elMessage.info("查无此ID用户");
+      // }
+    },
+    async inviteWorker() {
+      const { data: res } = await this.$user.get(`invite/${this.searchInfo.id}`);
+      console.log(res);
+      if (res.statusCode === 20000) {
+        this.elMessage.success("成功发出邀请");
+        this.toDialogInfo.dialogVisible = false;
+      } else {
+        console.error("邀请失败");
+      }
     },
   },
 };

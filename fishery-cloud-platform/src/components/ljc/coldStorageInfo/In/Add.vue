@@ -6,6 +6,7 @@
       icon="el-icon-download"
       size="mini"
       @click="dialogVisible = true"
+      v-auth="auth"
     ></el-button>
     <!-- 按钮结束 -->
 
@@ -99,6 +100,7 @@ export default {
     id: {},
     createPersonList: {},
     seedInfo: {},
+    auth:''
   },
   data() {
     return {

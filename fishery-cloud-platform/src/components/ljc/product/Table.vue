@@ -89,6 +89,7 @@
                 :root="root"
                 :deleteUrl="deleteUrl"
                 @getAllInfo="getAllInfo()"
+                :auth="'traceability_product_delete'"
               />
             </el-col>
           </el-row>

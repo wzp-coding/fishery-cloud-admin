@@ -114,6 +114,7 @@
                 :root="root"
                 :deleteUrl="deleteUrl"
                 @getAllInfo="getAllInfo()"
+                :auth="'traceability_process'"
               />
             </el-col>
           </el-row>

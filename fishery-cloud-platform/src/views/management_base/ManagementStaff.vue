@@ -16,6 +16,7 @@
             <el-button
               type="primary"
               @click="toInviteStaff.dialogVisible = true"
+              v-auth="'enterprise_enterprise_user'"
               >邀请员工</el-button
             >
           </el-col>
@@ -35,8 +36,8 @@
               icon="el-icon-edit"
               size="small"
               @click="editAdminInfo(scope.row.id, scope.row.username)"
-            ></el-button>
-            <!--  -->
+              v-auth="'authority_role_update'"
+            >修改角色</el-button>
             <!-- 删除按钮 -->
             <!-- type="danger": 红色警告按钮 -->
             <el-button
@@ -44,6 +45,7 @@
               icon="el-icon-delete"
               size="small"
               @click="removeStaff(scope.row.id)"
+              v-auth="'enterprise_enterprise_user'"
             ></el-button>
           </template>
         </el-table-column>
@@ -58,7 +60,10 @@
       :toDialogInfo="toEditInfo"
       @fatherMethods="getAllStaffInfo"
     ></editStaffInfo>
-    <inviteStaff :toDialogInfo="toInviteStaff" @fatherMethods="getAllStaffInfo"></inviteStaff>
+    <inviteStaff
+      :toDialogInfo="toInviteStaff"
+      @fatherMethods="getAllStaffInfo"
+    ></inviteStaff>
   </div>
 </template>
 
@@ -83,33 +88,62 @@ export default {
         size: 6,
         page: 1,
       },
+      baseIdentity: "",
       staffInfoList: [],
       toEditInfo: {
         dialogVisible: false,
         id: "",
-        username:''
+        username: "",
       },
       toInviteStaff: {
         dialogVisible: false,
+      },
+      addInfo: {
+        name: "111",
+        remarks: "222",
+        useable: false,
       },
     };
   },
   created() {
     this.getAllStaffInfo();
+    this.getBaseIdentity();
+    this.temp();
+    // this.add();
   },
   methods: {
+    async add() {
+      const { data: res } = await this.$user.get(`getBaseMember/${this.$store.state.baseInfo.id}`);
+      console.log(res);
+    },
+    async count(){
+      const {data: res} = await this.$user.get(`getBaseMemberCount/${this.$store.state.baseInfo.id}`)
+      console.log(res);
+    },
+    async temp() {
+      const { data: res } = await this.$user.get(`getTypeInvitation/1/1/3`);
+      console.log(res);
+    },
+    async getBaseIdentity() {
+      const { data: res } = await this.$role.get(
+        `getByUserId/${this.$store.state.userInfo.id}`
+      );
+      // console.log(res);
+      // console.log(res.data[0]);
+    },
+    //分页查询基地人员信息
     async getAllStaffInfo() {
-      const { data: res } = await this.$admin.post(
-        `search/${this.paginationInfo.page}/${this.paginationInfo.size}`
+      const { data: res } = await this.$user.get(
+        `getBaseMember/${this.paginationInfo.page}/${this.paginationInfo.size}/${this.$store.state.baseInfo.id}`
       );
       console.log(res);
       if (res.statusCode === 20000) {
-        this.staffInfoList = res.data.records;
-        for(let i=0;i<this.staffInfoList.length;i++){
-          if(this.staffInfoList[i].baseIdentity ===2){
-            this.staffInfoList[i].baseIdentity = '老板'
-          }else{
-            this.staffInfoList[i].baseIdentity = '员工'
+        this.staffInfoList = res.data.rows;
+        for (let i = 0; i < this.staffInfoList.length; i++) {
+          if (this.staffInfoList[i].baseIdentity === 2) {
+            this.staffInfoList[i].baseIdentity = "老板";
+          } else {
+            this.staffInfoList[i].baseIdentity = "员工";
           }
         }
         this.paginationInfo.total = res.data.total;
@@ -124,7 +158,6 @@ export default {
       this.toEditInfo.id = id;
       this.toEditInfo.username = name;
       this.toEditInfo.dialogVisible = true;
-      
     },
     async removeStaff(id) {
       const confirmResult = await this.elConfirm(
@@ -141,12 +174,12 @@ export default {
       if (confirmResult !== "confirm") {
         return this.elMessage.info("已取消删除");
       }
-      const { data: res } = await this.$admin.delete(`${id}`);
+      const { data: res } = await this.$user.put(`sack/${id}`);
       console.log(res);
       if (res.statusCode === 20000) {
         this.elMessage.success("删除成功！");
-        this.getAllStaffInfo()
-      }else{
+        this.getAllStaffInfo();
+      } else {
         this.elMessage.error("删除失败！");
       }
     },

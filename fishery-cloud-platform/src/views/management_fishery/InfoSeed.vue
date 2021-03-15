@@ -2,7 +2,7 @@
   <div>
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item>养殖管理</el-breadcrumb-item>
+      <el-breadcrumb-item>渔业管理</el-breadcrumb-item>
       <el-breadcrumb-item>种苗信息</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
@@ -13,7 +13,7 @@
             <span>种苗信息</span>
           </el-col>
           <el-col style="float: right; width: 100px; margin-right: 10px">
-            <el-button type="primary" @click="toaddSeed.dialogVisible = true"
+            <el-button type="primary" @click="toaddSeed.dialogVisible = true" v-auth="'traceability_fisheryInfo_add'"
               >添加种苗</el-button
             >
           </el-col>
@@ -94,6 +94,7 @@
                 @click="editView(scope.row.id)"
                 icon="el-icon-edit"
                 size="mini"
+                v-auth="'traceability_fisheryInfo_update'"
               ></el-button
             ></el-tooltip>
             <el-tooltip
@@ -107,6 +108,7 @@
                 icon="el-icon-s-order"
                 @click="purchaseView(scope.row.id)"
                 size="mini"
+                v-auth="'traceability_fisheryInfo'"
               ></el-button> </el-tooltip
             ><!-- 入库按钮 -->
             <el-tooltip
@@ -120,6 +122,7 @@
                 type="success"
                 icon="el-icon-mobile"
                 size="mini"
+                v-auth="'traceability_refrigeratory'"
               ></el-button>
             </el-tooltip>
             <!-- 删除按钮 -->
@@ -134,6 +137,7 @@
                 icon="el-icon-delete"
                 size="mini"
                 @click="removeGermchit(scope.row.id)"
+                v-auth="'traceability_fisheryInfo_delete'"
               ></el-button>
             </el-tooltip>
           </template>
@@ -188,7 +192,7 @@ export default {
       //分页信息
       paginationInfo: {
         total: 0,
-        size: 3,
+        size: 6,
         page: 1,
       },
       //修改种苗信息

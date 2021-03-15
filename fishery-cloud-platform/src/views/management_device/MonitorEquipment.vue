@@ -12,7 +12,7 @@
           <span>监控设备</span>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary" @click="ShowAddDevice=true">添加设备</el-button>
+          <el-button type="primary" @click="ShowAddDevice=true" v-auth="'traceability_monitor_add'">添加设备</el-button>
         </el-col>
       </el-row>
       <!--标题区域——send-->
@@ -31,7 +31,7 @@
               设备数量：{{total}}台
             </el-col>
             <el-col :span="9" :push="3">
-              <SearchDevice @getequipmentList="getequipmentList" @searchfor="searchfor($event)" :SearchType="SearchType"></SearchDevice>
+              <SearchDevice @getequipmentList="getequipmentList" @searchfor="searchfor($event)" :SearchType="SearchType" auth="traceability_monitor_select"></SearchDevice>
             </el-col>
           </el-row>
 
@@ -53,12 +53,12 @@
             </el-table-column>
             <el-table-column label="状态" width="100px" align="center">
               <template slot-scope="scope">
-                <el-switch v-model="scope.row.statusCode" active-value="1" inactive-value="0" active-color="#13ce66" inactive-color="#ff4949" @change="changeCode(scope.row.id,scope.row.statusCode)"></el-switch>
+                <el-switch v-model="scope.row.statusCode" active-value="1" inactive-value="0" active-color="#13ce66" inactive-color="#ff4949" @change="changeCode(scope.row.id,scope.row.statusCode)" v-auth="'traceability_monitor_update'"></el-switch>
               </template>
             </el-table-column>
             <el-table-column label="操作" align="center">
               <template slot-scope="scope">
-              <el-tooltip content="删除设备"><el-button type="danger" icon="el-icon-delete" size="mini" @click="deletedevice(scope.row.id)"></el-button></el-tooltip>
+              <el-tooltip content="删除设备"><el-button type="danger" icon="el-icon-delete" size="mini" @click="deletedevice(scope.row.id)" v-auth="'traceability_monitor_delete'"></el-button></el-tooltip>
               </template>
             </el-table-column>
             </el-table>

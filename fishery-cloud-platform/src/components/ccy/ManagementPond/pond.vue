@@ -50,13 +50,14 @@
               size="mini"
               slot="reference"
               v-if="toPond.germchitId != null"
+              v-auth="'traceability_pond'"
               >更多</el-button
             >
           </el-popover>
         </div>
       </el-col>
     </el-row>
-    <el-row>
+    <el-row class="pondInfo">
       <el-col :span="8">
         <div class="imgBox">
           <img src="../../../assets/images/pond.jpg" alt="" />
@@ -86,8 +87,8 @@
         </p>
       </el-col>
     </el-row>
-    <el-row class="buttons">
-      <el-col :span="24">
+    <el-row >
+      <el-col :span="20" :offset="11" class="buttons">
         <div>
           <!-- 有投放的才有捕捞选项 -->
           <el-tooltip
@@ -102,6 +103,7 @@
               icon="el-icon-wind-power"
               size="mini"
               @click="catchEvent()"
+              v-auth="'traceability_pond'"
             ></el-button>
           </el-tooltip>
           <!-- 有投放的才有投料选项 -->
@@ -117,10 +119,10 @@
               type="warning"
               size="mini"
               @click="toFeedInfo.dialogVisible = true"
+              v-auth="'traceability_pond'"
             ></el-button>
           </el-tooltip>
           <!-- 投苗过的不可以再投 -->
-          <!--  -->
           <el-tooltip
             effect="dark"
             content="投苗"
@@ -133,6 +135,7 @@
               icon="el-icon-arrow-down"
               size="mini"
               @click="toDialogFarmInfo.dialogVisible = true"
+              v-auth="'traceability_pond'"
             ></el-button>
           </el-tooltip>
           <el-button
@@ -140,12 +143,14 @@
             icon="el-icon-edit"
             type="info"
             @click="toDialogEdit.dialogVisible = true"
+            v-auth="'traceability_pond_update'"
           ></el-button>
           <el-button
             size="mini"
             icon="el-icon-delete"
             type="danger"
             @click="deletePond(toPond.pondId)"
+            v-auth="'traceability_pond_delete'"
           ></el-button>
         </div>
       </el-col>
@@ -477,7 +482,7 @@ export default {
   padding: 5px;
   margin: 0 0 10px 10px;
   border-radius: 4px;
-  height: 270px;
+  height: 260px;
   position: relative;
 }
 .el-row {
@@ -511,10 +516,11 @@ el-col {
     height: 100%;
   }
 }
-
+.pondInfo{
+  height: 180px;
+}
 .buttons {
-  position: absolute;
-  bottom: 3px;
+  bottom: 1px;
   right: 5px;
 }
 </style>

@@ -5,6 +5,7 @@
       icon="el-icon-delete"
       size="mini"
       @click="removeById()"
+      v-auth="auth"
     ></el-button>
     <!-- 删除按钮结束 -->
 </template>
@@ -19,6 +20,8 @@ export default {
     deleteUrl: {},
     // 根路径
     root: {},
+
+    auth:""
   },
   data() {
     return {};
@@ -44,7 +47,7 @@ export default {
       const { data: res } = await this["$" + this.root].delete(
         `${this.deleteUrl}/${this.id}`
       );
-      if (res.statusCode == 20000) {  
+      if (res.statusCode == 20000) {
         this.$emit("getAllInfo");
         this.elMessage.success(res.message);
       }
