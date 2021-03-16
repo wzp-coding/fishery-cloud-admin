@@ -17,6 +17,7 @@
         </el-form-item>
         <el-form-item label="客户类型">
           <el-select
+          @change="selectEvent"
             v-model="orderobject.targetType"
             placeholder="请选择客户类型"
           >
@@ -127,11 +128,13 @@
       </span>
     </el-dialog>
     <Customerfrom
+    :germchitId="germchitId"
       :CustomerVisible="CustomerVisible"
       @setCustomer="setCustomer"
       @setRefInfo="setRefInfo"
       @CustomerClose="CustomerClose"
       @setProcess="setProcess"
+      :togermchitId="germchitId"
       :tableType="orderobject.targetType"
     >
     </Customerfrom>
@@ -156,8 +159,8 @@ export default {
     orderid: {
       type: String,
     },
-    look: {
-      type: Boolean,
+    germchitId:{
+      type:String
     },
     orderName: {
       type: String,
@@ -201,12 +204,14 @@ export default {
         //   类型
         targetType: null,
       },
+      // germchitId:null,  //种苗ID
       // 控制顾客表单
       CustomerVisible: false,
       // 冷库面板
       ProductVisible: false,
       dialogVisible: this.createdialogVisible,
       rules: {},
+      // germchitId:null
     };
   },
   watch: {
@@ -259,8 +264,9 @@ export default {
     },
     // 关闭收货方信息
     CustomerClose() {
+      console.log('关闭收货方信息');
       this.CustomerVisible = false;
-      // this.
+      // this.orderobject.targetType = null;
     },
     // 设置子组件传来的顾客信息
     setCustomer(row) {
@@ -294,15 +300,10 @@ export default {
     async setProcess(row) {
       console.log(row);
       this.orderobject.targetId = row.baseId;
-      this.orderobject.receiveAddress = row.factoryAddress;
-      this.orderobject.targetName = row.factoryName;
-      const { data: res } = await this.$getOneProcess.get(`${row.id}`);
-      if (res.statusCode === 20000) {
-        this.orderobject.addressLatitude =
-          res.data.processingFactoryPositionLongitude;
-        this.orderobject.addressLongitude =
-          res.data.processingFactoryPositionLatitude;
-      }
+      this.orderobject.receiveAddress = row.processingFactoryAddress;
+      this.orderobject.targetName = row.processingFactoryName;
+      this.orderobject.processingFactoryPositionLongitude = row.processingFactoryPositionLongitude;
+      this.orderobject.addressLatitude =row.processingFactoryPositionLatitude;
       console.log(this.orderobject);
     },
     // 提交创建表单
@@ -330,6 +331,13 @@ export default {
         this.elMessage.error(res.message);
       }
     },
+    selectEvent(res){
+      console.log(res);
+      if(res === 3){
+        // this. 
+        // germchitId
+      }
+    }
   },
 };
 </script>

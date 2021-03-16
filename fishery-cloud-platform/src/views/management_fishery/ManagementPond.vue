@@ -70,10 +70,7 @@
                     "
                     @click="
                       creteOrderEvent(
-                        scope.row.id,
-                        scope.row.germchitBatchName,
-                        scope.row.surplusWeight,
-                        scope.row.surplusAmount
+                        scope.row
                       )
                     "
                   ></el-button>
@@ -116,12 +113,12 @@
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button
+                <!-- <el-button
                   type="primary"
                   icon="el-icon-edit"
                   size="small"
                   @click="editFeedEvent(scope.row.pondId)"
-                ></el-button>
+                ></el-button> -->
                 <el-button
                   type="danger"
                   icon="el-icon-delete"
@@ -145,7 +142,7 @@
       :createdialogVisible="createdialogVisible"
       :orderid="orderid"
       :ordertitle="ordertitle"
-      :look="look"
+      :germchitId="germchitId"
       :orderName="orderName"
       @refresh="eventRefresh"
       :catchMax="catchMax"
@@ -265,9 +262,9 @@ export default {
         shrimpMethod: "",
       },
       //创建订单
+      germchitId:null,
       createdialogVisible: false,
       orderid: "",
-      look: true,
       orderName: "",
       ordertitle: "创建订单",
       catchMax: null, //最大出售质量
@@ -403,14 +400,14 @@ export default {
       this.createdialogVisible = false;
     },
     //创建订单
-    creteOrderEvent(id, name, surplusWeight, surplusAmount) {
-      this.orderid = id;
-      this.orderName = name;
-      this.surplusAmount = surplusAmount;
-      this.catchMax = surplusWeight;
+    creteOrderEvent(res) {
+      console.log(res);
+      this.orderid = res.id;
+      this.orderName = res.germchitBatchName;
+      this.surplusAmount = res.surplusAmount;
+      this.catchMax = res.surplusWeight;
+      this.germchitId = res.germchitId ;
       this.createdialogVisible = true;
-      console.log("最大出售质量", surplusWeight);
-      console.log("最大出售数量", surplusAmount);
     },
     async getFeedInfo() {
       const { data: res } = await this.$pondController.get(

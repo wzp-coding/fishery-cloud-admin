@@ -55,9 +55,13 @@
           )
         "
       >
-        <el-table-column label="加工厂名称" prop="factoryName">
+        <el-table-column label="加工厂名称" prop="processingFactoryName">
         </el-table-column>
-        <el-table-column label="加工厂地址" prop="factoryAddress">
+        <el-table-column label="加工厂地址" prop="processingFactoryAddress">
+        </el-table-column>
+        <el-table-column label="加工厂面积" prop="processingFactoryArea">
+        </el-table-column>
+        <el-table-column label="加工厂产品" prop="processingType">
         </el-table-column>
         <el-table-column align="right">
           <template slot="header" slot-scope="{}">
@@ -126,6 +130,9 @@ export default {
     },
     tableType: {
       type: Number,
+    },
+    togermchitId: {
+      type: String,
     },
   },
   data() {
@@ -215,22 +222,28 @@ export default {
       }
     },
     async getProcessData() {
-      const { data: res } = await this.$processData.get("");
+      console.log(this.togermchitId);
+      const { data: res } = await this.$processData.get(`${this.togermchitId}`);
       console.log(res);
       if (res.statusCode === 20000) {
-        this.processList = res.data;
-        for (let i = 0; i < this.processList.length; i++) {
-          if (
-            this.processList[i].factoryName == null ||
-            this.processList[i].factoryName == "" ||
-            this.processList[i].processingFactoryPositionLongitude == "" ||
-            JSON.stringify(this.processList[i]) == "{}"
-          ) {
-            this.processList.splice(i, 1);
-            i = i - 1;
-          }
+        if (res.data.length === 0) {
+          this.elMessage.info("暂无相关加工厂");
+          this.closed();
+        } else {
+          this.processList = res.data;
+          // for (let i = 0; i < this.processList.length; i++) {
+          //   if (
+          //     this.processList[i].processingFactoryName == null ||
+          //     this.processList[i].processingFactoryName == "" ||
+          //     this.processList[i].processingFactoryPositionLatitude == "" ||
+          //     JSON.stringify(this.processList[i]) == "{}"
+          //   ) {
+          //     this.processList.splice(i, 1);
+          //     i = i - 1;
+          //   }
+          // }
+          this.loading = false;
         }
-        this.loading = false;
       }
     },
   },
