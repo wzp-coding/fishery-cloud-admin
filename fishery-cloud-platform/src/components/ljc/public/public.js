@@ -34,4 +34,26 @@ module.exports = class {
         })
     }
 
+    // 获取所有原料
+    getMaterial(id) {
+        return new Promise((resolve) => {
+            this.vue.$plant.get(`/processing/material/${id}`)
+                .then((res) => {
+                    resolve(res);
+                })
+        })
+    }
+
+    // 获取工厂产品
+    getProduct(id) {
+        return new Promise((resolve) => {
+            this.vue.$plant.get(`/processingFactory/product/factoryProduct/${id}`)
+                .then((res) => {
+                    resolve(res);
+                })
+        })
+    }
+
+
+
 }

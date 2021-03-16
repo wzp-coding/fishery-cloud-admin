@@ -100,7 +100,6 @@ export default {
       }
       this.allList = res.data.records;
       this.total = res.data.total;
-      console.log(this.allList);
     },
   },
 };

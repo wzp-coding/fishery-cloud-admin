@@ -18,10 +18,20 @@
             :commoditIds="commoditIds"
         /></el-tab-pane>
         <el-tab-pane label="工艺管理"
-          ><Craft :createPersonList="createPersonList" :commoditIds="commoditIds"
+          ><Craft
+            :createPersonList="createPersonList"
+            :commoditIds="commoditIds"
         /></el-tab-pane>
         <el-tab-pane label="投入品管理"
-          ><Input :createPersonList="createPersonList" :commoditIds="commoditIds"
+          ><Input
+            :createPersonList="createPersonList"
+            :commoditIds="commoditIds"
+        /></el-tab-pane>
+        <el-tab-pane label="加工作业管理"
+          ><Job
+            :createPersonList="createPersonList"
+            :Materials="Materials"
+            :Products="Products"
         /></el-tab-pane>
       </el-tabs>
       <!-- tab栏结束 -->
@@ -36,6 +46,7 @@ import Product from "../../components/ljc/product/TheProduct";
 import Craft from "../../components/ljc/craft/TheCraft";
 import Input from "../../components/ljc/input/TheInput";
 import Public from "../../components/ljc/public/public";
+import Job from "../../components/ljc/Job/TheJob";
 
 export default {
   components: {
@@ -44,6 +55,7 @@ export default {
     Product,
     Craft,
     Input,
+    Job,
   },
   data() {
     return {
@@ -61,6 +73,12 @@ export default {
       // 种苗信息
       seedInfo: [],
 
+      //原料信息
+      Materials: [],
+
+      // 产品信息
+      Products: [],
+
       // 水产品/冷库产品编号
       commoditIds: [
         {
@@ -76,6 +94,8 @@ export default {
   },
   created() {
     this.getStaff();
+    this.getMaterial();
+    this.getProduct();
   },
   methods: {
     /* 返回开始 */
@@ -90,6 +110,18 @@ export default {
     async getStaff() {
       const { data: res } = await this.public.getStaff();
       this.createPersonList = res.data.records;
+    },
+
+    // 获取原料
+    async getMaterial() {
+      const { data: res } = await this.public.getMaterial(this.$route.query.ID);
+      this.Materials = res.data;
+    },
+
+    // 获取生产产品
+    async getProduct() {
+      const { data: res } = await this.public.getProduct(this.$route.query.ID);
+      this.Products = res.data;
     },
   },
 };
