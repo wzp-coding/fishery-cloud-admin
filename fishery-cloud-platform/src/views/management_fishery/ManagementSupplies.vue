@@ -32,6 +32,16 @@
             label="剩余量(kg)"
           ></el-table-column>
           <el-table-column prop="gmtCreate" label="进货日期"></el-table-column>
+          <el-table-column label="操作" width="180px">
+            <template slot-scope="scope">
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                size="mini"
+                @click="removeSupply(scope.row.id)"
+              ></el-button>
+            </template>
+          </el-table-column>
         </el-table>
         <ThePagination
           :toPagination="paginationNowInfoIn"
@@ -480,9 +490,29 @@ export default {
       if (res.statusCode === 20000) {
         this.baseNowSupplyList = res.data.records;
         this.paginationNowInfoIn.total = res.data.total;
-        for(let i=0;i<this.baseNowSupplyList.length;i++){
-          this.baseNowSupplyList[i].type = '饲料'
+        for (let i = 0; i < this.baseNowSupplyList.length; i++) {
+          this.baseNowSupplyList[i].type = "饲料";
         }
+      }
+    },
+    async removeSupply(id) {
+      const confirmResult = await this.elConfirm(
+        "此操作将永久该记录, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => {
+        return err;
+      });
+      if (confirmResult !== "confirm") {
+        return this.elMessage.info("已取消删除");
+      }
+      const {data:res} = await this.$baseSupply.delete(`id`)
+      if(res.statusCode === 20000){
+        this.elMessage.success('删除库存信息成功');
       }
     },
   },

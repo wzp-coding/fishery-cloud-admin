@@ -1,13 +1,13 @@
 <template>
   <div class="body">
-    <header style="position:relative">
+    <header style="position: relative">
       <h1 class="wzp_style_leaderTitle">基地信息概览</h1>
       <!-- <div class="showTime">当前时间：{{}}</div> -->
     </header>
     <section class="mainbox">
       <div class="column">
         <div class="panel">
-          <h2>基地种苗进货信息</h2>
+          <h2>基地种苗信息</h2>
           <div class="chart1 chart"></div>
           <div class="panel-footer"></div>
         </div>
@@ -71,7 +71,7 @@
               </ul>
             </el-col>
           </el-row>
-          <el-row class="columnSt">
+          <el-row class="columnSt" v-if="proInfo.length > 0">
             <el-col :span="12">
               <ul>
                 <li>基地加工厂数</li>
@@ -82,6 +82,40 @@
               <ul>
                 <li>加工厂总面积(平方米)</li>
                 <li class="specialLi">{{ proInfo.area }}</li>
+              </ul>
+            </el-col>
+          </el-row>
+          <el-row class="columnSt" v-if="baseRefInfo.length > 0">
+            <el-col :span="12">
+              <ul>
+                <li>基地冷库数</li>
+                <li class="specialLi">{{ baseRefInfo.amount }}</li>
+              </ul>
+            </el-col>
+            <el-col :span="12">
+              <ul>
+                <li>冷库总面积(平方米)</li>
+                <li class="specialLi">
+                  {{ baseRefInfo.area ? "baseRefInfo.area" : "暂无数据" }}
+                </li>
+              </ul>
+            </el-col>
+          </el-row>
+          <el-row class="columnSt" v-if="orderTimeList">
+            <el-col :span="12">
+              <ul>
+                <li>近三个月订单数</li>
+                <li class="specialLi">
+                  {{ orderTimeList.amount ? orderTimeList.amount : 0 }}
+                </li>
+              </ul>
+            </el-col>
+            <el-col :span="12">
+              <ul>
+                <li>近三个月交易总额</li>
+                <li class="specialLi">
+                  {{ orderTimeList.money ? orderTimeList.money : 0 }}
+                </li>
               </ul>
             </el-col>
           </el-row>
@@ -102,38 +136,20 @@
             </div>
           </div>
         </div>
-        <div v-if="orderTimeList.length">
-          <h3>近期订单</h3>
-          <div class="order">
-            <el-row class="orderTitle">
-              <el-col :span="12"><span>客户名</span></el-col>
-              <el-col :span="12"><span>金额</span></el-col>
-            </el-row>
-            <div class="orderInfo">
-              <el-row v-for="(item, index) in orderTimeList" :key="index">
-                <el-col :span="12">{{ item.name }}</el-col>
-                <el-col :span="12">{{ item.money }}</el-col>
-              </el-row>
-            </div>
-          </div>
-        </div>
-        <div v-else>
-          <h3>暂无近期订单</h3>
-        </div>
       </div>
       <div class="column">
         <div class="panel">
-          <h2>基地入库信息</h2>
+          <h2>养殖投入品入库信息</h2>
           <div class="chart chart4"></div>
           <div class="panel-footer"></div>
         </div>
         <div class="panel">
-          <h2>基地投入品库存</h2>
+          <h2>养殖投入品库存</h2>
           <div class="chart chart5"></div>
           <div class="panel-footer"></div>
         </div>
         <div class="panel">
-          <h2>基地投入出库信息</h2>
+          <h2>养殖投入品出库信息</h2>
           <div class="chart6 chart"></div>
           <div class="panel-footer"></div>
         </div>
@@ -144,8 +160,9 @@
 
 
 <script>
-import { mapState } from 'vuex';
-// var myVue = {};
+import { mapState } from "vuex";
+// import echarts from "echarts"
+var myVue = {};
 export default {
   data() {
     return {
@@ -162,6 +179,7 @@ export default {
       orderTimeList: [],
       nowLength: 0,
       timer: "",
+      baseRefInfo: [],
       orderTimeInfo: {
         baseId: this.$store.state.baseInfo.id,
         end: "",
@@ -189,14 +207,25 @@ export default {
         this.getSupplyInInfo();
         this.getPondInfo();
         this.getSupplyInfo();
-        this.putChart6()
+        this.putChart6();
       },
     },
   },
-  computed:{
-    ...mapState(['userInfo'])
+  computed: {
+    ...mapState(["userInfo"]),
   },
   created() {
+    
+  },
+  mounted() {
+    window["putChart2"] = () => {
+      this.putChart2();
+    };
+    console.log(this.$store);
+    window.nowLength = 0;
+    window["myVue"] = this;
+    this.putChart1();
+    this.getBaseGermchit(); //获取各种类种苗进货量，库存量，使用量，产量信息
     this.getBaseAmount(); //获取基地总人数
     this.getBaseInfo(); //获取基地基本信息
     this.getBaseGermchit(); //获取各种类种苗进货量，库存量，使用量，产量信息
@@ -208,14 +237,7 @@ export default {
     this.getProInfo(); //获取基地加工厂信息
     this.getOrderBySize(10); //获取基地订单
     this.getOrderBytime(); //选择日期获取订单
-  },
-  mounted() {
-    window["putChart2"] = () => {
-      this.putChart2();
-    };
-    console.log(this.$store);
-    window.nowLength = 0;
-    window["myVue"] = this;
+    this.getBaseRefInfo(); //获取冷库信息
   },
   methods: {
     async getBaseAmount() {
@@ -228,6 +250,7 @@ export default {
       const { data: res } = await this.$leader.get(
         `base/germchit/${this.$store.state.baseInfo.id}`
       );
+      console.log(res);
       if (res.statusCode === 20000) {
         this.baseGermchitInfo = res.data;
         this.putChart1(res.data);
@@ -252,8 +275,7 @@ export default {
       console.log(res);
       if (res.statusCode === 20000) {
         this.pondInfo = res.data;
-        this.putChart2(this.pondInfo)
-        // this.Chart2(this.pondInfo.length, this.pondInfo);
+        this.putChart2(this.pondInfo);
       }
     },
     async getSupplyOutInfo() {
@@ -328,8 +350,8 @@ export default {
       resultDate = year + "-" + month + "-" + date + " " + hms;
       console.log(resultDate);
       currDate = this.timeFormat(currDate);
-      this.orderTimeInfo.begin = currDate;
-      this.orderTimeInfo.end = resultDate;
+      this.orderTimeInfo.begin = resultDate;
+      this.orderTimeInfo.end = currDate;
       console.log(this.orderTimeInfo);
       const { data: res } = await this.$leader.post(
         "order",
@@ -349,50 +371,102 @@ export default {
         console.log(this.orderList);
       }
     },
-    putChart1(data=this.baseGermchitInfo) {
-      let myChart = this.$echarts.init(document.querySelector(".chart1"),this.userInfo.theme);
+    async getBaseRefInfo() {
+      const { data: res } = await this.$leader.get(
+        `ref/${this.$store.state.baseInfo.id}`
+      );
+      console.log(res);
+      if (res.statusCode === 20000) {
+        this.baseRefInfo = res.data;
+      }
+    },
+    putChart1(data = this.baseGermchitInfo) {
+      let myChart = this.$echarts.init(
+        document.querySelector(".chart1"),
+        this.userInfo.theme
+      );
       this.chart1VM = myChart;
       let name = [];
       let obj = [];
+      let objSurp = [];
       data.forEach((e) => {
         if (name.indexOf(e.species) == -1) {
           name.push(e.species);
           let objData = {};
+          let objSurpdata = {};
+          objSurpdata.value = e.surplusAmount;
+          objSurpdata.name = e.species;
           objData.value = e.purchaseAmount;
           objData.name = e.species;
           obj.push(objData);
+          objSurp.push(objSurpdata);
         } else {
           obj[name.indexOf(e.species)].value += e.purchaseAmount;
+          objSurp[name.indexOf(e.species)].value += e.surplusAmount;
         }
       });
       let option = {
-        color: ["#FDB434", "#59CA9E", "#F76968", "#4BCCD3"],
+        title: [
+          {
+            text: "种苗进货",
+            left: "24.5%",
+            top: "41%",
+            textAlign: "center",
+            textStyle: {
+              fontSize: 14,
+            },
+            subtextStyle: {
+              fontSize: 22,
+            },
+          },
+          {
+            text: "种苗库存",
+            left: "74.5%",
+            top: "41%",
+            textAlign: "center",
+            textStyle: {
+              fontSize: 14,
+            },
+            subtextStyle: {
+              fontSize: 22,
+            },
+          },
+        ],
         tooltip: {
           trigger: "item",
-          formatter: "{a} <br/>{b} : {c}尾 ({d}%)",
+          formatter: (v) =>
+            `${v.name.replace("_legend1", "").replace("_legend2", "")} : ${(
+              v.value 
+            )}(${v.percent}%)`,
         },
-        // width: "250px",
-        legend: {
-          type: "scroll",
-          orient: "vertical",
-          left: "left",
-          top: 5,
-          bottom: 20,
-          data: name,
-        },
+        legend: [
+          {
+            left: "13%",
+            type: "scroll",
+            height: "10%",
+            data: name,
+            formatter: (v) => v.replace("_legend1", ""),
+          },
+        ],
         series: [
           {
-            name: "种苗进货量",
             type: "pie",
-            radius: "55%",
-            center: ["55%", "50%"],
+            radius: [50, 55],     //数组的第一项是内半径，第二项是外半径。
+            center: ["25%", "55%"],
             data: obj,
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)",
-              },
+            label: {
+              formatter: (v) =>
+                `${v.name.replace("_legend1", "")}：${v.percent}%`,
+            },
+          },
+          {
+            type: "pie",
+            radius: [50, 55],
+            center: ["75%", "55%"],
+            data: objSurp,
+            label: {
+              formatter: (v) =>
+                `${v.name.replace("_legend2", "")}：${v.percent}%`,
             },
           },
         ],
@@ -415,7 +489,10 @@ export default {
       }, 3000);
     },
     putChart2(data) {
-      let myChart = this.$echarts.init(document.querySelector(".chart2"),this.userInfo.theme);
+      let myChart = this.$echarts.init(
+        document.querySelector(".chart2"),
+        this.userInfo.theme
+      );
       this.chart2VM = myChart;
       let name = [];
       let inputNum = [];
@@ -431,7 +508,8 @@ export default {
         title: {
           text: "投苗量",
           textStyle: {
-            color: "#c1c2c5",
+            color: "#fff",
+            fontSize: 17,
           },
         },
         tooltip: {
@@ -448,64 +526,109 @@ export default {
           bottom: "4%",
           containLabel: true,
         },
-        xAxis: [
-          {
-            type: "category",
-            data: name,
-            axisTick: {
-              alignWithLabel: true,
+        xAxis: {
+          axisLabel: {
+            color: "#c0c3cd",
+            fontSize: 12,
+            interval: 0,
+          },
+          splitLine: {
+            show: false,
+          },
+          axisLine: {
+            lineStyle: {
+              color: "#384267",
+              width: 1,
+              type: "dashed",
             },
-            axisLine: {
-              show: false,
-              lineStyle: {
-                color: "#b7b7b7",
-              },
+            show: true,
+          },
+          data: name,
+          type: "category",
+        },
+        yAxis: {
+          axisLabel: {
+            color: "#c0c3cd",
+            fontSize: 14,
+          },
+
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: "#384267",
+              type: "dashed",
             },
           },
-        ],
-        yAxis: [
-          {
-            type: "value",
-            axisLine: {
-              show: true,
-              lineStyle: {
-                color: "#b7b7b7",
-              },
+          axisLine: {
+            lineStyle: {
+              color: "#384267",
+              width: 1,
+              type: "dashed",
             },
+            show: true,
           },
-        ],
+          name: "",
+        },
         series: [
           {
-            name: "池塘投苗量",
-            type: "bar",
-            barWidth: "40%",
             data: inputNum,
+            type: "bar",
+            barWidth: 30,
             itemStyle: {
-              barBorderRadius: 5,
-              normal: {
-                color: function (params) {
-                  //注意，如果颜色太少的话，后面颜色不会自动循环，最好多定义几个颜色
-                  var colorList = [
-                    "#c23531",
-                    "#2f4554",
-                    "#61a0a8",
-                    "#d48265",
-                    "#91c7ae",
-                    "#749f83",
-                    "#ca8622",
-                  ];
-                  return colorList[params.dataIndex];
-                },
+              color: {
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                type: "linear",
+                global: false,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: "#3A1BFD",
+                  },
+                  {
+                    offset: 1,
+                    color: "#3BEFFD",
+                  },
+                ],
               },
             },
+            label: {
+              show: true,
+              position: "top",
+              distance: 10,
+              color: "#fff",
+            },
+          },
+          {
+            data: [1, 1, 1, 1, 1, 1, 1, 1],
+            type: "pictorialBar",
+            barMaxWidth: "20",
+            symbol: "diamond",
+            symbolOffset: [0, "50%"],
+            symbolSize: [30, 15],
+          },
+          {
+            data: inputNum,
+            type: "pictorialBar",
+            barMaxWidth: "20",
+            symbolPosition: "end",
+            symbol: "diamond",
+            symbolOffset: [0, "-50%"],
+            symbolSize: [30, 12],
+            zlevel: 2,
           },
         ],
       };
 
       myChart.setOption(option);
     },
-    putChart3(data=this.baseGermchitInfo) {
-      let myChart = this.$echarts.init(document.querySelector(".chart3"),this.userInfo.theme);
+    putChart3(data = this.baseGermchitInfo) {
+      let myChart = this.$echarts.init(
+        document.querySelector(".chart3"),
+        this.userInfo.theme
+      );
       this.chart3VM = myChart;
       let name = [];
       let obj = [];
@@ -558,7 +681,10 @@ export default {
       myChart.setOption(option);
     },
     putChart4(data) {
-      let myChart = this.$echarts.init(document.querySelector(".chart4"),this.userInfo.theme);
+      let myChart = this.$echarts.init(
+        document.querySelector(".chart4"),
+        this.userInfo.theme
+      );
       this.chart4VM = myChart;
       let name = [];
       let obj = [];
@@ -606,8 +732,11 @@ export default {
         myChart.resize();
       });
     },
-    putChart6(data=this.supplyOutInfo) {
-      let myChart = this.$echarts.init(document.querySelector(".chart6"),this.userInfo.theme);
+    putChart6(data = this.supplyOutInfo) {
+      let myChart = this.$echarts.init(
+        document.querySelector(".chart6"),
+        this.userInfo.theme
+      );
       this.chart6VM = myChart;
       let name = [];
       let obj = [];
@@ -659,64 +788,267 @@ export default {
       let name = [];
       let surplusWeight = [];
       let useWeight = [];
+      let totalWeight = [];
       data.forEach((e) => {
         if (name.indexOf(e.name) != -1) {
           useWeight[name.indexOf(e.name)] += e.useWeight;
           surplusWeight[name.indexOf(e.name)] += e.surplusWeight;
+          totalWeight[name.indexOf(e.name)] += e.totalWeight;
         } else {
           useWeight.push(e.useWeight);
           surplusWeight.push(e.useWeight);
+          totalWeight.push(e.totalWeight);
           name.push(e.name);
         }
       });
-      let myChart = this.$echarts.init(document.querySelector(".chart5"),this.userInfo.theme);
+      let myChart = this.$echarts.init(
+        document.querySelector(".chart5"),
+        this.userInfo.theme
+      );
       this.chart5VM = myChart;
       let option = {
-        color: ["#FF9F7F", "grey"],
         tooltip: {
+          //提示框组件
           trigger: "axis",
+          formatter: "{b}<br/>{a2}: {c2}<br/>{a1}: {c1}<br/>{a5}: {c5}",
           axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: "shadow", // 默认为直线，可选为：'line' | 'shadow'
+            type: "shadow",
+            label: {
+              backgroundColor: "rgba(17, 27, 54, 1)",
+            },
           },
         },
-        legend: {
-          data: ["剩余量", "使用量"],
-        },
         grid: {
-          left: "1%",
-          right: "8%",
-          bottom: "3%",
+          left: "10%",
+          right: "10%",
+          bottom: "10%",
+          top: "15%",
+          height: "85%",
           containLabel: true,
         },
-        xAxis: {
-          name: "kg",
-          type: "value",
+        legend: {
+          //图例组件，颜色和名字
+          itemGap: 16,
+          itemWidth: 18,
+          itemHeight: 10,
+          selectedMode: false,
+          data: [
+            {
+              name: "进货量",
+            },
+            {
+              name: "使用量",
+            },
+            {
+              name: "剩余量",
+            },
+          ],
+          textStyle: {
+            color: "#a8aab0",
+            fontStyle: "normal",
+            fontFamily: "微软雅黑",
+            fontSize: 12,
+          },
         },
-        yAxis: {
-          type: "category",
-          data: name,
-        },
+        xAxis: [
+          {
+            type: "category",
+            //	boundaryGap: true,//坐标轴两边留白
+            data: name,
+            axisLabel: {
+              //坐标轴刻度标签的相关设置。
+              //		interval: 0,//设置为 1，表示『隔一个标签显示一个标签』
+              //	margin:15,
+              textStyle: {
+                color: "#078ceb",
+                fontStyle: "normal",
+                fontFamily: "微软雅黑",
+                fontSize: 10,
+              },
+              rotate: 50,
+            },
+            axisTick: {
+              //坐标轴刻度相关设置。
+              show: false,
+            },
+            axisLine: {
+              //坐标轴轴线相关设置
+              lineStyle: {
+                color: "#fff",
+                opacity: 0.2,
+              },
+            },
+            splitLine: {
+              //坐标轴在 grid 区域中的分隔线。
+              show: false,
+            },
+          },
+        ],
+        yAxis: [
+          {
+            // max:1200,
+            type: "value",
+            splitNumber: 4,
+            axisLabel: {
+              textStyle: {
+                color: "#a8aab0",
+                fontStyle: "normal",
+                fontFamily: "微软雅黑",
+                fontSize: 10,
+              },
+            },
+            axisLine: {
+              show: false,
+            },
+            axisTick: {
+              show: false,
+            },
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: ["#fff"],
+                opacity: 0.06,
+              },
+            },
+          },
+        ],
         series: [
           {
-            name: "剩余量",
-            type: "bar",
-            stack: "总量",
+            name: "",
+            type: "pictorialBar",
+            symbolSize: [20, 10],
+            symbolOffset: [-10, -6],
+            symbolPosition: "end",
+            z: 12,
+            // "barWidth": "0",barGap
             label: {
-              // show: true,
-              // position: "insideLeft ",
+              normal: {
+                show: true,
+                offset: [-10, 0],
+                position: "top",
+                textAlign: "left",
+                // "formatter": "{c}%"
+                fontSize: 10,
+                fontWeight: "bold",
+                color: "rgba(230, 230, 230, 1)",
+              },
             },
-            data: surplusWeight,
+            color: "rgba(230, 230, 230, 1)",
+            data: useWeight,
           },
           {
             name: "使用量",
             type: "bar",
-            stack: "总量",
-            // label: {
-            //   show: true,
-            //   position: "insideRight",
-            // },
+            stack: "1",
             data: useWeight,
+            barWidth: 20,
+            barGap: 0, //柱间距离
+            itemStyle: {
+              normal: {
+                show: true,
+                color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 0,
+                    color: "rgba(230, 230, 230, 1)",
+                  },
+                  {
+                    offset: 1,
+                    color: "rgba(255, 255, 255, 0)",
+                  },
+                ]),
+                opacity: 0.8,
+              },
+            },
+          },
+          {
+            name: "进货量", //头部
+            type: "pictorialBar",
+            symbolSize: [20, 10],
+            symbolOffset: [-10, -6],
+            z: 12,
+            symbolPosition: "end",
+            label: {
+              normal: {
+                offset: [-10, 0],
+                show: true,
+                position: "top",
+                // "formatter": "{c}%",
+                fontSize: 10,
+                fontWeight: "bold",
+                color: "rgba(51,135,255, 1)",
+              },
+            },
+            color: "rgba(51,135,255, 1)",
+            data: totalWeight,
+          },
+          {
+            name: "进货量",
+            type: "bar",
+            stack: "1",
+            barWidth: 20,
+            barGap: "-100%",
+            z: 0,
+            itemStyle: {
+              normal: {
+                color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 0,
+                    color: "rgba(51,135,255, 1)",
+                  },
+                  {
+                    offset: 1,
+                    color: "rgba(51,135,255, .2)",
+                  },
+                ]),
+                opacity: 0.8,
+              },
+            },
+
+            data: totalWeight,
+          },
+          {
+            name: "剩余量",
+            type: "pictorialBar",
+            symbolSize: [20, 10],
+            symbolOffset: [10, -6],
+            symbolPosition: "end",
+            z: 12,
+            // "barWidth": "0",barGap
+            label: {
+              normal: {
+                offset: [10, 0],
+                show: true,
+                position: "top",
+                // "formatter": "{c}%",
+                fontSize: 10,
+                fontWeight: "bold",
+                color: "rgba(0, 255, 255, 1)",
+              },
+            },
+            color: "rgba(0, 255, 255, 1)",
+            data: surplusWeight,
+          },
+          {
+            name: "剩余量",
+            type: "bar",
+            data: surplusWeight,
+            barWidth: 20,
+            barGap: 0, //柱间距离
+            itemStyle: {
+              normal: {
+                color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 0,
+                    color: "rgba(0, 255, 255, 1)",
+                  },
+                  {
+                    offset: 1,
+                    color: "rgba(255, 255, 255, 0)",
+                  },
+                ]),
+                opacity: 0.8,
+              },
+            },
           },
         ],
       };
