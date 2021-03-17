@@ -15,6 +15,7 @@
 </template>
 <script>
 export default {
+  name: "inputNumber",
   props: {
     label: String,
     defaultVal: String,

@@ -54,6 +54,17 @@ module.exports = class {
         })
     }
 
+    // 根据id获取原料信息
+    getProduct(id) {
+        return new Promise((resolve) => {
+            this.vue.$plant.get(`/processingFactory/product/factoryProduct/${id}`)
+                .then((res) => {
+                    resolve(res);
+                })
+        })
+    }
+
+
 
 
 }

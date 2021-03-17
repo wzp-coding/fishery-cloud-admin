@@ -27,12 +27,9 @@
             :createPersonList="createPersonList"
             :commoditIds="commoditIds"
         /></el-tab-pane>
-        <el-tab-pane label="加工作业管理"
-          ><Job
-            :createPersonList="createPersonList"
-            :Materials="Materials"
-            :Products="Products"
-        /></el-tab-pane>
+        <el-tab-pane label="加工作业管理"><Job /></el-tab-pane>
+        <el-tab-pane label="原料库存管理"><Material /></el-tab-pane>
+        <el-tab-pane label="产品批次管理"><ProductBatch /></el-tab-pane>
       </el-tabs>
       <!-- tab栏结束 -->
     </el-card>
@@ -47,6 +44,8 @@ import Craft from "../../components/ljc/craft/TheCraft";
 import Input from "../../components/ljc/input/TheInput";
 import Public from "../../components/ljc/public/public";
 import Job from "../../components/ljc/Job/TheJob";
+import Material from "../../components/ljc/Material/TheMaterial";
+import ProductBatch from "../../components/ljc/ProductBatch/TheProductBatch";
 
 export default {
   components: {
@@ -56,6 +55,8 @@ export default {
     Craft,
     Input,
     Job,
+    Material,
+    ProductBatch,
   },
   data() {
     return {

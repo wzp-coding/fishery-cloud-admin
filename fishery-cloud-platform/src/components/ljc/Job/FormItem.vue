@@ -16,6 +16,7 @@
         :label="labels.materialWeight"
         min="0"
         @change="scope.data.change"
+        @callBack="callBack"
       />
     </el-row>
     <el-row>
@@ -81,6 +82,12 @@ export default {
     // 基地
     baseId() {
       return this.$store.state.userInfo.baseId;
+    },
+
+    async callBack(key, val) {
+      if (key !== "materialId") {
+        return;
+      }
     },
   },
 };

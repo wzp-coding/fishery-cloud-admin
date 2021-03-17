@@ -95,6 +95,11 @@ export default {
     baseId() {
       return this.$store.state.userInfo.baseId;
     },
+
+    // 加工厂id
+    processingFactoryId() {
+      return this.$route.query.ID;
+    },
   },
   created() {},
   methods: {
