@@ -28,11 +28,11 @@
         :model="form"
         ref="formRef"
         :rules="Fdata.form.formRules"
-        label-width="100px"
         label-position="left"
         :hide-required-asterisk="true"
+        label-width="auto"
       >
-        <slot></slot>
+        <slot :data="{ form, change: onChange }"></slot>
       </el-form>
       <div slot="footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -63,7 +63,6 @@ export default {
     async GetInfo() {
       if (this.id) {
         let res = await this.GetInfoFn();
-        console.log(res);
       }
 
       this.dialogVisible = true;
@@ -71,15 +70,22 @@ export default {
     /* 根据Id查询信息结束 */
 
     /* 提交表单 */
-    submit() {
+    async submit() {
       this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
+        let res = await this.submitFn(this.form);
+        return;
       });
     },
 
     dialogClosed() {
       this.form = {};
       this.$refs.formRef.resetFields();
+    },
+
+    onChange(key, value) {
+      this.form[key] = value;
+      console.log(this.form);
     },
   },
 };

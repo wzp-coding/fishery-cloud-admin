@@ -1,9 +1,10 @@
 <template>
-  <el-col :xs="24" :sm="12" :lg="6">
+  <el-col :xs="24" :sm="12" :lg="12">
     <el-form-item :label="label + '：'">
       <el-input
-        :value="value"
-        @input="inputChange($event)"
+        :type="textarea || ''"
+        v-model="value"
+        @input="handleChange($event)"
         :placeholder="place"
       ></el-input>
     </el-form-item>
@@ -14,23 +15,28 @@
 export default {
   props: {
     label: String,
-    value: String,
+    defaultVal: String,
+    keyName: String,
     placeholder: String,
+    textarea: {},
   },
   data() {
     return {
       place: "",
+      value: this.defaultVal || "",
     };
   },
+  computed: {},
   mounted() {
     this.initPlaceholder();
+    this.handleChange(this.value);
   },
   methods: {
     initPlaceholder() {
       this.place = this.placeholder || this.label;
     },
-    inputChange(val) {
-      this.$emit("input", val);
+    handleChange(val) {
+      this.$emit("change", this.keyName, val);
     },
   },
 };
@@ -40,6 +46,7 @@ export default {
     传入参数：
     label: String, // 标题
     value: String,  // 默认值
+    keyName: String
     placeholder: String,   //填写提示内容
-    input函数
+    change函数
 */

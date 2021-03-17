@@ -7,6 +7,9 @@
       :submitFn="addInfo"
       :GetInfoFn="getInfoById"
     >
+      <template slot-scope="scope">
+        <FormItem :scope="scope" />
+      </template>
     </Form>
     <!-- 添加区域结束 -->
 
@@ -39,11 +42,13 @@
 import ljc from "./Job";
 import Form from "../public/Form";
 import Table from "../public/Table";
+import FormItem from "./FormItem";
 
 export default {
   components: {
     Table,
     Form,
+    FormItem,
   },
   props: {},
   data() {
@@ -71,15 +76,11 @@ export default {
         },
       },
 
+      // 表单数据
       dataF: {},
     };
   },
   computed: {
-    // 加工厂id
-    processingFactoryId() {
-      return this.$route.query.ID;
-    },
-
     // 标签
     labels() {
       return this.model.labels;
@@ -88,6 +89,11 @@ export default {
     // 验证规则
     formRules() {
       return this.model.formRules;
+    },
+
+    // 基地
+    baseId() {
+      return this.$store.state.userInfo.baseId;
     },
   },
   created() {},
@@ -99,6 +105,7 @@ export default {
         pageSize,
         pageNum
       );
+      console.log(res);
       if (res.statusCode !== 20000) {
         this.elMessage.error(res.message);
       } else {
@@ -138,11 +145,6 @@ export default {
         this.elMessage.error(res.message);
       }
     },
-
-    // input类型
-    input () {
-      
-    }
   },
 };
 </script>
