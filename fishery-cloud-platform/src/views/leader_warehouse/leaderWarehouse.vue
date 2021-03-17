@@ -410,7 +410,7 @@ export default {
           {
             text: "种苗进货",
             left: "24.5%",
-            top: "41%",
+            top: "49%",
             textAlign: "center",
             textStyle: {
               fontSize: 14,
@@ -422,7 +422,7 @@ export default {
           {
             text: "种苗库存",
             left: "74.5%",
-            top: "41%",
+            top: "49%",
             textAlign: "center",
             textStyle: {
               fontSize: 14,
