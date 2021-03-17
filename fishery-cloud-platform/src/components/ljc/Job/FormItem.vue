@@ -1,10 +1,12 @@
 <template>
   <div>
     <el-row>
-      <Input
-        keyName="jobDescription"
-        textarea="textarea"
-        :label="labels.jobDescription"
+      <Select
+        keyName="materialId"
+        :label="labels.materialId"
+        labelName="materialName"
+        root="plant"
+        :Url="`/processing/material/${processingFactoryId}`"
         @change="scope.data.change"
       />
     </el-row>
@@ -28,16 +30,6 @@
     </el-row>
     <el-row>
       <Select
-        keyName="materialId"
-        :label="labels.materialId"
-        labelName="materialName"
-        root="plant"
-        :Url="`/processing/material/${processingFactoryId}`"
-        @change="scope.data.change"
-      />
-    </el-row>
-    <el-row>
-      <Select
         keyName="productId"
         :label="labels.productId"
         labelName="productName"
@@ -45,7 +37,15 @@
         :Url="`/processingFactory/product/factoryProduct/${processingFactoryId}`"
         @change="scope.data.change"
       />
-    </el-row>   
+    </el-row>
+    <el-row>
+      <Input
+        keyName="jobDescription"
+        textarea="textarea"
+        :label="labels.jobDescription"
+        @change="scope.data.change"
+      />
+    </el-row>
   </div>
 </template>
 
