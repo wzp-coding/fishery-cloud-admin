@@ -1,12 +1,12 @@
 // 我的基地-数字基地
-import Map from "../../components/public_components/Map";
-import WeatherCard from "../../components/wzp/digital_base/WeatherCard";
-import InfoBase from "../../components/wzp/digital_base/InfoBase";
+// import InfoBase from "../../components/wzp/digital_base/InfoBase";
+// import Map from "../../components/public_components/Map";
+// import WeatherCard from "../../components/wzp/digital_base/WeatherCard";
 import { mapState } from "vuex";
 
 const DigitalBase = {
     DraggableInfoBase: {
-        components: { InfoBase },
+        components: { InfoBase:()=>import(/* webpackChunkName:"drag-commponents" */'../../components/wzp/digital_base/InfoBase') },
         render(h) {
             return (
                 <el-col span={6}>
@@ -16,7 +16,7 @@ const DigitalBase = {
         },
     },
     DraggableMap: {
-        components: { Map },
+        // components: { Map:()=>import(/* webpackChunkName:"drag-commponents" */'../../components/public_components/Map') },
         computed:{
             ...mapState(['baseInfo'])
         },
@@ -29,7 +29,7 @@ const DigitalBase = {
         },
     },
     DraggableWeatherCard: {
-        components: { WeatherCard },
+        components: { WeatherCard:()=>import(/* webpackChunkName:"drag-commponents" */'../../components/wzp/digital_base/WeatherCard') },
         render(h) {
             return (
                 <el-col span={6}>

@@ -76,19 +76,31 @@
             clearable
           ></el-input>
         </el-form-item>
-        <el-form-item label="供应商地址" prop="supplierAddress" slot="after">
-          <el-input
-            placeholder="请输入供应商地址"
-            v-model="editForm.supplierAddress"
-            clearable
-          ></el-input>
-        </el-form-item>
-      </editLayout>
-      <editLayout>
-        <el-form-item label="投入品成分" prop="ingredient" slot="pre">
+        <el-form-item label="投入品成分" prop="ingredient" slot="after">
           <el-input v-model="editForm.ingredient"></el-input>
         </el-form-item>
       </editLayout>
+      <el-form-item label="收货地址" prop="supplierAddress">
+        <el-select
+          style="width: 100%"
+          v-model="editForm.supplierAddress"
+          placeholder="请通过拖拽地图选择收货地址"
+        >
+          <el-option
+            v-for="(item, index) in addressArray"
+            :key="item + index"
+            :label="item.address + item.title"
+            :value="item.address + item.title"
+            @click.native="setcoordinates(item.location)"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <Map
+        :selectedLocation="location"
+        @getCenterAddress="setAddress"
+        @getAroundPoi="setpoi"
+      ></Map>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="toDialogInfo.dialogVisible = false">取 消</el-button>
@@ -99,9 +111,11 @@
 
 <script>
 import editLayout from "../InfoSupply/editLayout";
+import Map from "../../public_components/MyLocationPicker";
 export default {
   components: {
     editLayout,
+    Map,
   },
   props: {
     toDialogInfo: {
@@ -110,6 +124,17 @@ export default {
   },
   data() {
     return {
+      // 地图传来的地址数组
+      addressArray: [],
+      // 传入地图的中心坐标
+      location: {
+        lat: "",
+        lng: "",
+      },
+      initPoint: {
+        lat: "",
+        lng: "",
+      },
       editForm: {
         id: "",
         ingredient: "",
@@ -171,13 +196,10 @@ export default {
       this.editForm.produceDate = this.timeFormat(this.editForm.produceDate);
       this.editForm.shelfDate = this.timeFormat(this.editForm.shelfDate);
       console.log(this.editForm);
-      const { data: res } = await this.$supplyController.put(
-        "",
-        this.editForm
-      );
+      const { data: res } = await this.$supplyController.put("", this.editForm);
       console.log(res);
       this.toDialogInfo.dialogVisible = false;
-      this.$emit('fatherMethod');
+      this.$emit("fatherMethod");
     },
     timeFormat(date) {
       var y = date.getFullYear();
@@ -192,6 +214,20 @@ export default {
       var second = date.getSeconds();
       second = second < 10 ? "0" + second : second;
       return y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second;
+    },
+    setAddress(address) {
+      console.log("address-->", address);
+      this.editForm.supplierAddress = address;
+    },
+    // 设置地图返回的位置数组
+    setpoi(poi) {
+      console.log("pio-->", poi);
+      this.addressArray = poi;
+    },
+    // 设置坐标
+    setcoordinates(location) {
+      this.location = location;
+      console.log("location-->", this.location);
     },
   },
 };

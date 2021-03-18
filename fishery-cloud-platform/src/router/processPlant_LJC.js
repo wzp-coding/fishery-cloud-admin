@@ -1,32 +1,27 @@
-import ProcessPlant from '../views/aquaculture_production/ProcessPlant.vue';
-import InfoPlant from '../views/aquaculture_production/InfoPlant.vue';
-import InfoCraft from '../views/aquaculture_production/InfoCraft.vue';
-import InfoInput from '../views/aquaculture_production/InfoInput.vue';
-import ManagementInputsClassification from '../views/management_base/ManagementInputsClassification.vue';
 export default [
     {
         // 加工厂
         path: '/process-plant',
-        component: ProcessPlant
+        component: ()=>import(/* webpackChunkName:"ProcessPlant" */ '../views/aquaculture_production/ProcessPlant.vue')
     },
     {
         // 加工信息
         path: '/info-plant',
-        component: InfoPlant
+        component: ()=>import(/* webpackChunkName:"InfoPlant" */ '../views/aquaculture_production/InfoPlant.vue')
     },
     {
         // 加工产品的工艺信息
         path: '/info-craft',
-        component: InfoCraft
+        component: ()=>import(/* webpackChunkName:"InfoCraft" */ '../views/aquaculture_production/InfoCraft.vue')
     },
     {
         // 加工工艺的投入品信息
         path: "/info-input",
-        component: InfoInput,
+        component: ()=>import(/* webpackChunkName:"InfoInput" */ '../views/aquaculture_production/InfoInput.vue'),
     },
     {
         // 投入品分类管理
         path: '/management-inputs-classification',
-        component: ManagementInputsClassification
+        component: ()=>import(/* webpackChunkName:"ManagementInputsClassification" */ '../views/management_base/ManagementInputsClassification.vue')
     },
 ]

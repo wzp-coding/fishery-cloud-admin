@@ -94,17 +94,17 @@
 
         <!--预警列表区域——start-->
         <el-table :data="warningList" border stripe>
-            <el-table-column type="index" label="序号" width="50px"> </el-table-column>
+            <el-table-column type="index" label="序号" width="60"> </el-table-column>
+            <el-table-column prop="channelName" label="通道的名称" width="180"></el-table-column>
+            <el-table-column prop="maxValues" label="最大值" width="120"></el-table-column>
+            <el-table-column prop="minValues" label="最小值" width="120"></el-table-column>
+            <el-table-column prop="unit" label="单位" width="120"></el-table-column>
             <el-table-column prop="updateDate" label="添加时间" width-min>
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i>
                     {{scope.row.updateDate}}
                 </template>
             </el-table-column>
-            <el-table-column prop="channelName" label="通道的名称" width="180"></el-table-column>
-            <el-table-column prop="maxValues" label="最大值" width="120"></el-table-column>
-            <el-table-column prop="minValues" label="最小值" width="120"></el-table-column>
-            <el-table-column prop="unit" label="单位" width="120"></el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope" width="200px">
                     <div>

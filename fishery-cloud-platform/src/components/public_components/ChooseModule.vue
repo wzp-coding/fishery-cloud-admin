@@ -28,7 +28,7 @@ modules<Array>: 所有模块的数据数组
       :key="index"
     >
       <el-checkbox
-        @change="() => $emit('choose', modules)"
+        @change="() => $emit('choose', item)"
         v-model="item.checked"
         :label="item.cname"
         border
@@ -49,5 +49,3 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
-</style>

@@ -88,7 +88,7 @@ export default {
               icon: "grape",
               route: "/management-supplies",
             },
-            种苗进货: {
+            种苗管理: {
               icon: "shopping-cart-1",
               route: "/seed-purchase",
             },
@@ -218,7 +218,7 @@ export default {
           ? data.customized_labels
           : data.labels;
         this.newSortMenus = this.formatLabel(labels);
-        // console.log("this.newSortMenus: ", this.newSortMenus);
+        console.log("this.newSortMenus: ", this.newSortMenus);
       } else {
         console.error(res.message);
       }
@@ -228,34 +228,19 @@ export default {
     // 根据labels判断原始的menus是否有标签，没有则删除即可
     formatLabel(labels) {
       console.log("labels: ", labels);
-      let cMenu = this._.cloneDeep(this.menus);
-      // 生成一级标签map
-      const mapOneLabel = {};
-      labels.forEach((oneLabel) => {
-        mapOneLabel[oneLabel.name] = oneLabel.children;
+      let cMenu = {};
+      labels.forEach((item) => {
+        let childMap = this._.cloneDeep(this.menus[item.name]);
+        let pitem = {
+          icon: childMap.icon,
+          children: {},
+        };
+        item.children.forEach((citem) => {
+          pitem.children[citem] = childMap.children[citem];
+        });
+        cMenu[item.name] = pitem;
       });
-      // 根据map判断cMenu中是否有一级标签
-      for (const key in cMenu) {
-        if (!mapOneLabel[key]) {
-          // 如果不存在该一级标签
-          // 删除cMenu中的一级标签
-          delete cMenu[key];
-        } else {
-          // 存在则处理二级标签
-          // 生成二级map
-          const mapTwoLabel = {};
-          mapOneLabel[key].forEach(
-            (twoLabel) => (mapTwoLabel[twoLabel] = true)
-          );
-          // 根据map判断该一级标签中是否有二级标签
-          for (const ckey in cMenu[key].children) {
-            if (!mapTwoLabel[ckey]) {
-              delete cMenu[key].children[ckey];
-            }
-          }
-        }
-      }
-      // console.log('cMenu: ', cMenu);
+      console.log("cMenu: ", cMenu);
       return cMenu;
     },
   },

@@ -34,26 +34,26 @@ Vue.prototype.$echarts = echarts
 
 // 给所有组件添加一个save方法，用于保存拖拽模块
 // 给自己的组件data选项声明（变量名要一致）：modules:[],moduleChecked:[]
-Vue.mixin({
-  methods: {
-    save(viewsName, yourName) {
-      if (!localStorage.getItem(`${yourName}-${viewsName}-modules`)) {
-        // 第一次载入页面
-        this.moduleChecked = this.modules.filter(
-          (item) => item.checked
-        );
-      } else {
-        // 第二次以后载入页面，获取上次保存的自定义视图
-        this.modules = JSON.parse(
-          localStorage.getItem(`${yourName}-${viewsName}-modules`)
-        );
-        this.moduleChecked = JSON.parse(
-          localStorage.getItem(`${yourName}-${viewsName}-checked`)
-        );
-      }
-    }
-  },
-})
+// Vue.mixin({
+//   methods: {
+//     save(viewsName, yourName) {
+//       if (!localStorage.getItem(`${yourName}-${viewsName}-modules`)) {
+//         // 第一次载入页面
+//         this.moduleChecked = this.modules.filter(
+//           (item) => item.checked
+//         );
+//       } else {
+//         // 第二次以后载入页面，获取上次保存的自定义视图
+//         this.modules = JSON.parse(
+//           localStorage.getItem(`${yourName}-${viewsName}-modules`)
+//         );
+//         this.moduleChecked = JSON.parse(
+//           localStorage.getItem(`${yourName}-${viewsName}-checked`)
+//         );
+//       }
+//     }
+//   },
+// })
 
 new Vue({
   router,

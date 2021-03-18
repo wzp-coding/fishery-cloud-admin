@@ -33,7 +33,7 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item style="width: 60px" command="chooseNavbar"
-              >选择菜单
+              >自定义
             </el-dropdown-item>
             <el-dropdown-item style="width: 60px" command="modifyPassword"
               >修改密码</el-dropdown-item
@@ -132,8 +132,7 @@ export default {
       window.__twoLevel = {};
       window.__threeLevel = {};
       this.$router.push("/login");
-      // 清除主题
-      document.body.className = ''
+      
     },
 
     // 修改密码操作
@@ -148,7 +147,7 @@ export default {
 
     // 换主题皮肤
     async changeTheme(color) {
-      const form = Object.assign(this.userInfo, { theme: color });
+      const form = Object.assign( this.userInfo,{ id:this.userInfo.id });
       // console.log('form: ', form);
       const { data: res } = await this.$user.put("/user", form);
       if (res.statusCode === 20000) {

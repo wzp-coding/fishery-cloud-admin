@@ -27,15 +27,15 @@
       <DraggableWrap
         :modules="modules"
         :changeLayout="
-          (newModuleChecked) =>
-            (this.moduleChecked = newModuleChecked)
+          (newModuleChecked) => (this.moduleChecked = newModuleChecked)
         "
+        :changeItem="changeItem"
         justify="space-around"
         type="flex"
       >
         <template v-slot:default="scope">
           <component
-            style="margin: 5px;"
+            style="margin: 5px"
             v-for="item in scope.moduleChecked"
             :key="item.id"
             :is="item.name"
@@ -51,7 +51,7 @@
 
     <!-- 模块选择框 -->
     <ChooseModule
-      @choose="(newModules) => (this.modules = newModules)"
+      @choose="(item) => (this.changeItem = item)"
       @close="() => (this.isShowModule = false)"
       :isShowModule="isShowModule"
       :modules="modules"
@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import Authority from "../../components/wzp/Authority";
 import { DigitalBase as dragComps } from "../../util/draggable/wzp";
 
@@ -68,6 +69,9 @@ export default {
   components: {
     ...dragComps,
     Authority,
+  },
+  computed: {
+    ...mapState(["userInfo"]),
   },
   data() {
     return {
@@ -78,33 +82,28 @@ export default {
       isShowModule: false,
 
       // 存放可拖拽模块
-      modules: [
-        {
-          id: 1,
-          name: "DraggableInfoBase",
-          cname: "基地信息",
-          checked: true,
-        },
-        {
-          id: 2,
-          name: "DraggableMap",
-          cname: "基地地图",
-          checked: true,
-        },
-        {
-          id: 3,
-          name: "DraggableWeatherCard",
-          cname: "天气卡片",
-          checked: true,
-        },
-      ],
+      modules: [],
 
       // 存放被选中的可拖拽模块
       moduleChecked: [],
+
+      changeItem:{}
     };
   },
-  created() {
-    this.save('DigitalBase','wzp');
+  methods: {
+    async getModules() {
+      const { data: res } = await this.$drag.get("/all");
+      console.log('res: ', res);
+      if (res.statusCode === 20000) {
+        this.modules = res.data;
+      } else {
+        console.error(res.message);
+      }
+    },
+  },
+  async created() {
+    await this.getModules();
+    // this.save('DigitalBase','wzp');
   },
 };
 </script>

@@ -42,11 +42,11 @@
           <el-row style="margin-bottom:0">
             <el-table :data="equipmentList" border stripe>
             <el-table-column type="index" label="序号" width="50px" align="center"></el-table-column>
-            <el-table-column prop="updateTime" label="添加时间"></el-table-column>
             <el-table-column prop="equipmentName" label="设备名称"></el-table-column>
             <el-table-column prop="username" label="用户名称"></el-table-column>
             <el-table-column prop="baseName" label="基地名称"></el-table-column>
             <el-table-column prop="remarks" label="备注信息"></el-table-column>
+            <el-table-column prop="updateTime" label="添加时间"></el-table-column>
             <el-table-column label="操作" width="180px" align="center">
               <template slot-scope="scope">
               <el-tooltip content="修改设备信息"><el-button type="primary" icon="el-icon-edit" size="mini" @click="editshow(scope.row)" v-auth="'traceability_atmosphere_update'"></el-button></el-tooltip>

@@ -41,16 +41,26 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import Form from "../../components/wzp/Form";
-import InvitatedInfo from "../../components/wzp/user_info/InvitatedInfo";
-import UpdatePsd from "../../components/wzp/user_info/UpdatePsd";
-import CreateBase from "../../components/wzp/user_info/CreateBase";
+// import Form from "../../components/wzp/Form";
+// import InvitatedInfo from "../../components/wzp/user_info/InvitatedInfo";
+// import UpdatePsd from "../../components/wzp/user_info/UpdatePsd";
+// import CreateBase from "../../components/wzp/user_info/CreateBase";
 export default {
   components: {
-    Form,
-    InvitatedInfo,
-    UpdatePsd,
-    CreateBase,
+    Form: () =>
+      import(/* webpackChunkName:"common-user" */ "../../components/wzp/Form"),
+    InvitatedInfo: () =>
+      import(
+        /* webpackChunkName:"common-user" */ "../../components/wzp/user_info/InvitatedInfo"
+      ),
+    UpdatePsd: () =>
+      import(
+        /* webpackChunkName:"common-user" */ "../../components/wzp/user_info/UpdatePsd"
+      ),
+    CreateBase: () =>
+      import(
+        /* webpackChunkName:"common-user" */ "../../components/wzp/user_info/CreateBase"
+      ),
   },
   data() {
     return {

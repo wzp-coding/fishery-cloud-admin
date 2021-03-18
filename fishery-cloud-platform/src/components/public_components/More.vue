@@ -14,18 +14,22 @@
   </el-dropdown>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
-    props:{
-        defLayout:{
-            type:Function
-        },
-        moduleChecked:{
-          type:Array
-        },
-        modules:{
-          type:Array
-        },
+  props: {
+    defLayout: {
+      type: Function,
     },
+    moduleChecked: {
+      type: Array,
+    },
+    modules: {
+      type: Array,
+    },
+  },
+  computed: {
+    ...mapState(["userInfo"]),
+  },
   methods: {
     // 处理下拉框指令
     handleCommand(command) {
@@ -41,24 +45,32 @@ export default {
     },
 
     // 保存布局
-    saveLayout() {
-      // 保存选中模块的调整顺序
-      localStorage.setItem(
-        "wzp-DigitalBase-checked",
-        JSON.stringify(this.moduleChecked)
-      );
-      // 保存所有模块
-      localStorage.setItem(
-        "wzp-DigitalBase-modules",
-        JSON.stringify(this.modules)
-      );
-      this.elMessage.success("保存成功");
+    async saveLayout() {
+      console.log("this.modules: ", this.modules);
+      this.modules.forEach(async(item) => {
+       const {data:res} = await this.$drag.put("", item);
+       if(res.statusCode !== 20000){
+         this.elMessage.error(res.message);
+       }
+      });
+      let moduleCheckedIds = this.moduleChecked.map((item) => item.id);
+      const params = {
+        moduleChecked: moduleCheckedIds,
+        userId: this.userInfo.id,
+      };
+      const { data: res } = await this.$drag.put("/checked", params);
+      if (res.statusCode === 20000) {
+        this.elMessage.success(res.message);
+      } else {
+        this.elMessage.error(res.message);
+        console.error(res.message);
+      }
     },
   },
 };
 </script>
 <style lang="less" scoped>
 .el-dropdown-link {
-    cursor: pointer;
-  }  
+  cursor: pointer;
+}
 </style>

@@ -19,17 +19,46 @@
       </el-col>
     </el-row>
     <el-tabs type="border-card">
+      <el-tab-pane label="农资库存">
+        <el-table :data="baseNowSupplyList" border stripe>
+          <el-table-column prop="name" label="农资名称"></el-table-column>
+          <el-table-column prop="type" label="投入品类型"></el-table-column>
+          <el-table-column
+            prop="totalWeight"
+            label="进货量(kg)"
+          ></el-table-column>
+          <el-table-column
+            prop="surplusWeight"
+            label="剩余量(kg)"
+          ></el-table-column>
+          <el-table-column prop="gmtCreate" label="进货日期"></el-table-column>
+          <el-table-column label="操作" width="180px">
+            <template slot-scope="scope">
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                size="mini"
+                @click="removeSupply(scope.row.id)"
+              ></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <ThePagination
+          :toPagination="paginationNowInfoIn"
+          @fatherMethod="paginationChangeEventNow"
+        ></ThePagination>
+      </el-tab-pane>
       <el-tab-pane label="入库记录">
         <el-row>
           <el-col style="float: right; width: 70px">
-            <downloadExcel :data="baseSupplyList" name="基地入库信息导出.xls">
-              <el-tooltip
-                effect="dark"
-                content="导出基地订单信息"
-                placement="top-start"
-                ><el-button type="success">导出</el-button></el-tooltip
-              >
-            </downloadExcel>
+            <el-tooltip
+              effect="dark"
+              content="导出基地订单信息"
+              placement="top-start"
+              ><el-button type="success" @click="downExcelIn"
+                >导出</el-button
+              ></el-tooltip
+            >
           </el-col>
           <el-col style="width: 100px; float: right; margin-left: 10px">
             <el-button
@@ -39,17 +68,7 @@
               >农资入库</el-button
             >
           </el-col>
-          <el-col>
-            <!-- <el-select v-model="selectType1" @change="typeChange1">
-              <el-option
-                v-for="item in type"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select> -->
-          </el-col>
+          <el-col> </el-col>
         </el-row>
         <el-table :data="baseSupplyList" border stripe>
           <el-table-column type="expand">
@@ -111,22 +130,6 @@
                 @click="editInEvent(scope.row.id, scope.row.supplyId)"
                 v-auth="'traceability_agricultural_update'"
               ></el-button>
-              <!-- 出库按钮 -->
-              <!-- <el-tooltip
-                effect="dark"
-                content="出库"
-                placement="top"
-                :enterable="false"
-              >
-                <el-button
-                  @click="delivery(scope.row.supplyId)"
-                  type="warning"
-                  icon="el-icon-upload2"
-                  size="mini"
-                ></el-button>
-              </el-tooltip> -->
-              <!-- 删除按钮 -->
-              <!-- type="danger": 红色警告按钮 -->
               <el-button
                 type="danger"
                 icon="el-icon-delete"
@@ -145,17 +148,14 @@
       <el-tab-pane label="出库记录">
         <el-row>
           <el-col style="float: right; width: 70px">
-            <downloadExcel
-              :data="baseSupplyOutList"
-              name="基地入库信息导出.xls"
+            <el-tooltip
+              effect="dark"
+              content="导出基地订单信息"
+              placement="top-start"
+              ><el-button type="success" @click="downExcel"
+                >导出</el-button
+              ></el-tooltip
             >
-              <el-tooltip
-                effect="dark"
-                content="导出基地订单信息"
-                placement="top-start"
-                ><el-button type="success" v-auth="'traceability_agricultural_select'">导出</el-button></el-tooltip
-              >
-            </downloadExcel>
           </el-col>
           <el-col style="float: right; width: 75px; margin-right: 25px">
             <el-button
@@ -292,6 +292,7 @@ export default {
     return {
       baseId: this.$store.state.userInfo.baseId,
       // baseId: "1248910886228332544",
+      baseNowSupplyList: [],
       baseSupplyList: [],
       baseSupplyOutList: [],
       addInfo: {
@@ -319,15 +320,20 @@ export default {
       toSupplyInfo: {
         dialogVisible: false,
       },
+      paginationNowInfoIn: {
+        total: 0,
+        page: 1,
+        size: 6,
+      },
       paginationInfoIn: {
         total: 0,
         page: 1,
-        size: 3,
+        size: 6,
       },
       paginationInfoOut: {
         total: 0,
         page: 1,
-        size: 3,
+        size: 6,
       },
       toDialogAddInfo: {
         title: "农资入库",
@@ -356,6 +362,7 @@ export default {
   created() {
     this.getBaseSupplyInfo(); //获取基地入库记录
     this.getOutSupplyInfo(); //获取基地出库记录
+    this.getBaseNowSupply(); //获取基地库存
   },
   methods: {
     async getBaseSupplyInfo() {
@@ -363,8 +370,10 @@ export default {
         `in/${this.baseId}/${this.paginationInfoIn.size}/${this.paginationInfoIn.page}`
       );
       console.log(res);
-      this.baseSupplyList = res.data.records;
-      this.paginationInfoIn.total = res.data.total;
+      if (res.statusCode === 20000) {
+        this.baseSupplyList = res.data.records;
+        this.paginationInfoIn.total = res.data.total;
+      }
     },
     async addBaseSupply() {
       console.log(this.addInfo);
@@ -374,10 +383,13 @@ export default {
       this.paginationInfoIn.size = size;
       this.getBaseSupplyInfo();
     },
+    paginationChangeEventNow(size, page) {
+      this.paginationNowInfoIn.page = page;
+      this.paginationNowInfoIn.size = size;
+      this.getBaseNowSupply();
+    },
     // 出库
     async delivery(supplyId) {
-      // const {data : res} = await this.$baseSupply.put('in')
-      // console.log(res);
       this.toDialogAddOut.dialogVisible = true;
       this.toDialogAddOut.id = supplyId;
       console.log(supplyId);
@@ -465,6 +477,47 @@ export default {
       this.paginationInfoOut.size = size;
       this.paginationInfoOut.page = page;
       this.getOutSupplyInfo();
+    },
+    async downExcel() {
+      window.location.href =
+        "http://119.23.218.131:9103/base/supply/out/excel/+this.$store.state.baseInfo.id";
+    },
+    async downExcelIn() {
+      window.location.href =
+        "http://119.23.218.131:9103/base/supply/in/excel/+this.$store.state.baseInfo.id";
+    },
+    async getBaseNowSupply() {
+      const { data: res } = await this.$baseSupply.get(
+        `${this.$store.state.baseInfo.id}/${this.paginationNowInfoIn.size}/${this.paginationNowInfoIn.page}`
+      );
+      console.log(res);
+      if (res.statusCode === 20000) {
+        this.baseNowSupplyList = res.data.records;
+        this.paginationNowInfoIn.total = res.data.total;
+        for (let i = 0; i < this.baseNowSupplyList.length; i++) {
+          this.baseNowSupplyList[i].type = "饲料";
+        }
+      }
+    },
+    async removeSupply(id) {
+      const confirmResult = await this.elConfirm(
+        "此操作将永久该记录, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => {
+        return err;
+      });
+      if (confirmResult !== "confirm") {
+        return this.elMessage.info("已取消删除");
+      }
+      const {data:res} = await this.$baseSupply.delete(`id`)
+      if(res.statusCode === 20000){
+        this.elMessage.success('删除库存信息成功');
+      }
     },
   },
 };

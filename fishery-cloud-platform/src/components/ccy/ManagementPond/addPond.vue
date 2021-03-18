@@ -17,6 +17,9 @@
       <el-form-item label="池塘类型" prop="type">
         <el-input v-model="addeForm.type"></el-input>
       </el-form-item>
+      <el-form-item label="创建者" prop="creator">
+        <el-input v-model="addeForm.creator"></el-input>
+      </el-form-item>
       <el-form-item label="池塘面积/m²" prop="area">
         <el-input-number
           v-model="addeForm.area"
@@ -52,7 +55,7 @@ export default {
         //与对话框的输入数据绑定
         area: "", //池塘面积
         baseId: this.$store.state.baseInfo.id, //基地id
-        creator: "boss", //创建者
+        creator: "", //创建者
         depth: "", //池塘深度
         name: "", //池塘名称
         type: "", //池塘类型
@@ -86,7 +89,7 @@ export default {
   methods: {
     async addPondEvent() {
       const { data: res } = await this.$pondController.post(
-        `create}`,
+        `create`,
         this.addeForm
       );
       if(res.statusCode === 20000){

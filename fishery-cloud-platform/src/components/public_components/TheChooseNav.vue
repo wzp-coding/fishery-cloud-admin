@@ -16,7 +16,8 @@
       show-checkbox
       accordion
       draggable
-      :allow-drop="handleDrop"
+      :allow-drop="handleAllowDrop"
+      @node-drop="handleNodeDrop"
     ></el-tree>
     <div style="padding: 20px 10px; overflow: hidden">
       <el-button
@@ -41,48 +42,19 @@ export default {
   },
   data() {
     return {
-      retNavList: [],
-      retCheckedNav: [],
+      navList: [], //后端返回的菜单
+      retCheckedNav: [], //后端返回选中的菜单
+      // tree组件
       defualtProps: {
         children: "children",
         label: "name",
       },
-      preUserChecked: [],
-      nameToIdMap: {},
     };
   },
   computed: {
-    ...mapState(["userInfo", "stdNavbar"]),
-    // 有授权的全部用户菜单
-    navList() {
-      const ret = [];
-      let parentId = 1000;
-      let childId = 10000;
-      this.retNavList.forEach((item, index) => {
-        ret.push({
-          id: parentId,
-          name: item.name,
-          children: [],
-        });
-        this.$set(this.nameToIdMap, item.name, parentId);
-        if (item.children.length !== 0) {
-          item.children.forEach((name) => {
-            ret[index].children.push({
-              id: childId,
-              name,
-              parentId,
-            });
-            this.$set(this.nameToIdMap, name, childId);
-            childId++;
-          });
-        }
-        parentId++;
-      });
-      console.log("navList: ", ret);
-      return ret;
-    },
+    ...mapState(["userInfo", "stdNavbar", "idToNameMap","nameToIdMap", "stdNavbarTree","stdNavbarTree"]),
     // 上一次用户选中的菜单ID(只要叶子节点即可)
-    checkedNav() {
+    checkedNavIds() {
       const checkedIds = [];
       this.retCheckedNav.forEach((item) => {
         if (item.children.length != 0) {
@@ -108,13 +80,21 @@ export default {
         role,
         userId,
       };
-      const { data: res } = await this.$userLabel.post("", params);
-      // console.log("userLabel: ", res);
-      if (res.statusCode !== 20000) {
-        console.error(res.message);
+      const { data: res1 } = await this.$userLabel.post("", params);
+      const { data: res2 } = await this.$userLabel.get(
+        `/sequence/${this.userInfo.id}`
+      );
+      // console.log('sequence: ', res2);
+      // console.log("userLabel: ", res1);
+      if (res1.statusCode !== 20000 || res2.statusCode !== 20000) {
+        console.error(res1.message);
       } else {
-        console.log("userLabel: ", JSON.parse(res.data));
-        this.retNavList = this.sortRetLabels(JSON.parse(res.data).labels);
+        console.log("userLabel: ", JSON.parse(res1.data));
+        // 将返回所有菜单按上次的拖拽顺序排序
+        this.navList = this.sortRetLabels(
+          JSON.parse(res1.data).labels,
+          res2.data
+        );
         // console.log("navList: ", this.navList);
       }
       // 再请求该用户已经选择的标签菜单（进行初始化tree，同时记录一下标签菜单）
@@ -126,17 +106,15 @@ export default {
       } else {
         console.log("$label.post ", JSON.parse(ret.data));
         let checkedLabels = JSON.parse(ret.data);
-        this.retCheckedNav = this.sortRetLabels(
-          checkedLabels.customized_labels
-            ? checkedLabels.customized_labels
-            : checkedLabels.labels
-        );
-        // console.log(this.nameToIdMap);
-        this.$refs.tree.setCheckedKeys(this.checkedNav);
+        this.retCheckedNav = checkedLabels.customized_labels
+          ? checkedLabels.customized_labels
+          : checkedLabels.labels;
+        console.log(this.checkedNavIds);
+        this.$refs.tree.setCheckedKeys(this.checkedNavIds);
       }
     },
 
-    // 点击保存自定义的时候
+    // 点击保存自定义的时候(1.保存所有菜单拖拽顺序  2.更新选中的菜单)
     async saveNav() {
       // 这里注意：还要获取半选中的父节点
       const curUserCheckedIds = this.$refs.tree
@@ -144,76 +122,103 @@ export default {
         .concat(this.$refs.tree.getCheckedKeys());
       let c_navList = this._.cloneDeep(this.navList);
       // console.log("c_navList: ", c_navList);
-      const customizedLabels = this.formatCNavList(
+      // 保存自定义的customizedLabels数组
+      const customizedLabels = this.formatCNavListToName(
         c_navList,
         curUserCheckedIds
       );
       console.log("customizedLabels: ", customizedLabels);
-
-      let params = {
+      // 保存拖拽顺序的labelsSequence数组
+      const labelsSequence = this.formatNavListToId(this.navList);
+      console.log("labelsSequence: ", labelsSequence);
+      let params1 = {
         userId: this.userInfo.id,
         customizedLabels,
-        baseId:this.userInfo.baseId,
-        role:this.userInfo.role
+        baseId: this.userInfo.baseId,
+        role: this.userInfo.role,
       };
-      const { data: res } = await this.$userLabel.put("", params);
+      console.log("this.navList: ", this.navList);
+      let params2 = {
+        labelsSequence,
+        userId: this.userInfo.id,
+      };
+      const { data: res1 } = await this.$userLabel.put("", params1);
+      const { data: res2 } = await this.$userLabel.put("/sequence", params2);
       // console.log("res: ", res);
-      if (res.statusCode === 20000) {
-        this.elMessage.success(res.message);
+      if (res1.statusCode === 20000 && res2.statusCode === 20000) {
+        this.elMessage.success(res1.message);
         this.$store.commit("setShouldFlushNavbar", true);
         this.$emit("close");
       } else {
-        this.elMessage.error(res.message);
-        console.error(res.message);
+        this.elMessage.error(res1.message);
+        console.error(res1.message);
       }
-      // if(res.statusCode !==)
     },
 
     // 判断拖拽放置位置
-    handleDrop(draggingNode, dropNode, type) {
-      console.log("type: ", type);
-      console.log("dropNode: ", dropNode);
-      console.log("draggingNode: ", draggingNode);
+    handleAllowDrop(draggingNode, dropNode, type) {
+      // console.log("type: ", type);
+      // console.log("dropNode: ", dropNode);
+      // console.log("draggingNode: ", draggingNode);
+      if (type === "inner") return false;
+      if (draggingNode.level !== dropNode.level) return false;
+      return true;
     },
-
-    // 将后端返回的乱序的标签排序，思路：先拷贝一份完全的顺序的菜单，再根据乱序的数组中查看是否有该菜单名，没有则删除即可
-    sortRetLabels(retLabels) {
-      // console.log("retLabels: ", retLabels);
-      const ret = this._.cloneDeep(this.stdNavbar);
-      // 生成一级标签map
-      const mapOneLabel = {};
-
-      retLabels?.forEach((oneLabel) => {
-        mapOneLabel[oneLabel.name] = oneLabel.children;
-      });
-      // 必须倒着遍历然后删除，否则前边删除后index会影响后面的删除
-      for (let index = ret.length - 1; index >= 0; index--) {
-        let item = ret[index];
-        if (mapOneLabel[item.name]) {
-          // 如果返回包含该一级菜单
-          // 生成二级map
-          const mapTwoLabel = {};
-          mapOneLabel[item.name].forEach(
-            (twoLabel) => (mapTwoLabel[twoLabel] = true)
+    // 拖拽完成触发，处理拖拽后取消选中的问题
+    handleNodeDrop(draggingNode) {
+      // console.log("draggingNode: ", draggingNode);
+      if (draggingNode.level === 1) {
+        // 处理一级菜单的拖拽
+        const childNodes = draggingNode.childNodes;
+        const childKeys = childNodes.map((item) =>
+          item.checked ? item.key : ""
+        );
+        console.log("childKeys: ", childKeys);
+        this.$refs.tree.setCheckedKeys(
+          childKeys.concat(this.$refs.tree.getCheckedKeys())
+        );
+      } else if (draggingNode.level === 2) {
+        // 处理二级菜单的拖拽
+        if (draggingNode.checked) {
+          this.$refs.tree.setCheckedKeys(
+            [draggingNode.key].concat(this.$refs.tree.getCheckedKeys())
           );
-          for (let cindex = item.children.length - 1; cindex >= 0; cindex--) {
-            let citem = item.children[cindex];
-            if (!mapTwoLabel[citem]) {
-              // delete ret[index].children[cindex];
-              ret[index].children.splice(cindex, 1);
-            }
-          }
-        } else {
-          // delete ret[index];
-          ret.splice(index, 1);
         }
       }
+      // console.log("dropNode: ", dropNode);
+      // console.log("draggingNode: ", draggingNode);
+    },
+    // 将后端返回的乱序的标签排序，思路：根据所拥有的菜单标签和顺序id，生成一颗tree
+    sortRetLabels(retLabels, sortIds) {
+      if (sortIds.length === 0) {
+        // 如果用户是第一次进入选择菜单页面
+        // 这时候是没有顺序id数组的，默认用vuex里定义好的即可
+        return this.stdNavbarTree;
+      }
+      console.log("retLabels: ", retLabels);
+      console.log("sortIds: ", sortIds);
+      const ret = [];
+      sortIds.forEach((item) => {
+        let pitem = {
+          id: item.parentId,
+          name: this.idToNameMap[item.parentId],
+          children: [],
+        };
+        item.childrenIds.forEach(cid=>{
+          pitem.children.push({
+            id:cid,
+            name:this.idToNameMap[cid],
+            parentId:item.parentId
+          })
+        })
+        ret.push(pitem);
+      });
       console.log("ret: ", ret);
       return ret;
     },
 
-    // 将选中的菜单c_navList格式化传给后端
-    formatCNavList(c_navList, curUserCheckedIds) {
+    // 将选中的菜单c_navList格式化成name传给后端
+    formatCNavListToName(c_navList, curUserCheckedIds) {
       // 先删除一级菜单(从后往前)
       for (let i = c_navList.length - 1; i >= 0; i--) {
         let item = c_navList[i];
@@ -242,6 +247,21 @@ export default {
         });
       });
       return ret;
+    },
+
+    // 将拖拽后的所有菜单顺序，转为id形式传给后端
+    formatNavListToId(navList) {
+      const ids = [];
+      navList.forEach((item) => {
+        let pitem = {};
+        pitem.parentId = item.id;
+        pitem.childrenIds = [];
+        item.children.forEach((citem) => {
+          pitem.childrenIds.push(citem.id);
+        });
+        ids.push(pitem);
+      });
+      return ids;
     },
   },
 };

@@ -61,7 +61,7 @@
           </el-form-item>
           <el-form-item
             slot="after"
-            label="养殖类型"
+            label="经营范围"
             label-width="130px"
             prop="scope"
           >
@@ -237,7 +237,8 @@ export default {
             baseId:newUserInfo.baseId
           })
         );
-        this.$router.push("/digital-base");
+        this.$router.push("/login");
+        this.elMessage.info('权限发生改变，请您重新登录！')
       } else {
         this.elMessage.error(res.message);
       }

@@ -113,7 +113,7 @@ export default {
         phoneCode: "",
         loginId: this.defaultForm.id,
         captcha: "",
-        userName: this.defaultForm.username,
+        userName: this.defaultForm.username || this.defaultForm.userName,
         email: this.defaultForm.email,
         avatar:
           this.defaultForm.avatar ||
@@ -493,6 +493,7 @@ export default {
     // 点击图片获取验证码
     async getCaptcha() {
       const { data: res } = await this.$captcha.post("/getCaptcha");
+      console.log(res);
       this.url = res.data.img;
     },
 

@@ -16,6 +16,7 @@
   </el-row>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -24,7 +25,13 @@ export default {
 
       // 存放被选中的可拖拽组件
       moduleChecked: [],
+
+      // id->module映射
+      idToModule: {},
     };
+  },
+  computed: {
+    ...mapState(["userInfo"]),
   },
   props: {
     modules: {
@@ -33,24 +40,51 @@ export default {
     changeLayout: {
       type: Function,
     },
+    changeItem: {
+      type: Object,
+    },
+  },
+  methods: {
+    async getModuleChecked() {
+      this.modules.forEach((item) => {
+      this.$set(this.idToModule, item.id, item);
+    });
+      const { data: res } = await this.$drag.get(
+        `/checked/${this.userInfo.id}`
+      );
+        console.log('moduleCheckedIds: ', res);
+      if (res.statusCode === 20000) {
+        this.moduleChecked = res.data.map((id) => {
+          return this.idToModule[id];
+        });
+        console.log("this.moduleChecked: ", this.moduleChecked);
+      } else {
+        this.moduleChecked = this.modules.filter((item) => item.checked);
+      }
+    },
   },
   watch: {
-    // 当第一次传入，选择模块，第二次载入页面时
-    modules: {
-      handler(val) {
-        const moduleChecked = localStorage.getItem("wzp-DigitalBase-checked");
-        if (moduleChecked) {
-          // 第二次载入页面的时候，获取上一次用户保存的布局
-          this.moduleChecked = JSON.parse(moduleChecked);
-          localStorage.removeItem("wzp-DigitalBase-checked");
-        } else {
-          this.moduleChecked = val.filter((item) => item.checked);
-        }
-      },
-      deep: true,
-      immediate: true,
+    modules(val){
+      console.log('val: ', val);
+      if(!val){
+        return;
+      }else{
+        this.getModuleChecked();
+      }
     },
-
+    changeItem: {
+      handler(cur){
+        console.log("cur: ", cur);
+        if (!cur.checked) {
+          let index = this.moduleChecked.findIndex((item) => item.id == cur.id);
+          this.moduleChecked.splice(index, 1);
+        } else {
+          this.moduleChecked.push(cur);
+        }
+        console.log("this.modules: ", this.modules);
+      },
+      deep:true
+    },
     // 当用户拖拽的时候，将最新的拖拽数组的顺序反馈给父组件
     moduleChecked(val) {
       this.changeLayout(val);

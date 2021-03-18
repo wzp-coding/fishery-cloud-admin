@@ -64,7 +64,6 @@
         </div>
       </el-col>
       <el-col :span="15">
-        <!-- <p>池塘名称：</p> -->
         <p>池塘面积/m²：{{ toPond.area }}</p>
         <p>池塘深度/m：{{ toPond.depth }}</p>
         <p>池塘类型：{{ toPond.type }}</p>
@@ -79,15 +78,30 @@
         </p>
         <p v-show="!toPond.germchitId">养殖信息：未投放种苗</p>
         <p v-if="toPond.germchitId">
-          捕捞状态：{{
-            toPond.catchStatus === 0 
-              ? "未捕捞"
-              : "已捕捞"
-          }}
+          捕捞状态：{{ toPond.catchStatus === 0 ? "未捕捞" : "已捕捞" }}
         </p>
+        <p><el-tooltip
+          class="item"
+          effect="dark"
+          content="点击查询当前投喂信息"
+          placement="top-start"
+          v-if="toPond.germchitId"
+        >
+          <span @click="feedRecord.dialogVisible1 = true" style="margin-right:18px">喂养记录</span>
+        </el-tooltip>
+        <!--  -->
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="点击查询历史投喂"
+          placement="top-start"
+        >
+          <span @click="feedRecord.dialogVisible2 = true">历史喂养记录</span>
+        </el-tooltip></p>
+        
       </el-col>
     </el-row>
-    <el-row >
+    <el-row>
       <el-col :span="20" :offset="11" class="buttons">
         <div>
           <!-- 有投放的才有捕捞选项 -->
@@ -246,6 +260,11 @@
       :toDialogInfo="toCatchingInfo"
       @fatherMethod="RefreshPond"
     ></catching>
+    <!-- 捕捞记录 -->
+    <feedHistory
+      :feedRecord="feedRecord"
+      @fatherMethods="feedHistoryEvent"
+    ></feedHistory>
   </div>
 </template>
 
@@ -253,11 +272,13 @@
 import TheDialogAll from "../../ccy/public/TheDialogAll";
 import feedPond from "../ManagementPond/feedPond";
 import catching from "../ManagementPond/catching";
+import feedHistory from "../ManagementPond/feedHistory";
 export default {
   components: {
     TheDialogAll,
     feedPond,
     catching,
+    feedHistory,
   },
   props: {
     toPond: {
@@ -349,12 +370,19 @@ export default {
       toFeedInfo: {
         pondId: this.toPond.pondId,
         dialogVisible: false,
+        farmingId: this.toPond.farmingId,
       },
       //捕捞
       toCatchingInfo: {
         pondId: this.toPond.pondId,
         dialogVisible: false,
         max: 0,
+      },
+      feedRecord: {
+        pondId: this.toPond.pondId,
+        farmingId: this.toPond.farmingId,
+        dialogVisible1: false,
+        dialogVisible2: false,
       },
     };
   },
@@ -363,7 +391,6 @@ export default {
   },
   methods: {
     async editPondInfo() {
-      // this.$refs.addeFormRef.dialogVerification()
       this.toDialogEdit.dialogVisible = false;
       console.log(this.editInfo);
       const { data: res } = await this.$pondController.put(
@@ -451,22 +478,22 @@ export default {
       console.log(res);
     },
     async searchGermchitInfo(germchitId) {
-      console.log(germchitId);
       const { data: res } = await this.$germchit.get(`${germchitId}`);
-      console.log(res);
       if (res.statusCode === 20000) {
         this.germchitDetail = res.data;
-        console.log(this.germchitDetail);
       }
     },
     RefreshPond() {
       this.$emit("fatherMethod");
     },
     selectEvent(res) {
-      console.log(res);
       this.max = this.germchitList[res].germchitSurplusNumber;
       this.farmInfo.germchitId = this.germchitList[res].id;
       this.germchitName = this.germchitList[res].germchitSpecies;
+    },
+    feedHistoryEvent() {
+      this.feedRecord.dialogVisible1 = false;
+      this.feedRecord.dialogVisible2 = false;
     },
   },
 };
@@ -516,7 +543,7 @@ el-col {
     height: 100%;
   }
 }
-.pondInfo{
+.pondInfo {
   height: 180px;
 }
 .buttons {
