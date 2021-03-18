@@ -36,18 +36,18 @@
           prop="taskWeekday"
           label="提醒日期"
           :formatter="memoType"
-          width="120"
+         
         ></el-table-column>
         <el-table-column
           prop="status"
           label="状态"
           :formatter="statusType"
-          width="120"
+         
         ></el-table-column>
         <el-table-column
           prop="taskContent"
           label="内容"
-          width="500"
+         
         ></el-table-column>
         <el-table-column label="操作" width="280px">
           <template slot-scope="scope">
