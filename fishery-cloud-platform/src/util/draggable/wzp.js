@@ -1,6 +1,6 @@
 // 我的基地-数字基地
 // import InfoBase from "../../components/wzp/digital_base/InfoBase";
-import Map from "../../components/public_components/Map";
+// import Map from "../../components/public_components/Map";
 // import WeatherCard from "../../components/wzp/digital_base/WeatherCard";
 import { mapState } from "vuex";
 
