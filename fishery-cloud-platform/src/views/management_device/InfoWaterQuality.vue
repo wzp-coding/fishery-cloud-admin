@@ -43,12 +43,12 @@
           <!--设备信息列表区域——start-->
           <el-row style="margin-bottom:0">
             <el-table :data="equipmentList" border stripe>
-            <el-table-column type="index" label="序号" width="50px" align="center"></el-table-column>
-            <el-table-column prop="updateTime" label="添加时间"></el-table-column>
+            <el-table-column type="index" label="序号" width="60" align="center"></el-table-column>
             <el-table-column prop="equipmentName" label="设备名称"></el-table-column>
             <el-table-column prop="username" label="用户名称"></el-table-column>
             <el-table-column prop="baseName" label="基地名称"></el-table-column>
-            <el-table-column prop="poodId" label="池塘编号"></el-table-column>
+            <el-table-column prop="poodId" label="池塘编号" width="190"></el-table-column>
+            <el-table-column prop="updateTime" label="添加时间"></el-table-column>
             <el-table-column prop="remarks" label="备注信息"></el-table-column>
             <el-table-column label="操作" width="180px" align="center">
               <template slot-scope="scope">

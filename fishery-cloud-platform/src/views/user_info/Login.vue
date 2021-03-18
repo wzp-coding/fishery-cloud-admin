@@ -97,6 +97,8 @@ export default {
     if (this.activeName === "passwordLogin") {
       this.$refs.passwordLogin.getCaptcha();
     }
+    // 清除主题
+      document.body.className = ''
   },
 };
 </script>

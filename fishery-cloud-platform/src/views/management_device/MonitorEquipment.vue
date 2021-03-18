@@ -38,13 +38,13 @@
           <!--设备信息列表区域——start-->
           <el-row style="margin-bottom:0">
             <el-table :data="equipmentList" border stripe>
-            <el-table-column type="index" label="序号"></el-table-column>
-            <el-table-column prop="createDate" label="创建时间" min-width></el-table-column>
+            <el-table-column type="index" label="序号" width="60"></el-table-column>
             <el-table-column prop="deviceSerial" label="设备序列号" min-width></el-table-column>
             <el-table-column prop="createBy" label="创建者" min-width></el-table-column>
             <el-table-column prop="baseName" label="基地名称" min-width></el-table-column>
             <el-table-column prop="monitoringLocation" label="摄像头监控位置" min-width></el-table-column>
             <el-table-column prop="validateCode" label="设备验证码" min-width></el-table-column>
+            <el-table-column prop="createDate" label="创建时间" width="170"></el-table-column>
             <el-table-column prop="status" label="是否溯源" min-width align="center">
               <template slot-scope="scope">
                   <el-tag v-if="scope.row.statusCode == '1'" type="success">是</el-tag>

@@ -61,7 +61,7 @@
           </el-form-item>
           <el-form-item
             slot="after"
-            label="养殖类型"
+            label="经营范围"
             label-width="130px"
             prop="scope"
           >

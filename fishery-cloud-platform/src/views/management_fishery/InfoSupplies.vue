@@ -78,13 +78,21 @@
               </TheInfoSupplyLayout>
               <el-form-item label="供应商生产许可证" class="down-label">
                 <div class="downBox">
-                  <el-image v-if="props.row.supplierLicense" :src="props.row.supplierLicense" :preview-src-list="srcListLicense" />
+                  <el-image
+                    v-if="props.row.supplierLicense"
+                    :src="props.row.supplierLicense"
+                    :preview-src-list="srcListLicense"
+                  />
                   <!-- <i v-if="props.row.supplierLicense" class="el-icon-zoom-in avatar-uploader-icon" ></i> -->
                 </div>
               </el-form-item>
               <el-form-item label="投入品照片" class="down-label">
                 <div class="downBox">
-                  <el-image v-if="props.row.picture" :src="props.row.picture" :preview-src-list="srcList"></el-image>
+                  <el-image
+                    v-if="props.row.picture"
+                    :src="props.row.picture"
+                    :preview-src-list="srcList"
+                  ></el-image>
                   <!-- <i v-if="props.row.picture" class="el-icon-zoom-in avatar-uploader-icon" ></i> -->
                 </div>
               </el-form-item>
@@ -93,17 +101,22 @@
         </el-table-column>
         <el-table-column label="#" type="index" width="140"></el-table-column>
         <el-table-column label="投入品名称" prop="name"></el-table-column>
-        <el-table-column label="投入品类型" prop="type"></el-table-column>
-        <el-table-column label="供应商电话" prop="supplierPhone"></el-table-column>
-        
+        <el-table-column label="投入品类型" prop="typeName"></el-table-column>
+        <el-table-column
+          label="供应商电话"
+          prop="supplierPhone"
+        ></el-table-column>
+
         <el-table-column label="生产日期" prop="produceDate"></el-table-column>
         <el-table-column label="到期时间" prop="shelfDate"></el-table-column>
         <el-table-column label="操作" width="143">
           <template slot-scope="scope">
             <el-row :gutter="15">
               <el-col :span="11"
-                ><el-button size="mini" @click="editSupplyEvent(scope.row.id)"
-                v-auth="'traceability_fishery_update'"
+                ><el-button
+                  size="mini"
+                  @click="editSupplyEvent(scope.row.id)"
+                  v-auth="'traceability_fishery_update'"
                   >编辑</el-button
                 ></el-col
               >
@@ -340,8 +353,8 @@ export default {
       // 控制放大面板的显示和隐藏
       isPreview: false,
       // 图片预览
-      srcList:[],
-      srcListLicense:[],
+      srcList: [],
+      srcListLicense: [],
       addSupplyInfo: {
         ingredient: "", //投入品成分
         inspector: "", //检验人
@@ -446,10 +459,17 @@ export default {
       if (res.statusCode === 20000) {
         this.allSupplyList = res.data.records;
         this.paginationInfo.total = res.data.total;
-        for(let i=0;i<this.allSupplyList.length;i++){
-          if(this.allSupplyList[i].picture || this.allSupplyList[i].supplierLicense){
-            this.srcList.push(this.allSupplyList[i].picture)
-            this.srcListLicense.push(this.allSupplyList[i].supplierLicense)
+        this.allSupplyList.forEach((item,index) => {
+          // console.log('item: ', item);
+          this.$set(this.allSupplyList[index],"typeName",item.type == 1 ? "鱼料" : "饲料")
+        });
+        for (let i = 0; i < this.allSupplyList.length; i++) {
+          if (
+            this.allSupplyList[i].picture ||
+            this.allSupplyList[i].supplierLicense
+          ) {
+            this.srcList.push(this.allSupplyList[i].picture);
+            this.srcListLicense.push(this.allSupplyList[i].supplierLicense);
           }
         }
       }
