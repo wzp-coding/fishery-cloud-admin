@@ -1,7 +1,7 @@
  <template>
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item>养殖管理</el-breadcrumb-item>
+      <el-breadcrumb-item>渔业管理</el-breadcrumb-item>
       <el-breadcrumb-item>池塘管理</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
