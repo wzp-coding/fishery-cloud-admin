@@ -14,7 +14,7 @@
     <!-- 添加区域结束 -->
 
     <!-- 表格开始 -->
-    <Table :labels="labels" :func="getAllInfo">
+    <Table :labels="labels" :func="getAllInfo" opHandle="true">
       <el-table-column label="操作">
         <!-- <template slot-scope="scope">
           <el-row :gutter="20">

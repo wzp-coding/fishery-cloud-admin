@@ -1,5 +1,5 @@
 <template>
-  <el-col :xs="24" :sm="12" :lg="12">
+  <el-col :xs="24" :sm="12" :lg="12" v-if="!orTrue">
     <el-form-item :label="label + '：'">
       <el-input
         :type="textarea || ''"
@@ -20,6 +20,7 @@ export default {
     keyName: String,
     placeholder: String,
     textarea: {},
+    orTrue: Boolean,
   },
   data() {
     return {
@@ -27,10 +28,12 @@ export default {
       value: this.defaultVal || "",
     };
   },
+  created() {
+    this.handleChange(this.defaultVal);
+  },
   computed: {},
   mounted() {
     this.initPlaceholder();
-    this.handleChange(this.value);
   },
   methods: {
     initPlaceholder() {

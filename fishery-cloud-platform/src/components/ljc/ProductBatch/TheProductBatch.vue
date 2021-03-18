@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 表格开始 -->
-    <Table :labels="labels" :func="getAllInfo">
+    <Table :labels="labels" :func="getAllInfo" opHandle="true">
       <template #handle="slotProps">
         {{ slotProps.data }}
         <Form

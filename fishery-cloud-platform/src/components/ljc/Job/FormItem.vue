@@ -20,6 +20,14 @@
       />
     </el-row>
     <el-row>
+      <InputNumber
+        keyName="productWeight"
+        :label="labels.productWeight"
+        min="0"
+        @change="scope.data.change"
+      />
+    </el-row>
+    <el-row>
       <Select
         keyName="operatorName"
         :label="labels.operatorName"
@@ -44,6 +52,14 @@
         keyName="jobDescription"
         textarea="textarea"
         :label="labels.jobDescription"
+        @change="scope.data.change"
+      />
+    </el-row>
+    <el-row>
+      <Input
+        keyName="processingFactoryId"
+        :defaultVal="processingFactoryId"
+        :orTrue="true"
         @change="scope.data.change"
       />
     </el-row>

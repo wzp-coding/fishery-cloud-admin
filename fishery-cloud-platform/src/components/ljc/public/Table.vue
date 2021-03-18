@@ -15,7 +15,7 @@
         :label="val"
         align="center"
       ></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" v-if="handle">
         <template slot-scope="{ row }">
           <slot name="handle" :data="row"></slot>
         </template>
@@ -45,6 +45,7 @@
 export default {
   props: {
     labels: {},
+    opHandle: {},
     func: Function,
   },
   data() {
@@ -54,6 +55,11 @@ export default {
       total: 0,
       allList: [],
     };
+  },
+  computed: {
+    handle() {
+      return this.opHandle || false;
+    },
   },
   methods: {
     // 改变currentPage
@@ -104,5 +110,6 @@ export default {
 
     => 操作插槽： 具名：handle
 
+    opHandle: 控制是否显示操作选项 （默认为false）
 
  */

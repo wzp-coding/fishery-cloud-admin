@@ -73,7 +73,6 @@ export default {
       const { data: res } = await this["$" + this.root][this.requiredF](
         `${this.Url}`
       );
-      console.log(res.data);
       this.options = res.data;
     },
   },
