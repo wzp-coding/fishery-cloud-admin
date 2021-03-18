@@ -13,7 +13,6 @@
 
 <script>
 export default {
-  name: "input",
   props: {
     label: String,
     defaultVal: String,

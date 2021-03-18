@@ -2,12 +2,13 @@
   <div>
     <el-row>
       <Select
-        keyName="materialId"
+        :keyName="{ materialId: 'materialId' }"
         :label="labels.materialId"
         labelName="materialName"
         root="plant"
         :Url="`/processing/material/${processingFactoryId}`"
         @change="scope.data.change"
+        @callBack="callBack"
       />
     </el-row>
     <el-row>
@@ -15,8 +16,8 @@
         keyName="materialWeight"
         :label="labels.materialWeight"
         min="0"
+        :max="materialWeight"
         @change="scope.data.change"
-        @callBack="callBack"
       />
     </el-row>
     <el-row>
@@ -29,7 +30,7 @@
     </el-row>
     <el-row>
       <Select
-        keyName="operatorName"
+        :keyName="{ id: 'operatorName' }"
         :label="labels.operatorName"
         labelName="username"
         root="user"
@@ -39,7 +40,7 @@
     </el-row>
     <el-row>
       <Select
-        keyName="productId"
+        :keyName="{ id: 'productId' }"
         :label="labels.productId"
         labelName="productName"
         root="plant"
@@ -82,7 +83,7 @@ export default {
     scope: {},
   },
   data() {
-    return { model: new ljc(this) };
+    return { model: new ljc(this), materialWeight: 0 };
   },
   computed: {
     // 标签
@@ -99,11 +100,11 @@ export default {
     baseId() {
       return this.$store.state.userInfo.baseId;
     },
-
-    async callBack(key, val) {
-      if (key !== "materialId") {
-        return;
-      }
+  },
+  methods: {
+    async callBack(val) {
+      const { data: res } = await this.model.getMaterial(val);
+      this.materialWeight = res.data.materialWeight;
     },
   },
 };

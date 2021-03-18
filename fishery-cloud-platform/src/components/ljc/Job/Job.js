@@ -80,4 +80,14 @@ module.exports = class {
         })
     }
     /* 修改结束 */
+
+    /* 根据id获取原料 */
+    getMaterial(id) {
+        return new Promise((resolve) => {
+            this.vue.$plant.get(`/processing/material/info/${id}`)
+                .then((res) => {
+                    resolve(res);
+                })
+        })
+    }
 }

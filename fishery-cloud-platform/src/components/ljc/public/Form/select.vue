@@ -19,13 +19,14 @@
         v-model="value"
         placeholder="请选择"
         style="width: 100%"
+        :value-key="`${labelName}`"
         @input="inputChange($event)"
       >
         <el-option
           v-for="item in options"
           :key="item.value"
           :label="item[`${labelName}`]"
-          :value="item.id"
+          :value="item"
         >
         </el-option>
       </el-select>
@@ -35,10 +36,9 @@
 
 <script>
 export default {
-  name: "select",
   props: {
     label: String,
-    keyName: String,
+    keyName: {},
     labelName: {},
     Url: {},
     reqFn: {},
@@ -64,8 +64,12 @@ export default {
       this.place = this.placeholder || this.label;
     },
     inputChange(val) {
-      this.$emit("change", this.keyName, val);
-      this.$emit("callBack", this.keyName, val);
+      for (let key in this.keyName) {
+        if (this.keyName[key] || val[key]) {
+          this.$emit("change", this.keyName[key], val[key]);
+        }
+      }
+      this.$emit("callBack", val["id"]);
     },
 
     // 获取选项

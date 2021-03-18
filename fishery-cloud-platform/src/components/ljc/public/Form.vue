@@ -73,6 +73,7 @@ export default {
       this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
         let res = await this.submitFn(this.form);
+        this.dialogVisible = false;
         return;
       });
     },

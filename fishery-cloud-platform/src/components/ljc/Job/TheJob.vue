@@ -3,7 +3,6 @@
     <!-- 添加区域开始 -->
     <Form
       :Fdata="JobDataAdd"
-      :data="dataF"
       :submitFn="addInfo"
       :GetInfoFn="getInfoById"
     >
@@ -75,9 +74,6 @@ export default {
           title: "添加加工作业",
         },
       },
-
-      // 表单数据
-      dataF: {},
     };
   },
   computed: {
@@ -133,6 +129,7 @@ export default {
 
     // 添加
     async addInfo(from) {
+      console.log(from);
       const { data: res } = await this.model.addInfo(from);
       if (res.statusCode == 20000) {
         this.elMessage.success(res.message);
