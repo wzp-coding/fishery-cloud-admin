@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item>基地管理</el-breadcrumb-item>

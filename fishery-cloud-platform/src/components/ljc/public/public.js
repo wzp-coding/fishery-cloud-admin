@@ -7,7 +7,7 @@ module.exports = class {
     // 获取人员信息
     getStaff() {
         return new Promise((resolve) => {
-            this.vue.$admin.post(`search/1/1000`)
+            this.vue.$user.get(`getBaseMember/${this.vue.$store.state.userInfo.baseId}`)
                 .then((res) => {
                     resolve(res);
                 })
@@ -33,5 +33,38 @@ module.exports = class {
                 })
         })
     }
+
+    // 获取所有原料
+    getMaterial(id) {
+        return new Promise((resolve) => {
+            this.vue.$plant.get(`/processing/material/${id}`)
+                .then((res) => {
+                    resolve(res);
+                })
+        })
+    }
+
+    // 获取工厂产品
+    getProduct(id) {
+        return new Promise((resolve) => {
+            this.vue.$plant.get(`/processingFactory/product/factoryProduct/${id}`)
+                .then((res) => {
+                    resolve(res);
+                })
+        })
+    }
+
+    // 根据id获取原料信息
+    getProduct(id) {
+        return new Promise((resolve) => {
+            this.vue.$plant.get(`/processingFactory/product/factoryProduct/${id}`)
+                .then((res) => {
+                    resolve(res);
+                })
+        })
+    }
+
+
+
 
 }
