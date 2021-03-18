@@ -5,7 +5,12 @@
     width="30%"
     @close="closeEvent"
   >
-    <el-form :model="feedInfo" label-width="130px" :rules="fromRules" ref="formRef">
+    <el-form
+      :model="feedInfo"
+      label-width="130px"
+      :rules="fromRules"
+      ref="formRef"
+    >
       <el-form-item label="操作者身份" prop="operatorIdentity">
         <el-input v-model="feedInfo.operatorIdentity"></el-input>
       </el-form-item>
@@ -19,7 +24,11 @@
         <el-input v-model="feedInfo.warehouseNumber"></el-input>
       </el-form-item>
       <el-form-item label="请选择投入品" prop="supplyName">
-        <el-select v-model="feedInfo.supplyName" placeholder="请选择" @change="selectEvent">
+        <el-select
+          v-model="feedInfo.supplyName"
+          placeholder="请选择"
+          @change="selectEvent"
+        >
           <el-option
             v-for="(item, index) in supplyList"
             :key="index"
@@ -28,9 +37,11 @@
           >
           </el-option>
         </el-select>
-        <!-- <el-input v-model="feedInfo.supplyName"></el-input> -->
       </el-form-item>
-      <el-form-item label="请输入投喂量" prop="feedingVolume">
+      <el-form-item label="投入品剩余量" prop="remark">
+        <el-input v-model="max" disabled></el-input>
+      </el-form-item>
+      <el-form-item label="投喂量(kg)" prop="feedingVolume">
         <el-input-number
           controls-position="right"
           :min="1"
@@ -47,7 +58,6 @@
     </div>
   </el-dialog>
 </template>
-
 <script>
 export default {
   props: {
@@ -63,6 +73,7 @@ export default {
         baseId: this.$store.state.userInfo.baseId,
         feedingVolume: 0,
         operatorIdentity: "",
+        farmingId:this.toDialogInfo.farmingId,
         operatorName: "",
         pondId: this.toDialogInfo.pondId,
         remark: "", //备注信息
@@ -82,12 +93,12 @@ export default {
           { required: true, message: "请输入投放量", trigger: "blur" },
         ],
       },
+      max: null,
     };
   },
   created() {
     this.getSupplyList(); //获取基地所有投入品库存信息
   },
-  
   methods: {
     async createFeed() {
       console.log(this.feedInfo);
@@ -95,14 +106,15 @@ export default {
         "feeding",
         this.feedInfo
       );
+      console.log(res);
       if (res.statusCode === 20000) {
-        this.elMessage.success('喂养成功');
-        this.toDialogInfo.dialogVisible = false
-      }  
+        this.elMessage.success("喂养成功");
+        this.toDialogInfo.dialogVisible = false;
+        this.closeEvent()
+      }
     },
     async getSupplyList() {
       const { data: res } = await this.$baseSupply.get(`all/${this.baseId}`);
-      // console.log(res);
       if (res.statusCode === 20000) {
         this.supplyList = res.data;
       }
@@ -119,13 +131,15 @@ export default {
         this.createFeed();
       }
     },
-    closeEvent(){
-        this.$refs.formRef.resetFields()
+    closeEvent() {
+      this.$refs.formRef.resetFields();
+      this.max= null;
     },
-    selectEvent(res){
-      this.feedInfo.supplyId = this.supplyList[res].id
-      this.feedInfo.supplyName = this.supplyList[res].name
-    }
+    selectEvent(res) {
+      this.feedInfo.supplyId = this.supplyList[res].supplyId;
+      this.feedInfo.supplyName = this.supplyList[res].name;
+      this.max = this.supplyList[res].surplusWeight;
+    },
   },
 };
 </script>
