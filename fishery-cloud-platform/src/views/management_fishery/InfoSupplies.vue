@@ -101,7 +101,7 @@
         </el-table-column>
         <el-table-column label="#" type="index" width="140"></el-table-column>
         <el-table-column label="投入品名称" prop="name"></el-table-column>
-        <el-table-column label="投入品类型" prop="typeName"></el-table-column>
+        <el-table-column label="投入品类型" prop="type"></el-table-column>
         <el-table-column
           label="供应商电话"
           prop="supplierPhone"
@@ -212,14 +212,7 @@
         </el-form-item>
       </TheDialogLayout>
       <TheDialogLayout>
-        <el-form-item label="供应商地址" prop="supplierAddress" slot="pre">
-          <el-input
-            placeholder="请输入供应商地址"
-            v-model="addSupplyInfo.supplierAddress"
-            clearable
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="投入品成分" prop="ingredient" slot="after">
+        <el-form-item label="投入品成分" prop="ingredient" slot="pre">
           <el-input
             placeholder="请输入投入品成分"
             clearable
@@ -227,60 +220,93 @@
           ></el-input>
         </el-form-item>
       </TheDialogLayout>
-      <el-row>
-        <el-col :span="4">供应商生产许可证</el-col>
-        <el-col :span="5">
-          <el-upload
-            action="http://119.23.218.131:9103/base/file/upload"
-            ref="upload"
-            name="multipartFile"
-            class="avatar-uploader"
-            :on-success="handleAvatarSuccessLicense"
-            multiple
-            :show-file-list="false"
-            :file-list="fileList"
-            :on-remove="handleRemove(1)"
-            list-type="picture"
-          >
-            <img
-              v-if="addSupplyInfo.supplierLicense"
-              :src="addSupplyInfo.supplierLicense"
-              class="avatar"
-            />
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="4">投入品照片</el-col>
-        <el-col :span="5">
-          <el-upload
-            action="http://119.23.218.131:9103/base/file/upload"
-            ref="upload"
-            name="multipartFile"
-            :on-remove="handleRemove(2)"
-            class="avatar-uploader"
-            :on-success="handleAvatarSuccess"
-            multiple
-            :show-file-list="false"
-            :file-list="fileList"
-            list-type="picture"
-          >
-            <img
-              v-if="addSupplyInfo.picture"
-              :src="addSupplyInfo.picture"
-              class="avatar"
-            />
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
-        </el-col>
-      </el-row>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="toDialogSupply.dialogVisible = false"
-          >取 消</el-button
+      <TheDialogLayout>
+        <el-row slot="pre">
+          <el-col :span="9">供应商生产许可证</el-col>
+          <el-col :span="7">
+            <el-upload
+              action="http://119.23.218.131:9103/base/file/upload"
+              ref="upload"
+              name="multipartFile"
+              class="avatar-uploader"
+              :on-success="handleAvatarSuccessLicense"
+              multiple
+              :show-file-list="false"
+              :file-list="fileList"
+              :on-remove="handleRemove(1)"
+              list-type="picture"
+            >
+              <img
+                v-if="addSupplyInfo.supplierLicense"
+                :src="addSupplyInfo.supplierLicense"
+                class="avatar"
+              />
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-col>
+        </el-row>
+        <el-row slot="after">
+          <el-col :span="6">投入品照片</el-col>
+          <el-col :span="7">
+            <el-upload
+              action="http://119.23.218.131:9103/base/file/upload"
+              ref="upload"
+              name="multipartFile"
+              :on-remove="handleRemove(2)"
+              class="avatar-uploader"
+              :on-success="handleAvatarSuccess"
+              multiple
+              :show-file-list="false"
+              :file-list="fileList"
+              list-type="picture"
+            >
+              <img
+                v-if="addSupplyInfo.picture"
+                :src="addSupplyInfo.picture"
+                class="avatar"
+              />
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-col>
+        </el-row>
+      </TheDialogLayout>
+
+      <el-form-item label="收货地址" prop="supplierAddress">
+        <el-select
+          style="width: 100%"
+          v-model="addSupplyInfo.supplierAddress"
+          placeholder="请通过拖拽地图选择收货地址"
         >
-        <el-button type="primary" @click="addSupplise">确 定</el-button>
-      </span>
+          <el-option
+            v-for="(item, index) in addressArray"
+            :key="item + index"
+            :label="item.address + item.title"
+            :value="item.address + item.title"
+            @click.native="setcoordinates(item.location)"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <Map
+        :selectedLocation="location"
+        @getCenterAddress="setAddress"
+        @getAroundPoi="setpoi"
+      ></Map>
+      <el-row style="margin-top:7px">
+        <el-col
+        :offset="19"
+        :span="2.8"
+          ><el-button @click="toDialogSupply.dialogVisible = false"
+            >取 消</el-button
+          ></el-col
+        >
+        <el-col :span="2.8"
+          ><el-button type="primary" @click="addSupplise"
+            >确 定</el-button
+          ></el-col
+        >
+      </el-row>
+      <div slot="footer" class="dialog-footer"></div>
     </TheDialogAll>
     <!-- 编辑信息 -->
     <editSupply
@@ -302,9 +328,19 @@ import TheDialogAll from "../../components/ccy/TheDialogAll";
 import TheDialogLayout from "../../components/ccy/public/TheDialogLayout";
 import TheInfoSupplyLayout from "../../components/ccy/TheInfoSupplyLayout";
 import editSupply from "../../components/ccy/InfoSupply/editSupply";
-
+import Map from "../../components/public_components/MyLocationPicker";
 export default {
   name: "Suppliesinfo",
+  components: {
+    TheCardAll,
+    ThePagination,
+    TheDialogAll,
+    TheDialogLayout,
+    TheInfoSupplyLayout,
+    TheCardHead,
+    editSupply,
+    Map,
+  },
   data() {
     return {
       allSupplyList: [],
@@ -341,6 +377,17 @@ export default {
             { required: true, message: "请输入规格", trigger: "blur" },
           ],
         },
+      },
+      // 地图传来的地址数组
+      addressArray: [],
+      // 传入地图的中心坐标
+      location: {
+        lat: "",
+        lng: "",
+      },
+      initPoint: {
+        lat: "",
+        lng: "",
       },
       fileList: [],
       paginationInfo: {
@@ -389,16 +436,6 @@ export default {
         dialogVisible: false,
       },
     };
-  },
-  components: {
-    TheCardAll,
-    ThePagination,
-    TheDialogAll,
-    TheDialogLayout,
-    TheInfoSupplyLayout,
-    // LoginVue,
-    TheCardHead,
-    editSupply,
   },
   created() {
     this.getAllSupplInfo();
@@ -459,11 +496,8 @@ export default {
       if (res.statusCode === 20000) {
         this.allSupplyList = res.data.records;
         this.paginationInfo.total = res.data.total;
-        this.allSupplyList.forEach((item,index) => {
-          // console.log('item: ', item);
-          this.$set(this.allSupplyList[index],"typeName",item.type == 1 ? "鱼料" : "饲料")
-        });
         for (let i = 0; i < this.allSupplyList.length; i++) {
+          this.allSupplyList[i].type = "饲料";
           if (
             this.allSupplyList[i].picture ||
             this.allSupplyList[i].supplierLicense
@@ -478,17 +512,7 @@ export default {
       this.toDialogEditInfo.dialogVisible = true;
       this.toDialogEditInfo.id = id;
     },
-    /* 图片相关的方法 */
-    // 查看资料放大图片
-    previewInfo(src) {
-      this.isPreview = true;
-      this.previewImg = src;
-    },
-    // 放大图片
-    preview(Pic) {
-      this.isPreview = true;
-      this.previewImg = Pic;
-    },
+
     // 分页组件事件
     paginationChangeEvent(size, page) {
       this.paginationInfo.size = size;
@@ -541,6 +565,23 @@ export default {
         this.addSupplise.picture = "";
       }
     },
+    // 设置地图返回的定点位置
+    setAddress(address) {
+      console.log("address-->", address);
+      this.addSupplyInfo.supplierAddress = address;
+    },
+    // 设置地图返回的位置数组
+    setpoi(poi) {
+      console.log("pio-->", poi);
+      this.addressArray = poi;
+    },
+    // 设置坐标
+    setcoordinates(location) {
+      this.location = location;
+      // this.addSupplyInfo.addressLatitude =this.location.lat
+      // this.addSupplyInfo.addressLongitude = this.location.lng
+      console.log("location-->", this.location);
+    },
   },
 };
 </script>
@@ -550,10 +591,6 @@ export default {
   .el-form-item__label {
     font-weight: bold;
   }
-  // img {
-  //   width: 100%;
-  //   height: 100%;
-  // }
 }
 .containter {
   height: 1700px;
