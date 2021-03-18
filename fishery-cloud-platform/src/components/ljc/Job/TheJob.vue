@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 添加区域开始 -->
-    <Form :Fdata="JobDataAdd" :submitFn="addInfo" :GetInfoFn="getInfoById">
+    <Form :Fdata="DataAdd" :submitFn="addInfo" :GetInfoFn="getInfoById">
       <template v-slot:default="scope">
         <FormItem :scope="scope" />
       </template>
@@ -10,8 +10,20 @@
 
     <!-- 表格开始 -->
     <Table :labels="labels" :func="getAllInfo" opHandle="true">
-      <el-table-column label="操作">
-        <!-- <template slot-scope="scope">
+      <template #handle="slotProps">
+        <Form
+          :id="slotProps.data.id"
+          :Fdata="DataEdit"
+          :submitFn="editInfo"
+          :GetInfoFn="getInfoById"
+        >
+          <template slot-scope="scopeItem">
+            <FormItem :scope="scopeItem" />
+          </template>
+        </Form>
+      </template>
+
+      <!-- <template slot-scope="scope">
           <el-row :gutter="20">
             <el-col :span="8">
               <Form></Form>
@@ -28,7 +40,6 @@
             </el-col>
           </el-row>
         </template> -->
-      </el-table-column>
     </Table>
     <!-- 表格结束 -->
   </div>
@@ -52,7 +63,7 @@ export default {
       model: new ljc(this),
 
       // 添加表单
-      JobDataAdd: {
+      DataAdd: {
         tooltip: {
           tipDisabled: true,
           tipContent: "",
@@ -68,6 +79,25 @@ export default {
           labels: this.labels,
           formRules: this.formRules,
           title: "添加加工作业",
+        },
+      },
+      // 修改表单
+      DataEdit: {
+        tooltip: {
+          tipDisabled: true,
+          tipContent: "",
+          placement: "top",
+        },
+        button: {
+          type: "primary",
+          icon: "el-icon-edit",
+          size: "mini",
+          text: "",
+        },
+        form: {
+          labels: this.labels,
+          formRules: this.formRules,
+          title: "修改加工作业",
         },
       },
     };
