@@ -1,11 +1,7 @@
 <template>
   <div>
     <!-- 添加区域开始 -->
-    <Form
-      :Fdata="JobDataAdd"
-      :submitFn="addInfo"
-      :GetInfoFn="getInfoById"
-    >
+    <Form :Fdata="JobDataAdd" :submitFn="addInfo" :GetInfoFn="getInfoById">
       <template v-slot:default="scope">
         <FormItem :scope="scope" />
       </template>
