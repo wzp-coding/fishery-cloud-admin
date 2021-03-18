@@ -7,7 +7,7 @@ module.exports = class {
     // 获取人员信息
     getStaff() {
         return new Promise((resolve) => {
-            this.vue.$admin.post(`search/1/1000`)
+            this.vue.$user.get(`getBaseMember/${this.vue.$store.state.userInfo.baseId}`)
                 .then((res) => {
                     resolve(res);
                 })

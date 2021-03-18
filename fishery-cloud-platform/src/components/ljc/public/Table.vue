@@ -15,9 +15,12 @@
         :label="val"
         align="center"
       ></el-table-column>
-
+      <el-table-column label="操作">
+        <template slot-scope="{ row }">
+          <slot name="handle" :data="row"></slot>
+        </template>
+      </el-table-column>
       <!-- 放自定义展示形式 -->
-      <slot></slot>
     </el-table>
     <!-- 表格结束 -->
 
@@ -98,6 +101,8 @@ export default {
         };
       }
     },
+
+    => 操作插槽： 具名：handle
 
 
  */

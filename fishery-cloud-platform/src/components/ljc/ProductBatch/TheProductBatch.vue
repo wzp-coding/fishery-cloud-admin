@@ -2,25 +2,20 @@
   <div>
     <!-- 表格开始 -->
     <Table :labels="labels" :func="getAllInfo">
-      <el-table-column label="操作">
-        <!-- <template slot-scope="scope">
-          <el-row :gutter="20">
-            <el-col :span="8">
-              <Form></Form>
-            </el-col>
-            <el-col :span="8">
-              <Delete
-                :id="scope.row.id"
-                :title="title"
-                :root="root"
-                :deleteUrl="deleteUrl"
-                @getAllInfo="getAllInfo()"
-                :auth="'traceability_refrigeratory'"
-              />
-            </el-col>
-          </el-row>
-        </template> -->
-      </el-table-column>
+      <template #handle="slotProps">
+        {{ slotProps.data }}
+        <Form
+          :id="slotProps.data.id"
+          :Fdata="dataAdd"
+          :data="dataF"
+          :submitFn="addOrder"
+          :GetInfoFn="getInfoById"
+        >
+          <template slot-scope="scopeItem">
+            <FormItem :scope="scopeItem" />
+          </template>
+        </Form>
+      </template>
     </Table>
     <!-- 表格结束 -->
   </div>
@@ -44,22 +39,22 @@ export default {
       model: new ljc(this),
 
       // 添加表单
-      JobDataAdd: {
+      dataAdd: {
         tooltip: {
-          tipDisabled: true,
-          tipContent: "",
-          effect: "top",
+          tipDisabled: false,
+          tipContent: "添加订单",
+          placement: "top",
         },
         button: {
-          type: "primary",
-          icon: "",
-          size: "medium",
-          text: "添加加工作业",
+          type: "success",
+          icon: "el-icon-download",
+          size: "mini",
+          text: "",
         },
         form: {
-          labels: this.labels,
+          labels: this.formLabels,
           formRules: this.formRules,
-          title: "添加加工作业",
+          title: "添加订单",
         },
       },
 
@@ -71,6 +66,11 @@ export default {
     // 标签
     labels() {
       return this.model.labels;
+    },
+
+    // 表单标签
+    formLabels() {
+      return this.model.formLabels;
     },
 
     // 验证规则
@@ -116,6 +116,12 @@ export default {
         const { data: res } = await this.model.getInfoById(id);
         return res.data;
       }
+    },
+
+    // 添加订单
+    async addOrder(form) {
+      const { data: res } = await this.model.addOrder(form);
+      console.log(res);
     },
   },
 };

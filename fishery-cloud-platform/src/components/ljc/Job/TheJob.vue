@@ -7,7 +7,7 @@
       :submitFn="addInfo"
       :GetInfoFn="getInfoById"
     >
-      <template slot-scope="scope">
+      <template v-slot:default="scope">
         <FormItem :scope="scope" />
       </template>
     </Form>
@@ -61,7 +61,7 @@ export default {
         tooltip: {
           tipDisabled: true,
           tipContent: "",
-          effect: "top",
+          placement: "top",
         },
         button: {
           type: "primary",

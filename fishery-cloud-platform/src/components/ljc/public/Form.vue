@@ -3,8 +3,7 @@
     <el-tooltip
       :disabled="Fdata.tooltip.tipDisabled"
       :content="Fdata.tooltip.tipContent"
-      placement="bottom"
-      :effect="Fdata.tooltip.effect"
+      :placement="Fdata.tooltip.placement"
     >
       <el-button
         :type="Fdata.button.type"
@@ -98,7 +97,7 @@ export default {
       tooltip: {
         tipDisabled,
         tipContent,
-        effect,
+        placement,
       },
       button: {
         type,
