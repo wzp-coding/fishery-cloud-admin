@@ -10,5 +10,9 @@ export default [
         // 物流信息
         path: '/info-logistics',
         component: InfoLogistics
+    },
+    {
+        path:'/B-code-web',
+        component:()=>import('../components/cgx/ManagementOrder/BackPage/BcodeWeb.vue')
     }
 ]

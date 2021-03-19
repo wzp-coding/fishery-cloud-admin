@@ -12,7 +12,7 @@
     </p>
     <div slot="footer" class="dialog-footer">
       <el-button @click="closeCode">取 消</el-button>
-      <el-button type="primary" @click="toOcodeWeb(Id)">确 定</el-button>
+      <el-button type="primary" @click="testToOcodeWeb">确 定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -48,15 +48,15 @@ export default {
         height: 250,
       });
       if (this.title == "物流二维码") {
-        console.log("this.url1+this.Id", this.url1);
+        // console.log("this.url1+this.Id", this.url1);
         qrcode.makeCode(
-          "http://119.23.218.131:9301/IsArriveLcode?id=" + this.Id
+          "http://119.23.218.131:9301/B-code-web?id=" + this.Id+"&type="+"logis"
         );
       }
       if (this.title == "溯源二维码") {
-        console.log("this.url2+this.Id", this.url2);
+        // console.log("this.url2+this.Id", this.url2);
         qrcode.makeCode(
-          "http://119.23.218.131:9301/#/IsArriveOcode?id=" + this.Id
+          "http://119.23.218.131:9301/#/B-code-web?id=" + this.Id+"&type="+"origin"
         );
       }
     },
@@ -64,20 +64,23 @@ export default {
       this.$refs.qrcode.innerHTML = "";
       this.$emit("notifyParent2");
     },
-    // 前往判断是否收货页面1
-    toLcodeWeb() {
-      this.$router.push({
-        path: "/IsArriveLcode",
-        query: { id: id },
-      });
-    },
-    // 前往判断是否收货页面2
-    toOcodeWeb(id) {
-      this.$router.push({
-        path: "/IsArriveOcode",
-        query: { id: id },
-      });
-    },
+    testToOcodeWeb(){
+      this.$router.push("/B-code-web?id=" + this.Id+"&type="+"origin")
+    }
+    // // 前往判断是否收货页面1
+    // toLcodeWeb() {
+    //   this.$router.push({
+    //     path: "/BcodeWeb",
+    //     query: { id: id },
+    //   });
+    // },
+    // // 前往判断是否收货页面2
+    // toOcodeWeb(id) {
+    //   this.$router.push({
+    //     path: "/BcodeWeb",
+    //     query: { id: id },
+    //   });
+    // },
   },
   watch: {
     jQcode: {
