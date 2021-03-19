@@ -273,7 +273,6 @@ export default {
                 typeId: forecaseForm.typeId,
                 baseId: forecaseForm.equipment.baseId
             }
-            console.log(form);
             let Unit = ''
             let arrUnitList = forecaseForm.typeId === '0' ? this.weatherCheckItemName : this.pondCheckItemName
             Unit = arrUnitList.find(item => item.value === forecaseForm.checkItemName )
