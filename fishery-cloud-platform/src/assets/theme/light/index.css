@@ -9560,7 +9560,7 @@
 }
 
 .custom-light .el-table__expanded-cell[class*=cell] {
-    padding: 20px 50px
+    /* padding: 20px 50px */
 }
 
 .custom-light .el-table__expanded-cell:hover {

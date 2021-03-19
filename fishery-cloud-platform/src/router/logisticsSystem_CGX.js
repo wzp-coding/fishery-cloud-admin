@@ -9,4 +9,5 @@ export default [
         path: '/info-logistics',
         component: () => import(/* webpackChunkName:"InfoLogistics" */'../views/order_logistics/InfoLogistics.vue')
     }
+    
 ]

@@ -33,6 +33,29 @@ const routes = [
       ...logisticsSystem_CGX,
     ]
   },
+  {
+    // 二维码页面
+    path: '/b-code-web',
+    component: () => import(/* webpackChunkName:"BcodeWeb" */'../components/cgx/ManagementOrder/BackPage/BcodeWeb.vue'),
+    children: [
+      {
+        path:'/info-farm-p',
+        component: () => import(/* webpackChunkName:"BcodeWeb" */'../components/cgx/ManagementOrder/BackPage/child/InfoFarm.vue')
+      },
+      {
+        path:'/info-cold-p',
+        component:()=>import(/* webpackChunkName:"BcodeWeb" */'../components/cgx/ManagementOrder/BackPage/child/InfoCold.vue')
+      },
+      {
+        path:'/info-logitis-p',
+        component:()=>import(/* webpackChunkName:"BcodeWeb" */'../components/cgx/ManagementOrder/BackPage/child/InfoLogitis.vue')
+      },
+      {
+        path:'/info-plant-p',
+        component:()=>import(/* webpackChunkName:"BcodeWeb" */'../components/cgx/ManagementOrder/BackPage/child/InfoPlant.vue')
+      },
+    ]
+  }
 ]
 
 const router = new VueRouter({
