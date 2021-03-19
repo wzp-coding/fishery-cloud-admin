@@ -266,20 +266,19 @@ export default {
                 myflag = 'water/' + forecaseForm.arithmetic
             }
             const form = {
-                equipmentId: forecaseForm.equipment.equipmentId,
+                equipmentId:  '20476',// forecaseForm.equipment.equipmentId,
                 checkItemName: forecaseForm.checkItemName,
                 startTime: forecaseForm.startTime,
                 endTime: forecaseForm.endTime,
                 typeId: forecaseForm.typeId,
-                baseId: forecaseForm.equipment.baseId
+                baseId: '1248910886228332544',// forecaseForm.equipment.baseId
             }
             console.log(form);
             let Unit = ''
             let arrUnitList = forecaseForm.typeId === '0' ? this.weatherCheckItemName : this.pondCheckItemName
             Unit = arrUnitList.find(item => item.value === forecaseForm.checkItemName )
             Unit = Unit.label
-            // this.$forecast.post(`${myflag}/${this.forecaseForm.arithmetic}/1/50`,form)
-            const {data: res} = await this.$originAxios.post(`http://119.23.218.131:9110/datarecord/forecast/${myflag}/1/500`,form)
+            const {data: res} = await this.$forecast.post(`/${myflag}/1/500`,form)
             if(res.statusCode !== 20000) {
                 return this.elMessage.error(('预测失败'))
             }
