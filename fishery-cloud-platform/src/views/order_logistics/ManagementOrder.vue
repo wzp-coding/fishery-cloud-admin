@@ -126,14 +126,14 @@
             <el-button
               type="primary"
               size="mini"
-              @click="logisticsOrcode(scope.row.id)"
+              @click="logisticsOrcode(scope.row)"
               >物流</el-button
             >
             <!-- 溯源二维码按钮 -->
             <el-button
               type="success"
               size="mini"
-              @click="originOrcode(scope.row.id)"
+              @click="originOrcode(scope.row)"
               >溯源</el-button
             >
           </template>
@@ -184,7 +184,7 @@
                 type="success"
                 icon="el-icon-truck"
                 size="mini"
-                @click="toShowLogisticsInfo(scope.row.id)"
+                @click="toShowLogisticsInfo(scope.row.logisticsId)"
               ></el-button>
             </el-tooltip>
             
@@ -326,6 +326,7 @@
     :title="QrTitle"
     :is-show-code="isShowCode"
     :Id="QrcodeId"
+    :logisticsId="logisticsId"
     :jQcode="jQcode"
     @notifyParent2="closeCode"
     >
@@ -361,7 +362,7 @@ import ShowOrinfo from "../../components/cgx/ManagementOrder/ShowOrcode/ShowOrco
 import ShowChange from "../../components/cgx/ManagementOrder/ModifyInformation/ShowChange";
 import CreateOrder from '../../components/cgx/ManagementOrder/CreateOrder/createOrder';
 import Delete from '../../components/cgx/public/delete';
-import Map from '../../components/public_components/MyLocationPicker';
+import Map from '../../components/public_components/Map';
 import CreateCustomer from '../../components/cgx/ManagementOrder/CreateCustomer/createCustomer'
 export default {
   components: {
@@ -408,6 +409,7 @@ export default {
       jQcode:true,
       // 当前点击订单的id
       QrcodeId: "1304076777332805632",
+      logisticsId:"",
       // -----------------------------------
       token: window.localStorage.getItem("token"),
       // 基地编号
@@ -578,8 +580,9 @@ export default {
       }
     },
     // 物流二维码弹窗
-    logisticsOrcode(id) {
-      this.QrcodeId = id;
+    logisticsOrcode(row) {
+      this.QrcodeId = row.id;
+      this.logisticsId = row.logisticsId
       this.QrTitle="物流二维码"
       this.isShowCode = true;
       this.jQcode = !this.jQcode
@@ -588,8 +591,9 @@ export default {
       // });
     },
     // 溯源二维码弹窗
-    originOrcode(id) {
-      this.QrcodeId = id;
+    originOrcode(row) {
+      this.QrcodeId = row.id;
+      this.logisticsId = row.logisticsId
       this.QrTitle="溯源二维码"
       this.isShowCode = true;
       this.jQcode = !this.jQcode
