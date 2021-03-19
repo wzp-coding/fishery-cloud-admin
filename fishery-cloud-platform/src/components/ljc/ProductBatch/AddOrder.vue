@@ -4,15 +4,14 @@
       type="success"
       icon="el-icon-s-order"
       size="mini"
-      @click="dialogVisible = true"
-      v-auth="'traceability_refrigeratory'"
+      @click="getInfoById"
     ></el-button>
 
     <el-dialog
       :title="formTitle"
       :visible.sync="dialogVisible"
       @close="dialogClosed"
-      width="40%"
+      width="20%"
     >
       <el-form
         :model="form"
@@ -55,7 +54,7 @@
             v-model="form.weight"
             controls-position="right"
             :min="1"
-            :max="scope.weight"
+            :max="scope.row.weight"
           ></el-input-number>
         </el-form-item>
       </el-form>
@@ -116,10 +115,6 @@ export default {
     createOrder() {
       this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
-        this.form.refrigeratoryInId = this.id;
-        this.form.productId = this.id;
-        this.form.type = this.form.target.customerType;
-        this.form.productName = this.productName;
         this.form.receiveAddress = this.form.target.receiveAddress;
         this.form.addressLatitude = this.form.target.addressLatitude;
         this.form.addressLongitude = this.form.target.addressLongitude;
@@ -127,14 +122,13 @@ export default {
         this.form.baseId = this.form.target.baseId;
         this.form.targetName = this.form.target.customerName;
         this.form.targetType = this.form.target.customerType;
-        this.form.status = 0;
         this.form.targetId = this.form.target.id;
+        delete this.form.target;
 
         console.log(JSON.parse(JSON.stringify(this.form)));
 
         const { data: res } = await this.model.createOrder(
-          JSON.parse(JSON.stringify(this.form)),
-          this.tag
+          JSON.parse(JSON.stringify(this.form))
         );
         console.log(res);
         if (res.statusCode == 20000) {
@@ -144,6 +138,22 @@ export default {
         }
         this.dialogVisible = false;
       });
+    },
+
+    /* 根据产品批次id获取原料来源 */
+    async getInfoById() {
+      const { data: res } = await this.model.getInfoById(this.scope.row.id);
+      this.form.productId = res.data.productId;
+      this.getProductById(res.data.productId);
+      this.dialogVisible = true;
+    },
+
+    // 根据id查询产品信息
+    async getProductById(id) {
+      const { data: res } = await this.model.getProductById(id);
+      console.log(res);
+      // this.form.productName = res.data.productName;
+      this.form.productName = "ljc加工厂";
     },
 
     /* 获取所有客户信息 */
