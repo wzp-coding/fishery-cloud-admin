@@ -7,7 +7,7 @@ module.exports = class {
     labels = {
         id: "ID",
         jobId: "加工作业ID",
-        weight: "重量",
+        weight: "产品批次重量",
     }
     /* 标签结束 */
 
@@ -23,14 +23,23 @@ module.exports = class {
         productName: "产品名",
         receiveAddress: "收货地址",
         targetId: "目标",
-        targetName: "目标名",
+        targetName: "客户名称",
         type: "目标类型",
         weight: "产品重量"
     }
 
     formRules = {
-        jobDescription: [
-            { required: true, message: `请输入${this.labels.jobDescription}`, trigger: "blur" },
+        amount: [
+            { required: true, message: `请输入${this.formLabels.amount}`, trigger: "blur" },
+        ],
+        productName: [
+            { required: true, message: `请输入${this.formLabels.productName}`, trigger: "blur" },
+        ],
+        weight: [
+            { required: true, message: `请输入${this.formLabels.weight}`, trigger: "blur" },
+        ],
+        money: [
+            { required: true, message: `请输入${this.formLabels.money}`, trigger: "blur" },
         ],
     }
 
@@ -55,7 +64,7 @@ module.exports = class {
     }
 
     /* 创建订单 */
-    addOrder(form) {
+    createOrder(form) {
         return new Promise((resolve) => {
             this.vue.$plant.put(`/processing/batch/order`, form)
                 .then((res) => {
