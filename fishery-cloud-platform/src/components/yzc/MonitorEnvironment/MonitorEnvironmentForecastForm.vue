@@ -112,7 +112,7 @@ export default {
             this.forecaseForm.arithmetic = ''
         },
         sendfrom() {
-            this.$refs.forecaseFormRef.validate(async valid => {
+             this.$refs.forecaseFormRef.validate(async valid => {
                 if(!valid) return false
                 this.$emit('getForecastData',this.forecaseForm)
             //     this.$emit('showfrom',false)

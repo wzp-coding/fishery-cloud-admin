@@ -325,7 +325,7 @@ export default {
         async getwarningList(id) {
             this.equipmentId = id
             const {data:res} = await this.$waterData.post(`search/${this.page_index}/${this.page_size}`,{
-                equipmentId:this.id
+                equipmentId:this.equipmentId
             })
             if(res.statusCode!==20000) {
                 return this.elMessage.error('获取设备水质数据失败！')
