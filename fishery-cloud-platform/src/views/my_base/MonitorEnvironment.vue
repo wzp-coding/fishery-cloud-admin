@@ -266,12 +266,12 @@ export default {
                 myflag = 'water/' + forecaseForm.arithmetic
             }
             const form = {
-                equipmentId:  '20476',// forecaseForm.equipment.equipmentId,
+                equipmentId: forecaseForm.equipment.equipmentId,
                 checkItemName: forecaseForm.checkItemName,
                 startTime: forecaseForm.startTime,
                 endTime: forecaseForm.endTime,
                 typeId: forecaseForm.typeId,
-                baseId: '1248910886228332544',// forecaseForm.equipment.baseId
+                baseId: forecaseForm.equipment.baseId
             }
             console.log(form);
             let Unit = ''
