@@ -1,5 +1,5 @@
 <template>
-     <div id="ocode-web">
+  <div id="ocode-web">
     <div id="head2">
       <span>溯源信息</span>
     </div>
@@ -36,12 +36,35 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
 </template>
 <script>
 export default {
-    
-}
+  methods: {
+   async getTypeAndProId(traceId){
+      const{data:res}  = await this.$traceability.get(`/product/${traceId}`);
+      if(res.statusCode !== 20000){
+        console.error(res.message);
+      }
+      return res.data;
+    },
+    async getOriginInfo(productId,sourceType){
+      
+    },
+    iconbase() {},
+    iconshrimp() {},
+    iconfarm() {},
+    iconplant() {},
+    iconsto() {},
+    iconDeliver() {},
+  },
+  created() {
+    // console.log(this.$route.query);
+    const {id,type}=this.$route.query;
+
+  },
+};
 </script>
 <style lang="sass" scoped>
-
 </style>
