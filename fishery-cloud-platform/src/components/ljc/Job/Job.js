@@ -37,7 +37,7 @@ module.exports = class {
         ],
     }
 
-    /* 获取数据开始 */
+    /* 获取数据 */
     getAllInfo(id, page, size) {
         return new Promise((resolve) => {
             this.vue.$plant.get(`/processing/job/${id}/${page}/${size}`)
@@ -46,9 +46,8 @@ module.exports = class {
                 })
         })
     }
-    /* 获取数据结束 */
 
-    /* 添加开始 */
+    /* 添加 */
     addInfo(addFrom) {
         return new Promise((resolve) => {
             this.vue.$plant.post("/processing/job/", addFrom)
@@ -57,9 +56,8 @@ module.exports = class {
                 })
         })
     }
-    /* 添加结束 */
 
-    /* 根据ID查询信息开始 */
+    /* 根据ID查询信息 */
     getInfoById(id) {
         return new Promise((resolve) => {
             this.vue.$plant.get(`/processing/job/${id}`)
@@ -68,9 +66,8 @@ module.exports = class {
                 })
         })
     }
-    /* 根据ID查询信息结束 */
 
-    /* 修改开始 */
+    /* 修改 */
     editInfo(editForm) {
         return new Promise((resolve) => {
             this.vue.$plant.put(`/processing/job/`, editForm)
@@ -79,7 +76,6 @@ module.exports = class {
                 })
         })
     }
-    /* 修改结束 */
 
     /* 根据id获取原料 */
     getMaterial(id) {

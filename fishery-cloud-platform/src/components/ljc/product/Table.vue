@@ -51,7 +51,7 @@
               </el-tooltip>
             </el-col>
 
-            <el-col :span="8">
+            <!-- <el-col :span="8">
               <el-tooltip
                 effect="dark"
                 content="创建订单"
@@ -63,7 +63,7 @@
                   :createPersonList="createPersonList"
                 />
               </el-tooltip>
-            </el-col>
+            </el-col> -->
 
             <el-col :span="6">
               <el-tooltip
@@ -105,7 +105,7 @@ import Delete from "../public/delete";
 import Into from "../public/into";
 import Edit from "../product/Edit";
 import Form from "../qualification/Form";
-import Order from "../order/form";
+// import Order from "../order/form";
 
 export default {
   components: {
@@ -113,7 +113,6 @@ export default {
     Edit,
     Into,
     Form,
-    Order,
   },
   props: {
     // 表格数据
