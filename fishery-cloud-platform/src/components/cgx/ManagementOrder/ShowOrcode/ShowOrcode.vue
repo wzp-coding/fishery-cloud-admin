@@ -12,7 +12,7 @@
     </p>
     <div slot="footer" class="dialog-footer">
       <el-button @click="closeCode">取 消</el-button>
-      <el-button type="primary" @click="toOcodeWeb(Id)">确 定</el-button>
+      <!-- <el-button type="primary" @click="testToBcodeWeb">确 定</el-button> -->
     </div>
   </el-dialog>
 </template>
@@ -31,15 +31,16 @@ export default {
       type: String,
       required: true,
     },
+    logisticsId: {
+      type: String,
+      required: true,
+    },
     jQcode: {
       type: Boolean,
     },
   },
   data() {
-    return {
-      url1: "http://119.23.218.131:9301/IsArriveLcode?id=",
-      url2: "http://119.23.218.131:9301/IsArriveOcode?id=",
-    };
+    return {};
   },
   methods: {
     createcode() {
@@ -47,49 +48,49 @@ export default {
         width: 250,
         height: 250,
       });
+      let codeUrl = `http://119.23.218.131:9301/b-code-web?id=${this.Id}&logisticsId=${this.logisticsId}&type=`;
       if (this.title == "物流二维码") {
-        console.log("this.url1+this.Id", this.url1);
-        qrcode.makeCode(
-          "http://119.23.218.131:9301/IsArriveLcode?id=" + this.Id
-        );
+        codeUrl += `logitis`;
+      } else {
+        codeUrl += `origin`;
       }
-      if (this.title == "溯源二维码") {
-        console.log("this.url2+this.Id", this.url2);
-        qrcode.makeCode(
-          "http://119.23.218.131:9301/#/IsArriveOcode?id=" + this.Id
-        );
-      }
+      qrcode.makeCode(codeUrl);
     },
     closeCode() {
       this.$refs.qrcode.innerHTML = "";
       this.$emit("notifyParent2");
     },
-    // 前往判断是否收货页面1
-    toLcodeWeb() {
+    // 测试：手动跳转到二维码对应的页面
+    testToBcodeWeb() {
+      console.log("this.Id: ", this.Id);
+      console.log("this.logisticsId: ", this.logisticsId);
+      let type;
+      if (this.title == "物流二维码") {
+        type = `logitis`;
+      } else {
+        type = `origin`;
+      }
       this.$router.push({
-        path: "/IsArriveLcode",
-        query: { id: id },
-      });
-    },
-    // 前往判断是否收货页面2
-    toOcodeWeb(id) {
-      this.$router.push({
-        path: "/IsArriveOcode",
-        query: { id: id },
+        path: "/b-code-web",
+        query: {
+          id: this.Id,
+          logisticsId:this.logisticsId,
+          type,
+        },
       });
     },
   },
   watch: {
     jQcode: {
-     async handler(){
-       await this.$nextTick();
+      async handler() {
+        await this.$nextTick();
         this.createcode();
-      }
+      },
     },
   },
-    // created(){
-    //   this.createcode();
-    // }
+  // created(){
+  //   this.createcode();
+  // }
 };
 </script>
 <style lang="less" scoped>
