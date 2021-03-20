@@ -3,7 +3,7 @@
       title="修改物流信息"
       :visible.sync="createdialogVisible"
       width="45%"
-      @close="close"
+      :before-close="close"
     >
     <el-form 
     ref="form" 
