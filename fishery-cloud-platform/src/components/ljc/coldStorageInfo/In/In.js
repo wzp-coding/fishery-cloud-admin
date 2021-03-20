@@ -11,7 +11,8 @@ module.exports = class {
         refrigeratoryInCapacity: "入库容量",
         refrigeratoryInDescription: "入库描述",
         refrigeratoryInTime: "入库时间",
-        warehousingPersonId: "管理人员Id"
+        warehousingPersonId: "管理人员Id",
+        refrigeratoryInUsedCapacity: "冷库已用容量"
     }
     /* 标签结束 */
 

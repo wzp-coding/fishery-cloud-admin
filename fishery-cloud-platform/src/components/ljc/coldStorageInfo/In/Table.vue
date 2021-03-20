@@ -29,6 +29,11 @@
         align="center"
       ></el-table-column>
       <el-table-column
+        prop="refrigeratoryInUsedCapacity"
+        :label="labels.refrigeratoryInUsedCapacity"
+        align="center"
+      ></el-table-column>
+      <el-table-column
         prop="warehousingPersonId"
         :label="labels.warehousingPersonId"
         align="center"

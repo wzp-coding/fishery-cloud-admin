@@ -99,7 +99,7 @@
                 @getAllInfo="getAllInfo()"
               />
             </el-col>
-            <el-col :span="6">
+            <!-- <el-col :span="6">
               <el-tooltip
                 effect="dark"
                 :content="infoIn"
@@ -113,7 +113,7 @@
                   :auth="'traceability_refrigeratory'"
                 />
               </el-tooltip>
-            </el-col>
+            </el-col> -->
             <el-col :span="6">
               <el-tooltip
                 effect="dark"
@@ -154,13 +154,12 @@
 import Delete from "../public/delete";
 import Edit from "../coldStorage/Edit";
 import Into from "../public/into";
-import In from "../coldStorageInfo/In/Add";
+// import In from "../coldStorageInfo/In/Add";
 export default {
   components: {
     Delete,
     Edit,
     Into,
-    In,
   },
   props: {
     // 表格数据

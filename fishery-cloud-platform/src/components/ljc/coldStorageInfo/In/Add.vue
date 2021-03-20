@@ -59,6 +59,7 @@
             v-model="form.refrigeratoryInCapacity"
             controls-position="right"
             :min="1"
+            :precision="2"
           ></el-input-number>
         </el-form-item>
         <el-form-item
@@ -144,10 +145,10 @@ export default {
         if (res.statusCode == 20000) {
           this.elMessage.success(res.message);
           this.$emit("getAllInfo");
-          this.dialogVisible = false;
         } else {
           this.elMessage.error(res.message);
         }
+        this.dialogVisible = false;
       });
     },
     /* 添加结束 */

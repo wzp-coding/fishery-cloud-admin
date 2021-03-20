@@ -18,7 +18,7 @@
         <el-tab-pane label="出库信息管理"
           ><Out :createPersonList="createPersonList" :seedInfo="seedInfo"
         /></el-tab-pane>
-        <el-tab-pane label="待入库信息管理"><Enter/></el-tab-pane>
+        <el-tab-pane label="待入库信息管理"><Enter /></el-tab-pane>
       </el-tabs>
       <!-- tab栏结束 -->
     </el-card>
@@ -75,8 +75,7 @@ export default {
     // 获取员工
     async getStaff() {
       const { data: res } = await this.model.getStaff();
-      this.createPersonList = res.data.records;
-      console.log(this.createPersonList);
+      this.createPersonList = res.data;
     },
 
     // 获取种苗信息

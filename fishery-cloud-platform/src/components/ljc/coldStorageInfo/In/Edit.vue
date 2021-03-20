@@ -58,6 +58,7 @@
           <el-input-number
             v-model="form.refrigeratoryInCapacity"
             controls-position="right"
+            :precision="2"
             :min="1"
           ></el-input-number>
         </el-form-item>
@@ -106,7 +107,7 @@ export default {
     return {
       model: new ljc(this),
       // 表单名称
-      formTitle: "修改冷库信息",
+      formTitle: "修改入库信息",
 
       // 控制表单的显示与隐藏
       dialogVisible: false,
@@ -142,12 +143,15 @@ export default {
         if (!val) return false;
         this.form.processingBaseId = this.productInfo.id;
         this.form.productName = this.productInfo.germchitSpecies;
+        delete this.form.refrigeratoryInUsedCapacity;
+        console.log(this.form);
         const { data: res } = await this.model.editInfo(this.form);
-        console.log(res);
         if (res.statusCode == 20000) {
           this.$emit("getAllInfo");
           this.dialogVisible = false;
           this.elMessage.success(res.message);
+        } else {
+          this.elMessage.error(res.message);
         }
       });
     },
