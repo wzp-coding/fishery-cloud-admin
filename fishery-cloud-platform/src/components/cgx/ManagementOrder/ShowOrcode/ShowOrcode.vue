@@ -44,11 +44,11 @@ export default {
         width: 250,
         height: 250,
       });
-      let codeUrl = `http://119.23.218.131:9301/b-code-web?id=${this.orderId}&type=`;
+      let codeUrl = `http://119.23.218.131:9301/`;
       if (this.ortitle == "物流二维码") {
-        codeUrl += `logitis`;
+        codeUrl += `info-farm-p?id=${this.orderId}&type=logitis`;
       } else {
-        codeUrl += `origin`;
+        codeUrl += `info-logitis-p?id=${this.orderId}&type=origin`;
       }
       qrcode.makeCode(codeUrl);
     },
@@ -59,14 +59,16 @@ export default {
     // 测试：手动跳转到二维码对应的页面
     testToBcodeWeb() {
       console.log("this.orderId: ", this.orderId);
-      let type;
+      let type, path;
       if (this.ortitle == "物流二维码") {
         type = `logitis`;
+        path = "info-logitis-p";
       } else {
         type = `origin`;
+        path = "info-farm-p";
       }
       this.$router.push({
-        path: "/b-code-web",
+        path,
         query: {
           id: this.orderId,
           type,

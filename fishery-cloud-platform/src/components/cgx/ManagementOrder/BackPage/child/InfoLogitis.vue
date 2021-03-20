@@ -64,7 +64,7 @@ export default {
   },
   created() {
     const { id } = this.$route.query;
-    console.log("id: ", id);
+    console.log("logisticsId: ", id);
     this.getLogisticsPath(id);
   },
 };
