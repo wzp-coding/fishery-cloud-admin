@@ -4,7 +4,7 @@
       :title="ordertitle"
       :visible.sync="dialogVisible"
       width="45%"
-      @close="close"
+      :before-close="close"
     >
       <el-form
         ref="form"
@@ -137,8 +137,22 @@
       :togermchitId="germchitId"
       :tableType="orderobject.targetType"
     >
-    </Customerfrom>
-  </div>
+    </Map>
+    
+  <el-form-item style="right">
+    <el-button type="primary" @click="submitorder" style="margin:20px 0 0 0">立即修改</el-button>
+    <el-button @click="close">取消</el-button>
+   </el-form-item>
+    
+  </el-form>
+
+  <Customerfrom
+  :CustomerVisible="CustomerVisible"
+  @CustomerClose="CustomerClose"
+  @setCustomer="setCustomer"
+  >
+  </Customerfrom>
+</el-dialog>
 </template>
 <script>
 import Map from "../../../public_components/MyLocationPicker";

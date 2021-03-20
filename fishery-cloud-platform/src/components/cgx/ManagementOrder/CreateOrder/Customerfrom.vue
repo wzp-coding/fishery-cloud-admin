@@ -4,121 +4,43 @@
       title="收货方信息"
       :visible.sync="dialogVisible"
       width="50%"
-      @close="closed"
-    >
-      <el-table
-        v-if="tableType == 1"
-        element-loading-text="拼命加载中"
-        v-loading="loading"
-        element-loading-background="rgba(0, 0, 0, 0.8)"
-        height="450"
-        :data="
-          tableData.filter(
-            (data) =>
-              !search ||
-              data.customerName.toLowerCase().includes(search.toLowerCase()) ||
-              data.phoneNumber.toLowerCase().includes(search.toLowerCase())
-          )
-        "
-        style="width: 100%"
-      >
-        <el-table-column label="客户名" prop="customerName"> </el-table-column>
-        <el-table-column label="电话" prop="phoneNumber"> </el-table-column>
-        <el-table-column label="收货地址" prop="receiveAddress">
-        </el-table-column>
-        <el-table-column align="right">
-          <template slot="header" slot-scope="{}">
-            <el-input
-              v-model="search"
-              size="mini"
-              placeholder="输入关键字搜索"
-            />
-          </template>
-          <template slot-scope="scope">
-            <el-button size="mini" @click="handleEdit(scope.row)"
-              >选择</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-table
-        height="450"
-        element-loading-text="拼命加载中"
-        element-loading-background="rgba(0, 0, 0, 0.8)"
-        v-if="tableType == 3"
-        v-loading="loading"
-        :data="
-          processList.filter(
-            (data) =>
-              !search ||
-              data.factoryName.toLowerCase().includes(search.toLowerCase())
-          )
-        "
-      >
-        <el-table-column label="加工厂名称" prop="processingFactoryName">
-        </el-table-column>
-        <el-table-column label="加工厂地址" prop="processingFactoryAddress">
-        </el-table-column>
-        <el-table-column label="加工厂面积" prop="processingFactoryArea">
-        </el-table-column>
-        <el-table-column label="加工厂产品" prop="processingType">
-        </el-table-column>
-        <el-table-column align="right">
-          <template slot="header" slot-scope="{}">
-            <el-input
-              v-model="search"
-              size="mini"
-              placeholder="输入关键字搜索"
-            />
-          </template>
-          <template slot-scope="scope">
-            <el-button size="mini" @click="handleProcess(scope.row)"
-              >选择</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-table
-        height="450"
-        v-if="tableType == 4"
-        element-loading-text="拼命加载中"
-        v-loading="loading"
-        element-loading-background="rgba(0, 0, 0, 0.8)"
-        :data="
-          refDataList.filter(
-            (data) =>
-              !search ||
-              data.refrigeratoryName
-                .toLowerCase()
-                .includes(search.toLowerCase())
-          )
-        "
-      >
-        <el-table-column label="冷库名称" prop="refrigeratoryName">
-        </el-table-column>
-        <el-table-column label="冷库地址" prop="refrigeratoryAddress">
-        </el-table-column>
-        <el-table-column label="冷库温度" prop="refrigeratoryTemperature">
-        </el-table-column>
-        <el-table-column label="冷库面积" prop="refrigeratoryArea">
-        </el-table-column>
-        <el-table-column align="right">
-          <template slot="header" slot-scope="{}">
-            <el-input
-              v-model="search"
-              size="mini"
-              placeholder="输入关键字搜索"
-            />
-          </template>
-          <template slot-scope="scope">
-            <el-button size="mini" @click="handleRef(scope.row)"
-              >选择</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-dialog>
-  </div>
+      :before-close="closed"
+> 
+  <el-table height="450" 
+    :data="tableData.filter(data => !search || data.customerName.toLowerCase().includes(search.toLowerCase())||
+    data.phoneNumber.toLowerCase().includes(search.toLowerCase()))"
+    style="width: 100%">
+    <el-table-column
+      label="客户名"
+      prop="customerName">
+    </el-table-column>
+    <el-table-column
+      label="电话"
+      prop="phoneNumber">
+    </el-table-column>
+    <el-table-column
+      label="收货地址"
+      prop="receiveAddress">
+    </el-table-column>
+    <el-table-column
+      align="right">
+      <template slot="header" slot-scope="{}">
+        <el-input
+          v-model="search"
+          size="mini"
+          placeholder="输入关键字搜索"/>
+      </template>
+      <template slot-scope="scope">
+        <el-button 
+        size="mini"
+        @click="handleEdit(scope.row)">选择</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+   <span slot="footer" class="dialog-footer">
+       <el-button @click="closed">关 闭</el-button>
+      </span>
+</el-dialog> 
 </template>
 
 <script>
