@@ -28,24 +28,6 @@
         <el-form-item :label="labels.productName" prop="productName">
           <el-input v-model="editForm.productName"></el-input>
         </el-form-item>
-        <el-form-item :label="labels.commodityId" prop="germchitId">
-          <el-select v-model="editForm.commodityId">
-            <el-option
-              v-for="item in commoditIds"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="labels.inventory" prop="inventory">
-          <el-input-number
-            v-model="editForm.inventory"
-            controls-position="right"
-            :min="0"
-          ></el-input-number>
-        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
@@ -77,7 +59,6 @@ export default {
     };
   },
   computed: {
-
     // 验证规则
     formRules() {
       return this.model.formRules;

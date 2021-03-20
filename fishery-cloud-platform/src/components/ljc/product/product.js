@@ -7,8 +7,6 @@ module.exports = class {
     labels = {
         id: "产品编号",
         productName: "产品名称",
-        commodityId: "水产品/冷库产品编号 ",
-        inventory: "库存/件",
         processingFactoryId: "加工厂编号",
     }
     /* 标签结束 */

@@ -18,16 +18,6 @@
         :label="labels.productName"
         align="center"
       ></el-table-column>
-      <el-table-column
-        prop="commodityId"
-        :label="labels.commodityId"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        prop="inventory"
-        :label="labels.inventory"
-        align="center"
-      ></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-row :gutter="10">
