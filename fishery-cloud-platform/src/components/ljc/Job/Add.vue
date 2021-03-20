@@ -1,12 +1,9 @@
 <template>
   <div>
     <!-- 添加区域开始 -->
-    <el-button
-      type="primary"
-      @click="DialogVisible = true"
-      v-auth="'traceability_process_add'"
-      >{{ formTitle }}</el-button
-    >
+    <el-button type="primary" @click="DialogVisible = true">{{
+      formTitle
+    }}</el-button>
     <!-- 添加区域结束 -->
 
     <!-- 添加表单区域开始 -->
@@ -127,6 +124,8 @@ export default {
 
       //   原料上限
       weightMax: 100,
+
+      materialId: "",
     };
   },
   computed: {
@@ -150,14 +149,16 @@ export default {
     addInfo() {
       this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
+        this.form.materialId = this.materialId;
         this.form.processingFactoryId = this.processingFactoryId;
-        const { data: res } = await this.model.addInfo(this.addform);
+        console.log(this.form);
+        const { data: res } = await this.model.addInfo(this.form);
         if (res.statusCode !== 20000) {
           this.elMessage.error(res.message);
         } else {
           this.elMessage.success(res.message);
           this.$emit("getAllInfo");
-          this.addDialogVisible = false;
+          this.DialogVisible = false;
         }
       });
     },
@@ -174,6 +175,7 @@ export default {
         this.processingFactoryId
       );
       this.Materials = res.data;
+      console.log(res);
     },
 
     /* 获取操作人员 */
@@ -196,7 +198,7 @@ export default {
         this.form.materialId
       );
       this.weightMax = res.data.materialWeight;
-      this.form.materialId = res.data.materialId;
+      this.materialId = res.data.materialId;
     },
   },
 };

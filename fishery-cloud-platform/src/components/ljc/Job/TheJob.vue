@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Add :processingFactoryId="processingFactoryId" />
+    <Add :processingFactoryId="processingFactoryId" @getAllInfo="getAllInfo" />
     <!-- 表格开始 -->
     <Table
       :allList="allList"
