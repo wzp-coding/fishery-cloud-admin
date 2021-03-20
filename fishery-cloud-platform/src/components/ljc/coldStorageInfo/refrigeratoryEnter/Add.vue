@@ -15,7 +15,7 @@
       :title="formTitle"
       :visible.sync="dialogVisible"
       @close="dialogClosed"
-      width="40%"
+      width="20%"
     >
       <el-form
         :model="form"
