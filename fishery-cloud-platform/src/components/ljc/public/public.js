@@ -63,6 +63,15 @@ module.exports = class {
         })
     }
 
+    // 获取所有加工厂
+    getRefrigeratory() {
+        return new Promise((resolve, reject) => {
+            this.vue.$storage.get(`/refrigeratory/RefrigeratoryInfo/get/RefrigeratoryByBaseId/${this.vue.$store.state.userInfo.baseId}`).then((res) => {
+                resolve(res)
+            })
+        })
+    }
+
 
 
 

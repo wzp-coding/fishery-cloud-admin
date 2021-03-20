@@ -18,6 +18,7 @@
         <el-tab-pane label="出库信息管理"
           ><Out :createPersonList="createPersonList" :seedInfo="seedInfo"
         /></el-tab-pane>
+        <el-tab-pane label="待入库信息管理"><Enter/></el-tab-pane>
       </el-tabs>
       <!-- tab栏结束 -->
     </el-card>
@@ -30,6 +31,7 @@ import Title from "../public/title";
 import In from "../coldStorageInfo/In/InInfo";
 import Out from "../coldStorageInfo/Out/OutInfo";
 import Public from "../public/public";
+import Enter from "./refrigeratoryEnter/TheRefrigeratoryEnter";
 
 export default {
   components: {
@@ -37,6 +39,7 @@ export default {
     Title,
     In,
     Out,
+    Enter,
   },
   data() {
     return {
