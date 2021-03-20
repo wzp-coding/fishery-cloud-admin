@@ -1,5 +1,4 @@
 <template>
-
   <div>
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -8,358 +7,313 @@
       <el-breadcrumb-item v-if="!card">顾客管理</el-breadcrumb-item>
     </el-breadcrumb>
     <el-row
-        class="globalHeader"
-        style="margin-bottom: 20px; padding-bottom: 45px"
-      >
-        <el-col :span="4">
-          <i class="el-icon-document"></i>
-          <span v-if="card">订单管理</span>
-          <span v-if="!card">顾客管理</span>
-        </el-col>
-        <!-- <div style="width: 75px; float: right;padding:0 28px 0 0">
+      class="globalHeader"
+      style="margin-bottom: 20px; padding-bottom: 45px"
+    >
+      <el-col :span="4">
+        <i class="el-icon-document"></i>
+        <span v-if="card">订单管理</span>
+        <span v-if="!card">顾客管理</span>
+      </el-col>
+      <!-- <div style="width: 75px; float: right;padding:0 28px 0 0">
           <el-button type="success" style=" " plain @click="card=!card">顾客管理</el-button>
         </div> -->
-      </el-row>
+    </el-row>
     <!-- 卡片视图区域 -->
     <el-tabs type="border-card" @tab-click="changes()">
       <el-tab-pane label="订单管理">
         <el-row>
-      <div style="width: 75px; float: right;padding:0 30px 0 0">
-          <el-button type="primary" style=" " @click="createOrder()">创建订单</el-button>
-        </div>
-      </el-row>
-
-      <!-- 订单信息列表区域 -->
-      <el-table :data="OrderList" border stripe>
-        <!-- border： 加入边框线 -->
-        <!-- type="index"： 索引列 -->
-        >
-        <el-table-column type="expand">
-      <template slot-scope="props">
-        <el-form label-position="left" inline class="demo-table-expand">
-          <el-row :gutter="24">
-             <el-col :span="6">
-              <el-form-item label="电话：">
-                <span>{{props.row.phoneNumber}}</span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="数量">
-                <span>{{props.row.phoneNumber}}</span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="重量/kg">
-                <span>{{props.row.weight}}</span>
-              </el-form-item>
-            </el-col>
-            <el-col  :span="6">
-              <el-form-item label="创建时间">
-                <span>{{props.row.gmtCreate}}</span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="修改时间">
-                <span>{{props.row.gmtModified}}</span>
-              </el-form-item>
-            </el-col>
-              <el-col :span="6">
-              <el-form-item label="基地id">
-                <span>{{props.row.baseId}}</span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="产品编号">
-                <span>{{props.row.productId}}</span>
-              </el-form-item>
-            </el-col>
-            <el-col>
-              <el-form-item label="物流编号">
-                <span>{{props.row.logisticsId}}</span>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </template>
-    </el-table-column>
-
-        <el-table-column
-          prop="targetName"
-          label="客户名"
-
-        ></el-table-column>
-        <el-table-column
-          prop="targetType"
-          :formatter="customerType"
-          label="客户类型"
-
-        ></el-table-column>
-        <el-table-column
-          prop="productName"
-          label="产品名"
-
-        ></el-table-column>
-        <el-table-column
-          prop="money"
-          label="金额/元"
-
-        ></el-table-column>
-        <el-table-column
-          prop="status"
-          :formatter="statusType"
-          label="订单状态"
-
-        ></el-table-column>
-        <el-table-column
-          prop="gmtCreate"
-          label="创建时间"
-
-        ></el-table-column>
-        <el-table-column
-          prop="receiveAddress"
-          label="收货地址"
-
-        ></el-table-column>
-        <el-table-column label="二维码" width="150">
-          <template slot-scope="scope">
-            <!-- 物流二维码按钮 -->
-            <el-button
-              type="primary"
-              size="mini"
-              @click="logisticsOrcode(scope.row)"
-              >物流</el-button
+          <div style="width: 75px; float: right; padding: 0 30px 0 0">
+            <el-button type="primary" style="" @click="createOrder()"
+              >创建订单</el-button
             >
-            <!-- 溯源二维码按钮 -->
-            <el-button
-              type="success"
-              size="mini"
-              @click="originOrcode(scope.row.id)"
-              >溯源</el-button
-            >
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="250">
-          <template slot-scope="scope">
-            
-              <el-tooltip
-              effect="dark"
-              content="修改订单"
-              placement="top"
-              :enterable="false"
-            >
-            <el-button
-              type="primary"
-              icon="el-icon-edit"
-              size="mini"
-              @click="showEditDialog(scope.row.id)"
-            ></el-button>
-              </el-tooltip>
-              <!-- 修改按钮 -->
-            
-            <!-- 发货按钮 -->
-              <el-tooltip
-              effect="dark"
-              content="发货"
-              placement="top"
-              :enterable="false"
-            >
+          </div>
+        </el-row>
+
+        <!-- 订单信息列表区域 -->
+        <el-table :data="OrderList" border stripe>
+          <!-- border： 加入边框线 -->
+          <!-- type="index"： 索引列 -->
+          >
+          <el-table-column type="expand">
+            <template slot-scope="props">
+              <el-form label-position="left" inline class="demo-table-expand">
+                <el-row :gutter="24">
+                  <el-col :span="6">
+                    <el-form-item label="电话：">
+                      <span>{{ props.row.phoneNumber }}</span>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="数量">
+                      <span>{{ props.row.phoneNumber }}</span>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="重量/kg">
+                      <span>{{ props.row.weight }}</span>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="创建时间">
+                      <span>{{ props.row.gmtCreate }}</span>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="修改时间">
+                      <span>{{ props.row.gmtModified }}</span>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="基地id">
+                      <span>{{ props.row.baseId }}</span>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="产品编号">
+                      <span>{{ props.row.productId }}</span>
+                    </el-form-item>
+                  </el-col>
+                  <el-col>
+                    <el-form-item label="物流编号">
+                      <span>{{ props.row.logisticsId }}</span>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </template>
+          </el-table-column>
+
+          <el-table-column prop="targetName" label="客户名"></el-table-column>
+          <el-table-column
+            prop="targetType"
+            :formatter="customerType"
+            label="客户类型"
+          ></el-table-column>
+          <el-table-column prop="productName" label="产品名"></el-table-column>
+          <el-table-column prop="money" label="金额/元"></el-table-column>
+          <el-table-column
+            prop="status"
+            :formatter="statusType"
+            label="订单状态"
+          ></el-table-column>
+          <el-table-column prop="gmtCreate" label="创建时间"></el-table-column>
+          <el-table-column
+            prop="receiveAddress"
+            label="收货地址"
+          ></el-table-column>
+          <el-table-column label="二维码" width="150">
+            <template slot-scope="scope">
+              <!-- 物流二维码按钮 -->
               <el-button
-                type="warning"
-                icon="el-icon-box"
+                type="primary"
                 size="mini"
-                @click="delivery(scope.row.id)"
-              ></el-button>
-            </el-tooltip>
-            
-            
-
-            <!-- 查看物流信息 -->
-            <el-tooltip
-              effect="dark"
-              content="物流信息"
-              placement="top"
-              :enterable="false"
-            >
+                @click="logisticsOrcode(scope.row)"
+                >物流</el-button
+              >
+              <!-- 溯源二维码按钮 -->
               <el-button
                 type="success"
-                icon="el-icon-truck"
                 size="mini"
-                @click="toShowLogisticsInfo(scope.row.id)"
-              ></el-button>
-            </el-tooltip>
-            
-            
+                @click="originOrcode(scope.row.id)"
+                >溯源</el-button
+              >
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="250">
+            <template slot-scope="scope">
+              <el-tooltip
+                effect="dark"
+                content="修改订单"
+                placement="top"
+                :enterable="false"
+              >
+                <el-button
+                  type="primary"
+                  icon="el-icon-edit"
+                  size="mini"
+                  @click="showEditDialog(scope.row.id)"
+                ></el-button>
+              </el-tooltip>
+              <!-- 修改按钮 -->
 
-            <!-- 删除按钮 -->
+              <!-- 发货按钮 -->
+              <el-tooltip
+                effect="dark"
+                content="发货"
+                placement="top"
+                :enterable="false"
+              >
+                <el-button
+                  type="warning"
+                  icon="el-icon-box"
+                  size="mini"
+                  @click="delivery(scope.row.id)"
+                ></el-button>
+              </el-tooltip>
+
+              <!-- 查看物流信息 -->
+              <el-tooltip
+                effect="dark"
+                content="物流信息"
+                placement="top"
+                :enterable="false"
+              >
+                <el-button
+                  type="success"
+                  icon="el-icon-truck"
+                  size="mini"
+                  @click="toShowLogisticsInfo(scope.row.id)"
+                ></el-button>
+              </el-tooltip>
+
+              <!-- 删除按钮 -->
               <Delete
-              :id="scope.row.id"
-              :title="deletetitle"
-              :root="root"
-              :deleteUrl="deleteUrl"
-              @getAllInfo="setNode"
+                :id="scope.row.id"
+                :title="deletetitle"
+                :root="root"
+                :deleteUrl="deleteUrl"
+                @getAllInfo="setNode"
               >
               </Delete>
-            
-            
-        
-          </template>
-        </el-table-column>
-      </el-table>
+            </template>
+          </el-table-column>
+        </el-table>
 
-      <!-- 分页区域 -->
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="pageInfo.pagenum"
-        :page-sizes="[4, 6, 8, 10]"
-        :page-size="pageInfo.pagesize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-      >
-      </el-pagination>
-      </el-tab-pane>
-      
-      <el-tab-pane label="顾客管理" >
-
-      <!-- 订单信息列表区域 -->
-      <el-row>
-        <div style="width: 75px; float: right;padding:0 25px 0 0">
-          <el-button type="success" style=" "  @click="createCustomera()">添加顾客</el-button>
-        </div>
-      </el-row>
-      <el-table :data="CustomerList" border stripe style="width:100%">
-        <!-- border： 加入边框线 -->
-        <!-- type="index"： 索引列 -->
+        <!-- 分页区域 -->
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pageInfo.pagenum"
+          :page-sizes="[4, 6, 8, 10]"
+          :page-size="pageInfo.pagesize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
         >
-        <el-table-column type="index"> </el-table-column>
+        </el-pagination>
+      </el-tab-pane>
 
-        <el-table-column
-          prop="customerName"
-          label="客户名"
-
-        ></el-table-column>
-        <el-table-column
-          prop="customerType"
-          :formatter="customerType2"
-          label="客户类型"
-
-        ></el-table-column>
-        <el-table-column
-          prop="phoneNumber"
-          label="电话"
-
-        ></el-table-column>
-        <el-table-column
-          prop="email"
-          label="邮箱"
-
-        ></el-table-column>
-        <el-table-column
-          prop="receiveAddress"
-          label="地址"
-
-        ></el-table-column>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-          <!-- 修改按钮 -->
-              <el-tooltip
-              effect="dark"
-              content="修改信息"
-              placement="top"
-              :enterable="false"
+      <el-tab-pane label="顾客管理">
+        <!-- 订单信息列表区域 -->
+        <el-row>
+          <div style="width: 75px; float: right; padding: 0 25px 0 0">
+            <el-button type="success" style="" @click="createCustomera()"
+              >添加顾客</el-button
             >
-            <el-button
-              type="primary"
-              icon="el-icon-edit"
-              size="mini"
-              @click="EditcustomerDialog(scope.row)"
-            ></el-button>
-              </el-tooltip>
-           
-            <!-- 删除按钮 -->
-         
-              <el-tooltip
-              effect="dark"
-              content="删除顾客"
-              placement="top"
-              :enterable="false"
-            >
-            <el-button
-              type="danger"
-              icon="el-icon-delete"
-              size="mini"
-              @click="deleteCustomer(scope.row.id)"
-            ></el-button>
-              </el-tooltip>
-         
-             
-          </template>
-        </el-table-column>
-      </el-table>
+          </div>
+        </el-row>
+        <el-table :data="CustomerList" border stripe style="width: 100%">
+          <!-- border： 加入边框线 -->
+          <!-- type="index"： 索引列 -->
+          >
+          <el-table-column type="index"> </el-table-column>
 
-      <!-- 分页区域 -->
-      <el-pagination
-        @size-change="handleSizeChange2"
-        @current-change="handleCurrentChange2"
-        :current-page="pageInfo2.pagenum"
-        :page-sizes="[4, 6, 8, 10]"
-        :page-size="pageInfo2.pagesize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total2"
-      >
-      </el-pagination>
+          <el-table-column prop="customerName" label="客户名"></el-table-column>
+          <el-table-column
+            prop="customerType"
+            :formatter="customerType2"
+            label="客户类型"
+          ></el-table-column>
+          <el-table-column prop="phoneNumber" label="电话"></el-table-column>
+          <el-table-column prop="email" label="邮箱"></el-table-column>
+          <el-table-column prop="receiveAddress" label="地址"></el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <!-- 修改按钮 -->
+              <el-tooltip
+                effect="dark"
+                content="修改信息"
+                placement="top"
+                :enterable="false"
+              >
+                <el-button
+                  type="primary"
+                  icon="el-icon-edit"
+                  size="mini"
+                  @click="EditcustomerDialog(scope.row)"
+                ></el-button>
+              </el-tooltip>
+
+              <!-- 删除按钮 -->
+
+              <el-tooltip
+                effect="dark"
+                content="删除顾客"
+                placement="top"
+                :enterable="false"
+              >
+                <el-button
+                  type="danger"
+                  icon="el-icon-delete"
+                  size="mini"
+                  @click="deleteCustomer(scope.row.id)"
+                ></el-button>
+              </el-tooltip>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <!-- 分页区域 -->
+        <el-pagination
+          @size-change="handleSizeChange2"
+          @current-change="handleCurrentChange2"
+          :current-page="pageInfo2.pagenum"
+          :page-sizes="[4, 6, 8, 10]"
+          :page-size="pageInfo2.pagesize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total2"
+        >
+        </el-pagination>
       </el-tab-pane>
     </el-tabs>
 
     <!-- 展示物流信息-->
     <ShowMap
-    :title="title"
-    :id="showInfoId"
-    :dialogVisible="Mapjudge"
-    @notifyParent="closeMap"
+      :title="title"
+      :id="showInfoId"
+      :dialogVisible="Mapjudge"
+      @notifyParent="closeMap"
     >
     </ShowMap>
 
-<!-- 展示物流 或者 溯源二维码 -->
+    <!-- 展示物流 或者 溯源二维码 -->
     <Show-orinfo
-    :ortitle="orTitle"
-    :is-show-code="isShowCode"
-    :orderId="orderId"
-    @notifyParent2="closeCode"
-    
+      :ortitle="orTitle"
+      :is-show-code="isShowCode"
+      :orderId="orderId"
+      :jQcode="jQcode"
+      @notifyParent2="closeCode"
     >
     </Show-orinfo>
 
     <!-- 创建/修改订单信息的对话框 -->
     <Create-order
-    :createdialogVisible="createdialogVisible"
-    :orderid="orderid"
-    :ordertitle="ordertitle"
-    :look="look"
-    @createnotifyParent="changecreatedialogVisible"
+      :createdialogVisible="createdialogVisible"
+      :orderid="orderid"
+      :ordertitle="ordertitle"
+      :look="look"
+      @createnotifyParent="changecreatedialogVisible"
     >
-    </Create-order> 
+    </Create-order>
     <!-- 创建/修改顾客 -->
     <Create-customer
-    :customercard="createCustomers"
-    :customertitle="customertitle"
-    :customerData="customerData"
-    :look2="look2"
-    @createnotifyParent="changecustomerdialogVisible"
+      :customercard="createCustomers"
+      :customertitle="customertitle"
+      :customerData="customerData"
+      :look2="look2"
+      @createnotifyParent="changecustomerdialogVisible"
     >
     </Create-customer>
   </div>
- 
-  
 </template>
 
 <script>
-import ShowMap from  "../../components/cgx/public/ShwoMap"
+import ShowMap from "../../components/cgx/public/ShwoMap";
 import ShowOrinfo from "../../components/cgx/ManagementOrder/ShowOrcode/ShowOrcode";
 import ShowChange from "../../components/cgx/ManagementOrder/ModifyInformation/ShowChange";
-import CreateOrder from '../../components/cgx/ManagementOrder/CreateOrder/createOrder';
-import Delete from '../../components/cgx/public/delete';
-import CreateCustomer from '../../components/cgx/ManagementOrder/CreateCustomer/createCustomer'
+import CreateOrder from "../../components/cgx/ManagementOrder/CreateOrder/createOrder";
+import Delete from "../../components/cgx/public/delete";
+import CreateCustomer from "../../components/cgx/ManagementOrder/CreateCustomer/createCustomer";
 export default {
   components: {
     ShowOrinfo,
@@ -371,27 +325,27 @@ export default {
   },
   data() {
     return {
-      Mapjudge:false,
+      Mapjudge: false,
       //添加/修改顾客开关
-      createCustomers:false,
-      customertitle:"",
-      customerData:{},
-      look2:true,
+      createCustomers: false,
+      customertitle: "",
+      customerData: {},
+      look2: true,
       //控制订单和顾客管理卡片
-      card:true,
+      card: true,
       //删除接口标题
-      deletetitle:"该订单",
+      deletetitle: "该订单",
       // 删除接口的根路径标签
       root: "managementOrder",
       // 删除接口的路径
       deleteUrl: "",
       //创建或修改订单
-      ordertitle:"",
-      createdialogVisible:false,
-      orderid:"",
-      look:true,
+      ordertitle: "",
+      createdialogVisible: false,
+      orderid: "",
+      look: true,
       // 判断
-      customerjudge : ['个人', '企业', '加工厂', '冷库'],
+      customerjudge: ["个人", "企业", "加工厂", "冷库"],
       // orderstatus:['未发货','已发货'],
       // 传递给子组件
       title: "",
@@ -400,14 +354,15 @@ export default {
       dialogVisible: false,
       // -----------------------------------
       //传给二维码组件
-      orTitle:"",
-      isShowCode:false,
+      orTitle: "",
+      isShowCode: false,
+      jQcode:false,
       // 当前点击订单的城虾id
       orderId: "",
       // -----------------------------------
       token: window.localStorage.getItem("token"),
       // 基地编号
-      baseId: '1350657222372835330',
+      baseId: "1350657222372835330",
       // 是否显示物流二维码页面
       isShowLCode: false,
       // 是否显示溯源二维码页面
@@ -419,7 +374,7 @@ export default {
         // 每页显示条数
         pagesize: 10,
       },
-       pageInfo2: {
+      pageInfo2: {
         // 当前页码
         pagenum: 1,
         // 每页显示条数
@@ -428,38 +383,38 @@ export default {
 
       // 总条数
       total: null,
-      total2:null,
+      total2: null,
       // 订单列表
       OrderList: [],
       //顾客列表
-      CustomerList:[],
+      CustomerList: [],
     };
   },
   created() {
-    this.baseId=this.$store.state.userInfo.baseId;
+    this.baseId = this.$store.state.userInfo.baseId;
     this.setNode();
   },
   methods: {
     //关闭添加/修改顾客
-    changecustomerdialogVisible(){
-       this.createCustomers=false;
-       this.getCustomerList();
+    changecustomerdialogVisible() {
+      this.createCustomers = false;
+      this.getCustomerList();
     },
     //添加顾客
-    createCustomera(){
-      this.createCustomers=true;
-      this.customertitle="添加顾客"
+    createCustomera() {
+      this.createCustomers = true;
+      this.customertitle = "添加顾客";
     },
     //修改顾客
-    EditcustomerDialog(data){
-      this.createCustomers=true;
-      this.customertitle="修改信息"
-      this.look2=!this.look2
-      this.customerData=data
-      console.log("customerData--->",this.customerData)
+    EditcustomerDialog(data) {
+      this.createCustomers = true;
+      this.customertitle = "修改信息";
+      this.look2 = !this.look2;
+      this.customerData = data;
+      console.log("customerData--->", this.customerData);
     },
     //删除顾客
-    async deleteCustomer(id){
+    async deleteCustomer(id) {
       const confirmResult = await this.elConfirm(
         `此操作将永久删除顾客信息, 是否继续?`,
         "提示",
@@ -474,25 +429,23 @@ export default {
       if (confirmResult !== "confirm") {
         return this.elMessage.info("已取消删除");
       }
-      const { data: res } = await this.$Customer.delete(
-        `${id}`
-      );
-      if (res.statusCode == 20000) { 
+      const { data: res } = await this.$Customer.delete(`${id}`);
+      if (res.statusCode == 20000) {
         this.elMessage.success(res.message);
         this.getCustomerList();
       }
     },
     //改变卡片页面
-    changes(){
+    changes() {
       this.setNode();
-      this.card=!this.card
-      this.pageInfo.pagenum=1
-      this.pageInfo.pagesize=10
-      this.pageInfo2.pagenum=1
-      this.pageInfo2.pagesize=10
+      this.card = !this.card;
+      this.pageInfo.pagenum = 1;
+      this.pageInfo.pagesize = 10;
+      this.pageInfo2.pagenum = 1;
+      this.pageInfo2.pagesize = 10;
     },
     //执行发货操作
-    async delivery(id){
+    async delivery(id) {
       const confirmResult = await this.elConfirm(
         `是否确认将该订单发货?`,
         "提示",
@@ -507,48 +460,48 @@ export default {
       if (confirmResult !== "confirm") {
         return this.elMessage.info("已取消发货");
       }
-      const { data: res } = await this.$managementOrder.put( `${"deliver"}/${id}`);
-      if (res.statusCode == 20000) { 
+      const { data: res } = await this.$managementOrder.put(
+        `${"deliver"}/${id}`
+      );
+      if (res.statusCode == 20000) {
         this.elMessage.success(res.message);
         this.setNode();
+      } else {
+        this.elMessage.error(res.message);
       }
-       else {
-            this.elMessage.error(res.message);
-          }
     },
     //创建订单按钮
-    createOrder(){
+    createOrder() {
       this.createdialogVisible = true;
-      this.ordertitle="创建订单"
+      this.ordertitle = "创建订单";
     },
     // 客户类型判断传入
-   customerType (row){
-      return this.customerjudge[row.targetType-1]
+    customerType(row) {
+      return this.customerjudge[row.targetType - 1];
     },
-    customerType2 (row){
-      return this.customerjudge[row.customerType-1]
+    customerType2(row) {
+      return this.customerjudge[row.customerType - 1];
     },
     // 订单状态判断传入
-   statusType(row){
-      if(row.logisticsId==null){
-        return "未发货"
-      }
-      else{
-        return "已发货"
+    statusType(row) {
+      if (row.logisticsId == null) {
+        return "未发货";
+      } else {
+        return "已发货";
       }
     },
-  // 关闭修改/创建订单组件
-  changecreatedialogVisible(){
-    this.createdialogVisible=false;
-    this.setNode();
-  },
+    // 关闭修改/创建订单组件
+    changecreatedialogVisible() {
+      this.createdialogVisible = false;
+      this.setNode();
+    },
     //关闭地图组件
-    closeMap(){
-      this.Mapjudge = false
+    closeMap() {
+      this.Mapjudge = false;
     },
     // 展示物流信息时要传递给子组件的信息
     toShowLogisticsInfo(id) {
-      console.log("id",id)
+      console.log("id", id);
       this.title = "订单出发点";
       this.showInfoId = id;
       this.Mapjudge = true;
@@ -578,27 +531,27 @@ export default {
     },
     // 物流二维码弹窗
     logisticsOrcode(row) {
-      console.log("ttt",row)
-      if(row.logisticsId==null){
+      console.log("ttt", row);
+      if (row.logisticsId == null) {
         this.elMessage.error("该订单未发货，无法查询路径！");
+      } else {
+        this.orderId = row.id;
+        this.orTitle = "物流二维码";
+        this.isShowCode = true;
+        this.jQcode = !this.jQcode;
       }
-     else{
-      this.QrcodeId = row.id;
-      this.QrTitle="物流二维码"
-      this.isShowCode = true;
-      this.jQcode = !this.jQcode
-     }
       // this.$nextTick(() => {
       //   this.createlcode();
       // });
     },
     // 溯源二维码弹窗
     originOrcode(id) {
-      console.log('id: ', id);
+      console.log("id: ", id);
       // this.orderId = "1304076777332805632";
       this.orderId = id;
-      this.orTitle="溯源二维码"
+      this.orTitle = "溯源二维码";
       this.isShowCode = true;
+      this.jQcode = !this.jQcode;
       // this.$nextTick(() => {
       //   this.createocode();
       // });
@@ -639,12 +592,12 @@ export default {
     handleCurrentChange(newPage) {
       this.pageInfo.pagenum = newPage;
       this.getOrderList();
-      console.log("222333")
+      console.log("222333");
     },
     handleCurrentChange2(newPage) {
       this.pageInfo2.pagenum = newPage;
       this.getCustomerList();
-      console.log("111222")
+      console.log("111222");
     },
 
     // 获取订单信息
@@ -652,39 +605,38 @@ export default {
       const { data: res } = await this.$managementOrder.get(
         `baseOrder/${this.baseId}/${this.pageInfo.pagenum}/${this.pageInfo.pagesize}`
       );
-      console.log("结果1:",res);
+      console.log("结果1:", res);
       if (res.statusCode !== 20000) {
         return this.$message.error("获取虾苗订单列表失败！！");
       }
       this.OrderList = res.data.records;
       this.total = res.data.total;
-      console.log("uersinfo-->",this.$store.state.userInfo)
-      console.log("OrderList:",this.OrderList)
-      console.log("total:",this.total)
+      console.log("uersinfo-->", this.$store.state.userInfo);
+      console.log("OrderList:", this.OrderList);
+      console.log("total:", this.total);
     },
     // 获取顾客信息
     async getCustomerList() {
       const { data: res } = await this.$Customer.get(
         `${this.baseId}/${this.pageInfo2.pagenum}/${this.pageInfo2.pagesize}`
       );
-      console.log("结果2:",res);
+      console.log("结果2:", res);
       if (res.statusCode !== 20000) {
         return this.$message.error("获取顾客信息失败！！");
       }
       this.CustomerList = res.data.records;
       this.total2 = res.data.total;
-      console.log("getCustomerList:",this.CustomerList)
-      console.log("total2:",this.total2)
+      console.log("getCustomerList:", this.CustomerList);
+      console.log("total2:", this.total2);
     },
 
-     // 展示修改的对话框
+    // 展示修改的对话框
     async showEditDialog(id) {
       this.createdialogVisible = true;
-      this.ordertitle="修改订单"
-      this.orderid=id
-      this.look=!this.look
+      this.ordertitle = "修改订单";
+      this.orderid = id;
+      this.look = !this.look;
     },
-    
   },
 };
 </script>
@@ -698,5 +650,4 @@ export default {
   border: 1px solid rgb(161, 161, 161);
   border-radius: 6px;
 }
-
 </style>

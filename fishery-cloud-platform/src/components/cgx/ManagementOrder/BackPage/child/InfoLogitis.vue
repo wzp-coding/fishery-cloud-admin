@@ -49,10 +49,6 @@ export default {
           arrivalTime:item.logisticsPathArrivalTime
         })
       })
-      cRoutes.push({
-        content:"已送达目的地",
-        arrivalTime:""
-      })
       return cRoutes;
     }
   },
@@ -69,7 +65,7 @@ export default {
   created() {
     const { id } = this.$route.query;
     console.log("id: ", id);
-    this.getLogisticsPath("1356236375450034177");
+    this.getLogisticsPath(id);
   },
 };
 </script>

@@ -282,7 +282,7 @@ const mutations = {
 
   // 设置typeToIpMap
   setTypeToIdMap(state, data) {
-    state.typeToIpMap = data;
+    state.typeToIdMap = data;
   }
 }
 const getters = {
@@ -314,7 +314,7 @@ const actions = {
   // 根据id和溯源类型type查询相关信息（1：养殖信息，2：加工厂信息，3：冷库信息）
   async getOrginInfoByIdAndType({ state }, payload) {
     const {type,vm } = payload;
-    const { data: res } = await vm.$traceability.get(`/info/${state.typeToIpMap[type][0]}/${type}`);
+    const { data: res } = await vm.$traceability.get(`/info/${state.typeToIdMap[type][0]}/${type}`);
     if (res.statusCode != 20000) {
       console.error(res.message);
       vm.elMessage.error(res.message);

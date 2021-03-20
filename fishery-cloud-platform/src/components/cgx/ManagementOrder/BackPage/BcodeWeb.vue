@@ -2,23 +2,26 @@
   <div class="code-phone-container">
     <el-row class="b-code-web" style="margin-bottom: 0">
       <el-col :span="24">
-        <el-menu :default-active="active" router>
+        <el-menu :default-active="active">
           <el-submenu index="info">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>溯源导航信息</span>
             </template>
-            <el-menu-item index="info-farm-p"
+            <el-menu-item index="info-farm-p" @click="handleRoute('info-farm-p')"
               ><i class="el-icon-folder"></i><span>养殖信息</span></el-menu-item
             >
-            <el-menu-item index="info-cold-p" v-if="type['2']">
+            <el-menu-item v-if="type['3']" index="info-cold-p"  @click="handleRoute('info-cold-p')">
               <i class="el-icon-mobile"></i>
               <span>冷库信息</span></el-menu-item
             >
-            <el-menu-item :index="`info-logitis-p?id=${logisticsId}`"
+            <el-menu-item
+              v-if="hasLogisticsId"
+              :index="`info-logitis-p?id=${logisticsId}`"
+              @click="handleRoute(`info-logitis-p?id=${logisticsId}`)"
               ><i class="el-icon-truck"></i><span>物流信息</span></el-menu-item
             >
-            <el-menu-item index="info-plant-p" v-if="type['3']"
+            <el-menu-item  v-if="type['2']" index="info-plant-p" @click="handleRoute('info-plant-p')"
               ><i class="el-icon-house"></i
               ><span>加工厂信息</span></el-menu-item
             >
@@ -37,7 +40,8 @@ export default {
       active: "info-farm-p",
       traceId: "",
       type: {}, //能展示的type对象，1(养殖),2(加工厂),3(冷库)
-      logisticsId: "1356236375450034177",
+      hasLogisticsId: false,
+      logisticsId: "",
     };
   },
   methods: {
@@ -45,30 +49,50 @@ export default {
     // 获取溯源类型和id存到vuex中
     async getTaceabilityTypeAndProductId(traceId) {
       const { data: res } = await this.$traceability.get(`/product/${traceId}`);
-      // console.log('res: ', res);
+      console.log('this.type: ', res);
       if (res.statusCode != 20000) {
         console.error(res.message);
       }
       this.type = res.data;
       this.setTypeToIdMap(this.type);
     },
+    async getDetailOrderInfo(id) {
+      const { data: res } = await this.$managementOrder.get(`${id}`);
+      console.log('res: ', res);
+      if (res.statusCode != 20000) {
+        console.error(res.message);
+      }
+      return res.data;
+    },
+    handleRoute(route){
+      console.log('route: ', route);
+      this.$router.push(route);
+    }
   },
   async created() {
     document.body.className = "custom-dark";
     const { id, type } = this.$route.query;
     this.traceId = id;
-    this.logisticsId = logisticsId;
     console.log("id: ", id);
     console.log("type: ", type);
     await this.getTaceabilityTypeAndProductId(this.traceId);
+    // 如果扫描物流二维码，此时肯定是有logisticsId的
+    let orderInfo = await this.getDetailOrderInfo(this.traceId);
+    console.log('orderInfo: ', orderInfo);
     if (type == "logitis") {
-      this.active = "info-logitis-p";
-      this.$router.push({
-        path: this.active,
-        query: { id: logisticsId },
-      });
+      this.logisticsId = orderInfo.logisticsId;
+      this.hasLogisticsId = true;
+      // this.active = "info-logitis-p";
+      // this.handleRoute(`info-logitis-p?id=${this.logisticsId}`);
     } else {
-      this.$router.push(this.active);
+      // 如果是扫描溯源二维码，需要判断是否有logisticsId
+      if (!orderInfo.logisticsId) {
+        this.hasLogisticsId = false;
+      }else{
+        this.logisticsId = orderInfo.logisticsId;
+        this.hasLogisticsId = true;
+      }
+      // this.handleRoute(this.active)
     }
   },
 };

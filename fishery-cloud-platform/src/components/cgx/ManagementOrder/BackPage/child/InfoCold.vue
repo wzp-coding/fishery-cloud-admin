@@ -43,7 +43,7 @@ export default {
   async created() {
     const ret = await this.getOrginInfoByIdAndType({ type: "3", vm: this });
     console.log("ret: ", ret);
-    this.coldInfo = ret
+    this.coldInfo = ret;
   },
 };
 </script>

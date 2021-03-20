@@ -58,9 +58,6 @@ export default {
           content: "中心点内容",
         };
       },
-      validator(obj) {
-        return obj.lat && obj.lng;
-      },
     },
 
     path: {

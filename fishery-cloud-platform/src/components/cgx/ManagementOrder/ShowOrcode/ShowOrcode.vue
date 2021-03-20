@@ -1,14 +1,14 @@
 <template>
   <!-- 物流二维码 -->
   <el-dialog
-    :title="title"
+    :title="ortitle"
     width="40%"
     :visible.sync="isShowCode"
     :before-close="closeCode"
   >
     <div id="qrcode" ref="qrcode" style="margin: auto"></div>
     <p style="text-align: center; font-size: 20px">
-      {{ title }} <br />{{ Id }}
+      {{ ortitle }} <br />{{ orderId }}
     </p>
     <div slot="footer" class="dialog-footer">
       <el-button @click="closeCode">取 消</el-button>
@@ -20,7 +20,7 @@
 import QRCode from "qrcodejs2";
 export default {
   props: {
-    title: {
+    ortitle: {
       type: String,
       required: true,
     },
@@ -45,7 +45,7 @@ export default {
         height: 250,
       });
       let codeUrl = `http://119.23.218.131:9301/b-code-web?id=${this.orderId}&type=`;
-      if (this.title == "物流二维码") {
+      if (this.ortitle == "物流二维码") {
         codeUrl += `logitis`;
       } else {
         codeUrl += `origin`;
@@ -60,7 +60,7 @@ export default {
     testToBcodeWeb() {
       console.log("this.orderId: ", this.orderId);
       let type;
-      if (this.title == "物流二维码") {
+      if (this.ortitle == "物流二维码") {
         type = `logitis`;
       } else {
         type = `origin`;
@@ -68,18 +68,16 @@ export default {
       this.$router.push({
         path: "/b-code-web",
         query: {
-          id: this.Id,
+          id: this.orderId,
           type,
         },
       });
     },
   },
   watch: {
-    jQcode: {
-      async handler() {
-        await this.$nextTick();
-        this.createcode();
-      },
+    async jQcode() {
+      await this.$nextTick();
+      this.createcode();
     },
   },
   // created(){
