@@ -3,7 +3,7 @@
       :title="customertitle"
       :visible.sync="customercard"
       width="45%"
-      @close="close"
+      :before-close="close"
     >
     <el-form 
     ref="form" 

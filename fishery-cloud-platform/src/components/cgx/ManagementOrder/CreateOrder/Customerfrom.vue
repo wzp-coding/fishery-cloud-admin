@@ -3,7 +3,7 @@
       title="客户列表"
       :visible.sync="CustomerVisible"
       width="50%"
-      @close="closed"
+      :before-close="closed"
 > 
   <el-table height="450" 
     :data="tableData.filter(data => !search || data.customerName.toLowerCase().includes(search.toLowerCase())||

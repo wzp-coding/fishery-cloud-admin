@@ -6,7 +6,7 @@
     :before-close="DialogClosed"
   >
     <div>
-  <el-timeline :reverse="reverse">
+  <el-timeline :reverse="reverse" v-if="juged">
     <el-timeline-item
       v-for="(activity, index) in activities"
       :key="index"
@@ -42,11 +42,12 @@ export default {
       },
     data(){
         return{
+            juged:false,
             reverse:false,
             centerPoint:{},
             mapname:"",
             activities:[{
-            content: '开始发货'}],
+            content: '发货成功'}],
             path:[],
         }
     },
@@ -109,13 +110,14 @@ export default {
       b.timestamp = res.data[i].logisticsPathArrivalTime
       this.activities.push(b);
       }
-      // if(res.logisticsOrderStatus==1){
-      //   let c = {
-      //     content:""
-      //   }
-      //   c.content = "货物已送达",
-      // this.activities.push(c)
-      // }
+      const {data : res2} = await this.$logistics.get(`order/${this.id}`)
+      if(res2.data.logisticsOrderStatus==1){
+        let c = {
+          content:""
+        }
+        c.content = "货物已送达",
+      this.activities.push(c)
+      }
     },
     },
     watch:{
@@ -123,10 +125,12 @@ export default {
              if(this.title=="订单出发点"){
                this.getLogisticsById()
                this.mapname = "base"
+               this.juged = false
              }
              if(this.title=="物流运输"){
               this.getLogisticsById2()
                this.mapname = "logistics"
+               this.juged = true
              }
 
         }

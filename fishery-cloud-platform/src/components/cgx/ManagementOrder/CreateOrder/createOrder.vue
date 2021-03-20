@@ -3,7 +3,7 @@
       :title="ordertitle"
       :visible.sync="createdialogVisible"
       width="45%"
-      @close="close"
+      :before-close="close"
     >
     <el-form 
     ref="form" 
@@ -71,7 +71,7 @@
     </Map>
     
   <el-form-item style="right">
-    <el-button type="primary" @click="submitorder" style="margin:20px 0 0 0">立即创建</el-button>
+    <el-button type="primary" @click="submitorder" style="margin:20px 0 0 0">立即修改</el-button>
     <el-button @click="close">取消</el-button>
    </el-form-item>
     

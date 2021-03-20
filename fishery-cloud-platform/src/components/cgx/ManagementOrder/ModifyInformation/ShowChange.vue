@@ -4,7 +4,7 @@
       title="修改订单信息"
       :visible.sync="aditDialogVisible"
       width="30%"
-      @close="aditDialogClosed"
+      :before-close="aditDialogClosed"
     >
       <!-- 内容主题区 -->
       <el-form

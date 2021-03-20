@@ -4,7 +4,7 @@
       :title="stationtitle"
       :visible.sync="stationcard"
       width="45%"
-      @close="close"
+      :before-close="close"
     >
     <el-form 
     ref="form" 
