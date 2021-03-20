@@ -107,7 +107,7 @@
                 :enterable="false"
               >
                 <In
-                  :id="scope.row.id"
+                  :scope="scope"
                   :createPersonList="createPersonList"
                   :seedInfo="seedInfo"
                   :auth="'traceability_refrigeratory'"

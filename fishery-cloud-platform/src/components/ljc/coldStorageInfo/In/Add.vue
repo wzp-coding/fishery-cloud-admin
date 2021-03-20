@@ -26,7 +26,7 @@
         :hide-required-asterisk="true"
       >
         <el-form-item :label="labels.productName">
-          <el-select v-model="form.productInfo" value-key="value">
+          <el-select v-model="form.productInfo" value-key="germchitSpecies">
             <el-option
               v-for="item in seedInfo"
               :key="item.id"
@@ -97,10 +97,10 @@
 import ljc from "./In";
 export default {
   props: {
-    id: {},
+    scope: {},
     createPersonList: {},
     seedInfo: {},
-    auth:''
+    auth: "",
   },
   data() {
     return {
@@ -126,22 +126,28 @@ export default {
       return this.model.labels;
     },
   },
-  created() {},
+  created() {
+    console.log(this.scope.row);
+  },
   methods: {
     /* 添加开始 */
-    addInfo() {
+    async addInfo() {
       this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
-        this.form.refrigeratoryId = this.id;
+        this.form.refrigeratoryId = this.scope.row.id;
         this.form.productName = this.form.productInfo.germchitSpecies;
         this.form.processingBaseId = this.form.productInfo.id;
+        delete this.form.productInfo;
         this.form.refrigeratoryInUsedCapacity = 0;
+        console.log(this.form);
         const { data: res } = await this.model.addInfo(this.form);
         if (res.statusCode == 20000) {
           this.elMessage.success(res.message);
+          this.$emit("getAllInfo");
+          this.dialogVisible = false;
+        } else {
+          this.elMessage.error(res.message);
         }
-        this.$emit("getAllInfo");
-        this.dialogVisible = false;
       });
     },
     /* 添加结束 */

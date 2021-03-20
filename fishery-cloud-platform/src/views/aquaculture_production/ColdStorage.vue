@@ -126,7 +126,7 @@ export default {
     // 获取员工
     async getStaff() {
       const { data: res } = await this.public.getStaff();
-      this.createPersonList = res.data.records;
+      this.createPersonList = res.data;
     },
 
     // 获取种苗信息
