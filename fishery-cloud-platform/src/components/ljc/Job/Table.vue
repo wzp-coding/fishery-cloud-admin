@@ -17,16 +17,22 @@
         align="center"
       ></el-table-column>
 
-      <el-table-column label="操作" align="center">
+      <el-table-column label="操作">
         <template slot-scope="scope">
-          <Edit :scope="scope" />
-          <Delete
-            :id="scope.row.id"
-            :title="title"
-            :root="root"
-            :deleteUrl="deleteUrl"
-            @getAllInfo="getAllInfo()"
-          /> </template></el-table-column
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <Edit :scope="scope" :processingFactoryId="processingFactoryId" />
+            </el-col>
+            <el-col :span="12">
+              <Delete
+                :id="scope.row.id"
+                :title="title"
+                :root="root"
+                :deleteUrl="deleteUrl"
+                @getAllInfo="getAllInfo()"
+              />
+            </el-col>
+          </el-row> </template></el-table-column
     ></el-table>
   </div>
 </template>
@@ -53,6 +59,8 @@ export default {
 
     // 主题
     title: {},
+
+    processingFactoryId: {},
   },
   data() {
     return {

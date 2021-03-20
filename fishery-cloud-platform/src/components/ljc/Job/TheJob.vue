@@ -6,6 +6,7 @@
       :allList="allList"
       :labels="labels"
       :title="myTitle"
+      :processingFactoryId="processingFactoryId"
       @getAllInfo="getAllInfo()"
     />
     <!-- 表格结束 -->

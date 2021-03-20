@@ -5,7 +5,7 @@
       type="primary"
       icon="el-icon-edit"
       size="mini"
-      @click="DialogVisible = true"
+      @click="getInfoById"
     ></el-button>
 
     <!-- 添加表单区域开始 -->
@@ -23,7 +23,7 @@
         label-position="left"
         :hide-required-asterisk="true"
       >
-        <el-form-item :label="labels.materialId" prop="materialId">
+        <!-- <el-form-item :label="labels.materialId" prop="materialId">
           <el-select v-model="form.materialId" @change="getMaterialById">
             <el-option
               v-for="item in Materials"
@@ -33,7 +33,7 @@
             >
             </el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item :label="labels.operatorName" prop="operatorName">
           <el-select v-model="form.operatorName">
@@ -87,7 +87,7 @@
       </el-form>
       <div slot="footer">
         <el-button @click="DialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addInfo()">确 定</el-button>
+        <el-button type="primary" @click="editInfo()">确 定</el-button>
       </div>
     </el-dialog>
     <!-- 添加表单区域结束 -->
@@ -99,6 +99,7 @@ import publicFn from "../public/public";
 export default {
   props: {
     processingFactoryId: {},
+    scope: {},
   },
   data() {
     return {
@@ -107,7 +108,7 @@ export default {
       publicFn: new publicFn(this),
 
       // 表单名称
-      formTitle: "添加加工作业",
+      formTitle: "修改加工作业",
 
       // 控制添加表单的显示与隐藏
       DialogVisible: false,
@@ -126,8 +127,6 @@ export default {
 
       //   原料上限
       weightMax: 100,
-
-      materialId: "",
     };
   },
   computed: {
@@ -148,13 +147,11 @@ export default {
 
   methods: {
     /* 添加 */
-    addInfo() {
+    editInfo() {
       this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
-        this.form.materialId = this.materialId;
-        this.form.processingFactoryId = this.processingFactoryId;
         console.log(this.form);
-        const { data: res } = await this.model.addInfo(this.form);
+        const { data: res } = await this.model.editInfo(this.form);
         if (res.statusCode !== 20000) {
           this.elMessage.error(res.message);
         } else {
@@ -201,6 +198,13 @@ export default {
       );
       this.weightMax = res.data.materialWeight;
       this.materialId = res.data.materialId;
+    },
+
+    /* 获取加工作业信息 */
+    async getInfoById() {
+      const { data: res } = await this.model.getInfoById(this.scope.row.id);
+      this.form = res.data;
+      this.DialogVisible = true;
     },
   },
 };
