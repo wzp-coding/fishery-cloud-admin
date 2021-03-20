@@ -131,7 +131,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions,mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -150,8 +150,19 @@ export default {
   },
   methods: {
     ...mapActions(["getOrginInfoByIdAndType"]),
+    ...mapMutations(["setTypeToIdMap"]),
+    async getTaceabilityTypeAndProductId(traceId) {
+      const { data: res } = await this.$traceability.get(`/product/${traceId}`);
+      // console.log("this.type: ", res);
+      if (res.statusCode != 20000) {
+        console.error(res.message);
+      }
+      this.setTypeToIdMap(res.data);
+    },
   },
   async created() {
+    const { id } = this.$route.query;
+    await this.getTaceabilityTypeAndProductId(id);
     const ret = await this.getOrginInfoByIdAndType({ type: "1", vm: this });
     console.log("ret: ", ret);
     this.baseInfo = ret.baseInfo;
