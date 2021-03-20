@@ -131,7 +131,7 @@
   </div>
 </template>
 <script>
-import { mapActions,mapMutations } from "vuex";
+import { mapActions,mapMutations ,mapState} from "vuex";
 export default {
   data() {
     return {
@@ -141,6 +141,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(["typeToIdMap"]),
     basePics() {
       if (!this.baseInfo.picture) {
         return [];
@@ -161,8 +162,10 @@ export default {
     },
   },
   async created() {
-    const { id } = this.$route.query;
-    await this.getTaceabilityTypeAndProductId(id);
+    const { id:orderId } = this.$route.query;
+    if(this._.isEmpty(this.typeToIdMap)){
+      await this.getTaceabilityTypeAndProductId(orderId);
+    }
     const ret = await this.getOrginInfoByIdAndType({ type: "1", vm: this });
     console.log("ret: ", ret);
     this.baseInfo = ret.baseInfo;

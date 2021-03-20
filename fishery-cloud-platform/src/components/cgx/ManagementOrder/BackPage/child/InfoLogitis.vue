@@ -38,19 +38,21 @@ export default {
       console.log("cPath: ", cPath);
       return cPath;
     },
-    routes(){
-      let cRoutes = [{
-        content:"已发货",
-        arrivalTime:""
-      }];
-      this.path.forEach(item=>{
+    routes() {
+      let cRoutes = [
+        {
+          content: "已发货",
+          arrivalTime: "",
+        },
+      ];
+      this.path.forEach((item) => {
         cRoutes.push({
-          content:item.logisticsPathStation.logisticsStationAddress,
-          arrivalTime:item.logisticsPathArrivalTime
-        })
-      })
+          content: item.logisticsPathStation.logisticsStationAddress,
+          arrivalTime: item.logisticsPathArrivalTime,
+        });
+      });
       return cRoutes;
-    }
+    },
   },
   methods: {
     async getLogisticsPath(id) {
@@ -61,16 +63,25 @@ export default {
       }
       this.path = res.data;
     },
+    async getDetailOrderInfo(id) {
+      const { data: res } = await this.$managementOrder.get(`${id}`);
+      // console.log("res: ", res);
+      if (res.statusCode != 20000) {
+        console.error(res.message);
+      }
+      return res.data;
+    },
   },
-  created() {
-    const { id } = this.$route.query;
-    console.log("logisticsId: ", id);
-    this.getLogisticsPath(id);
+  async created() {
+    const { id: orderId } = this.$route.query;
+    let orderInfo = await this.getDetailOrderInfo(orderId);
+    console.log("logisticsId: ", orderInfo.logisticsId);
+    this.getLogisticsPath(orderInfo.logisticsId);
   },
 };
 </script>
 <style lang="less" scoped>
-.info-logitis{
+.info-logitis {
   padding: 10px;
   padding-top: 20px;
 }

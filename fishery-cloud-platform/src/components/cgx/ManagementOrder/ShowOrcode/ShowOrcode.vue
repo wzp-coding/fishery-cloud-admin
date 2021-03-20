@@ -46,9 +46,9 @@ export default {
       });
       let codeUrl = `http://119.23.218.131:9301/`;
       if (this.ortitle == "物流二维码") {
-        codeUrl += `info-farm-p?id=${this.orderId}&type=logitis`;
+        codeUrl += `info-logitis-p?id=${this.orderId}`;
       } else {
-        codeUrl += `info-logitis-p?id=${this.orderId}&type=origin`;
+        codeUrl += `info-farm-p?id=${this.orderId}`;
       }
       qrcode.makeCode(codeUrl);
     },
@@ -71,7 +71,6 @@ export default {
         path,
         query: {
           id: this.orderId,
-          type,
         },
       });
     },

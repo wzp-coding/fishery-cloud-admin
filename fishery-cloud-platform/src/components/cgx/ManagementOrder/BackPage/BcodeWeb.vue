@@ -8,19 +8,19 @@
               <i class="el-icon-location"></i>
               <span>溯源导航信息</span>
             </template>
-            <el-menu-item index="info-farm-p" v-if="type['1']"
+            <el-menu-item index="info-farm-p" v-if="typeToIdMap['1']"
               ><i class="el-icon-folder"></i><span>养殖信息</span></el-menu-item
             >
-            <el-menu-item v-if="type['3']" index="info-cold-p">
+            <el-menu-item v-if="typeToIdMap['3']" index="info-cold-p">
               <i class="el-icon-mobile"></i>
               <span>冷库信息</span></el-menu-item
             >
             <el-menu-item
               v-if="hasLogisticsId"
-              :index="`info-logitis-p?id=${logisticsId}`"
+              :index="`info-logitis-p?id=${traceId}`"
               ><i class="el-icon-truck"></i><span>物流信息</span></el-menu-item
             >
-            <el-menu-item v-if="type['2']" index="info-plant-p"
+            <el-menu-item v-if="typeToIdMap['2']" index="info-plant-p"
               ><i class="el-icon-house"></i
               ><span>加工厂信息</span></el-menu-item
             >
@@ -32,7 +32,7 @@
   </div>
 </template>
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 export default {
   data() {
     return {
@@ -41,6 +41,9 @@ export default {
       hasLogisticsId: false,
       logisticsId: "",
     };
+  },
+  computed: {
+    ...mapState(["typeToIdMap"]),
   },
   methods: {
     ...mapMutations(["setTypeToIdMap"]),
@@ -65,26 +68,20 @@ export default {
   },
   async created() {
     document.body.className = "custom-dark";
-    const { id, type } = this.$route.query;
-    this.traceId = id;
-    console.log("id: ", id);
-    console.log("type: ", type);
-    await this.getTaceabilityTypeAndProductId(this.traceId);
+    const { id: orderId } = this.$route.query;
+    this.traceId = orderId;
+    console.log("orderId: ", orderId);
+    if(this._.isEmpty(this.typeToIdMap)){
+      await this.getTaceabilityTypeAndProductId(this.traceId);
+    }
     // 如果扫描物流二维码，此时肯定是有logisticsId的
+    // 如果是扫描溯源二维码，需要判断是否有logisticsId
     let orderInfo = await this.getDetailOrderInfo(this.traceId);
     // console.log("orderInfo: ", orderInfo);
-    if (type == "logitis") {
-      this.logisticsId = orderInfo.logisticsId;
-      this.hasLogisticsId = true;
-      this.active = "info-logitis-p";
+    if (!orderInfo.logisticsId) {
+      this.hasLogisticsId = false;
     } else {
-      // 如果是扫描溯源二维码，需要判断是否有logisticsId
-      if (!orderInfo.logisticsId) {
-        this.hasLogisticsId = false;
-      } else {
-        this.logisticsId = orderInfo.logisticsId;
-        this.hasLogisticsId = true;
-      }
+      this.hasLogisticsId = true;
     }
   },
 };
