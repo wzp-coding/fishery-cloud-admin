@@ -3,7 +3,7 @@
       :title="title"
       :visible.sync="stationVisible"
       width="50%"
-      @close="closed"
+      :before-close="closed"
 > 
   <el-table height="450" 
     :data="tableData.filter(data => !search || data.logisticsStationAddress.toLowerCase().includes(search.toLowerCase())||

@@ -9560,7 +9560,7 @@
 }
 
 .custom-dark .el-table__expanded-cell[class*=cell] {
-    padding: 20px 50px
+    /* padding: 20px 50px */
 }
 
 .custom-dark .el-table__expanded-cell:hover {
@@ -27773,7 +27773,7 @@
     position: absolute;
     left: 4px;
     height: 100%;
-    border-left: 2px solid #151a30
+    border-left: 2px solid #3254eb
 }
 
 .custom-dark .el-timeline-item__icon {
@@ -27783,7 +27783,7 @@
 
 .custom-dark .el-timeline-item__node {
     position: absolute;
-    background-color: #151a30;
+    background-color: #3f5ad1;
     border-radius: 50%;
     display: -webkit-box;
     display: -ms-flexbox;

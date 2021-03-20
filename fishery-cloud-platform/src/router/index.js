@@ -33,6 +33,7 @@ const routes = [
       ...logisticsSystem_CGX,
     ]
   },
+  
 ]
 
 const router = new VueRouter({

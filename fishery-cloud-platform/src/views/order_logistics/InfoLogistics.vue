@@ -319,13 +319,12 @@
      @createnotifyParent="changeModifyLogistics"
       >
       </ModifyLogistics>
-      <Show-info
+      <ShowMap
       :title="title"
-      :is-logistics="jugie"
       :dialog-visible="dialogVisible"
       :id="id"
       @notifyParent="ChangeDialogVisible"
-    ></Show-info> 
+    ></ShowMap> 
 
       <StationForm
       @formClose="formClose"
@@ -340,13 +339,13 @@
 </template>
 <script>
 import ModifyLogistics from "../../components/cgx/LogisticsOrder/ModifyLogistics"
-import ShowInfo from   "../../components/cgx/ManagementOrder/ShowInfo/ShowInfo1";
+import ShowMap from  "../../components/cgx/public/ShwoMap";
 import StationForm from "../../components/cgx/LogisticsOrder/StationForm"
 import CreatedLogisrics from "../../components/cgx/LogisticsOrder/createdLogisrics.vue"
 export default {
   components:{
     ModifyLogistics,
-    ShowInfo,
+    ShowMap,
     StationForm,
     CreatedLogisrics,
   },
@@ -371,7 +370,7 @@ export default {
         lng:""
       },
       id:"",
-      title:"物流位置",
+      title:"",
       jugie:true,
       
       look:true,
@@ -541,6 +540,7 @@ export default {
        console.log("id-->",id)
        this.dialogVisible = true
        this.id = id
+       this.title = "物流运输"
     },
     //物流信息关
     ChangeDialogVisible(){

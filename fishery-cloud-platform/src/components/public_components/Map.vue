@@ -4,10 +4,16 @@
  地图类型：map-name:"base"
  基地的经纬度：center-point:{lat:纬度(Float),lng:经度(Float),content:"内容"(String)}
 
- 2.当组件作为 展示物流发货地和目的地 使用时，需要传入
+ 2.当组件作为 展示物流 使用时，需要传入
  地图类型：map-name:"logistics"
- 发货地的经纬度：start-point:{lat:纬度(Float),lng:经度(Float),content:"内容"(String)}
- 目的地的经纬度：end-point:{lat:纬度(Float),lng:经度(Float),content:"内容"(String)}
+ 路线：path:[
+   {
+     lat:纬度(Float),lng:经度(Float),content:"内容"(String)
+   },
+   {
+     lat:纬度(Float),lng:经度(Float),content:"内容"(String)
+   }
+ ]
  * @Author: 吴泽鹏
  * @Date: 2021/1/20 0:00
  * @LastEditors: 吴泽鹏
@@ -31,6 +37,16 @@ export default {
       map: undefined,
     };
   },
+  computed: {
+    // 物流出发地
+    startPoint() {
+      return this.path[0];
+    },
+    // 物流目的地
+    endPoint() {
+      return this.path[this.path.length - 1];
+    },
+  },
   props: {
     // 地图中心点坐标
     centerPoint: {
@@ -42,41 +58,11 @@ export default {
           content: "中心点内容",
         };
       },
-      validator(obj) {
-        return obj.lat && obj.lng;
-      },
     },
 
-    // 物流出发地
-    startPoint: {
-      type: Object,
-      default() {
-        return {
-          lat: 39.954104,
-          lng: 116.357503,
-          content: "出发点内容",
-        };
-      },
-      validator(obj) {
-        return obj.lat && obj.lng;
-      },
+    path: {
+      type: Array,
     },
-
-    // 物流目的地
-    endPoint: {
-      type: Object,
-      default() {
-        return {
-          lat: 39.994104,
-          lng: 116.287503,
-          content: "终点内容",
-        };
-      },
-      validator(obj) {
-        return obj.lat && obj.lng;
-      },
-    },
-
     // 控制显示地图的类型
     /**
      * 物流：logistics
@@ -89,11 +75,38 @@ export default {
       validator(str) {
         return ["logistics", "base"].includes(str);
       },
-      default() {
-        return {
-          a: "base",
-        };
-      },
+    },
+  },
+  watch: {
+    path(val) {
+      if (val) {
+        this.loadScript().then(() => {
+          // console.log('TMap: ', TMap);
+          switch (this.mapName) {
+            case "logistics":
+              this.initLogisticsMap();
+              break;
+            case "base":
+              this.initBaseMap();
+              break;
+          }
+        });
+      }
+    },
+    centerPoint(val) {
+      if (val) {
+        this.loadScript().then(() => {
+          // console.log('TMap: ', TMap);
+          switch (this.mapName) {
+            case "logistics":
+              this.initLogisticsMap();
+              break;
+            case "base":
+              this.initBaseMap();
+              break;
+          }
+        });
+      }
     },
   },
   methods: {
@@ -135,14 +148,23 @@ export default {
 
     // 创建标记点的图层
     createMarkerLayer(markerArr) {
-      new TMap.MultiMarker({
+      let marker = new TMap.MultiMarker({
         map: this.map, //指定地图容器
         //样式定义
         styles: {
-          //创建一个styleId为"myStyle"的样式（styles的子属性名即为styleId）
-          myStyle: new TMap.MarkerStyle({
+          //创建一个styleId为"style1"的样式（styles的子属性名即为styleId）
+          style1: new TMap.MarkerStyle({
             width: 25, // 点标记样式宽度（像素）
             height: 35, // 点标记样式高度（像素）
+            src:
+              "https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/markerDefault.png", //图片路径
+            // src: "../../assets/markerDefault.png", //图片路径
+            //焦点在图片中的像素位置，一般大头针类似形式的图片以针尖位置做为焦点，圆形点以圆心位置为焦点
+            anchor: { x: 16, y: 32 },
+          }),
+          style2: new TMap.MarkerStyle({
+            width: 10, // 点标记样式宽度（像素）
+            height: 15, // 点标记样式高度（像素）
             src:
               "https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/markerDefault.png", //图片路径
             // src: "../../assets/markerDefault.png", //图片路径
@@ -153,6 +175,9 @@ export default {
         //点标记数据数组
         geometries: markerArr,
       });
+      marker.on('click',function(e){
+        console.log(e.target);
+      })
     },
 
     /**
@@ -175,38 +200,55 @@ export default {
     },
 
     // 获取物流地图的路线（不是实际路线，只是为了好看）
-    async getLogisticsRouteAndDisplay() {
+    async getFullLogisticsLine() {
+      let pl = [];
+      this.path.forEach((item) => {
+        pl.push(new TMap.LatLng(item.lat, item.lng));
+      });
+      console.log("pl: ", pl);
+      return pl;
+    },
+    async getPlineFromAtoB(pointA, pointB) {
+      console.log("pointA: ", pointA);
+      console.log("pointB: ", pointB);
       let url = "";
-      // if (process.env.NODE_ENV === "development") {
-      url = "/api/ws/direction/v1/driving/?";
-      // } else {
-      //   url = "https://apis.map.qq.com/ws/direction/v1/driving/?";
-      // }
+      url = "/api/ws/direction/v1/transit/?";
       // 路线出发点
-      url += `from=${this.startPoint.lat},${this.startPoint.lng}`;
+      url += `from=${pointA.lat},${pointA.lng}`;
+      // url += `from=${parseFloat(pointA.lat)+0.1},${parseFloat(pointA.lat)+0.1}`;
       // 路线终点
-      url += `&to=${this.endPoint.lat},${this.endPoint.lng}`;
+      // url += `&to=${pointB.lat},${pointB.lng}`;
+      url += `&to=${parseFloat(pointB.lat) + 0.1 + ""},${
+        parseFloat(pointB.lng) + 0.1 + ""
+      }`;
       // 返回格式 和 密钥key
       url += `&output=json&key=${this.key}`;
       const { data: res } = await this.$originAxios.get(url);
+      console.log("res: ", res);
+      if (res.status != 0) {
+        console.error(res.message);
+      }
       //从结果中取出路线坐标串
-      let coors = res.result.routes[0].polyline,
-        pl = [];
-      //坐标解压（返回的点串坐标，通过前向差分进行压缩，因此需要解压）
-      let kr = 1000000;
-      for (let i = 2; i < coors.length; i++) {
-        coors[i] = Number(coors[i - 2]) + Number(coors[i]) / kr;
-      }
-      //将解压后的坐标生成LatLng数组
-      for (let i = 0; i < coors.length; i += 2) {
-        pl.push(new TMap.LatLng(coors[i], coors[i + 1]));
-      }
-
-      this.displayPolyline(pl);
+      // let coors = res.result.routes[0].polyline,
+      let pls = res.result.routes[0].steps;
+      let pl = [];
+      pls.forEach((coors) => {
+        //坐标解压（返回的点串坐标，通过前向差分进行压缩，因此需要解压）
+        let kr = 1000000;
+        for (let i = 2; i < coors.length; i++) {
+          coors[i] = Number(coors[i - 2]) + Number(coors[i]) / kr;
+        }
+        //将解压后的坐标生成LatLng数组
+        for (let i = 0; i < coors.length; i += 2) {
+          pl.push(new TMap.LatLng(coors[i], coors[i + 1]));
+        }
+      });
+      return pl;
     },
 
     // 创建路线图层
     displayPolyline(pl) {
+      // console.log('pl: ', pl);
       //创建 MultiPolyline显示折线
       new TMap.MultiPolyline({
         id: "polyline-layer", //图层唯一标识
@@ -234,7 +276,6 @@ export default {
 
     //初始化基地地图
     async initBaseMap() {
-
       //定义地图中心点坐标
       console.log("this.centerPoint: ", this.centerPoint);
       const center = new TMap.LatLng(
@@ -248,7 +289,7 @@ export default {
       // 创建中心点的标记
       const centerMarker = {
         id: "1", //点标记唯一标识，后续如果有删除、修改位置等操作，都需要此id
-        styleId: "myStyle", //指定样式id
+        styleId: "style1", //指定样式id
         position: center, //点标记坐标位置
         properties: {
           //自定义属性
@@ -267,67 +308,39 @@ export default {
 
     //初始化物流地图
     async initLogisticsMap() {
-
-      let start = new TMap.LatLng(this.startPoint.lat, this.startPoint.lng);
-      let end = new TMap.LatLng(this.endPoint.lat, this.endPoint.lng);
-
+      const path = this.path.map((item) => new TMap.LatLng(item.lat, item.lng));
       this.createMap();
-
-      //创建出发点，目的地在地图上的标记点
-      const markerArr = [
-        {
-          id: "1", //点标记唯一标识，后续如果有删除、修改位置等操作，都需要此id
-          styleId: "myStyle", //指定样式id
-          position: start, //点标记坐标位置
-          properties: {
-            //自定义属性
-            title: "出发点",
-          },
-        },
-        {
-          //第二个点标记
-          id: "2",
-          styleId: "myStyle",
-          position: end,
-          properties: {
-            title: "目的地",
-          },
-        },
-      ];
+      //创建地图上的标记点
+      const markerArr = [];
+      path.forEach((item, index) => {
+        markerArr.push({
+          id: index,
+          styleId: index == 0 || index == path.length - 1 ? "style1" : "style2",
+          position: item,
+        });
+      });
       this.createMarkerLayer(markerArr);
 
       //自适应标记点显示出来
       this.showMarker(markerArr);
+      const windows = [];
+      this.path.forEach((item) => {
+        windows.push({
+          point: new TMap.LatLng(item.lat, item.lng),
+          content: item.content,
+        });
+      });
+      this.createInfoWindow(windows);
 
-      this.createInfoWindow([
-        {
-          point: start,
-          content: this.startPoint.content,
-        },
-        {
-          point: end,
-          content: this.endPoint.content,
-        },
-      ]);
-
-      this.getLogisticsRouteAndDisplay();
+      let pl = await this.getFullLogisticsLine();
+      this.displayPolyline(pl);
     },
   },
-  created() {
-    this.loadScript().then(() => {
-      // console.log('TMap: ', TMap);
-      switch (this.mapName) {
-        case "logistics":
-          this.initLogisticsMap();
-          break;
-        case "base":
-          this.initBaseMap();
-          break;
-      }
-    });
-  },
+  created() {},
   beforeDestroy() {
-    this.map.destroy();
+    if (this.map) {
+      this.map.destroy();
+    }
   },
 };
 </script>

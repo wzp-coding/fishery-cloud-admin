@@ -3,6 +3,8 @@ export default {
     message: "http://119.23.218.131:9109/message/",
     managementOrder: "http://119.23.218.131:9114/order/",
     Customer: "http://119.23.218.131:9114/customer/",
+    traceability: "http://119.23.218.131:9114/traceability/",
     logistics: "http://119.23.218.131:9107/logistics/",
-    memo: "http://119.23.218.131:9108/memo/"
+    memo: "http://119.23.218.131:9108/memo/",
+    traceability: "http://119.23.218.131:9114/traceability/"
 }

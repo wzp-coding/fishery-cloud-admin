@@ -119,7 +119,7 @@ body {
     padding: 40px;
     background: rgba(0, 0, 0, 0.8);
     box-sizing: border-box;
-    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 15px 25px rgba(20, 10, 10, 0.5);
     border-radius: 10px; /*登录窗口边角圆滑*/
     h2 {
       margin: 0 0 30px;
@@ -137,7 +137,7 @@ body {
         .el-input {
           .el-input__inner {
             border: none;
-            border-bottom: 1px solid white;
+            border-bottom: 1px solid rgb(0, 0, 0);
             border-radius: unset;
             font-size: 14px;
           }

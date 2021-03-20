@@ -1,4 +1,5 @@
 import Vue from "vue"
+import BcodeWeb from '../components/cgx/ManagementOrder/BackPage/BcodeWeb.vue'
 export default [
     {
         // 第一次进入页面重定向到登录页面
@@ -35,13 +36,13 @@ export default [
         // 注册页面
         path: '/register',
         name: 'register',
-        component: ()=>import(/* webpackChunkName:"Register" */'../views/user_info/Register.vue'),
+        component: () => import(/* webpackChunkName:"Register" */'../views/user_info/Register.vue'),
     },
     {
         // 找回密码页面
         path: '/forgetPassword',
         name: 'forgetPassword',
-        component: ()=>import(/* webpackChunkName:"ForgetPassword" */'../views/user_info/ForgetPassword.vue'),
+        component: () => import(/* webpackChunkName:"ForgetPassword" */'../views/user_info/ForgetPassword.vue'),
     },
     // {
     //     // 创建基地页面
@@ -61,5 +62,29 @@ export default [
         path: '/test',
         name: 'test',
         component: () => import(/* webpackChunkName:"test" */'../views/user_info/test.vue')
+    },
+    {
+        // 二维码页面
+        path: '/b-code-web',
+        // component: () => import(/* webpackChunkName:"BcodeWeb" */'../components/cgx/ManagementOrder/BackPage/BcodeWeb.vue'),
+        component: BcodeWeb,
+        children: [
+            {
+                path: '/info-farm-p',
+                component: () => import(/* webpackChunkName:"BcodeWeb" */'../components/cgx/ManagementOrder/BackPage/child/InfoFarm.vue')
+            },
+            {
+                path: '/info-cold-p',
+                component: () => import(/* webpackChunkName:"BcodeWeb" */'../components/cgx/ManagementOrder/BackPage/child/InfoCold.vue')
+            },
+            {
+                path: '/info-logitis-p',
+                component: () => import(/* webpackChunkName:"BcodeWeb" */'../components/cgx/ManagementOrder/BackPage/child/InfoLogitis.vue')
+            },
+            {
+                path: '/info-plant-p',
+                component: () => import(/* webpackChunkName:"BcodeWeb" */'../components/cgx/ManagementOrder/BackPage/child/InfoPlant.vue')
+            },
+        ]
     }
 ]

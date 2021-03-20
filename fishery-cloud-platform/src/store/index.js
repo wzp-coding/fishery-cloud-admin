@@ -250,7 +250,12 @@ const state = {
     "10021": "备忘录",
     "10022": "基地数据"
   },
-  shouldFlushNavbar: false
+
+  // 是否需要刷新菜单
+  shouldFlushNavbar: false,
+
+  // 存储二维码溯源信息
+  typeToIdMap: {}
 }
 
 const mutations = {
@@ -273,6 +278,11 @@ const mutations = {
   // 设置状态（true或false）来决定是否刷新菜单
   setShouldFlushNavbar(state, data) {
     state.shouldFlushNavbar = data;
+  },
+
+  // 设置typeToIpMap
+  setTypeToIdMap(state, data) {
+    state.typeToIdMap = data;
   }
 }
 const getters = {
@@ -286,6 +296,7 @@ const actions = {
     commit('setPermissionList', [])
     commit('setBaseInfo', {})
     commit('setShouldFlushNavbar', false)
+    commit('setTypeToIdMap', {})
   },
 
   // 根据roleId查询登录用户的权限，并存到vuex中
@@ -298,6 +309,17 @@ const actions = {
     } else {
       console.error(res.message);
     }
+  },
+
+  // 根据id和溯源类型type查询相关信息（1：养殖信息，2：加工厂信息，3：冷库信息）
+  async getOrginInfoByIdAndType({ state }, payload) {
+    const {type,vm } = payload;
+    const { data: res } = await vm.$traceability.get(`/info/${state.typeToIdMap[type][0]}/${type}`);
+    if (res.statusCode != 20000) {
+      console.error(res.message);
+      vm.elMessage.error(res.message);
+    }
+    return res.data;
   },
 }
 export default new Vuex.Store({
