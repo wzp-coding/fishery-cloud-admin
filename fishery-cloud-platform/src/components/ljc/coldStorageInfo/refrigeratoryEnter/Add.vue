@@ -110,6 +110,7 @@ export default {
     this.getStaff();
   },
   methods: {
+    /* 添加数量入库 */
     addInfo() {
       this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
@@ -126,12 +127,11 @@ export default {
       });
     },
 
-    /* 监听窗口关闭事件开始 */
+    /* 监听窗口关闭事件 */
     dialogClosed() {
       this.form = {};
       this.$refs.formRef.resetFields();
     },
-    /* 监听窗口关闭事件关闭 */
 
     /* 获取所有加工厂 */
     async getRefrigeratory() {
@@ -143,7 +143,6 @@ export default {
     async getStaff() {
       const { data: res } = await this.publicFn.getStaff();
       this.Staffs = res.data;
-      console.log(this.Staffs);
     },
   },
 };
