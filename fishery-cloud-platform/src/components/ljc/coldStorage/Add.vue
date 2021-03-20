@@ -17,7 +17,7 @@
         :model="addFrom"
         ref="addFromRef"
         :rules="formRules"
-        label-width="100px"
+        label-width="120px"
         label-position="left"
         :hide-required-asterisk="true"
       >

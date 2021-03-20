@@ -2,7 +2,7 @@ module.exports = class {
     constructor(vue) {
         this.vue = vue;
     }
-    /* 标签开始 */
+    /* 标签 */
     labels = {
         productId: "产品编号",
         productName: "产品名称",
@@ -10,16 +10,19 @@ module.exports = class {
         suppliersSource: "产品供应商所属基地名称",
         supplierName: "产品供应商名称"
     }
-    /* 标签结束 */
 
-    /* 表单验证规则对象开始 */
+    /* 表单验证规则对象 */
     formRules = {
-        refrigeratoryOutCapacity: [
-            { required: true, message: `请输入${this.labels.refrigeratoryOutCapacity}`, trigger: "blur" },
+        refrigeratoryId: [
+            { required: true, message: `请输入${this.labels.refrigeratoryId}`, trigger: "blur" },
+        ],
+        warehousingPerson: [
+            { required: true, message: `请输入${this.labels.warehousingPerson}`, trigger: "blur" },
+        ],
+        productWeight: [
+            { required: true, message: `请输入${this.labels.productWeight}`, trigger: "blur" },
         ],
     }
-    /* 表单验证规则对象结束 */
-
 
     /* 获取数据开始 */
     getAllInfo(page, size) {
