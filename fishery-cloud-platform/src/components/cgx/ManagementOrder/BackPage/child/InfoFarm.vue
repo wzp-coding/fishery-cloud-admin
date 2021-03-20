@@ -151,7 +151,7 @@ export default {
   },
   methods: {
     ...mapActions(["getOrginInfoByIdAndType"]),
-    ...mapMutations(["setTypeToIdMap"]),
+    ...mapMutations(["setTypeToIdMap"]), 
     async getTaceabilityTypeAndProductId(traceId) {
       const { data: res } = await this.$traceability.get(`/product/${traceId}`);
       // console.log("this.type: ", res);
