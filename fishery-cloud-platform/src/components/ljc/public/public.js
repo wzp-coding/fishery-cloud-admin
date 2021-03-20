@@ -24,15 +24,6 @@ module.exports = class {
         })
     }
 
-    // 获取所有客户信息
-    getCustomer(id) {
-        return new Promise((resolve) => {
-            this.vue.$Customer.get(`/${id}`)
-                .then((res) => {
-                    resolve(res);
-                })
-        })
-    }
 
     // 获取所有原料
     getMaterial(id) {
@@ -58,21 +49,45 @@ module.exports = class {
     getMaterialById(id) {
         return new Promise((resolve, reject) => {
             this.vue.$plant.get(`/processing/material/info/${id}`).then((res) => {
-                resolve(res)
+                resolve(res);
             })
         })
     }
 
-    // 获取所有加工厂
+    // 根据基地ID查询冷库
     getRefrigeratory() {
         return new Promise((resolve, reject) => {
             this.vue.$storage.get(`/refrigeratory/RefrigeratoryInfo/get/RefrigeratoryByBaseId/${this.vue.$store.state.userInfo.baseId}`).then((res) => {
-                resolve(res)
+                resolve(res);
             })
         })
     }
 
+    // 获取所有的冷库的收货地址信息
+    getRefrigeratoryInfo() {
+        return new Promise((resolve, reject) => {
+            this.vue.$storage.get(`/refrigeratory/RefrigeratoryInfo/get/AllRefrigeratory`).then((res) => {
+                resolve(res);
+            })
+        })
+    }
 
+    // 获取所有加工厂信息
+    getFactoryAll() {
+        return new Promise((resolve) => {
+            this.vue.$plant.get(`/processingFactory/factory/factoryMessageOfAll`).then((res) => {
+                resolve(res);
+            })
+        })
+    }
 
-
+    // 获取所有客户(个人/企业)信息
+    getCustomer(id) {
+        return new Promise((resolve) => {
+            this.vue.$Customer.get(`/${id}`)
+                .then((res) => {
+                    resolve(res);
+                })
+        })
+    }
 }

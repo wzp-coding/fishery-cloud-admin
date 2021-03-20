@@ -80,9 +80,6 @@ export default {
       pageSize: 4,
       // 总数据
       allList: [],
-      // 基地ID
-      baseId: "1350657222372835330",
-
       // 管理员信息
       createPersonList: [],
 
@@ -94,6 +91,11 @@ export default {
     // 标签
     labels() {
       return this.model.labels;
+    },
+
+    // 基地ID
+    baseId() {
+      return this.$store.state.userInfo.baseId;
     },
   },
   created() {
@@ -127,6 +129,7 @@ export default {
     async getStaff() {
       const { data: res } = await this.public.getStaff();
       this.createPersonList = res.data;
+      console.log(this.createPersonList);
     },
 
     // 获取种苗信息

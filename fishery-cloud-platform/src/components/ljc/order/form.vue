@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- 修改按钮开始 -->
     <el-button
       type="info"
       icon="el-icon-s-order"
@@ -8,16 +7,13 @@
       @click="dialogVisible = true"
       v-auth="'traceability_refrigeratory'"
     ></el-button>
-    <!-- 修改按钮结束 -->
 
-    <!-- 修改表单区域开始 -->
     <el-dialog
       :title="formTitle"
       :visible.sync="dialogVisible"
       @close="dialogClosed"
       width="40%"
     >
-      <!-- 表单信息(按需改) -->
       <el-form
         :model="form"
         ref="formRef"
@@ -26,6 +22,18 @@
         label-position="left"
         :hide-required-asterisk="true"
       >
+        <el-form-item>
+          <el-select v-model="form.target" value-key="customerName">
+            <el-option
+              v-for="item in customerList"
+              :key="item.id"
+              :label="item.customerName"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item :label="labels.target">
           <el-select v-model="form.target" value-key="customerName">
             <el-option
@@ -107,11 +115,9 @@
         <el-button @click="createOrder()">创建</el-button>
       </div>
     </el-dialog>
-    <!-- 添加表单区域结束 -->
   </div>
 </template>
 <script>
-/* 路径（按需改） */
 import ljc from "./order";
 import Public from "../public/public";
 export default {
@@ -135,13 +141,17 @@ export default {
       // 表单
       form: {},
 
-      baseId: "1350657222372835330",
-
+      // 客户列表
       customerList: [],
+
+      // 冷库列表
+      Storages: [],
+
+      // 加工厂列表
+      Factorys: [],
     };
   },
   computed: {
-    // 验证规则
     formRules() {
       return this.model.formRules;
     },
@@ -149,9 +159,15 @@ export default {
     labels() {
       return this.model.labels;
     },
+
+    baseId() {
+      return this.$store.state.userInfo.baseId;
+    },
   },
   created() {
     this.getCustomer();
+    this.getStorage();
+    this.getFactory();
   },
   methods: {
     /* 监听窗口关闭事件开始 */
@@ -199,6 +215,21 @@ export default {
     async getCustomer() {
       const { data: res } = await this.public.getCustomer(this.baseId);
       this.customerList = res.data;
+      console.log("客户信息");
+    },
+
+    /* 获取所有冷库 */
+    async getStorage() {
+      const { data: res } = await this.public.getRefrigeratoryInfo();
+      this.Storages = res.data;
+      console.log("冷库", res.data);
+    },
+
+    /* 获取所有加工厂 */
+    async getFactory() {
+      const { data: res } = await this.public.getFactoryAll();
+      this.Factorys = res.data;
+      console.log("加工厂", res.data);
     },
   },
 };
