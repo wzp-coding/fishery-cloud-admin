@@ -175,7 +175,6 @@ export default {
         this.processingFactoryId
       );
       this.Materials = res.data;
-      console.log(res);
     },
 
     /* 获取操作人员 */

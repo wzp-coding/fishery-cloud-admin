@@ -35,6 +35,22 @@
         </el-form-item>
 
         <el-form-item :label="labels.inspectionReport">
+          <el-button
+            type="primary"
+            @click="isOpenUpload = true"
+            style="margin-left: 8px"
+            >上传{{ labels.inspectionReport }}</el-button
+          >
+          <UploadFile
+            :is-open="isOpenUpload"
+            :close-modal="() => (this.isOpenUpload = false)"
+            :type="'image'"
+            :init-files="form.inspectionReport"
+            :upload-success="inspectionReportPic"
+          ></UploadFile>
+        </el-form-item>
+
+        <!-- <el-form-item :label="labels.inspectionReport">
           <TheUploadPic
             :picLimit="picLimit"
             :uploadUrl="uploadUrl"
@@ -46,7 +62,7 @@
             tag="inspectionReport"
             @getPic="getPic"
           />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item :label="labels.license">
           <TheUploadPic
             :picLimit="picLimit"
@@ -129,8 +145,10 @@
 /* 路径（按需改） */
 import ljc from "./qualification";
 import TheUploadPic from "../public/uploadPic";
+import UploadFile from "../../public_components/UploadFile";
 export default {
   components: {
+    UploadFile,
     TheUploadPic,
   },
   props: {
@@ -139,11 +157,14 @@ export default {
   data() {
     return {
       model: new ljc(this),
+
       // 表单名称(改)
       formTitle: "产品资质信息",
 
       // 控制表单的显示与隐藏
       dialogVisible: false,
+
+      isOpenUpload: false,
 
       form: {},
 
@@ -168,6 +189,11 @@ export default {
   },
   created() {},
   methods: {
+    // 所有文件上传完成触发
+    inspectionReportPic(fileStr) {
+      this.form.inspectionReport = fileStr;
+    },
+
     /* 根据Id查询信息 */
     async getInfoById() {
       const { data: res } = await this.model.getInfoById(this.id);
@@ -186,7 +212,6 @@ export default {
         this.form = res.data;
       }
       this.dialogVisible = true;
-      console.log(this.form);
     },
 
     /* 添加 */
