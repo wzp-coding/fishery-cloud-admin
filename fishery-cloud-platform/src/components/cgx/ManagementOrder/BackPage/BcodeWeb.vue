@@ -15,9 +15,7 @@
               <i class="el-icon-mobile"></i>
               <span>冷库信息</span></el-menu-item
             >
-            <el-menu-item
-              :index="`info-logitis-p?id=${logisticsId}`"
-              
+            <el-menu-item :index="`info-logitis-p?id=${logisticsId}`"
               ><i class="el-icon-truck"></i><span>物流信息</span></el-menu-item
             >
             <el-menu-item index="info-plant-p" v-if="type['3']"
@@ -39,7 +37,7 @@ export default {
       active: "info-farm-p",
       traceId: "",
       type: {}, //能展示的type对象，1(养殖),2(加工厂),3(冷库)
-      logisticsId:"1356236375450034177"
+      logisticsId: "1356236375450034177",
     };
   },
   methods: {
@@ -57,9 +55,12 @@ export default {
   },
   async created() {
     document.body.className = "custom-dark";
-    const { id, type, logisticsId } = this.$route.query;
+    const { id, type } = this.$route.query;
     this.traceId = id;
-    this.logisticsId = logisticsId
+    this.logisticsId = logisticsId;
+    console.log("id: ", id);
+    console.log("type: ", type);
+    await this.getTaceabilityTypeAndProductId(this.traceId);
     if (type == "logitis") {
       this.active = "info-logitis-p";
       this.$router.push({
@@ -67,12 +68,8 @@ export default {
         query: { id: logisticsId },
       });
     } else {
-      await this.getTaceabilityTypeAndProductId(this.traceId);
       this.$router.push(this.active);
     }
-    console.log("id: ", id);
-    console.log("type: ", type);
-    console.log("logisticsId: ", logisticsId);
   },
 };
 </script>

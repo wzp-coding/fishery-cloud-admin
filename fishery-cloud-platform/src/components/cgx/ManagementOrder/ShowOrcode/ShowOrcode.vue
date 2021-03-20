@@ -27,11 +27,7 @@ export default {
     isShowCode: {
       type: Boolean,
     },
-    Id: {
-      type: String,
-      required: true,
-    },
-    logisticsId: {
+    orderId: {
       type: String,
       required: true,
     },
@@ -48,7 +44,7 @@ export default {
         width: 250,
         height: 250,
       });
-      let codeUrl = `http://119.23.218.131:9301/b-code-web?id=${this.Id}&logisticsId=${this.logisticsId}&type=`;
+      let codeUrl = `http://119.23.218.131:9301/b-code-web?id=${this.orderId}&type=`;
       if (this.title == "物流二维码") {
         codeUrl += `logitis`;
       } else {
@@ -62,8 +58,7 @@ export default {
     },
     // 测试：手动跳转到二维码对应的页面
     testToBcodeWeb() {
-      console.log("this.Id: ", this.Id);
-      console.log("this.logisticsId: ", this.logisticsId);
+      console.log("this.orderId: ", this.orderId);
       let type;
       if (this.title == "物流二维码") {
         type = `logitis`;
@@ -74,7 +69,6 @@ export default {
         path: "/b-code-web",
         query: {
           id: this.Id,
-          logisticsId:this.logisticsId,
           type,
         },
       });

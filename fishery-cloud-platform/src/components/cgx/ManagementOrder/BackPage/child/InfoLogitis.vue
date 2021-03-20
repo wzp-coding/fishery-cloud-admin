@@ -1,6 +1,16 @@
 <template>
   <div class="info-logitis">
-      <Map :path="formatPath" mapName="logistics"></Map>
+    <el-timeline>
+      <el-timeline-item
+        v-for="(route, index) in routes"
+        :key="index"
+        :timestamp="route.arrivalTime"
+      >
+        {{ route.content }}
+      </el-timeline-item>
+    </el-timeline>
+
+    <Map :path="formatPath" mapName="logistics"></Map>
   </div>
 </template>
 <script>
@@ -17,17 +27,34 @@ export default {
         let {
           logisticsStationLongitude,
           logisticsStationLatitude,
-          logisticsStationAddress
+          logisticsStationAddress,
         } = item.logisticsPathStation;
         cPath.push({
           lng: logisticsStationLongitude,
           lat: logisticsStationLatitude,
-          content:logisticsStationAddress
+          content: logisticsStationAddress,
         });
       });
-      console.log('cPath: ', cPath);
+      console.log("cPath: ", cPath);
       return cPath;
     },
+    routes(){
+      let cRoutes = [{
+        content:"已发货",
+        arrivalTime:""
+      }];
+      this.path.forEach(item=>{
+        cRoutes.push({
+          content:item.logisticsPathStation.logisticsStationAddress,
+          arrivalTime:item.logisticsPathArrivalTime
+        })
+      })
+      cRoutes.push({
+        content:"已送达目的地",
+        arrivalTime:""
+      })
+      return cRoutes;
+    }
   },
   methods: {
     async getLogisticsPath(id) {
@@ -42,9 +69,13 @@ export default {
   created() {
     const { id } = this.$route.query;
     console.log("id: ", id);
-    this.getLogisticsPath(id);
+    this.getLogisticsPath("1356236375450034177");
   },
 };
 </script>
 <style lang="less" scoped>
+.info-logitis{
+  padding: 10px;
+  padding-top: 20px;
+}
 </style>
