@@ -1,12 +1,5 @@
 <template>
   <div>
-    <!-- 添加区域开始 -->
-    <Add
-      :processingFactoryId="processingFactoryId"
-      @getAllInfo="getAllInfo"
-    />
-    <!-- 添加区域结束 -->
-
     <!-- 表格开始 -->
     <Table
       :allList="allList"
@@ -27,27 +20,22 @@
   </div>
 </template>
 <script>
-import ljc from "../product/product.js";
-import Add from "../product/Add";
-import Table from "../product/Table";
+import ljc from "./Job";
+import Table from "./Table";
 import Pagination from "../public/pagination";
 export default {
   components: {
-    Add,
     Table,
     Pagination,
   },
-  props: {
-    createPersonList: {},
-    commoditIds: {},
-  },
+  props: {},
   data() {
     return {
       // js导入vue
       model: new ljc(this),
 
       // 主题
-      myTitle: "加工产品",
+      myTitle: "加工工业",
 
       // 数据总条数
       total: 0,
