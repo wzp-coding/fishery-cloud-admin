@@ -126,7 +126,7 @@
             <el-button
               type="primary"
               size="mini"
-              @click="logisticsOrcode(scope.row.id)"
+              @click="logisticsOrcode(scope.row)"
               >物流</el-button
             >
             <!-- 溯源二维码按钮 -->
@@ -311,15 +311,14 @@
       </el-tab-pane>
     </el-tabs>
 
-    <!-- 展示虾苗信息 或者 物流信息-->
-     <!-- 暂时取消虾苗信息查询部分 -->
-    <Show-info
-      :title="title"
-      :is-logistics="isLogistics"
-      :dialog-visible="dialogVisible"
-      :id="showInfoId"
-      @notifyParent="ChangeDialogVisible"
-    ></Show-info> 
+    <!-- 展示物流信息-->
+    <ShowMap
+    :title="title"
+    :id="showInfoId"
+    :dialogVisible="Mapjudge"
+    @notifyParent="closeMap"
+    >
+    </ShowMap>
 
 <!-- 展示物流 或者 溯源二维码 -->
     <Show-orinfo
@@ -355,26 +354,24 @@
 </template>
 
 <script>
-import QRCode from "qrcodejs2";
-import ShowInfo from   "../../components/cgx/ManagementOrder/ShowInfo/ShowInfo1";
-import ShowOrinfo from "../../components/cgx/ManagementOrder/ShowOrcode/ShowOrcode2";
+import ShowMap from  "../../components/cgx/public/ShwoMap"
+import ShowOrinfo from "../../components/cgx/ManagementOrder/ShowOrcode/ShowOrcode";
 import ShowChange from "../../components/cgx/ManagementOrder/ModifyInformation/ShowChange";
 import CreateOrder from '../../components/cgx/ManagementOrder/CreateOrder/createOrder';
 import Delete from '../../components/cgx/public/delete';
-import Map from '../../components/public_components/MyLocationPicker';
 import CreateCustomer from '../../components/cgx/ManagementOrder/CreateCustomer/createCustomer'
 export default {
   components: {
-    ShowInfo,
     ShowOrinfo,
     ShowChange,
     CreateOrder,
     Delete,
-    Map,
-    CreateCustomer
+    CreateCustomer,
+    ShowMap,
   },
   data() {
     return {
+      Mapjudge:false,
       //添加/修改顾客开关
       createCustomers:false,
       customertitle:"",
@@ -545,13 +542,16 @@ export default {
     this.createdialogVisible=false;
     this.setNode();
   },
-
+    //关闭地图组件
+    closeMap(){
+      this.Mapjudge = false
+    },
     // 展示物流信息时要传递给子组件的信息
     toShowLogisticsInfo(id) {
-      this.title = "物流信息";
-      this.isLogistics = true;
+      console.log("id",id)
+      this.title = "订单出发点";
       this.showInfoId = id;
-      this.dialogVisible = true;
+      this.Mapjudge = true;
     },
     // 展示信息子组件关闭时触发改变dialogVisible
     ChangeDialogVisible() {
@@ -577,12 +577,17 @@ export default {
       }
     },
     // 物流二维码弹窗
-    logisticsOrcode(id) {
-      console.log('id: ', id);
-      // this.orderId = "1304076777332805632";
-      this.orderId = id;
-      this.orTitle="物流二维码"
+    logisticsOrcode(row) {
+      console.log("ttt",row)
+      if(row.logisticsId==null){
+        this.elMessage.error("该订单未发货，无法查询路径！");
+      }
+     else{
+      this.QrcodeId = row.id;
+      this.QrTitle="物流二维码"
       this.isShowCode = true;
+      this.jQcode = !this.jQcode
+     }
       // this.$nextTick(() => {
       //   this.createlcode();
       // });
@@ -598,20 +603,25 @@ export default {
       //   this.createocode();
       // });
     },
-    // // 前往判断是否收货页面
-    toLcodeWeb(id) {
-      this.$router.push({
-        path: "/IsArriveLcode",
-        query: { id: id },
-      });
-    },
-    // 前往判断是否收货页面
-    toOcodeWeb(id) {
-      this.$router.push({
-        path: "/IsArriveOcode",
-        query: { id: id },
-      });
-    },
+
+    // // 生成物流二维码
+    // createlcode() {
+    //   new QRCode("orcode", {
+    //     width: 250,
+    //     height: 250,
+    //   }).makeCode(
+    //     "http://106.75.132.85:9002/#/IsArriveLcode?id=" + this.adultShrimpId
+    //   );
+    // },
+    // // 生成溯源二维码
+    // createocode() {
+    //   new QRCode("orcode", {
+    //     width: 250,
+    //     height: 250,
+    //   }).makeCode(
+    //     "http://106.75.132.85:9002/#/IsArriveOcode?id=" + this.adultShrimpId
+    //   );
+    // },
     // 关闭弹框,清除已经生成的二维码
     closeCode() {
       this.isShowCode = false;
