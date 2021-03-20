@@ -5,9 +5,6 @@
       :allList="allList"
       :labels="labels"
       :title="myTitle"
-      :createPersonList="createPersonList"
-      :commoditIds="commoditIds"
-      :processingFactoryId="processingFactoryId"
       @getAllInfo="getAllInfo()"
     />
     <!-- 表格结束 -->
@@ -32,8 +29,6 @@ export default {
     Pagination,
   },
   props: {
-    createPersonList: {},
-    commoditIds: {},
   },
   data() {
     return {
