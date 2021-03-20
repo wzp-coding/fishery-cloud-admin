@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Add :processingFactoryId="processingFactoryId" />
     <!-- 表格开始 -->
     <Table
       :allList="allList"
@@ -21,10 +22,12 @@
 </template>
 <script>
 import ljc from "./Job";
+import Add from "./Add";
 import Table from "./Table";
 import Pagination from "../public/pagination";
 export default {
   components: {
+    Add,
     Table,
     Pagination,
   },

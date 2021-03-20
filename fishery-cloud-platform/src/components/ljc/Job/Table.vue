@@ -17,7 +17,7 @@
         align="center"
       ></el-table-column>
 
-      <el-table-column label="操作" align="center" width="120">
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <Edit :scope="scope" />
           <Delete
