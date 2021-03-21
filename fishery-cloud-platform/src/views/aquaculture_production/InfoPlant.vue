@@ -99,13 +99,12 @@ export default {
     this.getProduct();
   },
   methods: {
-    /* 返回开始 */
+    /* 返回 */
     goBack() {
       this.$router.push({
         path: "/process-plant",
       });
     },
-    /* 返回结束 */
 
     // 获取员工
     async getStaff() {

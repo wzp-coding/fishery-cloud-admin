@@ -1,9 +1,12 @@
 <template>
   <div>
     <!-- 添加区域开始 -->
-    <el-button type="primary" @click="addDialogVisible = true" v-auth="'traceability_process'">{{
-      formTitle
-    }}</el-button>
+    <el-button
+      type="primary"
+      @click="addDialogVisible = true"
+      v-auth="'traceability_process'"
+      >{{ formTitle }}</el-button
+    >
     <!-- 添加区域结束 -->
 
     <!-- 添加表单区域开始 -->
@@ -66,13 +69,19 @@
         <el-row>
           <el-col :span="24">
             <el-form-item :label="labels.inputPicture">
-              <TheUploadPic
-                :picLimit="picLimitInput"
-                :uploadUrl="uploadUrl"
-                tag="input"
-                :imageUrlArray="[]"
-                @getPic="getPic"
-              />
+              <el-button
+                type="primary"
+                @click="inputPictureVis = true"
+                style="margin-left: 8px"
+                >上传{{ labels.inputPicture }}</el-button
+              >
+              <UploadFile
+                :is-open="inputPictureVis"
+                :close-modal="() => (this.inputPictureVis = false)"
+                :type="'image'"
+                :init-files="addFrom.inputPicture"
+                :upload-success="inputPicturePic"
+              ></UploadFile>
             </el-form-item>
           </el-col>
         </el-row>
@@ -80,13 +89,19 @@
         <el-row>
           <el-col :span="24">
             <el-form-item :label="labels.supplierLicense">
-              <TheUploadPic
-                :picLimit="picLimitLicense"
-                :uploadUrl="uploadUrl"
-                :imageUrlArray="[]"
-                @getPic="getPic"
-                tag="license"
-              />
+              <el-button
+                type="primary"
+                @click="supplierLicenseVis = true"
+                style="margin-left: 8px"
+                >上传{{ labels.supplierLicense }}</el-button
+              >
+              <UploadFile
+                :is-open="supplierLicenseVis"
+                :close-modal="() => (this.supplierLicenseVis = false)"
+                :type="'image'"
+                :init-files="addFrom.supplierLicense"
+                :upload-success="supplierLicensePic"
+              ></UploadFile>
             </el-form-item>
           </el-col>
         </el-row>
@@ -102,10 +117,10 @@
 <script>
 /* 导入路径(改) */
 import ljc from "../input/input";
-import TheUploadPic from "../public/uploadPic";
+import UploadFile from "../../public_components/UploadFile";
 export default {
   components: {
-    TheUploadPic,
+    UploadFile,
   },
   props: {
     processingFactoryId: {},
@@ -122,17 +137,14 @@ export default {
       // 控制添加表单的显示与隐藏
       addDialogVisible: false,
 
+      inputPictureVis: false,
+      supplierLicenseVis: false,
+
       // 添加信息
       addFrom: {},
 
       // 有效期
       inputDate: [],
-
-      // 限制产品照片个数
-      picLimitInput: 1,
-
-      // 限制许可证数目
-      picLimitLicense: 1,
     };
   },
   computed: {
@@ -148,6 +160,14 @@ export default {
   },
   created() {},
   methods: {
+    // 所有文件上传完成触发
+    inputPicturePic(fileStr) {
+      this.form.inputPicture = fileStr;
+    },
+    supplierLicensePic(fileStr) {
+      this.form.supplierLicense = fileStr;
+    },
+
     /* 添加开始 */
     addInfo() {
       this.$refs.addFromRef.validate(async (val) => {
@@ -173,21 +193,6 @@ export default {
       this.$refs.addFromRef.resetFields();
     },
     /* 监听窗口关闭事件关闭 */
-
-    /* 接收上传组件的照片信息开始 */
-    getPic(tag, res) {
-      // 字符串转对象
-      let picUrl = eval("(" + res + ")").url;
-      switch (tag) {
-        case "input":
-          this.addFrom.inputPicture = picUrl;
-          break;
-        case "license":
-          this.addFrom.supplierLicense = picUrl;
-          break;
-      }
-    },
-    /* 接收上传组件的照片信息结束 */
   },
 };
 </script>
