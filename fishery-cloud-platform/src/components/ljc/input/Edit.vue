@@ -70,26 +70,39 @@
         <el-row>
           <el-col :span="24">
             <el-form-item :label="labels.inputPicture">
-              <TheUploadPic
-                :picLimit="picLimitInput"
-                :uploadUrl="uploadUrl"
-                :imageUrlArray="imageUrlInput"
-                tag="input"
-                @getPic="getPic"
-              />
+              <el-button
+                type="primary"
+                @click="inputPictureVis = true"
+                style="margin-left: 8px"
+                >上传{{ labels.inputPicture }}</el-button
+              >
+              <UploadFile
+                :is-open="inputPictureVis"
+                :close-modal="() => (this.inputPictureVis = false)"
+                :type="'image'"
+                :init-files="editForm.inputPicture"
+                :upload-success="inputPicturePic"
+              ></UploadFile>
             </el-form-item>
           </el-col>
         </el-row>
+
         <el-row>
           <el-col :span="24">
             <el-form-item :label="labels.supplierLicense">
-              <TheUploadPic
-                :picLimit="picLimitLicense"
-                :uploadUrl="uploadUrl"
-                @getPic="getPic"
-                :imageUrlArray="imageUrlLicense"
-                tag="license"
-              />
+              <el-button
+                type="primary"
+                @click="supplierLicenseVis = true"
+                style="margin-left: 8px"
+                >上传{{ labels.supplierLicense }}</el-button
+              >
+              <UploadFile
+                :is-open="supplierLicenseVis"
+                :close-modal="() => (this.supplierLicenseVis = false)"
+                :type="'image'"
+                :init-files="editForm.supplierLicense"
+                :upload-success="supplierLicensePic"
+              ></UploadFile>
             </el-form-item>
           </el-col>
         </el-row>
@@ -126,23 +139,14 @@ export default {
       // 控制表单的显示与隐藏
       editDialogVisible: false,
 
+      inputPictureVis: false,
+      supplierLicenseVis: false,
+
       // 修改信息
       editForm: {},
 
       // 有效期
       inputDate: [],
-
-      // 限制产品照片个数
-      picLimitInput: 1,
-
-      // 限制许可证数目
-      picLimitLicense: 1,
-
-      // 已有投入品图片展示
-      imageUrlInput: [],
-
-      // 已有许可证图片展示
-      imageUrlLicense: [],
     };
   },
   computed: {
@@ -150,22 +154,23 @@ export default {
     formRules() {
       return this.model.formRules;
     },
-
-    // 上传路径
-    uploadUrl() {
-      return this.model.uploadUrl;
-    },
   },
   created() {},
   methods: {
+    // 所有文件上传完成触发
+    inputPicturePic(fileStr) {
+      this.editForm.inputPicture = fileStr;
+    },
+    supplierLicensePic(fileStr) {
+      this.editForm.supplierLicense = fileStr;
+    },
+
     /* 根据Id查询信息开始 */
     async getInfoById() {
       const { data: res } = await this.model.getInfoById(this.id);
       this.editForm = res.data;
       this.inputDate.push(this.editForm.inputProduceDate);
       this.inputDate.push(this.editForm.inputExpireDate);
-      this.imageUrlInput = [{ url: this.editForm.inputPicture }];
-      this.imageUrlLicense = [{ url: this.editForm.supplierLicense }];
       this.editDialogVisible = true;
     },
     /* 根据Id查询信息结束 */
@@ -178,12 +183,15 @@ export default {
         this.editForm.processingFactoryId = this.processingFactoryId;
         this.editForm.inputProduceDate = this.inputDate[0];
         this.editForm.inputExpireDate = this.inputDate[1];
+        console.log(this.editForm);
         /* 传入表单逻辑处理结束 */
         const { data: res } = await this.model.editInfo(this.editForm);
         if (res.statusCode == 20000) {
           this.$emit("getAllInfo");
           this.editDialogVisible = false;
           this.elMessage.success(res.message);
+        } else {
+          this.elMessage.error(res.message);
         }
       });
     },
@@ -196,22 +204,6 @@ export default {
       this.$refs.editFormRef.resetFields();
     },
     /* 监听窗口关闭事件关闭 */
-
-    /* 接收上传组件的照片信息开始 */
-    getPic(tag, res) {
-      // 字符串转对象
-      let picUrl = eval("(" + res + ")").url;
-      console.log(picUrl);
-      switch (tag) {
-        case "input":
-          this.editForm.inputPicture = picUrl;
-          break;
-        case "license":
-          this.editForm.supplierLicense = picUrl;
-          break;
-      }
-    },
-    /* 接收上传组件的照片信息结束 */
   },
 };
 </script>

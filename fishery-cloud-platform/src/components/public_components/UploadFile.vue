@@ -125,7 +125,7 @@ export default {
         endpoint: "http://119.23.218.131:9800/group1/big/upload/",
       },
       fileStr: "",
-      hideUploadButton:false
+      hideUploadButton: false,
     };
   },
   components: {
@@ -138,7 +138,7 @@ export default {
     // 初始化
     init() {
       let { uppy, uppyOptions, tusOptions } = this.$data;
-      let retryNum = 0;// 重传次数
+      let retryNum = 0; // 重传次数
       uppy = new Uppy(uppyOptions);
       uppy.use(Tus, tusOptions);
       uppy.on("file-added", (file) => {
@@ -157,9 +157,9 @@ export default {
       uppy.on("upload-error", (file, error, res) => {
         this.elMessage.error(error);
         setTimeout(() => {
-          if(retryNum >3){ 
-            uppy.off('upload-error',()=>{
-              this.elMessage.error('尝试次数过多，均失败');
+          if (retryNum > 3) {
+            uppy.off("upload-error", () => {
+              this.elMessage.error("尝试次数过多，均失败");
             });
           }
           this.elMessage.info("正在尝试重新上传");
@@ -180,14 +180,12 @@ export default {
       uppy.on("dashboard:modal-open", () => {
         // 初始展示的文件
         if (this.initFiles) {
+          
           // 如果需要初始文件展示，先将容器清空
           const files = uppy.getFiles();
-          files.forEach(file=>uppy.removeFile(file.id));
+          files.forEach((file) => uppy.removeFile(file.id));
           // 接下来添加展示文件
           const cFiles = this.initFiles.split(",");
-          if(cFiles.length == this.max){
-            this.hideUploadButton = true
-          }
           cFiles.forEach((file, index) => {
             fetch(file)
               .then((res) => res.blob())
@@ -199,6 +197,9 @@ export default {
                 });
               });
           });
+          if (cFiles.length == this.max) {
+            this.hideUploadButton = true;
+          }
         }
       });
       this.uppy = uppy;
@@ -214,7 +215,7 @@ export default {
           props: {
             uppy: this.uppy,
             open: this.isOpen,
-            hideUploadButton:this.hideUploadButton
+            hideUploadButton: this.hideUploadButton,
           },
         }}
       />

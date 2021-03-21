@@ -162,10 +162,10 @@ export default {
   methods: {
     // 所有文件上传完成触发
     inputPicturePic(fileStr) {
-      this.form.inputPicture = fileStr;
+      this.addFrom.inputPicture = fileStr;
     },
     supplierLicensePic(fileStr) {
-      this.form.supplierLicense = fileStr;
+      this.addFrom.supplierLicense = fileStr;
     },
 
     /* 添加开始 */
@@ -176,13 +176,16 @@ export default {
         this.addFrom.processingFactoryId = this.processingFactoryId;
         this.addFrom.inputProduceDate = this.inputDate[0];
         this.addFrom.inputExpireDate = this.inputDate[1];
+        console.log(this.addFrom);
         /* 传入表单逻辑处理结束 */
         const { data: res } = await this.model.addInfo(this.addFrom);
         if (res.statusCode == 20000) {
+          this.$emit("getAllInfo");
+          this.addDialogVisible = false;
           this.elMessage.success(res.message);
+        } else {
+          this.elMessage.error(res.message);
         }
-        this.$emit("getAllInfo");
-        this.addDialogVisible = false;
       });
     },
     /* 添加结束 */
