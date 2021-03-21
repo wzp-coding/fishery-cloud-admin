@@ -5,7 +5,7 @@
       type="success"
       icon="el-icon-document"
       size="mini"
-      @click="getInfoById()"
+      @click="getInfoById"
     ></el-button>
     <!-- 修改按钮结束 -->
 
@@ -25,7 +25,7 @@
         label-position="left"
         :hide-required-asterisk="true"
       >
-        <el-form-item :label="labels.productInfo" prop="inputName">
+        <el-form-item :label="labels.productInfo" prop="productInfo">
           <el-input
             type="textarea"
             placeholder="请输入内容"
@@ -37,103 +37,92 @@
         <el-form-item :label="labels.inspectionReport">
           <el-button
             type="primary"
-            @click="isOpenUpload = true"
+            @click="inspectionReportVis = true"
             style="margin-left: 8px"
             >上传{{ labels.inspectionReport }}</el-button
           >
           <UploadFile
-            :is-open="isOpenUpload"
-            :close-modal="() => (this.isOpenUpload = false)"
+            :is-open="inspectionReportVis"
+            :close-modal="() => (this.inspectionReportVis = false)"
             :type="'image'"
             :init-files="form.inspectionReport"
             :upload-success="inspectionReportPic"
           ></UploadFile>
         </el-form-item>
 
-        <!-- <el-form-item :label="labels.inspectionReport">
-          <TheUploadPic
-            :picLimit="picLimit"
-            :uploadUrl="uploadUrl"
-            :imageUrlArray="
-              this.form.inspectionReport == ''
-                ? []
-                : [{ url: this.form.inspectionReport }]
-            "
-            tag="inspectionReport"
-            @getPic="getPic"
-          />
-        </el-form-item> -->
         <el-form-item :label="labels.license">
-          <TheUploadPic
-            :picLimit="picLimit"
-            :uploadUrl="uploadUrl"
-            :imageUrlArray="
-              this.form.inspectionReport == ''
-                ? []
-                : [{ url: this.form.license }]
-            "
-            tag="license"
-            @getPic="getPic"
-          />
+          <el-button
+            type="primary"
+            @click="licenseVis = true"
+            style="margin-left: 8px"
+            >上传{{ labels.license }}</el-button
+          >
+          <UploadFile
+            :is-open="licenseVis"
+            :close-modal="() => (this.licenseVis = false)"
+            :type="'image'"
+            :init-files="form.license"
+            :upload-success="licensePic"
+          ></UploadFile>
         </el-form-item>
+
         <el-form-item :label="labels.qualityCertificate">
-          <TheUploadPic
-            :picLimit="picLimit"
-            :uploadUrl="uploadUrl"
-            :imageUrlArray="
-              this.form.inspectionReport == ''
-                ? []
-                : [{ url: this.form.qualityCertificate }]
-            "
-            tag="qualityCertificate"
-            @getPic="getPic"
-          />
+          <el-button
+            type="primary"
+            @click="qualityCertificateVis = true"
+            style="margin-left: 8px"
+            >上传{{ labels.qualityCertificate }}</el-button
+          >
+          <UploadFile
+            :is-open="qualityCertificateVis"
+            :close-modal="() => (this.qualityCertificateVis = false)"
+            :type="'image'"
+            :init-files="form.qualityCertificate"
+            :upload-success="qualityCertificatePic"
+          ></UploadFile>
         </el-form-item>
+
         <el-form-item :label="labels.safetyCertificate">
-          <TheUploadPic
-            :picLimit="picLimit"
-            :uploadUrl="uploadUrl"
-            :imageUrlArray="
-              this.form.inspectionReport == ''
-                ? []
-                : [{ url: this.form.safetyCertificate }]
-            "
-            tag="safetyCertificate"
-            @getPic="getPic"
-          />
+          <el-button
+            type="primary"
+            @click="safetyCertificateVis = true"
+            style="margin-left: 8px"
+            >上传{{ labels.safetyCertificate }}</el-button
+          >
+          <UploadFile
+            :is-open="safetyCertificateVis"
+            :close-modal="() => (this.safetyCertificateVis = false)"
+            :type="'image'"
+            :init-files="form.safetyCertificate"
+            :upload-success="safetyCertificatePic"
+          ></UploadFile>
         </el-form-item>
+
         <el-form-item :label="labels.standard">
-          <TheUploadPic
-            :picLimit="picLimit"
-            :uploadUrl="uploadUrl"
-            :imageUrlArray="
-              this.form.inspectionReport == ''
-                ? []
-                : [{ url: this.form.standard }]
-            "
-            tag="standard"
-            @getPic="getPic"
-          />
+          <el-button
+            type="primary"
+            @click="standardVis = true"
+            style="margin-left: 8px"
+            >上传{{ labels.standard }}</el-button
+          >
+          <UploadFile
+            :is-open="standardVis"
+            :close-modal="() => (this.standardVis = false)"
+            :type="'image'"
+            :init-files="form.standard"
+            :upload-success="standardPic"
+          ></UploadFile>
         </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button
-          type="success"
-          v-if="this.form.inspectionReport == ''"
-          @click="addInfo()"
+        <el-button type="success" v-if="isAdd" @click="addInfo()"
           >创建</el-button
         >
-        <el-button
-          type="primary"
-          v-if="this.form.inspectionReport != ''"
-          @click="editInfo()"
+        <el-button type="primary" v-if="!isAdd" @click="editInfo()"
           >修改</el-button
         >
-        <el-button
-          type="danger"
-          v-if="this.form.inspectionReport != ''"
-          @click="removeById()"
+        <el-button type="danger" v-if="!isAdd" @click="removeById()"
           >删除</el-button
         >
       </div>
@@ -144,12 +133,10 @@
 <script>
 /* 路径（按需改） */
 import ljc from "./qualification";
-import TheUploadPic from "../public/uploadPic";
 import UploadFile from "../../public_components/UploadFile";
 export default {
   components: {
     UploadFile,
-    TheUploadPic,
   },
   props: {
     id: {},
@@ -164,23 +151,22 @@ export default {
       // 控制表单的显示与隐藏
       dialogVisible: false,
 
-      isOpenUpload: false,
+      // 上传
+      inspectionReportVis: false,
+      licenseVis: false,
+      qualityCertificateVis: false,
+      safetyCertificateVis: false,
+      standardVis: false,
 
       form: {},
 
-      // 限制照片个数
-      picLimit: 1,
+      isAdd: true,
     };
   },
   computed: {
     // 验证规则
     formRules() {
       return this.model.formRules;
-    },
-
-    // 上传路径
-    uploadUrl() {
-      return this.model.uploadUrl;
     },
 
     labels() {
@@ -194,22 +180,29 @@ export default {
       this.form.inspectionReport = fileStr;
     },
 
+    licensePic(fileStr) {
+      this.form.license = fileStr;
+    },
+
+    qualityCertificatePic(fileStr) {
+      this.form.qualityCertificate = fileStr;
+    },
+
+    safetyCertificatePic(fileStr) {
+      this.form.safetyCertificatePic = fileStr;
+    },
+
+    standardPic(fileStr) {
+      this.form.standard = fileStr;
+    },
+
     /* 根据Id查询信息 */
     async getInfoById() {
       const { data: res } = await this.model.getInfoById(this.id);
       console.log(res);
-      if (res.data == null) {
-        this.form = {
-          inspectionReport: "",
-          license: "",
-          productInfo: "",
-          productId: this.id,
-          qualityCertificate: "",
-          safetyCertificate: "",
-          standard: "",
-        };
-      } else {
+      if (res.data !== null) {
         this.form = res.data;
+        this.isAdd = false;
       }
       this.dialogVisible = true;
     },
@@ -218,12 +211,17 @@ export default {
     addInfo() {
       this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
+        this.form.productId = this.id;
         console.log(this.form);
         const { data: res } = await this.model.addInfo(this.form);
+        console.log(res);
         if (res.statusCode == 20000) {
           this.elMessage.success(res.message);
+          this.dialogVisible = false;
+          this.isAdd = true;
+        } else {
+          this.elMessage.success(res.message);
         }
-        this.dialogVisible = false;
       });
     },
 
@@ -250,6 +248,7 @@ export default {
         this.elMessage.success(res.message);
       }
       this.dialogVisible = false;
+      this.isAdd = true;
     },
 
     /* 修改 */
@@ -270,30 +269,6 @@ export default {
       this.$refs.formRef.resetFields();
     },
     /* 监听窗口关闭事件关闭 */
-
-    /* 接收上传组件的照片信息开始 */
-    getPic(tag, res) {
-      // 字符串转对象
-      let picUrl = eval("(" + res + ")").url;
-      switch (tag) {
-        case "inspectionReport":
-          this.form.inspectionReport = picUrl;
-          break;
-        case "license":
-          this.form.license = picUrl;
-          break;
-        case "standard":
-          this.form.standard = picUrl;
-          break;
-        case "qualityCertificate":
-          this.form.qualityCertificate = picUrl;
-          break;
-        case "safetyCertificate":
-          this.form.safetyCertificate = picUrl;
-          break;
-      }
-    },
-    /* 接收上传组件的照片信息结束 */
   },
 };
 </script>

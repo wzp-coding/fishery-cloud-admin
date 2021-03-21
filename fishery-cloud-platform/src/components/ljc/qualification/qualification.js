@@ -15,9 +15,6 @@ module.exports = class {
         standard: "采用标准"
     }
 
-    // 上传路径
-    uploadUrl = "http://119.23.218.131:9103/base/file/upload"
-
     // 表单验证规则
     formRules = {
         inspectionReport: [
