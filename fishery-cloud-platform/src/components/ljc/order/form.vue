@@ -261,21 +261,18 @@ export default {
     async getCustomer() {
       const { data: res } = await this.public.getCustomer(this.baseId);
       this.customerList = res.data;
-      console.log("客户", res.data);
     },
 
     /* 获取所有冷库 */
     async getStorage() {
       const { data: res } = await this.public.getRefrigeratoryInfo();
       this.Storages = res.data;
-      console.log("冷库", res.data);
     },
 
     /* 获取所有加工厂 */
     async getFactory() {
       const { data: res } = await this.public.getFactoryAll();
       this.Factorys = res.data;
-      console.log("加工厂", res.data);
     },
   },
 };
