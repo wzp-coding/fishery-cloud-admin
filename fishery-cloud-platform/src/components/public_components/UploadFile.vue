@@ -214,7 +214,7 @@ export default {
           props: {
             uppy: this.uppy,
             open: this.isOpen,
-            hideUploadButton:{hideUploadButton}
+            hideUploadButton:this.hideUploadButton
           },
         }}
       />
