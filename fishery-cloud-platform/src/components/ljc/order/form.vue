@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button
-      type="info"
+      type="success"
       icon="el-icon-s-order"
       size="mini"
       @click="dialogVisible = true"
@@ -22,18 +22,6 @@
         label-position="left"
         :hide-required-asterisk="true"
       >
-        <el-form-item>
-          <el-select v-model="form.target" value-key="customerName">
-            <el-option
-              v-for="item in customerList"
-              :key="item.id"
-              :label="item.customerName"
-              :value="item"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-
         <el-form-item :label="labels.target">
           <el-select v-model="form.target" value-key="customerName">
             <el-option
