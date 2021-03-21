@@ -62,12 +62,7 @@
                 placement="top"
                 :enterable="false"
               >
-                <Out
-                  :id="scope.row.id"
-                  :productName="scope.row.productName"
-                  :createPersonList="createPersonList"
-                  tag="storage"
-                />
+                <Out :scope="scope" />
               </el-tooltip>
             </el-col>
             <el-col :span="8">

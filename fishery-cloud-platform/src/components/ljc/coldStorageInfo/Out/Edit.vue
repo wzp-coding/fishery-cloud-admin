@@ -52,7 +52,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item
+        <!-- <el-form-item
           :label="labels.refrigeratoryOutCapacity"
           prop="refrigeratoryOutCapacity"
         >
@@ -62,7 +62,7 @@
             :min="0"
             :max="form.refrigeratoryInCapacity"
           ></el-input-number>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item
           :label="labels.refrigeratoryOutDescription"
@@ -109,7 +109,7 @@ export default {
     return {
       model: new ljc(this),
       // 表单名称
-      formTitle: "修改入库信息",
+      formTitle: "修改出库信息",
 
       // 控制表单的显示与隐藏
       dialogVisible: false,
@@ -153,6 +153,8 @@ export default {
           this.$emit("getAllInfo");
           this.dialogVisible = false;
           this.elMessage.success(res.message);
+        } else {
+          this.elMessage.error(res.message);
         }
       });
     },

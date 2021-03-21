@@ -51,7 +51,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
+        <!-- <el-form-item
           :label="labels.refrigeratoryInCapacity"
           prop="refrigeratoryInCapacity"
         >
@@ -61,7 +61,7 @@
             :precision="2"
             :min="1"
           ></el-input-number>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item
           :label="labels.refrigeratoryInDescription"
           prop="refrigeratoryInDescription"

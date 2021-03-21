@@ -22,8 +22,24 @@
         label-position="left"
         :hide-required-asterisk="true"
       >
-        <el-form-item :label="labels.target">
-          <el-select v-model="form.target" value-key="customerName">
+        <el-form-item label="客户类型">
+          <el-select v-model="form.targetType">
+            <el-option
+              v-for="item in typeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="客户" v-if="form.targetType">
+          <el-select
+            v-model="form.target"
+            v-if="form.targetType == 1 || form.targetType == 2"
+            value-key="customerName"
+          >
             <el-option
               v-for="item in customerList"
               :key="item.id"
@@ -32,45 +48,31 @@
             >
             </el-option>
           </el-select>
-        </el-form-item>
 
-        <el-form-item
-          :label="labels.refrigeratoryOutTime"
-          prop="refrigeratoryOutTime"
-          v-if="this.tag == 'storage'"
-        >
-          <el-date-picker
-            v-model="form.refrigeratoryOutTime"
-            type="datetime"
-            placeholder="选择日期时间"
-            value-format="yyyy-MM-dd HH:mm:ss"
+          <el-select
+            v-model="form.target"
+            v-if="form.targetType == 4"
+            value-key="refrigeratoryName"
           >
-          </el-date-picker>
-        </el-form-item>
-
-        <el-form-item
-          v-if="this.tag == 'storage'"
-          :label="labels.refrigeratoryOutDescription"
-          prop="refrigeratoryOutDescription"
-        >
-          <el-input
-            type="textarea"
-            placeholder="请输入内容"
-            v-model="form.refrigeratoryOutDescription"
-          >
-          </el-input>
-        </el-form-item>
-
-        <el-form-item
-          :label="labels.warehousingPersonId"
-          prop="warehousingPersonId"
-        >
-          <el-select v-model="form.warehousingPersonId">
             <el-option
-              v-for="item in createPersonList"
+              v-for="item in Storages"
               :key="item.id"
-              :label="item.username"
-              :value="item.id"
+              :label="item.refrigeratoryName"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+
+          <el-select
+            v-model="form.target"
+            v-if="form.targetType == 3"
+            value-key="factoryName"
+          >
+            <el-option
+              v-for="item in Factorys"
+              :key="item.id"
+              :label="item.factoryName"
+              :value="item"
             >
             </el-option>
           </el-select>
@@ -110,10 +112,7 @@ import ljc from "./order";
 import Public from "../public/public";
 export default {
   props: {
-    id: {},
-    createPersonList: {},
-    productName: {},
-    tag: {},
+    scope: {},
   },
   data() {
     return {
@@ -137,6 +136,26 @@ export default {
 
       // 加工厂列表
       Factorys: [],
+
+      // 类型列表
+      typeList: [
+        {
+          label: "个人",
+          value: 1,
+        },
+        {
+          label: "企业",
+          value: 2,
+        },
+        {
+          label: "加工厂",
+          value: 3,
+        },
+        {
+          label: "冷库",
+          value: 4,
+        },
+      ],
     };
   },
   computed: {
@@ -169,33 +188,36 @@ export default {
     createOrder() {
       this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
-        this.form.refrigeratoryInId = this.id;
-        this.form.productId = this.id;
-        this.form.type = this.form.target.customerType;
-        this.form.productName = this.productName;
-        this.form.receiveAddress = this.form.target.receiveAddress;
-        this.form.addressLatitude = this.form.target.addressLatitude;
-        this.form.addressLongitude = this.form.target.addressLongitude;
-        this.form.phoneNumber = this.form.target.phoneNumber;
-        this.form.baseId = this.form.target.baseId;
-        this.form.targetName = this.form.target.customerName;
-        this.form.targetType = this.form.target.customerType;
-        this.form.status = 0;
-        this.form.targetId = this.form.target.id;
-
-        console.log(JSON.parse(JSON.stringify(this.form)));
-
-        const { data: res } = await this.model.createOrder(
-          JSON.parse(JSON.stringify(this.form)),
-          this.tag
-        );
+        console.log(this.form.targetType);
+        switch (this.form.targetType) {
+          case 1:
+          case 2:
+            this.form.addressLatitude = this.form.target.addressLatitude;
+            this.form.addressLongitude = this.form.target.addressLongitude;
+            this.form.targetName = this.form.target.customerName;
+            this.form.targetId = this.form.target.id;
+            this.form.receiveAddress = this.form.target.receiveAddress;
+            this.form.phoneNumber = this.form.target.phoneNumber;
+            break;
+          case 3:
+            break;
+          case 4:
+            break;
+        }
+        console.log(this.scope.row);
+        this.form.productName = this.scope.row.productName;
+        this.form.productId = this.scope.row.id;
+        this.form.baseId = this.baseId;
+        delete this.form.target;
+        console.log(this.form);
+        const { data: res } = await this.model.createOrder(this.form);
         console.log(res);
         if (res.statusCode == 20000) {
           this.elMessage.success(res.message);
+          this.dialogVisible = false;
         } else {
           this.elMessage.error(res.message);
         }
-        this.dialogVisible = false;
       });
     },
 
@@ -203,7 +225,7 @@ export default {
     async getCustomer() {
       const { data: res } = await this.public.getCustomer(this.baseId);
       this.customerList = res.data;
-      console.log("客户信息");
+      console.log("客户", res.data);
     },
 
     /* 获取所有冷库 */
