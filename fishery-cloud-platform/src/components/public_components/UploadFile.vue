@@ -125,6 +125,7 @@ export default {
         endpoint: "http://119.23.218.131:9800/group1/big/upload/",
       },
       fileStr: "",
+      hideUploadButton:false
     };
   },
   components: {
@@ -184,6 +185,9 @@ export default {
           files.forEach(file=>uppy.removeFile(file.id));
           // 接下来添加展示文件
           const cFiles = this.initFiles.split(",");
+          if(cFiles.length == this.max){
+            this.hideUploadButton = true
+          }
           cFiles.forEach((file, index) => {
             fetch(file)
               .then((res) => res.blob())
@@ -210,6 +214,7 @@ export default {
           props: {
             uppy: this.uppy,
             open: this.isOpen,
+            hideUploadButton:{hideUploadButton}
           },
         }}
       />
