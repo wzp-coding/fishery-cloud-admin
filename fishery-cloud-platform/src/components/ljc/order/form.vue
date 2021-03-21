@@ -26,7 +26,7 @@
           <el-select v-model="form.targetType">
             <el-option
               v-for="item in typeList"
-              :key="item.id"
+              :key="item.value"
               :label="item.label"
               :value="item.value"
             >
@@ -73,6 +73,18 @@
               :key="item.id"
               :label="item.factoryName"
               :value="item"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item :label="labels.sourceType">
+          <el-select v-model="form.sourceType">
+            <el-option
+              v-for="item in sourceTypes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
             >
             </el-option>
           </el-select>
@@ -156,6 +168,22 @@ export default {
           value: 4,
         },
       ],
+
+      // 收货方类型
+      sourceTypes: [
+        {
+          label: "养殖基地",
+          value: 1,
+        },
+        {
+          label: "加工厂",
+          value: 2,
+        },
+        {
+          label: "冷库",
+          value: 3,
+        },
+      ],
     };
   },
   computed: {
@@ -200,8 +228,16 @@ export default {
             this.form.phoneNumber = this.form.target.phoneNumber;
             break;
           case 3:
+            this.form.targetId = this.form.target.id;
+            this.form.targetName = this.form.target.factoryName;
+            this.form.receiveAddress = this.form.target.factoryAddress;
             break;
           case 4:
+            this.form.addressLatitude = this.form.target.refrigeratoryPositionLatitude;
+            this.form.addressLongitude = this.form.target.refrigeratoryPositionLongitude;
+            this.form.targetName = this.form.target.refrigeratoryName;
+            this.form.targetId = this.form.target.id;
+            this.form.receiveAddress = this.form.target.refrigeratoryAddress;
             break;
         }
         console.log(this.scope.row);
