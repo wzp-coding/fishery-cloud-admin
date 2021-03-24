@@ -6,4 +6,5 @@ export default {
     waterData: "http://119.23.218.131:9110/waterData/",
     monitor: "http://119.23.218.131:9110/monitor/",
     diagnose: "http://119.23.218.131:9112/search/diagnose",
+    forecast: "http://119.23.218.131:9110/datarecord/forecast"
 }

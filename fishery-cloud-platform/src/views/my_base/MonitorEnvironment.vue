@@ -257,7 +257,14 @@ export default {
             this.forecaseForm = forecaseForm
             forecaseForm.startTime = this.checkTime(forecaseForm.startTime)
             forecaseForm.endTime = this.checkTime(forecaseForm.endTime)
-            const myflag = forecaseForm.typeId === '0' ? '' : '/water'
+            let myflag = ''
+            if(forecaseForm.arithmetic === 'arima') {
+                myflag = 'arima'
+            }else if(forecaseForm.arithmetic === 'lstmrnn') {
+                myflag = 'lstmrnn'
+            }else {
+                myflag = 'water/' + forecaseForm.arithmetic
+            }
             const form = {
                 equipmentId: forecaseForm.equipment.equipmentId,
                 checkItemName: forecaseForm.checkItemName,
@@ -270,9 +277,8 @@ export default {
             let arrUnitList = forecaseForm.typeId === '0' ? this.weatherCheckItemName : this.pondCheckItemName
             Unit = arrUnitList.find(item => item.value === forecaseForm.checkItemName )
             Unit = Unit.label
-            // this.$forecast.post(`${myflag}/${this.forecaseForm.arithmetic}/1/50`,form)
-            const {data:res} = await this.$originAxios.post(`http://106.75.154.40:9004/datarecord/forecast${myflag}/${forecaseForm.arithmetic}/1/500`,form)
-            if(res.code !== 200) {
+            const {data: res} = await this.$forecast.post(`/${myflag}/1/500`,form)
+            if(res.statusCode !== 20000) {
                 return this.elMessage.error(('预测失败'))
             }
             if (res.data.orgindata.length === 0) {

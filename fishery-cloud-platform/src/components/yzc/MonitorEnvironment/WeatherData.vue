@@ -275,7 +275,7 @@ export default {
         // 获取信息
         async getwarningList(id) {
             const {data:res} = await this.$meteorologicalData.post(`search/${this.page_index}/${this.page_size}`,{
-                equipmentId:this.id
+                equipmentId:id
             })
             if(res.statusCode!==20000) {
                 return this.elMessage.error('获取设备阈值信息失败！')
