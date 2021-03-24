@@ -11,7 +11,7 @@ export default [
     },
     {
         path:'/B-code-web',
-        component:()=>import('../components/cgx/ManagementOrder/BackPage/BcodeWeb.vue')
+        component: () => import(/* webpackChunkName:"BcodeWeb" */'../components/cgx/ManagementOrder/BackPage/BcodeWeb.vue')
     }
     
 ]

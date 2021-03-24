@@ -59,12 +59,12 @@ export default {
     // 测试：手动跳转到二维码对应的页面
     testToBcodeWeb() {
       console.log("this.orderId: ", this.orderId);
-      let type, path;
+      let  path;
       if (this.ortitle == "物流二维码") {
-        type = `logitis`;
+        
         path = "info-logitis-p";
       } else {
-        type = `origin`;
+        
         path = "info-farm-p";
       }
       this.$router.push({

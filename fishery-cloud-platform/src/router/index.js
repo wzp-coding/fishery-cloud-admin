@@ -33,7 +33,7 @@ const routes = [
       ...logisticsSystem_CGX,
     ]
   },
-  
+
 ]
 
 const router = new VueRouter({
@@ -43,16 +43,20 @@ const router = new VueRouter({
 })
 
 // 不需要权限的路由
-const NoAuthRouters = ['/login', '/register', '/forgetPassword']
+const NoAuthRouters = ['/login', '/register', '/forgetPassword', '/info-farm-p', '/info-cold-p', '/info-logitis-p', '/info-plant-p']
 
 // 挂载路由导航守卫
 router.beforeEach((to, from, next) => {
   NProgress.start();
+  console.log('to.path: ', to.path);
   if (NoAuthRouters.includes(to.path)) {
     // 当跳转的页面不需要权限时，直接过
     next();
   } else if (!localStorage.getItem('token')) {
     // 当跳转到需要token的页面，且不带token，需要重新登录
+    if (to.path == '/info-logitis-p' || to.path == '/info-farm-p' || to.path == '/info-cold-p' || to.path == 'info-plant-p') {
+      next();
+    }
     next('/login');
     Message.error('请您登录账户');
   } else if (to.path !== 'digital-base' && to.matched.length === 0) {
