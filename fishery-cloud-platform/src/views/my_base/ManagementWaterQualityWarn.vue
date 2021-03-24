@@ -136,11 +136,9 @@
 <script>
 // 引入分页组件
 import Pagination from '../../components/yzc/pagination'
-import Breadcrumb from '../../components/public_components/Breadcrumb'
 export default {
     components: {
         Pagination,
-        Breadcrumb
     },
     data() {
         return {

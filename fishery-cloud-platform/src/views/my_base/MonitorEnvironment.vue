@@ -123,14 +123,12 @@
 import MonitorEnvironmentDeviceQuery from "../../components/yzc/MonitorEnvironment/MonitorEnvironmentDeviceQuery";
 import MonitorEnvironmentForecastForm from "../../components/yzc/MonitorEnvironment/MonitorEnvironmentForecastForm";
 import MonitorEnvironmentForecastFormrevise from "../../components/yzc/MonitorEnvironment/MonitorEnvironmentForecastFormrevise";
-import Breadcrumb from "../../components/public_components/Breadcrumb";
 import { mapState } from "vuex";
 export default {
   components: {
     MonitorEnvironmentDeviceQuery,
     MonitorEnvironmentForecastForm,
     MonitorEnvironmentForecastFormrevise,
-    Breadcrumb,
   },
   mounted() {
     this.$nextTick(function () {
@@ -161,8 +159,8 @@ export default {
         { value: "RF", label: "RF" },
       ],
       weatherarithmetic: [
-        { value: "arima", label: "arima" },
-        { value: "lstmrnn", label: "lstmrnn" },
+        { value: "ARIMA", label: "ARIMA" },
+        { value: "LSTM", label: "LSTM" },
       ],
       // 预测的项目 其中pondCheckItemName为水质设备的 weatherCheckItemName为气象设备的
       pondCheckItemName: [
@@ -286,9 +284,9 @@ export default {
       forecaseForm.startTime = this.checkTime(forecaseForm.startTime);
       forecaseForm.endTime = this.checkTime(forecaseForm.endTime);
       let myflag = "";
-      if (forecaseForm.arithmetic === "arima") {
+      if (forecaseForm.arithmetic === "ARIMA") {
         myflag = "arima";
-      } else if (forecaseForm.arithmetic === "lstmrnn") {
+      } else if (forecaseForm.arithmetic === "LSTM") {
         myflag = "lstmrnn";
       } else {
         myflag = "water/" + forecaseForm.arithmetic;

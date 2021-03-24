@@ -104,13 +104,11 @@ import InfoWaterQualityAddDevice from '../../components/yzc/InfoWaterQuality/Inf
 import SearchDevice from '../../components/yzc/SearchDevice.vue'
 // 引入分页组件
 import Pagination from '../../components/yzc/pagination'
-import Breadcrumb from '../../components/public_components/Breadcrumb'
 export default {
   components: {
     InfoWaterQualityAddDevice,
     SearchDevice,
-    Pagination,
-    Breadcrumb
+    Pagination
   },
   created() {
     // 获取设备信息

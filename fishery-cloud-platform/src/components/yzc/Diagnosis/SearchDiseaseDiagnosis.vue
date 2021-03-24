@@ -28,7 +28,7 @@
                 <span style="font-weight:900">{{this.ArticleDetailO.diseaseName}} <span style="font-size:10px;color:#a1a1a1">最近修改于{{this.ArticleDetailO.gmtModified}}</span></span>
                 <el-button style="float: right; padding: 3px 0" type="text" @click="closeDetail">关闭</el-button>
             </div>
-            <div style="margin-left:15%;margin-bottom:10px">
+            <div style="margin-left:10%;margin-bottom:10px">
             <el-image v-if="showimage" style="width: 500px; height: 200px" error :src="this.ArticleDetailO.picture" :preview-src-list="srcList">
                 <div slot="error" class="image-slot"><i class="el-icon-picture-outline"></i></div>
             </el-image>

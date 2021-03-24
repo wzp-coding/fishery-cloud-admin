@@ -79,13 +79,11 @@ import MonitorEquipmentAddDevice from '../../components/yzc/MonitorEquipmentAddD
 import SearchDevice from '../../components/yzc/SearchDevice'
 // 引入分页组件
 import Pagination from '../../components/yzc/pagination'
-import Breadcrumb from '../../components/public_components/Breadcrumb'
 export default {
   components: {
     MonitorEquipmentAddDevice,
     SearchDevice,
-    Pagination,
-    Breadcrumb
+    Pagination
   },
   data() {
     return {

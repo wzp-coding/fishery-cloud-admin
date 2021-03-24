@@ -22,11 +22,7 @@
     </div>
 </template>
 <script>
-import Breadcrumb from '../../components/public_components/Breadcrumb'
 export default {
-    components: {
-        Breadcrumb
-    },
     data() {
         return {
             breadcrumbs:["我的基地","实况监控"],
