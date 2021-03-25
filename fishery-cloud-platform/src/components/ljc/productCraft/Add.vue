@@ -1,9 +1,13 @@
 <template>
   <div>
     <!-- 添加区域开始 -->
-    <el-button type="primary" @click="addDialogVisible = true" style="margin-top: 20px" v-auth="'traceability_process'">{{
-      formTitle
-    }}</el-button>
+    <el-button
+      type="primary"
+      @click="addDialogVisible = true"
+      style="margin-top: 20px"
+      v-auth="'traceability_process'"
+      >{{ formTitle }}</el-button
+    >
     <!-- 添加区域结束 -->
 
     <!-- 添加表单区域开始 -->
@@ -90,9 +94,11 @@ export default {
         const { data: res } = await this.model.addInfo(this.addFrom);
         if (res.statusCode == 20000) {
           this.elMessage.success(res.message);
+          this.$emit("getAllInfo");
+          this.addDialogVisible = false;
+        } else {
+          this.elMessage.error(res.message);
         }
-        this.$emit("getAllInfo");
-        this.addDialogVisible = false;
       });
     },
     /* 添加结束 */

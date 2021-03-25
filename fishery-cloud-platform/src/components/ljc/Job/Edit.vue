@@ -59,14 +59,14 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item :label="labels.materialWeight" prop="materialWeight">
+        <!-- <el-form-item :label="labels.materialWeight" prop="materialWeight">
           <el-input-number
             v-model="form.materialWeight"
             controls-position="right"
             :min="0"
             :max="weightMax"
           ></el-input-number>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item :label="labels.productWeight" prop="productWeight">
           <el-input-number
@@ -146,11 +146,12 @@ export default {
   },
 
   methods: {
-    /* 添加 */
+    /* 修改 */
     editInfo() {
       this.$refs.formRef.validate(async (val) => {
         if (!val) return false;
         console.log(this.form);
+        delete this.form.materialWeight;
         const { data: res } = await this.model.editInfo(this.form);
         if (res.statusCode !== 20000) {
           this.elMessage.error(res.message);
