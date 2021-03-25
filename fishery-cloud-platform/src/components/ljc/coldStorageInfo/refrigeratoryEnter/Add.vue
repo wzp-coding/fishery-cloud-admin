@@ -133,9 +133,9 @@ export default {
       this.$refs.formRef.resetFields();
     },
 
-    /* 获取所有加工厂 */
+    /* 获取所有冷库 */
     async getRefrigeratory() {
-      const { data: res } = await this.publicFn.getRefrigeratory();
+      const { data: res } = await this.publicFn.getRefrigeratoryInfo();
       this.Refrigeratorys = res.data;
     },
 

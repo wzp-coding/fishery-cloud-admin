@@ -29,7 +29,7 @@ module.exports = class {
             { required: true, message: `请输入${this.labels.refrigeratoryName}`, trigger: "blur" },
             {
                 min: 2,
-                max: 10,
+                max: 15,
                 message: `${this.labels.refrigeratoryName}的长度在2~10个字符之间`,
                 trigger: "blur",
             },
