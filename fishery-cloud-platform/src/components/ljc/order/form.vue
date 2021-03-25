@@ -240,7 +240,6 @@ export default {
             this.form.receiveAddress = this.form.target.refrigeratoryAddress;
             break;
         }
-        console.log(this.scope.row);
         this.form.productName = this.scope.row.productName;
         this.form.productId = this.scope.row.id;
         this.form.baseId = this.baseId;
