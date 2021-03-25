@@ -78,7 +78,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item :label="labels.sourceType">
+        <!-- <el-form-item :label="labels.sourceType">
           <el-select v-model="form.sourceType">
             <el-option
               v-for="item in sourceTypes"
@@ -88,7 +88,7 @@
             >
             </el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item :label="labels.amount" prop="amount">
           <el-input-number
@@ -243,8 +243,8 @@ export default {
         this.form.productName = this.scope.row.productName;
         this.form.productId = this.scope.row.id;
         this.form.baseId = this.baseId;
+        this.form.sourceType = 3;
         delete this.form.target;
-        console.log(this.form);
         const { data: res } = await this.model.createOrder(this.form);
         console.log(res);
         if (res.statusCode == 20000) {
