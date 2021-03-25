@@ -120,8 +120,7 @@ export default {
       if (res.statusCode !== 20000) {
         this.$message.error(res.message);
       }
-      this.allList = [];
-      this.allList.push(res.data.records);
+      this.allList = res.data.records;
       this.total = res.data.total;
     },
 
@@ -129,7 +128,6 @@ export default {
     async getStaff() {
       const { data: res } = await this.public.getStaff();
       this.createPersonList = res.data;
-      console.log(this.createPersonList);
     },
 
     // 获取种苗信息

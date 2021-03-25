@@ -2,7 +2,7 @@
   <div>
     <!-- 表格开始 -->
     <el-table
-      :data="allList[0]"
+      :data="allList"
       border
       stripe
       :header-cell-style="{ 'text-align': 'center' }"

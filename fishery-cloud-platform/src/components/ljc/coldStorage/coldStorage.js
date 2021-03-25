@@ -72,7 +72,7 @@ module.exports = class {
     /* 获取数据开始 */
     getAllInfo(baseId, page, size) {
         return new Promise((resolve) => {
-            this.vue.$storage.get(`/refrigeratory/RefrigeratoryInfo/get/PageRefrigeratoryByBaseId/${baseId}/${page}/${size}`)
+            this.vue.$storage.get(`/refrigeratory/RefrigeratoryInfo/get/AllRefrigeratory/${page}/${size}`)
                 .then((res) => {
                     resolve(res);
                 })
