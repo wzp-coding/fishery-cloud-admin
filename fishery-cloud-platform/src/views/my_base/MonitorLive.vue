@@ -13,7 +13,7 @@
                 <el-card>
                     <div>设备序列号：{{item.deviceSerial}}</div>
                     <el-divider></el-divider>
-                    <div style="height:200px">
+                    <div style="height:300px">
                         <iframe :src="item.vedioUrl" frameborder="0" width="100%" height="100%" style="margin-top:5px;border:1px solid #373d41;border-radius:4px;"></iframe>
                     </div>
                 </el-card>
