@@ -11,10 +11,10 @@
           v-model="orderobject.targetType"
           placeholder="请选择客户类型"
         >
-          <el-option label="1.个人" :value="1"></el-option>
-          <el-option label="2.企业" :value="2"></el-option>
-          <el-option label="3.加工厂" :value="3"></el-option>
-          <el-option label="4.冷库" :value="4"></el-option>
+          <el-option label="个人" :value="1"></el-option>
+          <el-option label="企业" :value="2"></el-option>
+          <el-option label="加工厂" :value="3"></el-option>
+          <el-option label="冷库" :value="4"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="发货方类型">
@@ -22,9 +22,9 @@
           v-model="orderobject.sourceType"
           placeholder="请选择发货方类型"
         >
-          <el-option label="1.养殖基地" :value="1"></el-option>
-          <el-option label="2.加工厂" :value="2"></el-option>
-          <el-option label="3.冷库" :value="3"></el-option>
+          <el-option label="养殖基地" :value="1"></el-option>
+          <el-option label="加工厂" :value="2"></el-option>
+          <el-option label="冷库" :value="3"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="客户名" v-if="orderobject.targetType <= 2">

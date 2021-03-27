@@ -101,6 +101,8 @@
             </el-col>
           </el-row>
           <el-table border stripe :data="feedList">
+            <el-table-column label="池塘" prop="pondName">
+            </el-table-column>
             <el-table-column label="投喂人" prop="operatorName">
             </el-table-column>
             <el-table-column label="身份" prop="operatorIdentity">
